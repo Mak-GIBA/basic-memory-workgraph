@@ -1,115 +1,74 @@
-# Basic Memory Work Knowledge Graph — 簡単導入
+# Basic Memory Work Knowledge Graph
 
-このセットは、Basic Memoryを次の用途に軽微拡張します。
-
-> 過去の仕事・ユーザー修正・ルール・作業手順・検査を
-> Knowledge Graphとして蓄積し、次回の仕事で関連事例を辿る。
-
----
-
-## まず理解する図
+案件をまたいで役立つ検証済みの知識と、ユーザーが明示した継続的な好みを
+Basic Memory に保存し、次回の仕事で再利用するための Codex フックです。
 
 ```text
-あなたの依頼
-   ↓
-[Codex Hook]
-   ↓
-Basic Memoryから似たCaseを検索
-   ↓
-Case → Correction → Rule
-  └→ Workflow → Validation
-   ↓
-Codexが過去事例を踏まえて作業
-   ↓
-終了時
-   ↓
-今回の修正・手順をKnowledge Graphへ追加
+依頼 → 関連する Rule / Workflow / Case を検索 → 条件を比較して活用
+                                                    ↓
+                             好み・教訓の候補があれば保存可否を評価
+                                                    ↓
+                         基準に合格 → 重複検索 → 必要な作成・更新だけ
+                         不合格・同じ内容 → 何も保存しない
 ```
 
-Basic Memoryでは、Markdownファイルがノードです。
+## 保存するもの
 
-```text
-cases/過去事例.md          → Case node
-rules/原図保持.md          → Rule node
-workflows/文書修正.md      → Workflow node
-```
+共通の正本は [memory-policy.md](memory-policy.md) です。自動保存する技術的な知識は、
+次の条件を**すべて**満たす必要があります。
 
-Markdown中の
+| 基準 | 必要な内容 |
+|---|---|
+| 再利用性 | 元の案件以外で使える具体的な場面 |
+| 有用性 | 次回の判断・手順をどう改善し、どの失敗や再調査を減らすか |
+| 根拠 | 実際の検証による裏付け。十分な根拠があれば1回でもよい |
+| 持続性 | 一時的な状態に依存しない知識と、適用条件・例外 |
+| 追加価値 | 既存メモや容易に確認できる一般知識にはない価値 |
 
-```text
-- learned_from [[過去事例]]
-- implemented_by [[文書修正]]
-```
+ユーザーが今後も適用すると明示した好みも、範囲と例外を添えて保存します。
+単発の修正から恒久的な好みを推測しません。
 
-がKnowledge Graphのedgeです。
+以下は自動保存しません。
 
----
+- 作業日誌、完了報告、成果物一覧、会話の引き継ぎメモ
+- 案件固有の判断、今回だけの修正
+- 抽象的な一般論、未検証の推測
+- 既存メモと同じ内容、利用日時や進捗だけの追記
 
-# 1. インストールは何をするのか
+迷った場合は保存しません。明示的な「これを覚えて」という依頼は例外として、
+案件固有でも指定された内容と範囲だけを保存できます。計画モードなどで
+書き込みが禁止されている間は保存しません。
 
-インストールスクリプトは、順番にこれだけ行います。
+フックは候補を見つけて**評価を依頼する**もので、Basic Memory に直接書き込みません。
+意味内容の合否は Codex が共通基準で判断します。キーワード一致は保存の許可ではなく、
+MCP サーバー側で全クライアントの書き込みを強制的に制限する仕組みでもありません。
 
-```text
-STEP 1
-uv / uvxを確認（不足時はリンクを補完、または導入）
-   ↓
-STEP 2
-Basic Memoryをインストール/更新
-   ↓
-STEP 3
-Basic Memory公式Codex pluginをインストール
-   ↓
-STEP 4
-Markdownを保存するKnowledgeフォルダを作成
-   ↓
-STEP 5
-Case / Rule / Workflowなどのフォルダ作成
-   ↓
-STEP 6
-7種類のSchemaを配置
-   ↓
-STEP 7
-Codexに「このBasic Memory projectを使う」と設定
-   ↓
-STEP 8
-2本だけ追加Hookを設定
-```
+## 導入
 
-ECCは変更しません。
-
-Basic Memory公式Codex pluginのMCP起動には`uvx`が必要です。
-`uv`だけがPATH上にある場合は、リンク先の実体と同じフォルダにある`uvx`を
-`~/.local/bin/uvx`へリンクします。同梱の`uvx`も見つからない場合は、
-公式インストーラーで`uv`と`uvx`を導入し、両方の実行を確認します。
-
----
-
-# 2. まず普通に実行する
-
-Linux / WSL2:
+Linux / WSL2 で、このリポジトリ一式を配置して実行してください。
+スクリプトは同梱の Python ファイルとポリシーファイルを使用します。
 
 ```bash
-chmod +x install_basic_memory_workgraph.sh
 bash install_basic_memory_workgraph.sh
 ```
 
-デフォルトでは:
+通常の導入は `uv` / `uvx`、Basic Memory、公式 Codex plugin を確認・導入し、
+保存プロジェクト、7種類のスキーマ、設定、追加フックを作成します。ECC は変更しません。
+
+公式 plugin の MCP 起動には `uvx` が必要です。`uv` だけが PATH にある場合は、
+実体と同じフォルダの `uvx` を `~/.local/bin/uvx` にリンクします。
+見つからなければ公式インストーラーで導入し、両方の実行を確認します。
+
+新規導入のデフォルトは次のとおりです。
 
 ```text
-Basic Memory project:
-  codex-memory
-
-Knowledge保存先:
-  ~/knowledge/codex-memory/
+Basic Memory project: codex-memory
+Markdown 保存先:      ~/knowledge/codex-memory/
+Codex 設定先:         ~/.codex/（CODEX_HOME 指定時はその場所）
+自動評価モード:        smart
 ```
 
-が作られます。
-
----
-
-# 3. 保存先を自分で決めたい場合
-
-例えば:
+保存先を指定する場合:
 
 ```bash
 MEMORY_PROJECT=work-memory \
@@ -117,277 +76,128 @@ MEMORY_DIR="$HOME/knowledge/work-memory" \
 bash install_basic_memory_workgraph.sh
 ```
 
-これは、
+### 既存環境の設定・フックだけを更新する
 
-```text
-Basic Memory上の名前 = work-memory
-
-実際のMarkdown保存場所 =
-~/knowledge/work-memory/
+```bash
+bash install_basic_memory_workgraph.sh --configure-only
 ```
 
-という意味です。
+この経路は Python 3 だけで実行できます。パッケージの更新、プロジェクト登録、
+スキーマ作成、保存済みメモの変更は行いません。既存の `primaryProject` と
+自動評価モードを維持し、環境変数で明示した場合だけ上書きします。
+`MEMORY_DIR` はこの経路では使用しません。
 
----
+設定とフックは変更前に日時付きの `.bak.*` へバックアップします。
+無関係な設定と他のフックを保持し、不正な JSON は上書きせずエラーにします。
+同じ内容で再実行してもフックやバックアップを増やしません。
 
-# 4. インストール後にできるフォルダ
+## 自動評価モード
 
-例えばデフォルトの場合:
-
-```text
-~/knowledge/codex-memory/
-
-├── cases/
-├── corrections/
-├── rules/
-├── workflows/
-├── validations/
-├── artifacts/
-├── projects/
-├── schemas/
-└── Work-Knowledge-Graph.md
-```
-
-役割:
-
-| Folder | Meaning |
+| モード | 動作 |
 |---|---|
-| cases | 過去に実施した具体的な仕事 |
-| corrections | ユーザーからの明示的な修正 |
-| rules | 条件付きの再利用ルール |
-| workflows | うまくいった作業手順 |
-| validations | 確認・評価手順 |
-| artifacts | 成果物への安全な参照 |
-| projects | プロジェクトや長期スコープ |
-| schemas | 上記ノートの構造 |
+| `smart`（標準） | 依頼・回答に継続的な好みや教訓の候補を示す表現がある場合に評価 |
+| `always` | 毎ターン評価。保存基準は同じ |
+| `off` | 自動評価・自動保存を停止。明示的な保存依頼は利用可能 |
 
----
-
-# 5. Codex側に何が追加されるか
-
-```text
-~/.codex/basic-memory.json
-```
-
-Basic Memoryの保存先設定。
-
-```text
-~/.codex/hooks/basic_memory_workgraph_recall.py
-```
-
-仕事開始前に過去事例を検索させるHook。
-
-```text
-~/.codex/hooks/basic_memory_workgraph_save.py
-```
-
-仕事終了前に今回の知識を保存させるHook。
-
-```text
-~/.codex/hooks.json
-```
-
-上記2本のHook登録。
-
-既存hooks.jsonがある場合はバックアップしてからマージします。
-
----
-
-# 6. Hookの意味
-
-## UserPromptSubmit
-
-あなたが依頼すると:
-
-```text
-「PDFを翻訳して。図はそのまま」
-```
-
-HookがCodexへ、
-
-```text
-Basic Memoryから似たCaseを探す
-↓
-関連Caseを起点に2〜3 hop辿る
-↓
-Correction
-Rule
-Workflow
-Validation
-を確認する
-```
-
-よう指示します。
-
----
-
-## Stop
-
-Codexが今回の仕事を終えようとすると:
-
-```text
-今回に再利用価値があるか？
-```
-
-を1回だけ評価させます。
-
-例えば:
-
-```text
-Case
-「PDF日本語翻訳」
-
-received
- ↓
-Correction
-「図を再生成しない」
-
-generalized_to
- ↓
-Rule
-「原図保持指定時は再描画しない」
-
-implemented_by
- ↓
-Workflow
-「原図抽出→本文翻訳→再配置」
-
-validated_by
- ↓
-Validation
-「原図との比較」
-```
-
-のようなKnowledge Graphを作ります。
-
-すべてのターンで必ず大量のノートを作るわけではありません。
-
----
-
-# 7. 自動保存モード
-
-デフォルト:
-
-```text
-smart
-```
-
-修正・判断・大きな仕事のときだけKnowledge保存処理が走ります。
-
-毎ターン実行する場合:
+文字数だけを理由に評価を起動しません。`smart` の候補検出は日本語・英語の
+表現に基づくため、すべての教訓を検出するものではありません。
+保存したい内容が明確なら、明示的な保存依頼を使用できます。
 
 ```bash
-BM_AUTO_MODE=always \
-bash install_basic_memory_workgraph.sh
+BM_AUTO_MODE=always bash install_basic_memory_workgraph.sh --configure-only
+BM_AUTO_MODE=off bash install_basic_memory_workgraph.sh --configure-only
+BM_AUTO_MODE=smart bash install_basic_memory_workgraph.sh --configure-only
 ```
 
-停止:
+## 配置と設定
 
-```bash
-BM_AUTO_MODE=off \
-bash install_basic_memory_workgraph.sh
-```
+| 配置 | 役割 |
+|---|---|
+| `~/.codex/basic-memory.json` | 保存先と共通基準。`checkpointOnCompact` は `false` |
+| `~/.codex/basic-memory-workgraph/memory-policy.md` | 開始・終了フックが読む共通基準 |
+| `~/.codex/basic-memory-workgraph/config.json` | `smart` / `always` / `off` |
+| `~/.codex/hooks/basic_memory_workgraph.py` | 開始時の検索・保存基準注入と終了時の評価依頼 |
+| `~/.codex/hooks.json` | 追加フックの登録 |
 
-通常は`smart`推奨です。
+`CODEX_HOME` を指定した場合、追加フックはその設定先を使用します。
+公式 plugin の設定探索はその plugin の仕様に従います。
 
----
+ポリシーを変える場合はリポジトリの `memory-policy.md` を編集し、
+`--configure-only` を再実行してください。`placementConventions` にも同じ内容を反映します。
+既存セッションが旧フックのパスを保持している場合も、新しい処理へ転送します。
 
-# 8. インストール後の必須操作
+圧縮時の自動チェックポイントは無効にします。`captureEvents` は既存値を維持します
+（未設定なら `true`）。これは知識グラフにノートを作らないローカルのイベント記録です。
+プロジェクトの `.codex/basic-memory.json` がある場合、そのキーはユーザー設定より
+優先されるため、導入後に有効設定を確認してください。
 
-Codexを完全に再起動してください。
+### ノートの種類
 
-Codexで:
+| Folder | 用途 |
+|---|---|
+| `rules/` | 条件付きの再利用ルール、明示された継続的な好み |
+| `workflows/` | 検証済みの再利用手順 |
+| `validations/` | 再利用できる確認手順 |
+| `cases/` | 既存事例、または明示的な保存依頼による具体的な仕事の記録 |
+| `corrections/` | 明示的な保存依頼による修正記録 |
+| `artifacts/` | 明示的な保存依頼による成果物参照 |
+| `projects/` | 明示的な保存依頼による長期スコープ |
+| `schemas/` | ノート構造の定義 |
 
-```text
-/plugins
-```
+自動保存のために Case → Correction → Rule などの一式を作る必要はありません。
+根拠は保存対象のノート内に簡潔に記録し、既存ノートとの関係が役立つ場合だけ
+`implements [[Rule]]` や `validated_by [[Validation]]` などの型付きリンクを追加します。
 
-`codex@basic-memory`を確認。
+## 導入後の確認
 
-次に:
-
-```text
-/hooks
-```
-
-以下を確認してtrust:
+新しい Codex セッションを開始してください。フックの登録が反映されない場合は
+Codex を再起動し、`/hooks` で次の2項目を確認します。
 
 ```text
 Searching Basic Memory Work Knowledge Graph
-Updating Basic Memory Work Knowledge Graph
+Evaluating reusable Basic Memory knowledge
 ```
 
-その後:
-
-```text
-$bm-status
-```
-
----
-
-# 9. 最初のテスト
-
-会話1:
-
-```text
-PDF翻訳で「図をそのまま」と指定した場合は、
-図を再生成せず原図を使ってください。
-
-今回の修正を、次回も使える事例として記憶してください。
-```
-
-仕事終了後にKnowledgeが保存されます。
-
-新しいCodex会話を作ります。
-
-```text
-PDF翻訳をします。
-
-Basic Memoryから過去の似たCaseを検索し、
-関連するRule、Workflow、Validationを辿ってから作業してください。
-```
-
-関連Knowledgeを参照できれば成功です。
-
----
-
-# 10. 解除
-
-追加した自動Knowledge Graph Hookだけ外す:
+公式 plugin は `/plugins` で `codex@basic-memory` を確認できます。
+必要なフックの trust は Codex の画面で設定してください。
 
 ```bash
-chmod +x remove_workgraph_hooks.sh
+bm hook status --harness codex --project-dir "$PWD"
+```
+
+`primary project` が意図した保存先で、`checkpoint on compact: off` であることを確認します。
+`capture events` は既存の選択どおりであることを確認します。
+
+保存判断の例:
+
+```text
+「今後、PDF翻訳で原図保持を指定したときは、図を再生成せず原図を使って」
+→ 継続的な好みとして、条件とともに保存候補にする。
+
+「今回のボタンだけ青くして」
+→ 単発の修正なので自動保存しない。
+
+「ファイルを修正し、全テストが通った」という長い完了報告
+→ 再利用できる新しい教訓がなければ自動保存しない。
+```
+
+## 検証
+
+```bash
+python3 -m unittest discover -s tests -v
+bash -n install_basic_memory_workgraph.sh remove_workgraph_hooks.sh
+```
+
+テストは一時ディレクトリで設定更新、保存評価の起動条件、再入防止、旧フックからの
+移行、他のフックの保持を確認します。実際の Basic Memory へは書き込みません。
+意味内容の評価例は [tests/POLICY_SCENARIOS.md](tests/POLICY_SCENARIOS.md) にあります。
+
+## 解除
+
+```bash
 bash remove_workgraph_hooks.sh
 ```
 
-これは削除しません:
-
-- Basic Memory本体
-- Basic Memory公式Codex plugin
-- 保存済みMarkdown
-- Knowledge Graph
-- Schema
-
----
-
-# ECCとの役割分担
-
-```text
-ECC
-├─ eval-harness
-└─ 作業Skill
-
-Basic Memory
-├─ Case
-├─ Correction
-├─ Rule
-├─ Workflow
-├─ Validation
-└─ Relation Graph
-```
-
-ECCは「今回どう作る・どう検査する」。
-
-Basic Memoryは「過去に何が起き、どう改善し、どの手順が有効だったか」。
-
-最初からOMEGAも併用せず、この2つから始める方が管理しやすいです。
+追加フックとそのローカル設定・状態を削除します。Basic Memory 本体、公式 plugin、
+保存済みメモ、スキーマ、`basic-memory.json` は残ります。
+したがって、保存基準と自動チェックポイントの無効設定もそのまま残ります。
