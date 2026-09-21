@@ -100,7 +100,16 @@ bm hook --help >/dev/null 2>&1 || die "bm hook が利用できません。"
 # STEP 3: Basic Memory 公式 Codex plugin
 # ------------------------------------------------------------
 log "Basic Memory 公式 Codex plugin を導入します"
-bm install codex --yes
+if bm install codex --help >/dev/null 2>&1; then
+  bm install codex --yes
+else
+  # bm install が無い版では、公式 installer と同じ Codex CLI 操作を行う。
+  log "bm install 未対応のため、Codex CLI から直接導入します"
+  codex plugin marketplace add --help >/dev/null 2>&1 \
+    || die "この Codex CLI は plugin marketplace に未対応です。Codex CLI を更新してください。"
+  codex plugin marketplace add basicmachines-co/basic-memory
+  codex plugin add codex@basic-memory
+fi
 
 # ------------------------------------------------------------
 # STEP 4: Knowledge project
