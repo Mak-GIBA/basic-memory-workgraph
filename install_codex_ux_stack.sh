@@ -80,6 +80,8 @@ plugin_installed() {
 
 install_openai_plugin() {
   local name="$1"
+  # These plugins are distributed through Codex's remote catalog, not openai/plugins.
+  local plugin_ref="${name}@openai-curated-remote"
 
   if plugin_installed "$name" && [ "$FORCE" -eq 0 ]; then
     skip "OpenAI plugin '${name}' already installed."
@@ -88,21 +90,13 @@ install_openai_plugin() {
 
   if plugin_installed "$name" && [ "$FORCE" -eq 1 ]; then
     info "OpenAI plugin '${name}' を更新/再インストールします (--force)..."
-    codex plugin remove "${name}" --json >/dev/null 2>&1 || true
+    codex plugin remove "${plugin_ref}" --json >/dev/null 2>&1 || true
   else
     info "OpenAI plugin '${name}' をインストールしています..."
   fi
 
-  if codex plugin add "${name}@openai-curated" --json >/dev/null 2>&1; then
-    ok "'${name}' をインストールしました。"
-    return
-  fi
-
-  info "openai-curated marketplace を登録して再試行します..."
-  codex plugin marketplace add openai/plugins --json >/dev/null 2>&1 || true
-
-  codex plugin add "${name}@openai-curated" --json >/dev/null \
-    || die "'${name}' のインストールに失敗しました。Codex を更新し、ネットワーク接続を確認してください。"
+  codex plugin add "${plugin_ref}" --json >/dev/null \
+    || die "'${plugin_ref}' のインストールに失敗しました。上記のエラーと、codex plugin list --available --json で配布状況を確認してください。"
 
   ok "'${name}' をインストールしました。"
 }
