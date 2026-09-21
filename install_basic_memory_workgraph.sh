@@ -40,15 +40,38 @@ command -v curl >/dev/null || die "curl が必要です。"
 mkdir -p "$CODEX_HOME_DIR" "$MEMORY_DIR"
 
 # ------------------------------------------------------------
-# STEP 1: uv
+# STEP 1: uv / uvx
 # ------------------------------------------------------------
-if ! command -v uv >/dev/null 2>&1; then
-  log "uv を導入します"
+export PATH="$HOME/.local/bin:$PATH"
+
+# uv だけが PATH 上にリンクされている場合、同梱の uvx も公開する。
+# Basic Memory の公式 plugin は bm ではなく uvx から MCP を起動する。
+if command -v uv >/dev/null 2>&1 && ! command -v uvx >/dev/null 2>&1; then
+  UVX_COMPANION="$(python3 - "$(command -v uv)" <<'PY'
+from pathlib import Path
+import sys
+
+print(Path(sys.argv[1]).resolve().with_name("uvx"))
+PY
+)"
+  if [ -x "$UVX_COMPANION" ] && \
+     [ ! -e "$HOME/.local/bin/uvx" ] && [ ! -L "$HOME/.local/bin/uvx" ]; then
+    log "既存の uvx を ~/.local/bin にリンクします"
+    mkdir -p "$HOME/.local/bin"
+    ln -s "$UVX_COMPANION" "$HOME/.local/bin/uvx"
+  fi
+fi
+
+if ! command -v uv >/dev/null 2>&1 || ! command -v uvx >/dev/null 2>&1; then
+  log "uv / uvx を導入します"
   curl -LsSf https://astral.sh/uv/install.sh | sh
-  export PATH="$HOME/.local/bin:$PATH"
 fi
 command -v uv >/dev/null || die "uv が PATH 上にありません。"
-log "uv: $(uv --version)"
+command -v uvx >/dev/null || die "uvx が PATH 上にありません。Basic Memory MCP の起動に必要です。"
+UV_VERSION="$(uv --version)" || die "uv を実行できません。"
+UVX_VERSION="$(uvx --version)" || die "uvx を実行できません。"
+log "uv: $UV_VERSION"
+log "uvx: $UVX_VERSION"
 
 # ------------------------------------------------------------
 # STEP 2: Basic Memory CLI

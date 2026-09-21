@@ -51,7 +51,7 @@ Markdown中の
 
 ```text
 STEP 1
-uvを確認
+uv / uvxを確認（不足時はリンクを補完、または導入）
    ↓
 STEP 2
 Basic Memoryをインストール/更新
@@ -76,6 +76,11 @@ STEP 8
 ```
 
 ECCは変更しません。
+
+Basic Memory公式Codex pluginのMCP起動には`uvx`が必要です。
+`uv`だけがPATH上にある場合は、リンク先の実体と同じフォルダにある`uvx`を
+`~/.local/bin/uvx`へリンクします。同梱の`uvx`も見つからない場合は、
+公式インストーラーで`uv`と`uvx`を導入し、両方の実行を確認します。
 
 ---
 
