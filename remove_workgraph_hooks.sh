@@ -21,10 +21,10 @@ hooks = data.get("hooks", {})
 for event in ("UserPromptSubmit", "Stop"):
     kept = []
     for group in hooks.get(event, []):
-        commands = [h.get("command", "") for h in group.get("hooks", [])]
-        if any("basic_memory_workgraph_" in c for c in commands):
-            continue
-        kept.append(group)
+        remaining = [h for h in group.get("hooks", [])
+                     if "basic_memory_workgraph" not in h.get("command", "")]
+        if remaining:
+            kept.append({**group, "hooks": remaining})
     if kept:
         hooks[event] = kept
     else:
@@ -35,6 +35,7 @@ path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding=
 PY
 fi
 
+rm -f "$CODEX_HOME_DIR/hooks/basic_memory_workgraph.py"
 rm -f "$CODEX_HOME_DIR/hooks/basic_memory_workgraph_recall.py"
 rm -f "$CODEX_HOME_DIR/hooks/basic_memory_workgraph_save.py"
 rm -rf "$CODEX_HOME_DIR/basic-memory-workgraph"
