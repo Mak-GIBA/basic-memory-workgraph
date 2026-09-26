@@ -35,6 +35,10 @@ die() { echo "ERROR: $*" >&2; exit 1; }
 command -v python3 >/dev/null || die "python3 が必要です。"
 
 case "${1:-}" in
+  --update)
+    shift
+    exec python3 "$SCRIPT_DIR/update_workgraph.py" --codex-dir "$CODEX_HOME_DIR" "$@"
+    ;;
   --configure-only)
     [[ $# -eq 1 ]] || die "--configure-only に追加の引数は指定できません。"
     python3 "$SCRIPT_DIR/configure_workgraph.py" --codex-dir "$CODEX_HOME_DIR"
@@ -42,7 +46,8 @@ case "${1:-}" in
     exit 0
     ;;
   --help|-h)
-    echo "Usage: bash install_basic_memory_workgraph.sh [--configure-only]"
+    echo "Usage: bash install_basic_memory_workgraph.sh [--configure-only | --update [--dry-run]]"
+    echo "--update: 登録済みの保存先を検出し、設定・hooks・CLI・スキーマを更新。コード取得やパッケージ更新は行いません。"
     echo "--configure-only: 設定とフックだけを更新。既存の保存先とモードを維持。"
     echo "MEMORY_PROJECT / BM_AUTO_MODE / BM_CASE_MODE / BM_SKILL_MODE で設定を指定します。"
     exit 0
