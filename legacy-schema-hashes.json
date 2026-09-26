@@ -1,0 +1,10 @@
+{
+  "schemas/Case.md": "837e233197bbaab203e2a1186ad62c492e9d31f4ab32e6263d612e0163d35f2e",
+  "schemas/Correction.md": "29ddf2ee52921b7e325f4c6335f055094128624a0a665f822578d24ae775d684",
+  "schemas/Rule.md": "faaf351bfe6f79bf3e6add70d6084a27eaad43d945ac1da57e6aba9d0675e283",
+  "schemas/Workflow.md": "bd2dc917e4067548489e777284634618c4af5a7271226c9aa18547d0df0f3f22",
+  "schemas/Validation.md": "38df0aff7d3b08cd5568a01806c4ecf20855932aedae5216090a7960d57a2730",
+  "schemas/Artifact.md": "6850f660a00ec4a4b05f215b09a88c0a4de10ed36459a83059c9419844fcbf85",
+  "schemas/Project.md": "516a6fd55d44c2944decd10234ecfa29edeaecc6ed5af857091a877224204d99",
+  "Work-Knowledge-Graph.md": "a248e3e00f8ff6a73c422e7a4b6873d8c9588c77e8964270f68a6406ee3c4ddc"
+}

@@ -21,7 +21,7 @@ class WorkgraphTest(unittest.TestCase):
         self.codex = self.home / "custom codex ' $()"
         self.codex.mkdir()
         self.env = {key: value for key, value in os.environ.items()
-                    if key not in ("BM_AUTO_MODE", "MEMORY_PROJECT", "MEMORY_DIR")}
+                    if key not in ("BM_AUTO_MODE", "BM_CASE_MODE", "BM_SKILL_MODE", "MEMORY_PROJECT", "MEMORY_DIR")}
         self.env.update(HOME=str(self.home), CODEX_HOME=str(self.codex))
 
     def write_json(self, relative, value):
@@ -78,7 +78,8 @@ class WorkgraphTest(unittest.TestCase):
         self.assertEqual(bm["custom"], [1])
         self.assertEqual(bm["rememberFolder"], "manual")
         self.assertEqual(bm["placementConventions"], POLICY)
-        self.assertEqual(self.read_json("basic-memory-workgraph/config.json"), {"mode": "off", "other": 3})
+        self.assertEqual(self.read_json("basic-memory-workgraph/config.json"),
+                         {"mode": "off", "other": 3, "caseMode": "off", "skillMode": "review"})
         hooks = self.read_json("hooks.json")
         self.assertEqual(hooks["custom"], "keep")
         self.assertEqual(hooks["hooks"]["Stop"][0], {"matcher": "keep", "hooks": [sibling]})
@@ -157,13 +158,59 @@ class WorkgraphTest(unittest.TestCase):
         self.assertEqual(self.state_files(), [])
         self.assertEqual(self.hook("save", {**event, "stop_hook_active": True}), {})
 
-    def test_length_and_one_off_edits_do_not_trigger(self):
+    def test_length_does_not_trigger(self):
         self.assertEqual(self.install().returncode, 0)
-        for prompt in ("説明してください。" * 200, "このボタンを修正して。もっと青く。"):
+        for prompt in ("説明してください。" * 200, "このボタンを青くして。"):
             with self.subTest(prompt=prompt[:30]):
                 event = {"turn_id": "long", "prompt": prompt}
                 self.hook("recall", event)
                 self.assertEqual(self.hook("save", {**event, "last_assistant_message": "完了しました。" * 500}), {})
+
+    def test_corrections_and_success_request_evaluation_not_capture(self):
+        self.assertEqual(self.install().returncode, 0)
+        for prompt in ("先ほどの出力を修正して", "This worked with the new denominator.",
+                       "Feedback: the previous output used the wrong units"):
+            event = {"session_id": "case", "turn_id": "correction", "prompt": prompt}
+            self.hook("recall", event)
+            self.assertEqual(json.loads(self.state_files()[0].read_text()), {"candidate": True})
+            result = self.hook("save", {**event, "last_assistant_message": "Done"})
+            self.assertEqual(result["decision"], "block")
+            self.assertIn("case=off", result["reason"])
+            self.assertIn("skill=review", result["reason"])
+            self.assertFalse((self.home / "knowledge").exists())
+
+    def test_submodes_preserved_validated_and_overridden(self):
+        self.assertEqual(self.install(BM_CASE_MODE="reusable", BM_SKILL_MODE="auto").returncode, 0)
+        self.assertEqual(self.install().returncode, 0)
+        config = self.read_json("basic-memory-workgraph/config.json")
+        self.assertEqual((config["caseMode"], config["skillMode"]), ("reusable", "auto"))
+        recall = self.hook("recall", {})["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("case=reusable, skill=auto", recall)
+        self.assertEqual(self.install(BM_AUTO_MODE="off").returncode, 0)
+        self.assertEqual(self.hook("save", {"last_assistant_message": "improved"}), {})
+        for key in ("BM_CASE_MODE", "BM_SKILL_MODE"):
+            before = {p: p.read_bytes() for p in self.codex.rglob("*") if p.is_file()}
+            self.assertNotEqual(self.install(**{key: "invalid"}).returncode, 0)
+            self.assertEqual(before, {p: p.read_bytes() for p in self.codex.rglob("*") if p.is_file()})
+        for key in ("caseMode", "skillMode"):
+            self.write_json("basic-memory-workgraph/config.json", {"mode": "always", key: "invalid"})
+            self.assertEqual(self.hook("save", {}), {})
+
+    def test_schema_install_preserves_custom_and_updates_only_legacy(self):
+        notes = self.home / "memory"
+        subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
+        original = {p: p.read_bytes() for p in notes.rglob("*") if p.is_file()}
+        subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
+        self.assertEqual(original, {p: p.read_bytes() for p in notes.rglob("*") if p.is_file()})
+        custom = notes / "schemas/Case.md"
+        custom.write_text("custom schema\n")
+        # A real prior template, independent of git availability/current HEAD.
+        (notes / "schemas/Rule.md").write_bytes((REPO / "tests/fixtures/legacy-Rule.md").read_bytes())
+        result = subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], capture_output=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(custom.read_text(), "custom schema\n")
+        self.assertEqual((notes / "schemas/Rule.md").read_text(), (REPO / "templates/schemas/Rule.md").read_text())
+        self.assertEqual(len(list((notes / "schemas").glob("Rule.md.bak.*"))), 1)
 
     def test_answer_can_supply_a_lesson_signal(self):
         self.assertEqual(self.install().returncode, 0)

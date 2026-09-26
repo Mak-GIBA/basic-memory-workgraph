@@ -42,7 +42,7 @@ def write_file(path, content, stamp):
         temporary.unlink(missing_ok=True)
 
 
-def configure(codex_dir, project=None, mode=None):
+def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None):
     policy = (SOURCE / "memory-policy.md").read_text(encoding="utf-8").strip()
     hook_source = (SOURCE / "hooks/basic_memory_workgraph.py").read_text(encoding="utf-8")
     if not policy:
@@ -63,6 +63,14 @@ def configure(codex_dir, project=None, mode=None):
         raise ValueError("primaryProject must be a nonempty string")
     if selected_mode not in ("smart", "always", "off"):
         raise ValueError("BM_AUTO_MODE must be smart, always, or off")
+    for key, override, default, allowed in (
+        ("caseMode", case_mode, "off", ("off", "reusable")),
+        ("skillMode", skill_mode, "review", ("off", "review", "auto")),
+    ):
+        value = override if override is not None else auto_config.get(key, default)
+        if value not in allowed:
+            raise ValueError(f"{key} must be one of {', '.join(allowed)}")
+        auto_config[key] = value
 
     bm["primaryProject"] = selected_project
     for key, value in {
@@ -104,6 +112,14 @@ def configure(codex_dir, project=None, mode=None):
         (hook_path, hook_source),
         (hooks_path, dumps(hook_config)),
     ]
+    # Reference documents are available to the agent without injecting them all
+    # on every prompt. These are installation assets, not knowledge-graph notes.
+    for source in sorted((SOURCE / "templates").rglob("*")):
+        if source.is_file():
+            changes.append((auto_dir / "templates" / source.relative_to(SOURCE / "templates"),
+                            source.read_text(encoding="utf-8")))
+    for name in ("workgraph_tools.py", "requirements-export.txt"):
+        changes.append((auto_dir / name, (SOURCE / name).read_text(encoding="utf-8")))
     # Already-running sessions may still have the previous command paths cached.
     for action in ("recall", "save"):
         legacy = codex_dir / "hooks" / f"basic_memory_workgraph_{action}.py"
@@ -115,10 +131,17 @@ def configure(codex_dir, project=None, mode=None):
                 f"    sys.argv[1:] = [{action!r}]\n    main()\n"
             )
             changes.append((legacy, wrapper))
+    message = (f"Configured {codex_dir}: project={selected_project}, mode={selected_mode}, "
+               f"case={auto_config['caseMode']}, skill={auto_config['skillMode']}, checkpointOnCompact=false")
+    return changes, message
+
+
+def configure(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None):
+    changes, message = prepare_configuration(codex_dir, project, mode, case_mode, skill_mode)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
     for path, content in changes:
         write_file(path, content, stamp)
-    print(f"Configured {codex_dir}: project={selected_project}, mode={selected_mode}, checkpointOnCompact=false")
+    print(message)
 
 
 def main():
@@ -126,9 +149,12 @@ def main():
     parser.add_argument("--codex-dir", type=Path, default=Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")))
     parser.add_argument("--project", default=os.environ.get("MEMORY_PROJECT"))
     parser.add_argument("--mode", default=os.environ.get("BM_AUTO_MODE"))
+    parser.add_argument("--case-mode", default=os.environ.get("BM_CASE_MODE"))
+    parser.add_argument("--skill-mode", default=os.environ.get("BM_SKILL_MODE"))
     args = parser.parse_args()
     try:
-        configure(args.codex_dir.expanduser().resolve(), args.project, args.mode)
+        configure(args.codex_dir.expanduser().resolve(), args.project, args.mode,
+                  args.case_mode, args.skill_mode)
     except (OSError, ValueError, TypeError, AttributeError) as exc:
         parser.exit(1, f"Configuration failed: {exc}\n")
 

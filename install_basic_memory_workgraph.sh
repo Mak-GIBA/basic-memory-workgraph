@@ -22,6 +22,8 @@ set -euo pipefail
 #   BM_AUTO_MODE=smart   # 推奨
 #   BM_AUTO_MODE=always  # 毎ターン
 #   BM_AUTO_MODE=off     # 自動保存しない
+#   BM_CASE_MODE=reusable # 有用な具体事例の保存（既定off）
+#   BM_SKILL_MODE=auto    # 検証済みSkillの登録（既定review）
 # ============================================================
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -42,7 +44,7 @@ case "${1:-}" in
   --help|-h)
     echo "Usage: bash install_basic_memory_workgraph.sh [--configure-only]"
     echo "--configure-only: 設定とフックだけを更新。既存の保存先とモードを維持。"
-    echo "MEMORY_PROJECT / BM_AUTO_MODE を指定した場合は、その値を使用します。"
+    echo "MEMORY_PROJECT / BM_AUTO_MODE / BM_CASE_MODE / BM_SKILL_MODE で設定を指定します。"
     exit 0
     ;;
   "") [[ $# -eq 0 ]] || die "不正な引数です。" ;;
@@ -56,6 +58,9 @@ case "$BM_AUTO_MODE" in
   smart|always|off) ;;
   *) die "BM_AUTO_MODE は smart / always / off のいずれかです。" ;;
 esac
+
+case "${BM_CASE_MODE:-off}" in off|reusable) ;; *) die "BM_CASE_MODE は off / reusable です。" ;; esac
+case "${BM_SKILL_MODE:-review}" in off|review|auto) ;; *) die "BM_SKILL_MODE は off / review / auto です。" ;; esac
 
 command -v codex >/dev/null || die "codex CLI が必要です。"
 command -v curl >/dev/null || die "curl が必要です。"
@@ -163,185 +168,9 @@ mkdir -p \
 # STEP 6: Schema notes
 # ------------------------------------------------------------
 
-cat > "$MEMORY_DIR/schemas/Case.md" <<'EOF'
----
-title: Case
-type: schema
-entity: Case
-version: 1
-schema:
-  task_type: string, kind of work performed
-  status?: string, accepted / rejected / unverified / partial
-  belongs_to?: Project, project or scope
-  received?(array): Correction, explicit user corrections
-  used?(array): Workflow, workflows used
-  validated_by?(array): Validation, checks applied
-  produced?(array): Artifact, output artifacts
-  learned?(array): Rule, rules learned from the case
-settings:
-  validation: warn
----
-
-# Case
-
-A concrete past task. Preserve the conditions, what happened, and outcome.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Correction.md" <<'EOF'
----
-title: Correction
-type: schema
-entity: Correction
-version: 1
-schema:
-  instruction: string, what the user explicitly corrected
-  reason?: string, why the previous result was inadequate
-  occurred_in?: Case, originating case
-  generalized_to?(array): Rule, reusable rules derived from this correction
-settings:
-  validation: warn
----
-
-# Correction
-
-An explicit user correction. Do not infer corrections from silence.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Rule.md" <<'EOF'
----
-title: Rule
-type: schema
-entity: Rule
-version: 1
-schema:
-  trigger: string, conditions where the rule applies
-  action: string, behavior to perform
-  exception?(array): string, when not to apply the rule
-  learned_from?(array): Case, evidence cases
-  implemented_by?(array): Workflow, workflows implementing the rule
-  validated_by?(array): Validation, checks verifying the rule
-settings:
-  validation: warn
----
-
-# Rule
-
-A reusable conditional rule generalized from evidence.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Workflow.md" <<'EOF'
----
-title: Workflow
-type: schema
-entity: Workflow
-version: 1
-schema:
-  steps(array): string, ordered or practical work steps
-  used_in?(array): Case, cases where this workflow was used
-  implements?(array): Rule, rules implemented by this workflow
-  checked_by?(array): Validation, checks for this workflow
-settings:
-  validation: warn
----
-
-# Workflow
-
-A reusable way of doing work.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Validation.md" <<'EOF'
----
-title: Validation
-type: schema
-entity: Validation
-version: 1
-schema:
-  check(array): string, checks to perform
-  validates_rule?(array): Rule, rules checked
-  validates_workflow?(array): Workflow, workflows checked
-settings:
-  validation: warn
----
-
-# Validation
-
-A verification procedure. Never mark an unperformed check as PASS.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Artifact.md" <<'EOF'
----
-title: Artifact
-type: schema
-entity: Artifact
-version: 1
-schema:
-  kind: string, pdf / docx / pptx / code / report / other
-  location?: string, stable path or reference if safe to store
-  produced_by?: Case, originating case
-settings:
-  validation: warn
----
-
-# Artifact
-
-A produced file or deliverable. Do not store secrets in paths or metadata.
-EOF
-
-cat > "$MEMORY_DIR/schemas/Project.md" <<'EOF'
----
-title: Project
-type: schema
-entity: Project
-version: 1
-schema:
-  scope: string, what this project represents
-settings:
-  validation: warn
----
-
-# Project
-
-A project, repository, workstream, or durable scope.
-EOF
-
-cat > "$MEMORY_DIR/Work-Knowledge-Graph.md" <<'EOF'
----
-title: Work Knowledge Graph
-type: note
-tags: [knowledge-graph, workflow, memory]
----
-
-# Work Knowledge Graph
-
-## Node Types
-- [[Case]]
-- [[Correction]]
-- [[Rule]]
-- [[Workflow]]
-- [[Validation]]
-- [[Artifact]]
-- [[Project]]
-
-## Relation Conventions
-- `belongs_to [[Project]]`
-- `received [[Correction]]`
-- `generalized_to [[Rule]]`
-- `learned_from [[Case]]`
-- `used [[Workflow]]`
-- `implements [[Rule]]`
-- `validated_by [[Validation]]`
-- `produced [[Artifact]]`
-- `related_to [[Case]]`
-
-## Principles
-- Current user instructions override older memory.
-- Automatically save only verified transferable knowledge or explicit lasting preferences.
-- Search before creating a new entity; duplicates without new evidence require no write.
-- Do not automatically create work diaries, Cases, or session checkpoints.
-- Preserve conditions and exceptions.
-- Do not infer success from silence.
-- A graph connection is evidence of relevance, not proof that an old rule applies.
-EOF
+SCHEMA_RESULT=0
+python3 "$SCRIPT_DIR/install_schemas.py" --memory-dir "$MEMORY_DIR" || SCHEMA_RESULT=$?
+[[ "$SCHEMA_RESULT" -eq 0 || "$SCHEMA_RESULT" -eq 2 ]] || die "スキーマ更新に失敗しました。"
 
 # ------------------------------------------------------------
 # STEP 7: 共通ポリシー / Codex設定 / 追加Hook
@@ -395,6 +224,12 @@ Basic Memory Work Knowledge Graph セットアップ完了
   always : 毎ターン評価（保存基準は同じ）
   off    : 自動保存を停止
 
+  事例・Skillの実効モード:
+    $CODEX_HOME_DIR/basic-memory-workgraph/config.json
+  BM_CASE_MODE: off / reusable（未設定時off）
+  BM_SKILL_MODE: off / review / auto（未設定時review）
+  共有・JSONL・Skill登録CLIにはPyYAMLが必要です。READMEの導入手順を参照してください。
+
 ------------------------------------------------------------
 次にやること
 ------------------------------------------------------------
@@ -429,3 +264,8 @@ Basic Memory Work Knowledge Graph セットアップ完了
 
 ============================================================
 EOF
+
+if [[ "$SCHEMA_RESULT" -eq 2 ]]; then
+  log "設定更新は完了しましたが、個別確認が必要なスキーマ・索引を保持しています。上の表示を確認してください。"
+  exit 2
+fi

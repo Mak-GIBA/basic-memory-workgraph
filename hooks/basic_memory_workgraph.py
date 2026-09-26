@@ -12,7 +12,9 @@ ROOT = Path(__file__).resolve().parent.parent / "basic-memory-workgraph"
 SIGNALS = re.compile(
     r"今後|次から|これからは|毎回|好み|覚えて|記憶して|教訓|再利用|再発防止|根本原因|"
     r"原因.{0,40}(?:確認|判明|特定)|"
-    r"\b(?:remember|preference|from now on|next time|lesson|reusable|root cause)\b",
+    r"修正|フィードバック|改善|解決|うまくいった|期待どおり|成功事例|"
+    r"\b(?:remember|preference|from now on|next time|lesson|reusable|root cause|"
+    r"correction|feedback|instead|improved|resolved|worked|successful)\b",
     re.IGNORECASE,
 )
 RECALL = """Before substantial work, search directly relevant Rules, Workflows,
@@ -46,9 +48,14 @@ def candidate(text):
 
 def evaluate(event, action):
     try:
-        mode = read_object(ROOT / "config.json").get("mode", "smart")
+        config = read_object(ROOT / "config.json")
+        mode = config.get("mode", "smart")
+        case_mode = config.get("caseMode", "off")
+        skill_mode = config.get("skillMode", "review")
         policy = (ROOT / "memory-policy.md").read_text(encoding="utf-8").strip()
-        if mode not in ("smart", "always", "off") or not policy:
+        if (mode not in ("smart", "always", "off") or not policy
+                or case_mode not in ("off", "reusable")
+                or skill_mode not in ("off", "review", "auto")):
             raise ValueError("Missing policy or invalid mode")
     except (OSError, ValueError):
         if action == "recall":
@@ -57,6 +64,18 @@ def evaluate(event, action):
                 "additionalContext": "Basic Memory policy is unavailable. Skip automatic memory writes; explicit user save requests remain allowed.",
             }}
         return {}
+
+    settings = (
+        f"Effective Workgraph settings: auto={mode}, case={case_mode}, skill={skill_mode}. "
+        "auto=off disables ALL automatic case capture and skill review/creation too. "
+        "case=off permits concrete case capture only on an explicit save request. "
+        "skill=review permits review only; skill=auto authorizes reviewed, validated "
+        "Workgraph-managed skill creation/registration. "
+        f"Read {ROOT / 'templates/CAPTURE.md'} when capturing a case and "
+        f"{ROOT / 'templates/SKILL_REVIEW.md'} when reviewing a workflow. "
+        "Use only available conversation evidence; do not read raw transcript logs "
+        "or fabricate missing interaction steps."
+    )
 
     state = state_path(event)
     if action == "recall":
@@ -74,7 +93,7 @@ def evaluate(event, action):
         )
         return {"hookSpecificOutput": {
             "hookEventName": "UserPromptSubmit",
-            "additionalContext": policy + "\n\n" + automatic + "\n\n" + RECALL,
+            "additionalContext": policy + "\n\n" + settings + "\n\n" + automatic + "\n\n" + RECALL,
         }}
 
     prompt_candidate = False
@@ -99,6 +118,7 @@ def evaluate(event, action):
             "If no candidate qualifies or the turn already saved the same knowledge, "
             "finish without writing. Respect plan/read-only modes: do not write there.\n\n"
             + policy
+            + "\n\n" + settings
             + "\n\nAfter this one pass, finish normally; do not start another persistence pass."
         ),
     }
