@@ -13,6 +13,8 @@ import shutil
 import sys
 import tempfile
 
+from workgraph_sequence import sequence_issues
+
 try:
     import yaml
 except ImportError:
@@ -23,7 +25,7 @@ MAX_BYTES = 8 * 1024 * 1024
 NOTE_FOLDERS = {"rules", "workflows", "validations", "cases", "corrections", "artifacts", "projects"}
 REVIEW_KEYS = {"privacy_review", "review_sha256"}
 SHARED_KEYS = {"title", "type", "tags", "schema", "sharing_scope", "training_use",
-               "capture_kind", "case_format_version"}
+               "capture_kind", "case_format_version", "integrity_status"}
 SENSITIVE = (
     ("private key", re.compile(r"-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----")),
     ("credential", re.compile(r"\b(?:sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16})\b")),
@@ -188,11 +190,11 @@ def text_piece(value, nullable=False):
         raise Invalid("Interaction text requires summary and optional excerpt")
 
 
-def interaction(note):
+def interaction_data(note):
     meta = note.metadata
     if (meta.get("type", "").lower() != "case" or meta.get("capture_kind") != "interaction_case"
-            or type(meta.get("case_format_version")) is not int or meta["case_format_version"] != 1):
-        raise Invalid("Not a supported structured Case v1")
+            or type(meta.get("case_format_version")) is not int or meta["case_format_version"] not in (1, 2)):
+        raise Invalid("Not a supported structured Case v1/v2")
     # The dedicated section is the sole canonical payload. No prose reconstruction.
     sections = re.findall(r"^## Interaction\s*\n(.*?)(?=^## |\Z)", note.body, re.M | re.S)
     if len(sections) != 1:
@@ -201,6 +203,20 @@ def interaction(note):
     if len(blocks) != 1:
         raise Invalid("Expected one JSON interaction block")
     data = strict_json(blocks[0])
+    if (not isinstance(data, dict) or type(data.get("version")) is not int
+            or data["version"] != meta["case_format_version"]):
+        raise Invalid("Interaction version does not match frontmatter")
+    return data
+
+
+def interaction(note):
+    data = interaction_data(note)
+    if data["version"] == 2:
+        issues = sequence_issues(data)
+        if issues:
+            # Only controlled codes/locations, never user-supplied text in errors.
+            raise Invalid("Invalid progressive Case: " + issues[0]["code"] + " at " + issues[0]["location"])
+        return data
     expected = {"version", "request", "initial", "corrections", "final", "outcome", "acceptance",
                 "checks", "lessons", "transfer_use"}
     if not isinstance(data, dict) or set(data) != expected or type(data["version"]) is not int or data["version"] != 1:
@@ -249,6 +265,7 @@ def atomic_file(path, content, replace=False):
 def review(args):
     root = no_symlink(args.memory_dir)
     note = load_note(root, args.note)
+    require_integrity(note)
     note.metadata.update(sharing_scope=args.sharing, training_use=args.training)
     if args.training == "approved" or note.metadata.get("capture_kind") == "interaction_case":
         screen(json_text(interaction(note)))
@@ -332,6 +349,105 @@ def skipped_note(relative, reason):
     return {"note": label, "reason": reason}
 
 
+def integrity_status(note):
+    status = note.metadata.get("integrity_status", "unreviewed")
+    if status not in ("unreviewed", "checked", "needs_review"):
+        raise Invalid("Invalid integrity status")
+    return status
+
+
+def require_integrity(note):
+    if integrity_status(note) == "needs_review":
+        raise Invalid("Knowledge needs integrity review before export permission can be used")
+    # Even a checked status never bypasses validation of current content.
+    if note.metadata.get("capture_kind") == "interaction_case":
+        interaction(note)
+
+
+def audit(args):
+    """Read-only diagnostics and bounded dependency candidates, never auto-repair."""
+    root = no_symlink(args.memory_dir)
+    if not root.is_dir():
+        raise Invalid("Memory directory does not exist")
+    selected = relative_path(args.note).as_posix() if args.note else None
+    notes, issues, legacy = {}, [], []
+
+    def report(path, code, location, action):
+        # Paths can contain personal data; never echo content, titles, IDs or links.
+        label = skipped_note(path, "")["note"]
+        issues.append({"note": label, "code": code, "location": location, "action": action})
+
+    paths = list(iter_notes(root))
+    if selected and selected not in paths:
+        raise Invalid("Audit target is not an existing note in a known folder")
+    inspected = set(paths if selected is None else [selected])
+    for path in paths:
+        try:
+            notes[path] = load_note(root, path)
+        except (Invalid, UnicodeError, OSError, TypeError, RecursionError):
+            if path in inspected:
+                report(path, "invalid_note", "/", "Check note structure locally; contents are omitted from this report.")
+    for path in sorted(inspected & notes.keys()):
+        note = notes[path]
+        try:
+            screen(note.render())
+            screen(path)
+        except Invalid:
+            report(path, "privacy_concern", "/", "Sanitize locally before sharing; do not copy private text into a repair log.")
+        try:
+            if integrity_status(note) == "needs_review":
+                report(path, "needs_review", "/integrity_status", "Resolve the recorded concern against available evidence before positive reuse.")
+        except Invalid:
+            report(path, "invalid_integrity_status", "/integrity_status", "Use unreviewed, checked, or needs_review.")
+        if note.metadata.get("capture_kind") == "interaction_case":
+            try:
+                data = interaction_data(note)
+                if data["version"] == 2:
+                    for item in sequence_issues(data):
+                        report(path, item["code"], item["location"], item["action"])
+                else:
+                    interaction(note)
+            except (Invalid, TypeError, RecursionError):
+                report(path, "invalid_interaction", "/Interaction", "Inspect the declared format and canonical JSON; do not reconstruct missing history.")
+        elif note.metadata.get("type", "").lower() == "case":
+            legacy.append(skipped_note(path, "Legacy freeform Case; no structured sequence checks performed"))
+
+    index = alias_index(notes.values())
+    dependents = {}
+    for path, note in notes.items():
+        # Parse relation lines only, never infer dependencies from ordinary mentions.
+        for kind, target in re.findall(r"^- (\w+) \[\[([^\]\n]+)\]\]\s*$", note.body, re.M):
+            matches = index.get(target.split("|", 1)[0].split("#", 1)[0].strip(), set())
+            if len(matches) != 1:
+                if path in inspected:
+                    report(path, "unresolved_relation", "/Relations", "Check the destination, ambiguity or external project; do not delete the relation automatically.")
+                continue
+            destination = next(iter(matches))
+            if kind in ("generalized_to", "learned", "packaged_as"):
+                dependents.setdefault(path, set()).add(destination)
+            elif kind in ("learned_from", "occurred_in", "implements", "implements_workflow"):
+                dependents.setdefault(destination, set()).add(path)
+
+    flagged = {path for path in inspected if any(
+        item["note"] == skipped_note(path, "")["note"] for item in issues)}
+    affected = []
+    for source in sorted(flagged):
+        seen, frontier = {source}, {source}
+        for depth in (1, 2):
+            next_level = set()
+            for parent in frontier:
+                next_level.update(dependents.get(parent, set()) - seen)
+            for target in sorted(next_level):
+                affected.append({"note": skipped_note(target, "")["note"],
+                                 "source": skipped_note(source, "")["note"], "depth": depth,
+                                 "action": "Inspect affected claims and independent evidence; do not invalidate the entire note automatically."})
+            seen.update(next_level)
+            frontier = next_level
+    return {"read_only": True, "checked": len(inspected), "issues": issues,
+            "affected": affected, "legacy": legacy,
+            "limits": "Structural checks only. A clean result does not verify chronology, evidence truth, or user satisfaction."}
+
+
 def candidates(root, predicate):
     if not root.is_dir():
         raise Invalid("Memory directory does not exist")
@@ -341,6 +457,7 @@ def candidates(root, predicate):
             note = load_note(root, rel)
             notes.append(note)
             if predicate(note):
+                require_integrity(note)
                 if not note.reviewed():
                     raise Invalid("Missing or stale privacy review")
                 selected.append(note)
@@ -417,7 +534,11 @@ def import_share(args):
         screen(text)
         screen(rel)
         note = parse_note(text, rel)
+        # An import is reference data, not an attestation that the knowledge is sound.
+        status = integrity_status(note)
         note.metadata = {k: v for k, v in note.metadata.items() if k in SHARED_KEYS}
+        if "integrity_status" in note.metadata:
+            note.metadata["integrity_status"] = "needs_review" if status == "needs_review" else "unreviewed"
         note.metadata.update(sharing_scope="private", training_use="excluded", privacy_review="pending",
                              import_source=rel)
         content = note.render()
@@ -471,8 +592,11 @@ def export_cases(args):
                 matches = index.get(target.split("|", 1)[0].split("#", 1)[0].strip(), set())
                 if len(matches) == 1:
                     relations.append({"type": kind, "target_id": sha(next(iter(matches)).encode())})
-            rows.append({"format_version": 1, "source_id": sha(note.path.encode()),
-                         "interaction": data, "relations": relations})
+            row = {"format_version": 1, "source_id": sha(note.path.encode()),
+                   "interaction": data, "relations": relations}
+            if data["version"] == 2:
+                row["integrity_status"] = integrity_status(note)
+            rows.append(row)
         except Invalid as exc:
             skipped.append(skipped_note(note.path, str(exc)))
     if not args.dry_run:
@@ -620,6 +744,11 @@ def main():
             if command == "export-share":
                 p.add_argument("--scope", choices=("team", "public"), required=True)
                 p.add_argument("--include-cases", action="store_true")
+    p = sub.add_parser("audit", help="Read-only structural checks; semantic repair remains evidence-driven")
+    p.set_defaults(handler=audit)
+    p.add_argument("--memory-dir", type=Path, required=True)
+    p.add_argument("--note", help="Optional relative note path; otherwise inspect all known note folders")
+    p.add_argument("--dry-run", action="store_true", help="Accepted for consistency; audit never writes")
     p = sub.add_parser("skill-digest")
     p.set_defaults(handler=skill_digest)
     p.add_argument("--source", type=Path, required=True)
@@ -639,7 +768,7 @@ def main():
         message = str(exc) if isinstance(exc, Invalid) else type(exc).__name__
         parser.exit(1, f"Workgraph operation failed: {message}\n")
     print(json_text(result), end="")
-    if result.get("conflicts") or result.get("skipped"):
+    if result.get("conflicts") or result.get("skipped") or result.get("issues"):
         sys.exit(2)
 
 

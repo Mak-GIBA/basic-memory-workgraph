@@ -2,7 +2,7 @@
 title: Correction
 type: schema
 entity: Correction
-version: 4
+version: 3
 schema:
   instruction: string, what the user explicitly corrected
   context?: string, purpose audience output type and constraints actually known
@@ -20,7 +20,6 @@ schema:
 settings:
   validation: warn
   frontmatter:
-    integrity_status?(enum): [unreviewed, checked, needs_review]
     sharing_scope?(enum): [private, team, public]
     training_use?(enum): [excluded, approved]
     privacy_review?(enum): [pending, passed]

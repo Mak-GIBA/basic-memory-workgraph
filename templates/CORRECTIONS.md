@@ -61,8 +61,13 @@ edits, leaving privacy_review=pending. Read back once after writing.
 5. Use applicable evidence in the initial output. Do not persist a recall diary.
 
 Only independently admitted abstract lessons become Rules. A useful full interaction
-may become a Case under its separate admission rules. Link existing nodes with
+may become a Case under its separate admission rules. In case=progressive, useful
+ongoing sequences use v2 and keep the observed stages instead of overwriting them. Link existing nodes with
 `occurred_in [[Case]]` or `generalized_to [[Rule]]` when meaningful. No companion
 nodes are required. Corrections are excluded from `export-cases`; they can inform
 a later approved structured Case, without inventing unknown outcomes. Sharing
 still requires independent explicit designation and content review.
+
+Before reuse also check integrity under AUDIT.md. A suspected sequence error is not
+proof that the user changed their mind. Mark unresolved notes needs_review; resolve
+only with evidence and inspect affected derived knowledge. No integrity edits in Plan.

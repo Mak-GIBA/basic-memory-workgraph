@@ -2,7 +2,7 @@
 title: Validation
 type: schema
 entity: Validation
-version: 3
+version: 2
 schema:
   check(array): string, checks to perform
   validates_rule?(array): Rule, rules checked
@@ -10,7 +10,6 @@ schema:
 settings:
   validation: warn
   frontmatter:
-    integrity_status?(enum): [unreviewed, checked, needs_review]
     sharing_scope?(enum): [private, team, public]
     training_use?(enum): [excluded, approved]
     privacy_review?(enum): [pending, passed]

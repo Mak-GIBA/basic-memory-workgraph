@@ -62,7 +62,7 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(config, {'mode': 'off', 'caseMode': 'reusable', 'skillMode': 'auto', 'custom': 9, 'correctionMode': 'off'})
         for path in (self.memory/'schemas').glob('*.md'):
             meta, _, _ = schemas.split_note(path.read_text())
-            self.assertEqual(meta['version'], 3 if path.stem == 'Correction' else 2)
+            self.assertEqual(meta['version'], 4 if path.stem == 'Correction' else 3)
             self.assertEqual(meta['permalink'], 'chosen/'+path.stem.lower())
             self.assertEqual(meta['extra_metadata'], {'owner':'retained'})
         self.assertEqual((self.memory/'rules/ordinary.md').read_bytes(), ordinary)
@@ -228,7 +228,7 @@ class UpdateTest(unittest.TestCase):
         self.args.dry_run = False
         self.assertEqual(updater.update(self.args)['preserved'], [])
         current, _, _ = schemas.split_note(target.read_text())
-        self.assertEqual(current['version'], 3)
+        self.assertEqual(current['version'], 4)
         self.assertEqual(current['permalink'], 'chosen/schemas/correction')
         self.assertEqual(current['custom_metadata'], 'keep')
         self.assertIn('desired_output?', current['schema'])

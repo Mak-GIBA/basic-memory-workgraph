@@ -2,7 +2,7 @@
 title: Workflow
 type: schema
 entity: Workflow
-version: 3
+version: 2
 schema:
   steps(array): string, ordered or practical work steps
   used_in?(array): Case, cases where this workflow was used
@@ -19,7 +19,6 @@ schema:
 settings:
   validation: warn
   frontmatter:
-    integrity_status?(enum): [unreviewed, checked, needs_review]
     sharing_scope?(enum): [private, team, public]
     training_use?(enum): [excluded, approved]
     privacy_review?(enum): [pending, passed]

@@ -64,7 +64,7 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
     if selected_mode not in ("smart", "always", "off"):
         raise ValueError("BM_AUTO_MODE must be smart, always, or off")
     for key, override, default, allowed in (
-        ("caseMode", case_mode, "off", ("off", "reusable")),
+        ("caseMode", case_mode, "off", ("off", "reusable", "progressive")),
         ("correctionMode", correction_mode, "off", ("off", "scoped")),
         ("skillMode", skill_mode, "review", ("off", "review", "auto")),
     ):
@@ -120,7 +120,7 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
         if source.is_file():
             changes.append((auto_dir / "templates" / source.relative_to(SOURCE / "templates"),
                             source.read_text(encoding="utf-8")))
-    for name in ("workgraph_tools.py", "requirements-export.txt"):
+    for name in ("workgraph_tools.py", "workgraph_sequence.py", "requirements-export.txt"):
         changes.append((auto_dir / name, (SOURCE / name).read_text(encoding="utf-8")))
     # Already-running sessions may still have the previous command paths cached.
     for action in ("recall", "save"):

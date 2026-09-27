@@ -2,7 +2,7 @@
 title: Rule
 type: schema
 entity: Rule
-version: 3
+version: 2
 schema:
   trigger: string, conditions where the rule applies
   action: string, behavior to perform
@@ -16,7 +16,6 @@ schema:
 settings:
   validation: warn
   frontmatter:
-    integrity_status?(enum): [unreviewed, checked, needs_review]
     sharing_scope?(enum): [private, team, public]
     training_use?(enum): [excluded, approved]
     privacy_review?(enum): [pending, passed]

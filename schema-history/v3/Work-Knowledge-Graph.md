@@ -35,10 +35,7 @@ tags: [knowledge-graph, workflow, memory]
 - Recall matching Corrections before drafting; compare purpose, audience, output and scope.
 - Search before creating a new entity; duplicates without new evidence require no write.
 - Never create work diaries or automatic session checkpoints.
-- Structured Cases require explicit capture, reusable mode, or progressive mode.
-- Progressive Cases keep ordered outputs/corrections/actions and evidence-linked adoption assessments.
-- Implicit adoption is not verified correctness, explicit acceptance or a lasting preference.
-- Check integrity before reuse; quarantine uncertain records and repair only with evidence.
+- Structured Cases require explicit capture or the reusable case mode.
 - Skill Artifacts describe only reviewed, validated registered Skills.
 - Sharing and training permissions are independent and default to disabled.
 - Preserve conditions and exceptions.

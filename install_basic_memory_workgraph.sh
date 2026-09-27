@@ -23,7 +23,8 @@ set -euo pipefail
 #   BM_AUTO_MODE=always  # 毎ターン
 #   BM_AUTO_MODE=off     # 自動保存しない
 #   BM_CORRECTION_MODE=scoped # 文脈付き修正指示の保存（既定off）
-#   BM_CASE_MODE=reusable # 有用な具体事例の保存（既定off）
+#   BM_CASE_MODE=reusable # 結果のある有用な具体事例（既定off）
+#   BM_CASE_MODE=progressive # 未完了の改善シーケンスと採用推定も段階的に保存
 #   BM_SKILL_MODE=auto    # 検証済みSkillの登録（既定review）
 # ============================================================
 
@@ -66,7 +67,7 @@ case "$BM_AUTO_MODE" in
 esac
 
 case "${BM_CORRECTION_MODE:-off}" in off|scoped) ;; *) die "BM_CORRECTION_MODE は off / scoped です。" ;; esac
-case "${BM_CASE_MODE:-off}" in off|reusable) ;; *) die "BM_CASE_MODE は off / reusable です。" ;; esac
+case "${BM_CASE_MODE:-off}" in off|reusable|progressive) ;; *) die "BM_CASE_MODE は off / reusable / progressive です。" ;; esac
 case "${BM_SKILL_MODE:-review}" in off|review|auto) ;; *) die "BM_SKILL_MODE は off / review / auto です。" ;; esac
 
 command -v codex >/dev/null || die "codex CLI が必要です。"

@@ -1,0 +1,138 @@
+{
+  "version": 2,
+  "context": {
+    "purpose": "Choose between options",
+    "audience": "Decision makers",
+    "deliverable": "Comparison briefing",
+    "constraints": "Readable at a glance",
+    "scope": "This briefing; cross-project preference not established"
+  },
+  "request": {
+    "summary": "Compare the options and recommend one",
+    "excerpt": null
+  },
+  "steps": [
+    {
+      "id": "o1",
+      "kind": "output",
+      "actor": "assistant",
+      "target_id": null,
+      "content": {
+        "summary": "Long explanations before comparison",
+        "excerpt": null
+      },
+      "change": null
+    },
+    {
+      "id": "c1",
+      "kind": "correction",
+      "actor": "user",
+      "target_id": "o1",
+      "content": {
+        "summary": "Put the comparison and recommendation first",
+        "excerpt": null
+      },
+      "signal": "none",
+      "group_id": "revision"
+    },
+    {
+      "id": "o2",
+      "kind": "output",
+      "actor": "assistant",
+      "target_id": "o1",
+      "content": {
+        "summary": "Comparison table and recommendation first",
+        "excerpt": null
+      },
+      "change": {
+        "summary": "Reordered the briefing; retained supporting detail",
+        "excerpt": null
+      }
+    },
+    {
+      "id": "c2",
+      "kind": "correction",
+      "actor": "user",
+      "target_id": "o2",
+      "content": {
+        "summary": "Only shorten the table labels now",
+        "excerpt": null
+      },
+      "signal": "scope_narrowing",
+      "group_id": "revision2"
+    },
+    {
+      "id": "o3",
+      "kind": "output",
+      "actor": "assistant",
+      "target_id": "o2",
+      "content": {
+        "summary": "Comparison first with shorter labels",
+        "excerpt": null
+      },
+      "change": {
+        "summary": "Shortened labels without changing the recommendation",
+        "excerpt": null
+      }
+    },
+    {
+      "id": "v1",
+      "kind": "verification",
+      "actor": "tool",
+      "target_id": "o3",
+      "content": {
+        "summary": "Checked that the label changes retained the quantities and units",
+        "excerpt": null
+      },
+      "result": "passed"
+    },
+    {
+      "id": "a1",
+      "kind": "action",
+      "actor": "user",
+      "target_id": "o3",
+      "content": {
+        "summary": "Commit these revisions",
+        "excerpt": null
+      },
+      "signal": "commit_request",
+      "group_id": "delivery"
+    },
+    {
+      "id": "a2",
+      "kind": "action",
+      "actor": "user",
+      "target_id": "o3",
+      "content": {
+        "summary": "Push the committed revision",
+        "excerpt": null
+      },
+      "signal": "push_request",
+      "group_id": "delivery"
+    }
+  ],
+  "latest_output_id": "o3",
+  "state": "completed",
+  "outcome": "verified",
+  "acceptance": "unknown",
+  "acceptance_evidence_ids": [],
+  "assessments": [
+    {
+      "id": "assessment1",
+      "target_id": "o3",
+      "aspect": "Readiness to retain and share the briefing",
+      "judgment": "tentative",
+      "evidence_ids": [
+        "a1",
+        "a2"
+      ],
+      "counterevidence_ids": [],
+      "rationale": {
+        "summary": "The user requested retention and sharing after revisions. Both requests belong to one delivery episode; no satisfaction claim follows.",
+        "excerpt": null
+      }
+    }
+  ],
+  "repairs": [],
+  "transfer_use": "Compare presentation choices for future decision briefings with matching audience and purpose"
+}

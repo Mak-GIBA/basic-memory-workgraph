@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent / "basic-memory-workgraph"
 SIGNALS = re.compile(
     r"今後|次から|これからは|毎回|好み|覚えて|記憶して|教訓|再利用|再発防止|根本原因|"
     r"原因.{0,40}(?:確認|判明|特定)|"
-    r"修正|調整|フィードバック|改善|解決|うまくいった|期待どおり|成功事例|"
+    r"commit|push|コミット|プッシュ|この形式で|この案で|元に戻|引き続き|あと.{0,20}だけ|修正|調整|フィードバック|改善|解決|うまくいった|期待どおり|成功事例|"
     r"もっと.{0,20}(?:短|長|詳|簡潔)|表にして|ではなく|じゃなく|その意味では|"
     r"\b(?:remember|preference|from now on|next time|lesson|reusable|root cause|"
     r"correction|feedback|instead|improved|resolved|worked|successful|adjust|shorter|"
@@ -28,7 +28,12 @@ SIGNALS = re.compile(
 )
 RECALL = """Before drafting, search directly relevant Corrections, Rules, Workflows,
 Validations, and similar Cases in Basic Memory using the current purpose, audience,
-output type and constraints. Read promising notes and, when useful, follow their
+output type and constraints. For progressive Cases read the ordered steps and
+assessments, checking integrity before reuse. Prefer matching context, then evidence
+of actual adoption/reuse; do not equate an implicit signal with satisfaction.
+A needs_review Case is not a positive precedent; inspect its sources and affected
+Rules/Workflows under AUDIT.md. In Plan/read-only report concerns without writes.
+Read promising notes and, when useful, follow their
 real graph context at depth 2 or 3. Compare scope and exceptions before applying
 an old desired output. A scoped correction is not a standing preference; a graph
 path is potential relevance, not automatic applicability. An explicit correction
@@ -54,7 +59,7 @@ def runtime():
         "correctionMode": config.get("correctionMode", "off"),
     }
     for key, allowed in (("mode", ("smart", "always", "off")),
-                         ("caseMode", ("off", "reusable")),
+                         ("caseMode", ("off", "reusable", "progressive")),
                          ("skillMode", ("off", "review", "auto")),
                          ("correctionMode", ("off", "scoped"))):
         if settings[key] not in allowed:
@@ -158,10 +163,12 @@ def evaluate(event, action):
         "correction=scoped admits contextual user corrections even with unknown outcomes; "
         "correction=off allows Correction capture only on an explicit save request. "
         "case=off permits concrete case capture only on an explicit save request. "
+        "case=progressive allows useful unfinished correction sequences and later adoption/reversal signals in one Case. "
         "skill=review permits review only; skill=auto authorizes reviewed, validated "
         "Workgraph-managed skill creation/registration. "
         f"Read {ROOT / 'templates/CORRECTIONS.md'} for correction capture/recall, "
-        f"{ROOT / 'templates/CAPTURE.md'} for a case, and "
+        f"{ROOT / 'templates/CAPTURE.md'} for a case, "
+        f"{ROOT / 'templates/AUDIT.md'} for integrity checking/repair, and "
         f"{ROOT / 'templates/SKILL_REVIEW.md'} for a workflow review. "
         "Use only available conversation evidence; do not read raw transcript logs "
         "or fabricate missing interaction steps."
@@ -186,7 +193,7 @@ def evaluate(event, action):
                     "ONLY in implementation/default mode with writes allowed, run this command "
                     "to enable the current turn's Stop evaluation. NEVER run it in Plan/read-only "
                     "mode or a Stop-hook continuation; permission_mode does not prove the mode. "
-                    "Append --candidate if you recognized a correction/adjustment or lesson "
+                    "Append --candidate if you recognized a correction, adoption/reuse/reversal signal, memory error, or lesson "
                     "semantically, even without a keyword match. Do not print the token to the user.\n"
                     + command
                 )

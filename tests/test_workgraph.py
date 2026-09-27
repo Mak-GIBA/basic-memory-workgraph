@@ -335,6 +335,30 @@ class WorkgraphTest(unittest.TestCase):
         self.assertNotEqual(self.install(BM_CORRECTION_MODE="invalid").returncode, 0)
         self.assertEqual(before, {p: p.read_bytes() for p in self.codex.rglob("*") if p.is_file()})
 
+    def test_progressive_mode_installs_audit_and_detects_adoption_signals(self):
+        self.assertEqual(self.install(BM_CASE_MODE="progressive").returncode, 0)
+        self.assertEqual(self.install().returncode, 0)
+        self.assertEqual(self.read_json("basic-memory-workgraph/config.json")["caseMode"], "progressive")
+        installed = self.codex / "basic-memory-workgraph"
+        self.assertTrue((installed / "workgraph_sequence.py").exists())
+        self.assertTrue((installed / "templates/AUDIT.md").exists())
+        memory = self.home / "isolated-memory"
+        memory.mkdir()
+        cli = subprocess.run([sys.executable, str(installed / "workgraph_tools.py"), "audit",
+                              "--memory-dir", str(memory)], env=self.env, capture_output=True, text=True)
+        self.assertEqual(cli.returncode, 0, cli.stderr)
+        self.assertEqual(json.loads(cli.stdout)["checked"], 0)
+        for prompt in ("commitして", "pushして", "この形式で残りも作って", "元に戻して"):
+            event = {"session_id": "progressive", "turn_id": "one", "prompt": prompt}
+            context = self.hook("recall", event)["hookSpecificOutput"]["additionalContext"]
+            self.assertIn("case=progressive", context)
+            self.assertIn("AUDIT.md", context)
+            self.activate(event)
+            self.assertEqual(self.hook("save", event)["decision"], "block")
+        self.assertEqual(self.install(BM_AUTO_MODE="off").returncode, 0)
+        self.hook("recall", event)
+        self.assertEqual(self.hook("save", event), {})
+
     def test_unattested_plan_and_approval_modes_never_start_evaluation(self):
         self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
         for permission in ("plan", "default", "bypassPermissions", None):

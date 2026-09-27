@@ -94,6 +94,57 @@ skip the case. Never persist an unsanitized intermediate or log it in hook state
 Default sharing_scope=private, training_use=excluded, privacy_review=pending.
 Case capture is NOT permission to share the case or use it for training.
 
+## Progressive sequences, implicit adoption and integrity
+
+case=progressive admits useful unfinished correction sequences with a concrete
+future comparison/learning use. Begin with a meaningful correction, not every new
+request. Keep one Case for the same deliverable and purpose; extend it with new
+outputs, corrections, meaningful later actions and results. A different deliverable
+gets a separate Case. Cross-session continuation requires evidence of identity,
+not just similarity. Follow the v2 format in CAPTURE.md. Never reconstruct missing
+turns, read raw logs, or replace old sequence steps with the latest summary.
+
+No rating prompt or praise is expected. Use ordinary behavior as evidence: a
+user-requested commit/push after revisions, downstream use, reuse of a format, or
+an explicitly narrowed remaining change. Preserve the actor, actual target output,
+context and order. A request is not proof of execution. Autonomous agent actions,
+prearranged delivery commands and checkpoint/backup commits do not establish user
+adoption. Commit and push in one delivery episode are correlated, not two votes.
+Commit/push or narrowed scope alone support at most a tentative adoption assessment.
+Direct downstream/reuse evidence can support a stronger but still inferred claim.
+No numeric satisfaction probabilities. Explicit acceptance, tested correctness and
+implicit adoption remain separate; acceptance may remain unknown indefinitely.
+Silence, elapsed time and a topic switch are not positive or negative evidence.
+
+Attach each assessment to an output and aspect, with observation references,
+rationale and counterevidence. Later repeated corrections or reversals trigger a
+reassessment; never keep a favorable assessment while ignoring its counterevidence.
+Keep the actual prior adoption action even if later reversed. Save only material
+new evidence, not use counts, maintenance diaries or repeated no-change reviews.
+
+Before reuse, compare context first, then inspect integrity and evidence behind
+adoption/reuse. Read the ordered sequence rather than treating a search summary as
+proof. Negative and unfinished Cases can still explain pitfalls. Matching scoped
+evidence can improve the initial output; an inferred preference is not a global rule.
+
+Inspect memory after a write, before reuse, when contradictory evidence appears,
+and on a manual audit request. Follow AUDIT.md. The local audit CLI is read-only:
+structural consistency is not proof of accurate chronology or user satisfaction.
+When available evidence establishes an error, repair only the affected content,
+record concise sanitized before/after changes with reasons and evidence, and read
+back. An actual mistaken record is distinct from an unfavorable real outcome.
+Never silently rewrite history or preserve secrets in repair records/backups.
+When unresolved, mark integrity_status=needs_review with the specific concern;
+do not use it as a positive precedent or export it for sharing/training. Inspect
+affected Rules/Workflows at graph depth 1–2; mark claims dependent solely on faulty
+evidence, preserving independently supported claims. No blanket deletion or repair.
+
+Resolve needs_review only against evidence and structural recheck; clear it to
+checked with the repair rationale. Every content/integrity change invalidates the
+privacy review: privacy_review=pending, remove review_sha256. A successful integrity
+audit does not approve sharing or training. Plan/read-only means report and avoid
+the suspect claim in the current response, without marking or repairing notes.
+
 ## Workflow-to-Skill review
 
 Effective skill mode defaults to review: off disables automatic review; review

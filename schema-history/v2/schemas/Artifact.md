@@ -2,7 +2,7 @@
 title: Artifact
 type: schema
 entity: Artifact
-version: 3
+version: 2
 schema:
   kind: string, pdf / docx / pptx / code / report / skill / other
   location?: string, stable path or reference if safe to store
@@ -14,7 +14,6 @@ schema:
 settings:
   validation: warn
   frontmatter:
-    integrity_status?(enum): [unreviewed, checked, needs_review]
     sharing_scope?(enum): [private, team, public]
     training_use?(enum): [excluded, approved]
     privacy_review?(enum): [pending, passed]
