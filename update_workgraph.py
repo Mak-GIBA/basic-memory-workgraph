@@ -100,7 +100,7 @@ def update(args):
         args.codex_dir, args.basic_memory_config, args.project, args.memory_dir)
     # All parsing/validation precedes mutation, including malformed hook settings.
     config_changes, message = prepare_configuration(
-        codex, project, args.mode, args.case_mode, args.skill_mode)
+        codex, project, args.mode, args.case_mode, args.skill_mode, getattr(args, "correction_mode", None))
     schema_changes, preserved = prepare_schemas(memory)
     changes = config_changes + schema_changes
     for path, _ in changes:
@@ -124,6 +124,7 @@ def main():
     parser.add_argument("--mode", default=os.environ.get("BM_AUTO_MODE"))
     parser.add_argument("--case-mode", default=os.environ.get("BM_CASE_MODE"))
     parser.add_argument("--skill-mode", default=os.environ.get("BM_SKILL_MODE"))
+    parser.add_argument("--correction-mode", default=os.environ.get("BM_CORRECTION_MODE"))
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     try:

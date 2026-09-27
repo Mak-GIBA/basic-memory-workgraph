@@ -30,9 +30,7 @@ tags: [knowledge-graph, workflow, memory]
 
 ## Principles
 - Current user instructions override older memory.
-- Abstract memories require verified transferable knowledge or explicit lasting preferences.
-- Scoped correction mode also admits contextual user corrections with unverified outcomes.
-- Recall matching Corrections before drafting; compare purpose, audience, output and scope.
+- Automatically save only verified transferable knowledge or explicit lasting preferences.
 - Search before creating a new entity; duplicates without new evidence require no write.
 - Never create work diaries or automatic session checkpoints.
 - Structured Cases require explicit capture or the reusable case mode.

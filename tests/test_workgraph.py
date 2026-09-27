@@ -21,7 +21,7 @@ class WorkgraphTest(unittest.TestCase):
         self.codex = self.home / "custom codex ' $()"
         self.codex.mkdir()
         self.env = {key: value for key, value in os.environ.items()
-                    if key not in ("BM_AUTO_MODE", "BM_CASE_MODE", "BM_SKILL_MODE", "MEMORY_PROJECT", "MEMORY_DIR")}
+                    if key not in ("BM_AUTO_MODE", "BM_CASE_MODE", "BM_SKILL_MODE", "BM_CORRECTION_MODE", "MEMORY_PROJECT", "MEMORY_DIR")}
         self.env.update(HOME=str(self.home), CODEX_HOME=str(self.codex))
 
     def write_json(self, relative, value):
@@ -46,6 +46,19 @@ class WorkgraphTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
+
+    def activate(self, event, semantic=False):
+        import hashlib
+        identity = [event.get("session_id"), event.get("turn_id")]
+        ticket = hashlib.sha256(json.dumps(identity).encode()).hexdigest()
+        state = self.read_json("basic-memory-workgraph/state/" + ticket + ".json")
+        command = [sys.executable, str(self.codex / "hooks/basic_memory_workgraph.py"),
+                   "arm", "--ticket", ticket, "--token", state["token"], "--mode", "implementation"]
+        if semantic:
+            command.append("--candidate")
+        result = subprocess.run(command, env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return command
 
     def state_files(self):
         return list((self.codex / "basic-memory-workgraph/state").glob("*.json"))
@@ -79,7 +92,7 @@ class WorkgraphTest(unittest.TestCase):
         self.assertEqual(bm["rememberFolder"], "manual")
         self.assertEqual(bm["placementConventions"], POLICY)
         self.assertEqual(self.read_json("basic-memory-workgraph/config.json"),
-                         {"mode": "off", "other": 3, "caseMode": "off", "skillMode": "review"})
+                         {"mode": "off", "other": 3, "caseMode": "off", "skillMode": "review", "correctionMode": "off"})
         hooks = self.read_json("hooks.json")
         self.assertEqual(hooks["custom"], "keep")
         self.assertEqual(hooks["hooks"]["Stop"][0], {"matcher": "keep", "hooks": [sibling]})
@@ -151,7 +164,8 @@ class WorkgraphTest(unittest.TestCase):
         event = {"session_id": "session", "turn_id": "short", "prompt": "今後日本語で"}
         recall = self.hook("recall", event)["hookSpecificOutput"]["additionalContext"]
         self.assertTrue(recall.startswith(POLICY))
-        self.assertEqual(json.loads(self.state_files()[0].read_text()), {"candidate": True})
+        self.assertIs(json.loads(self.state_files()[0].read_text())["candidate"], True)
+        self.activate(event)
         stop = self.hook("save", {**event, "last_assistant_message": "承知しました。"})
         self.assertEqual(stop["decision"], "block")
         self.assertIn(POLICY, stop["reason"])
@@ -162,8 +176,9 @@ class WorkgraphTest(unittest.TestCase):
         self.assertEqual(self.install().returncode, 0)
         for prompt in ("説明してください。" * 200, "このボタンを青くして。"):
             with self.subTest(prompt=prompt[:30]):
-                event = {"turn_id": "long", "prompt": prompt}
+                event = {"session_id": "test", "turn_id": "long", "prompt": prompt}
                 self.hook("recall", event)
+                self.activate(event)
                 self.assertEqual(self.hook("save", {**event, "last_assistant_message": "完了しました。" * 500}), {})
 
     def test_corrections_and_success_request_evaluation_not_capture(self):
@@ -172,7 +187,8 @@ class WorkgraphTest(unittest.TestCase):
                        "Feedback: the previous output used the wrong units"):
             event = {"session_id": "case", "turn_id": "correction", "prompt": prompt}
             self.hook("recall", event)
-            self.assertEqual(json.loads(self.state_files()[0].read_text()), {"candidate": True})
+            self.assertIs(json.loads(self.state_files()[0].read_text())["candidate"], True)
+            self.activate(event)
             result = self.hook("save", {**event, "last_assistant_message": "Done"})
             self.assertEqual(result["decision"], "block")
             self.assertIn("case=off", result["reason"])
@@ -215,11 +231,17 @@ class WorkgraphTest(unittest.TestCase):
     def test_answer_can_supply_a_lesson_signal(self):
         self.assertEqual(self.install().returncode, 0)
         for answer in ("根本原因を確認しました。", "The root cause was reproduced."):
-            self.assertEqual(self.hook("save", {"last_assistant_message": answer})["decision"], "block")
+            event = {"session_id": "answer", "turn_id": "one"}
+            self.hook("recall", event)
+            self.activate(event)
+            self.assertEqual(self.hook("save", {**event, "last_assistant_message": answer})["decision"], "block")
 
     def test_always_and_off_modes(self):
         self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
-        self.assertEqual(self.hook("save", {})["decision"], "block")
+        event = {"session_id": "always", "turn_id": "one"}
+        self.hook("recall", event)
+        self.activate(event)
+        self.assertEqual(self.hook("save", event)["decision"], "block")
         self.assertEqual(self.hook("save", {"stop_hook_active": True}), {})
         self.assertEqual(self.install(BM_AUTO_MODE="off").returncode, 0)
         recall = self.hook("recall", {"turn_id": "off", "prompt": "覚えて"})
@@ -249,6 +271,8 @@ class WorkgraphTest(unittest.TestCase):
         event = {"turn_id": "../../escape", "prompt": "今後日本語で"}
         self.hook("recall", {**event, "session_id": "one"})
         self.hook("recall", {**event, "session_id": "two", "prompt": "今回だけ青に"})
+        self.activate({**event, "session_id": "one"})
+        self.activate({**event, "session_id": "two"})
         self.assertEqual(len(self.state_files()), 2)
         for path in self.state_files():
             self.assertEqual(len(path.stem), len(hashlib.sha256().hexdigest()))
@@ -275,7 +299,10 @@ class WorkgraphTest(unittest.TestCase):
                 input="{}", text=True, capture_output=True,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn(POLICY, json.dumps(json.loads(result.stdout), ensure_ascii=False).replace("\\n", "\n"))
+            if action == "recall":
+                self.assertIn(POLICY, json.dumps(json.loads(result.stdout), ensure_ascii=False).replace("\\n", "\n"))
+            else:
+                self.assertEqual(json.loads(result.stdout), {})  # Old sessions have no attested token.
         self.assertTrue(list((self.codex / "hooks").glob("*.bak.*")))
 
     def test_uninstall_preserves_sibling_hooks_and_basic_memory_config(self):
@@ -291,6 +318,142 @@ class WorkgraphTest(unittest.TestCase):
         self.assertFalse((self.codex / "hooks/basic_memory_workgraph.py").exists())
         self.assertFalse((self.codex / "basic-memory-workgraph").exists())
         self.assertEqual((self.codex / "basic-memory.json").read_bytes(), before)
+
+    def test_scoped_corrections_preserve_modes_and_inject_contextual_recall(self):
+        self.assertEqual(self.install(BM_CORRECTION_MODE="scoped").returncode, 0)
+        self.assertEqual(self.install().returncode, 0)
+        config = self.read_json("basic-memory-workgraph/config.json")
+        self.assertEqual(config, {"mode": "smart", "caseMode": "off",
+                                  "skillMode": "review", "correctionMode": "scoped"})
+        context = self.hook("recall", {})["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("correction=scoped", context)
+        self.assertIn("Before drafting", context)
+        self.assertIn("Corrections", context)
+        self.assertIn("audience", context)
+        self.assertTrue((self.codex / "basic-memory-workgraph/templates/CORRECTIONS.md").is_file())
+        before = {p: p.read_bytes() for p in self.codex.rglob("*") if p.is_file()}
+        self.assertNotEqual(self.install(BM_CORRECTION_MODE="invalid").returncode, 0)
+        self.assertEqual(before, {p: p.read_bytes() for p in self.codex.rglob("*") if p.is_file()})
+
+    def test_unattested_plan_and_approval_modes_never_start_evaluation(self):
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        for permission in ("plan", "default", "bypassPermissions", None):
+            event = {"session_id": "plan", "turn_id": "one", "prompt": "修正して",
+                     "permission_mode": permission}
+            context = self.hook("recall", event)["hookSpecificOutput"]["additionalContext"]
+            if permission == "plan":
+                self.assertEqual(self.state_files(), [])
+                self.assertNotIn("--ticket", context)
+            else:
+                state = json.loads(self.state_files()[0].read_text())
+                self.assertFalse(state["armed"])
+                self.assertEqual(set(state), {"version", "token", "armed", "candidate"})
+            self.assertEqual(self.hook("save", {**event, "last_assistant_message": "lesson"}), {})
+            self.assertEqual(self.state_files(), [])
+
+    def test_attestation_command_is_quoted_and_semantic_candidate_is_supported(self):
+        self.assertEqual(self.install().returncode, 0)
+        event = {"session_id": "semantic", "turn_id": "one", "prompt": "結論を先頭へ"}
+        context = self.hook("recall", event)["hookSpecificOutput"]["additionalContext"]
+        self.assertFalse(json.loads(self.state_files()[0].read_text())["candidate"])
+        command = context.splitlines()[-1] + " --candidate"
+        result = subprocess.run(command, shell=True, env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.hook("save", event)["decision"], "block")
+        self.assertEqual(self.hook("save", event), {})
+        replay = subprocess.run(command, shell=True, env=self.env, capture_output=True, text=True)
+        self.assertNotEqual(replay.returncode, 0)
+        self.assertNotIn(shlex.split(command)[shlex.split(command).index("--token") + 1], replay.stderr)
+
+    def test_adjustment_phrases_trigger_only_after_attestation(self):
+        self.assertEqual(self.install(BM_CORRECTION_MODE="scoped").returncode, 0)
+        for prompt in ("もっと短く", "表にして", "その意味ではない", "順番を調整して",
+                       "AではなくB", "Make this shorter", "not what I meant"):
+            event = {"session_id": "adjust", "turn_id": "one", "prompt": prompt}
+            self.hook("recall", event)
+            self.activate(event)
+            result = self.hook("save", event)
+            self.assertEqual(result["decision"], "block", prompt)
+            self.assertIn("correction=scoped", result["reason"])
+
+    def test_new_turn_cannot_use_old_attestation_and_no_ids_cannot_arm(self):
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        first = {"session_id": "session", "turn_id": "one"}
+        second = {"session_id": "session", "turn_id": "two"}
+        self.hook("recall", first)
+        command = self.activate(first)
+        self.hook("recall", second)
+        self.assertEqual(self.hook("save", second), {})
+        # A second recall for the same identity also invalidates the old token.
+        self.hook("recall", first)
+        result = subprocess.run(command, env=self.env, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.hook("save", first), {})
+        for event in ({}, {"session_id": "session"}, {"turn_id": "one"}):
+            self.hook("recall", event)
+            self.assertEqual(self.hook("save", event), {})
+        self.assertEqual(self.state_files(), [])
+
+    def test_deny_signals_and_config_failure_consume_attested_token(self):
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        event = {"session_id": "deny", "turn_id": "one"}
+        path = self.codex / "basic-memory-workgraph/config.json"
+        original = path.read_text()
+        for case in ("plan", "continuation", "off", "invalid", "missing-policy"):
+            self.hook("recall", event)
+            command = self.activate(event)
+            stop = dict(event)
+            policy = self.codex / "basic-memory-workgraph/memory-policy.md"
+            if case == "plan": stop["permission_mode"] = "plan"
+            if case == "continuation": stop["stop_hook_active"] = True
+            if case == "off": path.write_text('{"mode":"off"}')
+            if case == "invalid": path.write_text('{"correctionMode":"wrong"}')
+            if case == "missing-policy": policy.unlink()
+            self.assertEqual(self.hook("save", stop), {})
+            self.assertEqual(self.state_files(), [])
+            path.write_text(original)
+            policy.write_text(POLICY)
+            replay = subprocess.run(command, env=self.env, capture_output=True, text=True)
+            self.assertNotEqual(replay.returncode, 0)
+
+    def test_concurrent_stop_evaluates_at_most_once(self):
+        from concurrent.futures import ThreadPoolExecutor
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        event = {"session_id": "concurrent", "turn_id": "one"}
+        self.hook("recall", event)
+        self.activate(event)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            results = list(pool.map(lambda _: self.hook("save", event), range(2)))
+        self.assertEqual(sum(result.get("decision") == "block" for result in results), 1)
+
+    def test_legacy_candidate_state_does_not_authorize_evaluation(self):
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        event = {"session_id": "legacy", "turn_id": "one"}
+        ticket = hashlib.sha256(json.dumps(["legacy", "one"]).encode()).hexdigest()
+        self.write_json("basic-memory-workgraph/state/" + ticket + ".json", {"candidate": True})
+        self.assertEqual(self.hook("save", event), {})
+
+    def test_wrong_token_mode_and_symlink_do_not_enable_evaluation(self):
+        self.assertEqual(self.install(BM_AUTO_MODE="always").returncode, 0)
+        event = {"session_id": "invalid", "turn_id": "one"}
+        context = self.hook("recall", event)["hookSpecificOutput"]["additionalContext"]
+        command = shlex.split(context.splitlines()[-1])
+        for option, value in (("--token", "incorrect"), ("--mode", "plan"), ("--ticket", "../../escape")):
+            changed = command.copy()
+            changed[changed.index(option) + 1] = value
+            result = subprocess.run(changed, env=self.env, capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(json.loads(self.state_files()[0].read_text())["armed"])
+        state = self.state_files()[0]
+        outside = self.home / "outside.json"
+        outside.write_text(state.read_text())
+        original = outside.read_bytes()
+        state.unlink()
+        state.symlink_to(outside)
+        result = subprocess.run(command, env=self.env, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.hook("save", event), {})
+        self.assertEqual(outside.read_bytes(), original)
 
 
 if __name__ == "__main__":

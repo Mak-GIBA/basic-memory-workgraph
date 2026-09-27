@@ -6,8 +6,8 @@ set -euo pipefail
 # Linux / WSL2
 #
 # 目的:
-#   案件をまたいで役立つ検証済みの知識と、明示的な継続的好みだけを
-#   Basic Memory に保存し、次回の仕事で再利用する。
+#   再利用知識・継続的好みと、有効化時は文脈付き修正指示を
+#   Basic Memory に保存し、次回の初回出力から再利用する。
 #
 # 使い方:
 #   chmod +x install_basic_memory_workgraph.sh
@@ -22,6 +22,7 @@ set -euo pipefail
 #   BM_AUTO_MODE=smart   # 推奨
 #   BM_AUTO_MODE=always  # 毎ターン
 #   BM_AUTO_MODE=off     # 自動保存しない
+#   BM_CORRECTION_MODE=scoped # 文脈付き修正指示の保存（既定off）
 #   BM_CASE_MODE=reusable # 有用な具体事例の保存（既定off）
 #   BM_SKILL_MODE=auto    # 検証済みSkillの登録（既定review）
 # ============================================================
@@ -49,7 +50,7 @@ case "${1:-}" in
     echo "Usage: bash install_basic_memory_workgraph.sh [--configure-only | --update [--dry-run]]"
     echo "--update: 登録済みの保存先を検出し、設定・hooks・CLI・スキーマを更新。コード取得やパッケージ更新は行いません。"
     echo "--configure-only: 設定とフックだけを更新。既存の保存先とモードを維持。"
-    echo "MEMORY_PROJECT / BM_AUTO_MODE / BM_CASE_MODE / BM_SKILL_MODE で設定を指定します。"
+    echo "MEMORY_PROJECT / BM_AUTO_MODE / BM_CORRECTION_MODE / BM_CASE_MODE / BM_SKILL_MODE で設定を指定します。"
     exit 0
     ;;
   "") [[ $# -eq 0 ]] || die "不正な引数です。" ;;
@@ -64,6 +65,7 @@ case "$BM_AUTO_MODE" in
   *) die "BM_AUTO_MODE は smart / always / off のいずれかです。" ;;
 esac
 
+case "${BM_CORRECTION_MODE:-off}" in off|scoped) ;; *) die "BM_CORRECTION_MODE は off / scoped です。" ;; esac
 case "${BM_CASE_MODE:-off}" in off|reusable) ;; *) die "BM_CASE_MODE は off / reusable です。" ;; esac
 case "${BM_SKILL_MODE:-review}" in off|review|auto) ;; *) die "BM_SKILL_MODE は off / review / auto です。" ;; esac
 

@@ -42,7 +42,7 @@ def write_file(path, content, stamp):
         temporary.unlink(missing_ok=True)
 
 
-def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None):
+def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None, correction_mode=None):
     policy = (SOURCE / "memory-policy.md").read_text(encoding="utf-8").strip()
     hook_source = (SOURCE / "hooks/basic_memory_workgraph.py").read_text(encoding="utf-8")
     if not policy:
@@ -65,6 +65,7 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
         raise ValueError("BM_AUTO_MODE must be smart, always, or off")
     for key, override, default, allowed in (
         ("caseMode", case_mode, "off", ("off", "reusable")),
+        ("correctionMode", correction_mode, "off", ("off", "scoped")),
         ("skillMode", skill_mode, "review", ("off", "review", "auto")),
     ):
         value = override if override is not None else auto_config.get(key, default)
@@ -97,10 +98,11 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
         ("UserPromptSubmit", "recall", "Searching Basic Memory Work Knowledge Graph"),
         ("Stop", "save", "Evaluating reusable Basic Memory knowledge"),
     ):
-        hooks[event].append({"hooks": [{
-            "type": "command", "command": "python3 " + shlex.quote(str(hook_path)) + " " + action,
-            "timeout": 10, "statusMessage": message,
-        }]})
+        entry = {"type": "command", "command": "python3 " + shlex.quote(str(hook_path)) + " " + action,
+                 "timeout": 10}
+        if action == "recall":
+            entry["statusMessage"] = message
+        hooks[event].append({"hooks": [entry]})
     hook_config.setdefault("description", "User hooks including Basic Memory Work Knowledge Graph")
 
     # Validate and prepare all content before changing any existing file.
@@ -132,12 +134,12 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
             )
             changes.append((legacy, wrapper))
     message = (f"Configured {codex_dir}: project={selected_project}, mode={selected_mode}, "
-               f"case={auto_config['caseMode']}, skill={auto_config['skillMode']}, checkpointOnCompact=false")
+               f"correction={auto_config['correctionMode']}, case={auto_config['caseMode']}, skill={auto_config['skillMode']}, checkpointOnCompact=false")
     return changes, message
 
 
-def configure(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None):
-    changes, message = prepare_configuration(codex_dir, project, mode, case_mode, skill_mode)
+def configure(codex_dir, project=None, mode=None, case_mode=None, skill_mode=None, correction_mode=None):
+    changes, message = prepare_configuration(codex_dir, project, mode, case_mode, skill_mode, correction_mode)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
     for path, content in changes:
         write_file(path, content, stamp)
@@ -151,10 +153,11 @@ def main():
     parser.add_argument("--mode", default=os.environ.get("BM_AUTO_MODE"))
     parser.add_argument("--case-mode", default=os.environ.get("BM_CASE_MODE"))
     parser.add_argument("--skill-mode", default=os.environ.get("BM_SKILL_MODE"))
+    parser.add_argument("--correction-mode", default=os.environ.get("BM_CORRECTION_MODE"))
     args = parser.parse_args()
     try:
         configure(args.codex_dir.expanduser().resolve(), args.project, args.mode,
-                  args.case_mode, args.skill_mode)
+                  args.case_mode, args.skill_mode, args.correction_mode)
     except (OSError, ValueError, TypeError, AttributeError) as exc:
         parser.exit(1, f"Configuration failed: {exc}\n")
 

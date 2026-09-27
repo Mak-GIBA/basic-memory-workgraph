@@ -37,6 +37,39 @@ trigger, action/steps, reason, evidence/check, transfer use, and relevant except
 Do not automatically save work diaries, completion reports, deliverable lists,
 session checkpoints, raw transcripts, long tool output, or task-specific decisions.
 
+## Optional contextual corrections
+
+Effective correction mode defaults to off. In scoped mode, actively save explicit
+user corrections and adjustments in corrections/ using CORRECTIONS.md. Capture
+the known context (purpose, audience, output type, constraints), the observed
+mismatch, the requested output, and the narrowest supported scope and exceptions.
+The aim is to recall what output was wanted in a matching context BEFORE drafting
+the next answer, not merely to record that a correction occurred.
+
+An observed user instruction is evidence of what was requested in that context;
+it is NOT evidence that the change worked or applies universally. A meaningful
+correction may be saved before implementation or verification, including a
+task-specific adjustment. Keep outcome verification and user acceptance separate,
+defaulting to unverified and unknown. Do not invent missing initial output,
+motives, context or results. No observed general lesson is required for Correction
+admission. Ordinary new requests, acknowledgments and duplicate corrections do
+not qualify. In off mode only explicit scoped save requests admit Correction notes.
+
+Before drafting, search relevant Corrections as well as Rules, Workflows,
+Validations and Cases using the current purpose, audience, output and constraints.
+Read promising matches and compare scope and exceptions. Apply matching explicit
+scope; use analogous task-scoped examples as contextual evidence, not standing
+preferences or obligations in unrelated work. Current instructions take precedence.
+Different contexts can support different output choices. Update a correction when
+new instructions supersede it in the same scope; preserve useful differences
+between contexts. Do not append use counts or timestamps without new knowledge.
+
+Promote a lesson to an abstract note only after its five admission checks pass.
+Case capture remains independent and still requires its own mode/admission.
+Link existing nodes when useful; do not generate a Case or Rule for every correction.
+The same sanitization, search/deduplication, read-back and privacy defaults apply
+to Corrections. They do not become training examples merely by being captured.
+
 ## Optional concrete cases
 
 The effective case mode defaults to off. In off mode, only an explicit request to
@@ -101,10 +134,21 @@ Explicit requests may use Case -> cases/, Correction -> corrections/, Artifact -
 artifacts/, Project -> projects/, decision -> codex/decisions/, or the configured
 checkpoint folder. Secret protection still applies.
 
-Missing effective settings mean case=off and skill=review. auto=off disables ALL
-automatic writes, concrete cases, Skill reviews and Skill creation regardless of
+Missing effective settings mean correction=off, case=off and skill=review. auto=off disables ALL
+automatic writes, contextual corrections, concrete cases, Skill reviews and Skill creation regardless of
 submode; explicit requests remain scoped exceptions. Read-only/plan restrictions
 always apply. An unavailable policy/config means no automatic persistence.
+
+The Stop evaluation requires a token enabled for the current session and turn.
+When the start hook supplies an arm command, run it before the final answer ONLY
+after confirming the active mode is implementation/default and not read-only.
+Never arm in Plan/read-only mode or during a Stop-hook continuation. An arm command
+does not change the collaboration mode or authorize a write. If a correction or
+lesson is recognized semantically, use --candidate even when no keyword matched.
+If already saved, do not request a duplicate write during the Stop evaluation.
+The token gates the extra evaluation only; it is not a server-side permission
+boundary. Missing/invalid tokens suppress the extra turn. Never read transcript
+logs or infer collaboration mode from permission_mode=default/bypassPermissions.
 
 ## Persistence and sharing
 

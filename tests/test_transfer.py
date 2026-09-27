@@ -71,6 +71,22 @@ class TransferTest(unittest.TestCase):
         self.assertEqual(len(result["skipped"]), 1)
         self.assertEqual(json.loads((self.output / "manifest.json").read_text())["notes"], [])
 
+    def test_contextual_corrections_are_private_and_not_training_cases(self):
+        rel = self.note("corrections/briefing.md", type="correction", schema="Correction",
+                        body="\n- [context] Decision briefing\n- [instruction] Compare first\n"
+                             "- [desired_output] Table then recommendation\n- [scope] Current briefing\n"
+                             "- [verification] unverified\n- [acceptance] unknown\n")
+        self.assertEqual(wg.export_share(self.args(scope="team", include_cases=True))["exported"], 0)
+        with self.assertRaises(wg.Invalid):
+            self.review(rel, training="approved")
+        self.output = self.base / "training.jsonl"
+        self.assertEqual(wg.export_cases(self.args())["exported"], 0)
+        self.assertEqual(self.output.read_text(), "")
+        self.review(rel, sharing="team")
+        self.output = self.base / "reviewed-correction"
+        self.assertEqual(wg.export_share(self.args(scope="team", include_cases=False))["exported"], 1)
+        self.assertIn("[verification] unverified", (self.output / rel).read_text())
+
     def test_review_invalidates_on_content_or_permission_change(self):
         rel = self.note()
         self.review(rel, "team")

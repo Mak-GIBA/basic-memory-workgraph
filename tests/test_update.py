@@ -59,10 +59,10 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(result['preserved'], [])
         self.assertTrue(result['changed'])
         config=json.loads((self.codex/'basic-memory-workgraph/config.json').read_text())
-        self.assertEqual(config, {'mode': 'off', 'caseMode': 'reusable', 'skillMode': 'auto', 'custom': 9})
+        self.assertEqual(config, {'mode': 'off', 'caseMode': 'reusable', 'skillMode': 'auto', 'custom': 9, 'correctionMode': 'off'})
         for path in (self.memory/'schemas').glob('*.md'):
             meta, _, _ = schemas.split_note(path.read_text())
-            self.assertEqual(meta['version'], 2)
+            self.assertEqual(meta['version'], 3 if path.stem == 'Correction' else 2)
             self.assertEqual(meta['permalink'], 'chosen/'+path.stem.lower())
             self.assertEqual(meta['extra_metadata'], {'owner':'retained'})
         self.assertEqual((self.memory/'rules/ordinary.md').read_bytes(), ordinary)
@@ -171,7 +171,7 @@ class UpdateTest(unittest.TestCase):
             path=binaries/name
             path.write_text('#!/bin/sh\ntouch "$HOME/unexpected-command"\nexit 99\n')
             path.chmod(0o755)
-        env={k:v for k,v in os.environ.items() if k not in ('MEMORY_PROJECT','MEMORY_DIR','BM_AUTO_MODE','BM_CASE_MODE','BM_SKILL_MODE')}
+        env={k:v for k,v in os.environ.items() if k not in ('MEMORY_PROJECT','MEMORY_DIR','BM_AUTO_MODE','BM_CASE_MODE','BM_SKILL_MODE','BM_CORRECTION_MODE')}
         env.update(HOME=str(self.root),CODEX_HOME=str(self.codex),BASIC_MEMORY_CONFIG_DIR=str(self.registry.parent),
                    PATH=str(binaries)+os.pathsep+os.environ['PATH'])
         result=subprocess.run(['bash',str(REPO/'install_basic_memory_workgraph.sh'),'--update','--dry-run'],
@@ -208,6 +208,42 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(updater.basic_memory_config(),self.root/'override/config.json')
         with patch.dict(os.environ,{'BASIC_MEMORY_CONFIG_DIR':'','XDG_CONFIG_HOME':str(self.root/'xdg')}):
             self.assertEqual(updater.basic_memory_config(),self.root/'xdg/basic-memory/config.json')
+
+    def test_v2_correction_upgrade_keeps_metadata_and_legacy_notes(self):
+        target = self.memory / 'schemas/Correction.md'
+        metadata, body, _ = schemas.split_note((REPO / 'schema-history/v2/schemas/Correction.md').read_text())
+        metadata['permalink'] = 'chosen/schemas/correction'
+        metadata['custom_metadata'] = 'keep'
+        target.write_text('---\n' + wg.yaml.safe_dump(metadata) + '---\n' + body)
+        old_note = self.memory / 'corrections/legacy.md'
+        old_note.parent.mkdir()
+        old_note.write_text('---\ntitle: Legacy\ntype: correction\n---\n- [instruction] Keep the original order.\n')
+        before = old_note.read_bytes()
+        self.args.correction_mode = 'scoped'
+        self.args.dry_run = True
+        snapshot_before = snapshot(self.root)
+        preview = updater.update(self.args)
+        self.assertIn(str(target), preview['changed'])
+        self.assertEqual(snapshot(self.root), snapshot_before)
+        self.args.dry_run = False
+        self.assertEqual(updater.update(self.args)['preserved'], [])
+        current, _, _ = schemas.split_note(target.read_text())
+        self.assertEqual(current['version'], 3)
+        self.assertEqual(current['permalink'], 'chosen/schemas/correction')
+        self.assertEqual(current['custom_metadata'], 'keep')
+        self.assertIn('desired_output?', current['schema'])
+        self.assertEqual(old_note.read_bytes(), before)
+        self.assertEqual(json.loads((self.codex/'basic-memory-workgraph/config.json').read_text())['correctionMode'], 'scoped')
+        self.args.correction_mode = None
+        self.assertEqual(updater.update(self.args)['changed'], [])
+
+    def test_custom_v2_correction_is_not_replaced(self):
+        target = self.memory / 'schemas/Correction.md'
+        target.write_text((REPO / 'schema-history/v2/schemas/Correction.md').read_text() + '\nUser custom scope.\n')
+        original = target.read_bytes()
+        result = updater.update(self.args)
+        self.assertEqual([item['path'] for item in result['preserved']], [str(target)])
+        self.assertEqual(target.read_bytes(), original)
 
 
 if __name__=='__main__':
