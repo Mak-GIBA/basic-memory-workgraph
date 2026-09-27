@@ -2,8 +2,9 @@
 
 Codexでの作業から、次の仕事にも役立つ知識をBasic Memoryへ蓄積するためのツールです。
 成功した手順やユーザーの修正を振り返り、再利用できるルール・具体事例・Skillを関連付けます。
+修正指示を状況と望ましい出力の組として蓄積し、似た依頼の初回出力から活用できます。
 
-**導入直後は、再利用知識の自動評価が有効です。具体事例の自動保存とSkillの自動登録は、設定で有効にします。**
+**導入直後は、再利用知識の自動評価が有効です。修正指示・具体事例の自動保存とSkillの自動登録は、設定で有効にします。**
 すべての会話を保存するものではありません。保存価値がなければ何も保存しません。
 
 | やりたいこと | 読む場所 |
@@ -11,7 +12,7 @@ Codexでの作業から、次の仕事にも役立つ知識をBasic Memoryへ蓄
 | 初めてこのPCに入れる | [初回インストール](#start) |
 | すでに入っている版を更新する | [アップデート](#update) |
 | 普段のCodexで使う | [日常の使い方](#daily) |
-| 具体事例の保存・Skill自動登録を有効にする | [設定を変更する](#modes) |
+| 修正指示・具体事例の保存・Skill自動登録を有効にする | [設定を変更する](#modes) |
 | チームや別のPCへMemoryを渡す | [Memoryを共有する](#share) |
 | ローカルLLM向けの事例データを出す | [学習用JSONLを出力する](#training) |
 | 保存されない・更新で止まった | [困ったとき](#troubleshooting) |
@@ -44,6 +45,7 @@ installerは `uv` / `uvx`、Basic Memory、公式Codex plugin、保存プロジ�
 | Markdownの保存先 | `~/knowledge/codex-memory/` |
 | Codex設定先 | `~/.codex/`。`CODEX_HOME` 指定時はその場所 |
 | 再利用知識の自動評価 | `smart`：候補があるとき評価 |
+| 文脈付き修正指示の自動保存 | `off`：明示保存依頼時のみ |
 | 具体事例の自動保存 | `off`：明示的に依頼した事例のみ |
 | Skill化 | `review`：価値を判断するところまで。自動登録しない |
 | 共有・学習利用 | どちらも未許可 |
@@ -62,12 +64,9 @@ bash install_basic_memory_workgraph.sh
 ### Codex側で確認する
 
 新しいCodexセッションを開始し、`/plugins` で `codex@basic-memory` を確認します。
-`/hooks` では次の2項目を確認し、必要なtrust設定を行います。反映されない場合はCodexを再起動します。
-
-```text
-Searching Basic Memory Work Knowledge Graph
-Evaluating reusable Basic Memory knowledge
-```
+`/hooks` では `basic_memory_workgraph.py recall`（UserPromptSubmit）と
+`basic_memory_workgraph.py save`（Stop）の2コマンドを確認し、必要なtrust設定を行います。
+反映されない場合はCodexを再起動します。Stopの判定だけで「保存評価中」とは表示しません。
 
 導入後は、[日常の使い方](#daily)に進めます。
 
@@ -191,9 +190,32 @@ bash install_basic_memory_workgraph.sh --update
 Codexへの依頼例:
 
 ```text
-この作業に関係する過去のRule・Workflow・CaseをBasic Memoryで確認してから進めて。
+この作業に関係する過去のCorrection・Rule・Workflow・CaseをBasic Memoryで確認してから進めて。
 今回にも当てはまる条件と、当てはまらない条件を区別して使ってください。
 ```
+
+### 修正指示を次の初回出力へ反映したい
+
+[文脈付き修正指示の保存](#correction-mode)を有効にすると、例えば次の指示を
+`corrections/` に残す候補として扱います。
+
+```text
+意思決定者向けなので、比較表と推奨案を先にして、細かい説明は後ろにしてください。
+```
+
+残すのは指示だけでなく、**目的・読者・成果物・制約と、望ましい出力・適用範囲**です。
+初回出力の問題や修正理由は、会話から分かる範囲だけ記録します。
+結果がまだ不明でも保存でき、「指示は確認済み／効果は未検証／承認は不明」と分けます。
+
+次の依頼では、出力を作る前に関連するCorrectionを検索し、条件の合う履歴を初回出力へ反映します。
+上記なら、似た意思決定用の説明で比較と推奨を先に置く参考になります。
+技術解説にも一律適用したり、「常に短文を好む」という恒久的な好みに変えたりはしません。
+今回の明示指示は過去の履歴より優先します。引用された過去の指示も新しい実行許可ではありません。
+
+同じ範囲で指示が変われば既存ノートを更新し、異なるコンテキストでの指示は区別します。
+全文ログ、新規依頼、相づち、追加情報のない重複は自動保存しません。
+Correctionはそのまま学習用Caseにはならず、共有・学習利用の許可も自動では付けません。
+記入例と参照手順は[CORRECTIONS.md](templates/CORRECTIONS.md)を参照してください。
 
 ### 修正から得た教訓を残したい
 
@@ -227,10 +249,11 @@ Codexへの依頼例:
 「今回のボタンだけ青くして」のような単発の修正を、恒久的な好みと推測することはありません。
 Plan/read-onlyモードでは、これらの依頼があっても書き込みを行いません。
 
-### Memory・Case・Skillの違い
+### 抽象Memory・Correction・Case・Skillの違い
 
 | 種類 | 残す内容 | 使い道 |
 |---|---|---|
+| Correction | 状況、修正指示、望ましい出力、適用範囲。効果は未検証でもよい | 出力前に参照し、同じ修正を繰り返すのを防ぐ |
 | 抽象Memory | 条件付きルール、再利用手順、確認方法 | 別タスクで判断・実行するときに使う |
 | Case | 要求、初回出力、修正、改善、結果の具体的な対比 | 類似案件の比較、学習データ候補に使う |
 | Skill | レビュー・検証済みの実行手順や補助資源 | 繰り返す仕事を実行しやすくする |
@@ -244,6 +267,28 @@ Skill化の背景や根拠はWorkflowに残し、登録したSkillへArtifactか
 
 モード変更は、リポジトリで `--configure-only` を実行します。
 **指定した設定だけを変更し、省略した設定は維持します。** 変更後は新しいCodexセッションを開始してください。
+
+<a id="correction-mode"></a>
+
+### 文脈付き修正指示の自動保存を有効にする
+
+初めてこの機能を導入する既存環境では、[Python環境](#python-tools)で次を実行します。
+Correctionスキーマも更新し、既存の他の設定は維持します。
+
+```bash
+BM_CORRECTION_MODE=scoped bash install_basic_memory_workgraph.sh --update
+```
+
+以降の設定変更だけなら次でも切り替えられます。
+
+```bash
+BM_CORRECTION_MODE=scoped bash install_basic_memory_workgraph.sh --configure-only
+# 修正指示の自動保存だけを停止
+BM_CORRECTION_MODE=off bash install_basic_memory_workgraph.sh --configure-only
+```
+
+`scoped` は結果不明の修正も、分かっている文脈と限定された適用範囲で保存します。
+`case=off` でも使えます。既存環境の更新では勝手に有効化せず、既定値は `off` です。
 
 ### 有用な具体事例の自動保存を有効にする
 
@@ -280,7 +325,7 @@ bash install_basic_memory_workgraph.sh --configure-only
 BM_CASE_MODE=off BM_SKILL_MODE=review \
 bash install_basic_memory_workgraph.sh --configure-only
 
-# 事例保存・Skillレビューを含む自動処理をすべて止める。
+# 修正指示・事例保存・Skillレビューを含む自動処理をすべて止める。
 BM_AUTO_MODE=off bash install_basic_memory_workgraph.sh --configure-only
 
 # 自動評価を再開する。事例・Skillの設定は保存されていた値を使う。
@@ -294,9 +339,11 @@ BM_AUTO_MODE=smart bash install_basic_memory_workgraph.sh --configure-only
 
 | 設定 | 値 | 動作 |
 |---|---|---|
-| `BM_AUTO_MODE` | `smart`（既定） | 要求・回答に成功／修正／教訓等の候補があるとき評価 |
-| | `always` | 毎ターン評価。保存基準は同じ |
-| | `off` | 自動保存・事例保存・Skillレビューと登録を停止 |
+| `BM_AUTO_MODE` | `smart`（既定） | 実装モード確認後、成功／修正／教訓等の候補があるとき評価 |
+| | `always` | 実装モード確認済みの各ターンで評価。保存基準は同じ |
+| | `off` | 修正指示を含む自動保存・Skillレビューと登録を停止 |
+| `BM_CORRECTION_MODE` | `off`（既定） | Correctionは明示保存依頼時のみ |
+| | `scoped` | 結果不明の修正指示も、文脈と適用範囲付きで保存 |
 | `BM_CASE_MODE` | `off`（既定） | 具体事例は明示保存依頼時のみ |
 | | `reusable` | 有用な具体事例を選別して保存 |
 | `BM_SKILL_MODE` | `off` | 自動Skillレビューを停止 |
@@ -314,6 +361,7 @@ cat "${CODEX_HOME:-$HOME/.codex}/basic-memory-workgraph/config.json"
 ```json
 {
   "mode": "smart",
+  "correctionMode": "off",
   "caseMode": "off",
   "skillMode": "review"
 }
@@ -437,6 +485,8 @@ python3 workgraph_tools.py review \
 |---|---|
 | 新機能が動かない | 新しいCodexセッションを開始し、`/plugins` と `/hooks` を確認する |
 | 教訓が保存されない | `mode`、検証根拠、再利用価値、既存Memoryとの重複を確認する。価値がなければ保存しないのが正常 |
+| 修正指示が保存されない | `correctionMode=scoped`、実装モード、重複や機密情報の有無を確認する |
+| 終了時の評価が出ない | Planでは正常。実装モードでも当該ターンの有効化が必要。更新後は新しいセッションを開始する |
 | 具体事例が増えない | 既定は `caseMode=off`。明示的に保存を依頼するか、`reusable` にする |
 | Skillが作成されない | 既定は `skillMode=review`。`auto` でもCreator・検証・追加価値が必要 |
 | `PyYAML` が必要と表示された | [Python環境の準備](#python-tools)を実行し、同じ環境でコマンドを使う |
@@ -474,9 +524,28 @@ exportは安全に出力できた項目を出し、`skipped` に除外理由を�
 新しい根拠・条件がなければ、既存ノートへ利用日時だけを追記することもありません。
 重複検索に失敗した場合は、自動保存を見送ります。
 
-`smart` の候補検出は日本語・英語表現に基づくため、すべての教訓を捕捉する保証はありません。
-hookのキーワード一致は評価を起動するだけで、保存の許可ではありません。
-hook状態には候補フラグだけを保持し、会話本文を記録しません。Stop hookは一度だけ評価を依頼します。
+`smart` は日本語・英語の修正・調整・成功表現と、Codexが意味的に認識した候補を使います。
+すべてを捕捉する保証はありません。候補検出は保存の許可ではなく、内容の判断はCodexが行います。
+
+### Planでは参照のみ、実装モードで保存評価
+
+開始時フックは検索方針と、そのセッション・ターンだけの有効化コマンドを渡します。
+Codexが**現在は実装モードかつ書き込み可能**と確認した場合にだけ、回答前にその補助コマンドを実行します。
+通常はユーザーがコマンドを操作する必要はありません。Plan／読み取り専用や追加評価中は実行しません。
+終了時フックは有効化済みターンだけ、一度の保存評価を依頼します。
+
+Planでも過去のMemoryを検索・参照できます。終了時の短い判定プロセス自体は呼ばれますが、
+保存評価の追加ターンは起動しません。トークンなし・古いトークン・別ターン・設定不備・`auto=off`も評価しません。
+更新前に始まったターンはトークンがないため、追加評価を見送ります。
+
+Codex 0.157.1のフック入力の `permission_mode` は承認設定由来で、Plan／実装モードを
+判別できません（[該当実装](https://github.com/openai/codex/blob/rust-v0.157.1/codex-rs/core/src/hook_runtime.rs#L1031)）。
+このため有効化はCodexによるモード確認に依存し、確認漏れでは追加評価を見送ります。
+`permission_mode=plan` が明示された場合も起動を拒否します。途中でPlanへ変わった場合は、
+有効化済みでも保存を行わないようpolicyで要求します。ホスト側のモードを直接検証する仕組みではありません。
+
+状態にはランダムな制御トークン、候補・有効化フラグ、形式版のみを保持し、会話本文は記録しません。
+トークンは終了時に消費し、同じ評価の並行実行・再実行を防ぎます。raw transcriptの読み取りは行いません。
 MCPサーバー側で全クライアントの書き込みを強制的に制限する仕組みではありません。
 
 ### ノートの配置
@@ -487,7 +556,7 @@ MCPサーバー側で全クライアントの書き込みを強制的に制限�
 | `workflows/` | 再利用手順、Skill化判断と背景 |
 | `validations/` | 再利用できる確認方法 |
 | `cases/` | 具体的インタラクション、既存の自由形式事例 |
-| `corrections/` | 明示依頼による修正記録 |
+| `corrections/` | 明示保存依頼または `correction=scoped` による文脈付き修正指示 |
 | `artifacts/` | 成果物や登録済みSkillへの参照 |
 | `projects/` | 明示依頼による長期スコープ |
 | `schemas/` | ノート構造の定義 |
