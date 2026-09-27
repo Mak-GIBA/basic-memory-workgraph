@@ -13,6 +13,8 @@ Codexでの作業から、次の仕事にも役立つ知識をBasic Memoryへ蓄
 | すでに入っている版を更新する | [アップデート](#update) |
 | 普段のCodexで使う | [日常の使い方](#daily) |
 | 修正指示・具体事例の保存・Skill自動登録を有効にする | [設定を変更する](#modes) |
+| 改善シーケンスを途中から蓄積する | [段階的なCase保存](#progressive-mode) |
+| 保存した記憶の誤りを点検する | [記憶の点検](#audit) |
 | チームや別のPCへMemoryを渡す | [Memoryを共有する](#share) |
 | ローカルLLM向けの事例データを出す | [学習用JSONLを出力する](#training) |
 | 保存されない・更新で止まった | [困ったとき](#troubleshooting) |
@@ -239,6 +241,27 @@ Correctionはそのまま学習用Caseにはならず、共有・学習利用の
 これは、事例モードが `off` でも使える明示的な保存依頼です。
 有用な事例の選別・保存を自動にしたい場合は、[事例保存の設定](#modes)を有効にします。
 
+### 改善シーケンスから初回出力を良くしたい
+
+[progressiveモード](#progressive-mode)では、同じ成果物について
+「初回出力 → 修正指示 → 改善 → 次の修正 → その後の利用」を一つのCaseに積み重ねます。
+結果が出る前から保存でき、後でどの版に対する指示・行動だったかを辿れます。
+目的・読者・制約が似たCaseを次の出力前に検索し、採用された可能性のある特徴と失敗点を参照します。
+
+評価のプロンプトや「いいね」は不要です。修正後のcommit／push指示、出力を土台にした次の仕事、
+同じ形式の再利用、残りの修正範囲の限定などを、対象と文脈付きの観測事実として残します。
+観測事実と採用・受容の推定、技術的な検証結果は別々です。
+
+- commit／pushだけなら推定は暫定。途中退避やエージェントの自主的なcommitは採用の根拠にしません。
+- commitとpushを別々の高評価として加算しません。沈黙・時間経過・話題変更でも満足を推定しません。
+- 後から同じ問題を指摘されたり、元に戻すよう依頼されたら推定を見直します。以前の実際の指示は消しません。
+- 対象や順序が分からない箇所は不明のままにし、会話全文の収集やログからの復元はしません。
+
+一つのセッションに別の成果物があればCaseを分けます。別セッションでも同じ成果物の継続と確認できれば
+同じCaseを更新します。単なる新規依頼や、学習・比較価値のない全作業記録は自動保存しません。
+検索・抽象化・採用推定はCodexが行い、CLIは構造と参照の整合性を検査します。
+詳しい形式は[CAPTURE.md](templates/CAPTURE.md)を参照してください。
+
 ### 継続的な好みを覚えてほしい
 
 ```text
@@ -299,6 +322,20 @@ BM_CASE_MODE=reusable bash install_basic_memory_workgraph.sh --configure-only
 成功・修正インタラクションのうち、比較や学習に価値があるものを選別します。
 会話全文を毎回保存する設定ではありません。
 
+<a id="progressive-mode"></a>
+
+### 改善シーケンスを途中から段階的に保存する
+
+[Python環境](#python-tools)で次を実行すると、Case v2・点検CLIを更新して有効化できます。
+
+```bash
+BM_CASE_MODE=progressive bash install_basic_memory_workgraph.sh --update
+```
+
+`reusable` は結果のある有用な事例、`progressive` は有用な未完了の改善過程から保存します。
+既存利用者の `caseMode` は更新時に保持し、未設定なら従来どおり `off` です。
+導入済みでモードだけ切り替える場合は `--configure-only` も使えます。
+
 ### Skillの作成・登録まで自動で行う
 
 [Python環境](#python-tools)を用意し、次を実行します。
@@ -345,7 +382,8 @@ BM_AUTO_MODE=smart bash install_basic_memory_workgraph.sh --configure-only
 | `BM_CORRECTION_MODE` | `off`（既定） | Correctionは明示保存依頼時のみ |
 | | `scoped` | 結果不明の修正指示も、文脈と適用範囲付きで保存 |
 | `BM_CASE_MODE` | `off`（既定） | 具体事例は明示保存依頼時のみ |
-| | `reusable` | 有用な具体事例を選別して保存 |
+| | `reusable` | 結果のある有用な具体事例を選別して保存 |
+| | `progressive` | 有用な修正シーケンスを途中から保存し、後続の採用・撤回の手掛かりも追加 |
 | `BM_SKILL_MODE` | `off` | 自動Skillレビューを停止 |
 | | `review`（既定） | Skill化の判断と理由まで |
 | | `auto` | レビュー・検証後の登録まで |
@@ -455,10 +493,13 @@ python3 workgraph_tools.py export-cases \
 |---|---|
 | `format_version` | 出力形式のバージョン |
 | `source_id` | 元ノートのパスから作った識別子 |
-| `interaction` | 要求、初回出力、順序付きの修正・改善、最終結果、検証、教訓 |
+| `interaction` | v1は従来形式。v2は文脈、順序付きsteps、採用推定、根拠、記憶の訂正履歴など |
+| `integrity_status` | v2のみ。保存時の整合性点検状態。要点検のノートは出力しない |
 | `relations` | 関係の種類と宛先の識別子。関連ノート本文は同梱しない |
 
-要約と抜粋、検証結果とユーザー承認を区別して保持します。後段で対象を選別し、
+JSONL外側の `format_version` は1を維持し、`interaction.version` でv1/v2を区別します。
+要約と抜粋、検証結果とユーザー承認、暗黙的な採用推定を区別して保持します。
+推定を満足の確定ラベルに変換せず、未完了や不明の状態も残します。後段で対象を選別し、
 要求・修正を入力、改善後の出力を教師データとしてSFT等の形式へ変換できます。
 要約を原文扱いしたり、不明な結果を成功扱いしたりしないでください。
 このツールの担当は汎用JSONLまでで、SFT形式への変換、LoRA学習、モデルへの投入は含みません。
@@ -487,11 +528,13 @@ python3 workgraph_tools.py review \
 | 教訓が保存されない | `mode`、検証根拠、再利用価値、既存Memoryとの重複を確認する。価値がなければ保存しないのが正常 |
 | 修正指示が保存されない | `correctionMode=scoped`、実装モード、重複や機密情報の有無を確認する |
 | 終了時の評価が出ない | Planでは正常。実装モードでも当該ターンの有効化が必要。更新後は新しいセッションを開始する |
-| 具体事例が増えない | 既定は `caseMode=off`。明示的に保存を依頼するか、`reusable` にする |
+| 具体事例が増えない | 既定は `caseMode=off`。明示保存依頼、`reusable`、`progressive` を用途に応じて使う |
 | Skillが作成されない | 既定は `skillMode=review`。`auto` でもCreator・検証・追加価値が必要 |
 | `PyYAML` が必要と表示された | [Python環境の準備](#python-tools)を実行し、同じ環境でコマンドを使う |
 | 更新で終了コード2になった | `preserved` を確認。対象を上書きせず保持した通知であり、全更新の失敗ではない |
 | 保存先が見つからない／不一致 | `primaryProject` とBasic Memory登録情報を確認。[更新の詳細](#update-details)を参照 |
+| 記憶の順序や解釈がおかしい | [audit](#audit)で構造を確認し、会話の根拠と照合する |
+| `needs_review` でexportが止まる | 根拠付きの訂正・点検後に共有／学習レビューをやり直す。フラグだけ消して通さない |
 | exportの件数が0になった | 共有／学習用途の指定とレビュー状態を確認。編集後は再レビューが必要 |
 | `Missing or stale privacy review` | 内容を確認して `review` を再実行する。共有・学習両方を許可するなら両引数を指定する |
 | `Output already exists` | 既存の出力は上書きしないため、新しい `--output` を指定する |
@@ -502,6 +545,49 @@ python3 workgraph_tools.py review \
 ただし、出力先がすでに存在する場合など、通常実行と同じ入力制約は適用されます。
 CLIの終了コードは0が成功、1が入力・処理エラー、2が除外項目またはimport衝突ありです。
 exportは安全に出力できた項目を出し、`skipped` に除外理由を表示します。
+
+<a id="audit"></a>
+
+### 保存した記憶を点検する
+
+点検するタイミングは、保存・更新後、再利用前、新しい情報と矛盾したとき、手動依頼時です。
+定期巡回ジョブは追加していません。まず構造だけを読み取り専用で確認できます。
+
+```bash
+# 保存先全体を点検。ノートやレビュー情報は変更しない。
+python3 workgraph_tools.py audit --memory-dir "$HOME/knowledge/codex-memory"
+
+# 対象のCaseだけ点検。パスは実在するノートに置き換える。
+python3 workgraph_tools.py audit \
+  --memory-dir "$HOME/knowledge/codex-memory" --note "cases/example.md"
+```
+
+JSONで問題種別・位置・対応候補と、影響がありそうな派生ノート（最大2段）を報告します。
+終了コードは0＝構造上の指摘なし、2＝指摘あり、1＝入力・処理エラーです。
+`--dry-run` も指定できますが、auditは常に読み取り専用です。
+既存の自由形式Caseは未対応扱いで捨てず、構造検査の対象外として報告します。
+
+CLIが検出するのはID重複、参照切れ、記録順序と対象の矛盾、根拠なしの採用推定などです。
+**構造検査に通っても、実際の会話の順序や解釈が正しいとは限りません。**
+Codexへの依頼例:
+
+```text
+このCaseの修正順序と評価対象を、利用可能な会話の根拠と照合して。
+確定できる誤りは根拠と訂正履歴を残して直し、不明なら要点検として扱って。
+このCaseから導いたRuleやWorkflowへの影響も確認して。
+```
+
+実装モードでは、確定できる誤りを必要な範囲だけ訂正し、匿名化した変更前後・理由・根拠を残します。
+実際に失敗した試行や後からの方針変更は、記憶の誤りと混同して消しません。
+判断できなければ `integrity_status=needs_review` と具体的な懸念を残し、成功事例としての参照やexportを保留します。
+派生知識は独立した根拠を確認し、一括削除・一括修正はしません。
+Plan／読み取り専用では、報告とその回答での参照見送りまでです。
+
+点検状態は `unreviewed` / `checked` / `needs_review` で、共有・学習許可とは別です。
+訂正後は根拠との照合と構造チェックを行い、読み返して懸念を解消してからcheckedに戻します。
+内容や状態を変えたら既存のprivacyレビューは失効し、exportには再レビューが必要です。
+何も変わらない点検では日時だけの更新をしません。importされたcheckedはunreviewedに戻り、
+needs_reviewは保持されます。詳細は[AUDIT.md](templates/AUDIT.md)を参照してください。
 
 <a id="details"></a>
 
@@ -520,11 +606,12 @@ exportは安全に出力できた項目を出し、`skipped` に除外理由を�
 | 追加価値 | 既存メモや容易に確認できる一般知識にない価値がある |
 
 明示された継続的な好みも、範囲と例外を添えて保存できます。
-作業日誌、完了報告、成果物一覧、一般論、推測は自動保存しません。
+作業日誌、完了報告、成果物一覧、一般論、根拠のない推測は自動保存しません。
+progressiveの採用推定は、観測事実と根拠を添えた暫定的な解釈として区別します。
 新しい根拠・条件がなければ、既存ノートへ利用日時だけを追記することもありません。
 重複検索に失敗した場合は、自動保存を見送ります。
 
-`smart` は日本語・英語の修正・調整・成功表現と、Codexが意味的に認識した候補を使います。
+`smart` は日本語・英語の修正・調整・成功・採用／撤回の手掛かりと、Codexが意味的に認識した候補を使います。
 すべてを捕捉する保証はありません。候補検出は保存の許可ではなく、内容の判断はCodexが行います。
 
 ### Planでは参照のみ、実装モードで保存評価
@@ -578,6 +665,7 @@ Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](templates/SKILL_RE
 | `training_use` | `excluded` | `approved` の明示で学習利用を指定 |
 | `privacy_review` | `pending` | 内容レビューの状態 |
 | `review_sha256` | なし | 本文・メタデータに結び付いたレビューの指紋 |
+| `integrity_status` | `unreviewed`扱い | 整合性の点検状態。`needs_review` は共有・学習用出力を保留 |
 
 項目がない旧ノートはprivate・学習対象外として扱います。
 これはCLIの出力対象を選ぶための指定であり、ファイル自体のアクセス制御や暗号化ではありません。
@@ -592,7 +680,8 @@ Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](templates/SKILL_RE
 | `basic-memory-workgraph/config.json` | 評価・事例・Skillのモード |
 | `basic-memory-workgraph/memory-policy.md` | 開始・終了hookの共通基準 |
 | `basic-memory-workgraph/templates/` | 事例形式、Skillレビュー、スキーマの参照資料 |
-| `basic-memory-workgraph/workgraph_tools.py` | 共有・JSONL出力・Skill登録CLI |
+| `basic-memory-workgraph/workgraph_tools.py` | 共有・JSONL出力・点検・Skill登録CLI |
+| `basic-memory-workgraph/workgraph_sequence.py` | Case v2の構造・根拠参照検証 |
 | `hooks/basic_memory_workgraph.py` | 方針注入、検索案内、保存評価依頼 |
 | `hooks.json` | hook登録 |
 
