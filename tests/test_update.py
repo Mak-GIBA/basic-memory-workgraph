@@ -11,12 +11,12 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+REPO = Path(__file__).resolve().parent.parent
+SOURCE = REPO / "tools/basic-memory-workgraph"
+sys.path.insert(0, str(SOURCE))
 import install_schemas as schemas
 import update_workgraph as updater
 import workgraph_tools as wg
-
-REPO = Path(__file__).resolve().parent.parent
 
 
 def snapshot(root):
@@ -41,7 +41,7 @@ class UpdateTest(unittest.TestCase):
             'mode': 'off', 'caseMode': 'reusable', 'skillMode': 'auto', 'custom': 9}))
         self.sibling = {'type': 'command', 'command': 'other-hook'}
         (self.codex/'hooks.json').write_text(json.dumps({'hooks': {'Stop': [{'hooks': [self.sibling]}]}}))
-        shutil.copytree(REPO/'schema-history/v1', self.memory)
+        shutil.copytree(SOURCE/'schema-history/v1', self.memory)
         for path in self.memory.rglob('*.md'):
             meta, body, _ = schemas.split_note(path.read_text())
             meta.update(permalink='chosen/'+path.stem.lower(), extra_metadata={'owner': 'retained'})
@@ -105,7 +105,7 @@ class UpdateTest(unittest.TestCase):
                 target.write_text(original)
 
     def test_metadata_formatting_does_not_force_rewrite_of_latest_schema(self):
-        latest=(REPO/'templates/schemas/Case.md').read_text()
+        latest=(SOURCE/'templates/schemas/Case.md').read_text()
         meta,body,_=schemas.split_note(latest)
         meta['permalink']='custom/stable-link'
         actual='---\n# preserve this comment\n'+wg.yaml.safe_dump(meta,sort_keys=True)+'---\n'+body
@@ -175,24 +175,24 @@ class UpdateTest(unittest.TestCase):
         env.update(HOME=str(self.root),CODEX_HOME=str(self.codex),BASIC_MEMORY_CONFIG_DIR=str(self.registry.parent),
                    PATH=str(binaries)+os.pathsep+os.environ['PATH'])
         result=subprocess.run(['bash',str(REPO/'install_basic_memory_workgraph.sh'),'--update','--dry-run'],
-                              env=env,capture_output=True,text=True)
+                              env=env,cwd=self.root,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
         self.assertTrue(json.loads(result.stdout)['dry_run'])
         self.assertFalse((self.root/'unexpected-command').exists())
         result=subprocess.run(['bash',str(REPO/'install_basic_memory_workgraph.sh'),'--update'],
-                              env=env,capture_output=True,text=True)
+                              env=env,cwd=self.root,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
         self.assertTrue(json.loads(result.stdout)['changed'])
         self.assertFalse((self.root/'unexpected-command').exists())
         target=self.memory/'schemas/Rule.md';target.write_text(target.read_text()+'\nCustom note.\n')
         result=subprocess.run(['bash',str(REPO/'install_basic_memory_workgraph.sh'),'--update'],
-                              env=env,capture_output=True,text=True)
+                              env=env,cwd=self.root,capture_output=True,text=True)
         self.assertEqual(result.returncode,2,result.stderr)
         self.assertEqual(json.loads(result.stdout)['preserved'][0]['path'],str(target))
 
     def test_earliest_graph_revision_migrates_and_unknown_edits_do_not(self):
-        old=(REPO/'schema-history/v0/Work-Knowledge-Graph.md').read_text()
-        latest=(REPO/'templates/Work-Knowledge-Graph.md').read_text()
+        old=(SOURCE/'schema-history/v0/Work-Knowledge-Graph.md').read_text()
+        latest=(SOURCE/'templates/Work-Knowledge-Graph.md').read_text()
         migrated=schemas.migrate(old,latest,[old])
         self.assertIn('packaged_as',migrated)
         self.assertIsNone(schemas.migrate(old+'\nCustom instructions.\n',latest,[old]))
@@ -211,7 +211,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_v2_correction_upgrade_keeps_metadata_and_legacy_notes(self):
         target = self.memory / 'schemas/Correction.md'
-        metadata, body, _ = schemas.split_note((REPO / 'schema-history/v2/schemas/Correction.md').read_text())
+        metadata, body, _ = schemas.split_note((SOURCE / 'schema-history/v2/schemas/Correction.md').read_text())
         metadata['permalink'] = 'chosen/schemas/correction'
         metadata['custom_metadata'] = 'keep'
         target.write_text('---\n' + wg.yaml.safe_dump(metadata) + '---\n' + body)
@@ -239,7 +239,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_custom_v2_correction_is_not_replaced(self):
         target = self.memory / 'schemas/Correction.md'
-        target.write_text((REPO / 'schema-history/v2/schemas/Correction.md').read_text() + '\nUser custom scope.\n')
+        target.write_text((SOURCE / 'schema-history/v2/schemas/Correction.md').read_text() + '\nUser custom scope.\n')
         original = target.read_bytes()
         result = updater.update(self.args)
         self.assertEqual([item['path'] for item in result['preserved']], [str(target)])

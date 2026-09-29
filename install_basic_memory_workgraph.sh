@@ -29,6 +29,7 @@ set -euo pipefail
 # ============================================================
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+WORKGRAPH_DIR="$SCRIPT_DIR/tools/basic-memory-workgraph"
 CODEX_HOME_DIR="${CODEX_HOME:-$HOME/.codex}"
 
 log() { printf '\n[%s] %s\n' "bm-workgraph" "$*"; }
@@ -39,11 +40,11 @@ command -v python3 >/dev/null || die "python3 が必要です。"
 case "${1:-}" in
   --update)
     shift
-    exec python3 "$SCRIPT_DIR/update_workgraph.py" --codex-dir "$CODEX_HOME_DIR" "$@"
+    exec python3 "$WORKGRAPH_DIR/update_workgraph.py" --codex-dir "$CODEX_HOME_DIR" "$@"
     ;;
   --configure-only)
     [[ $# -eq 1 ]] || die "--configure-only に追加の引数は指定できません。"
-    python3 "$SCRIPT_DIR/configure_workgraph.py" --codex-dir "$CODEX_HOME_DIR"
+    python3 "$WORKGRAPH_DIR/configure_workgraph.py" --codex-dir "$CODEX_HOME_DIR"
     log "設定とフックを更新しました。新しいCodexセッションで反映を確認してください。"
     exit 0
     ;;
@@ -177,13 +178,13 @@ mkdir -p \
 # ------------------------------------------------------------
 
 SCHEMA_RESULT=0
-python3 "$SCRIPT_DIR/install_schemas.py" --memory-dir "$MEMORY_DIR" || SCHEMA_RESULT=$?
+python3 "$WORKGRAPH_DIR/install_schemas.py" --memory-dir "$MEMORY_DIR" || SCHEMA_RESULT=$?
 [[ "$SCHEMA_RESULT" -eq 0 || "$SCHEMA_RESULT" -eq 2 ]] || die "スキーマ更新に失敗しました。"
 
 # ------------------------------------------------------------
 # STEP 7: 共通ポリシー / Codex設定 / 追加Hook
 # ------------------------------------------------------------
-python3 "$SCRIPT_DIR/configure_workgraph.py" \
+python3 "$WORKGRAPH_DIR/configure_workgraph.py" \
   --codex-dir "$CODEX_HOME_DIR" --project "$MEMORY_PROJECT" --mode "$BM_AUTO_MODE"
 
 # ------------------------------------------------------------

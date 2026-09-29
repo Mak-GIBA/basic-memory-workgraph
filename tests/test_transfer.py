@@ -9,11 +9,10 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import workgraph_tools as wg
-
-
 REPO = Path(__file__).resolve().parent.parent
+SOURCE = REPO / "tools/basic-memory-workgraph"
+sys.path.insert(0, str(SOURCE))
+import workgraph_tools as wg
 
 
 def piece(text):
@@ -310,7 +309,7 @@ Inline [[Private customer|confidential label]] and [internal](file:///internal/d
 
     def test_cli_skipped_items_have_nonzero_exit_and_no_secret_content(self):
         self.note(sharing_scope="team")
-        result = subprocess.run([sys.executable, str(REPO / "workgraph_tools.py"), "export-share",
+        result = subprocess.run([sys.executable, str(SOURCE / "workgraph_tools.py"), "export-share",
                                  "--memory-dir", str(self.memory), "--scope", "team", "--output", str(self.output)],
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 2, result.stderr)

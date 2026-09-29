@@ -8,11 +8,11 @@ import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+REPO = Path(__file__).resolve().parent.parent
+SOURCE = REPO / "tools/basic-memory-workgraph"
+sys.path.insert(0, str(SOURCE))
 import workgraph_tools as wg
 from workgraph_sequence import sequence_issues
-
-REPO = Path(__file__).resolve().parent.parent
 
 
 def data():
@@ -241,7 +241,7 @@ class SequenceTest(unittest.TestCase):
 
     def test_audit_cli_is_read_only_and_exit_codes_are_consistent(self):
         rel=self.note()
-        command=[sys.executable,str(REPO/'workgraph_tools.py'),'audit','--memory-dir',str(self.memory),'--note',rel]
+        command=[sys.executable,str(SOURCE/'workgraph_tools.py'),'audit','--memory-dir',str(self.memory),'--note',rel]
         before=snapshot(self.root)
         result=subprocess.run(command,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)

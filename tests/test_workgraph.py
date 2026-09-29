@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -10,7 +11,8 @@ import unittest
 
 
 REPO = Path(__file__).resolve().parent.parent
-POLICY = (REPO / "memory-policy.md").read_text().strip()
+SOURCE = REPO / "tools/basic-memory-workgraph"
+POLICY = (SOURCE / "memory-policy.md").read_text().strip()
 
 
 class WorkgraphTest(unittest.TestCase):
@@ -35,8 +37,29 @@ class WorkgraphTest(unittest.TestCase):
     def install(self, **overrides):
         return subprocess.run(
             ["bash", str(REPO / "install_basic_memory_workgraph.sh"), "--configure-only"],
-            env={**self.env, **overrides}, capture_output=True, text=True,
+            env={**self.env, **overrides}, cwd=self.home, capture_output=True, text=True,
         )
+
+    def test_relocated_checkout_configures_from_unrelated_directory(self):
+        checkout = self.home / "checkout with spaces ' $()"
+        checkout.mkdir()
+        shutil.copy2(REPO / "install_basic_memory_workgraph.sh", checkout)
+        shutil.copytree(SOURCE, checkout / "tools/basic-memory-workgraph",
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+        result = subprocess.run(
+            ["bash", str(checkout / "install_basic_memory_workgraph.sh"), "--configure-only"],
+            env=self.env, cwd=self.home, capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        installed = self.codex / "basic-memory-workgraph"
+        self.assertEqual((installed / "memory-policy.md").read_text().strip(), POLICY)
+        self.assertTrue((installed / "templates/schemas/Rule.md").is_file())
+        cli = subprocess.run(
+            [sys.executable, str(installed / "workgraph_tools.py"), "--help"],
+            env=self.env, cwd=self.home, capture_output=True, text=True,
+        )
+        self.assertEqual(cli.returncode, 0, cli.stderr)
+        self.assertIn("audit", cli.stdout)
 
     def hook(self, action, event, raw=False):
         result = subprocess.run(
@@ -152,7 +175,7 @@ class WorkgraphTest(unittest.TestCase):
         result = subprocess.run(
             ["bash", str(REPO / "install_basic_memory_workgraph.sh")],
             env={**self.env, "PATH": str(binaries) + os.pathsep + os.environ["PATH"]},
-            capture_output=True, text=True,
+            cwd=self.home, capture_output=True, text=True,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.read_json("basic-memory.json")["basicMemory"]["placementConventions"], POLICY)
@@ -214,18 +237,18 @@ class WorkgraphTest(unittest.TestCase):
 
     def test_schema_install_preserves_custom_and_updates_only_legacy(self):
         notes = self.home / "memory"
-        subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
+        subprocess.run([sys.executable, str(SOURCE / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
         original = {p: p.read_bytes() for p in notes.rglob("*") if p.is_file()}
-        subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
+        subprocess.run([sys.executable, str(SOURCE / "install_schemas.py"), "--memory-dir", str(notes)], check=True, capture_output=True)
         self.assertEqual(original, {p: p.read_bytes() for p in notes.rglob("*") if p.is_file()})
         custom = notes / "schemas/Case.md"
         custom.write_text("custom schema\n")
         # A real prior template, independent of git availability/current HEAD.
         (notes / "schemas/Rule.md").write_bytes((REPO / "tests/fixtures/legacy-Rule.md").read_bytes())
-        result = subprocess.run([sys.executable, str(REPO / "install_schemas.py"), "--memory-dir", str(notes)], capture_output=True)
+        result = subprocess.run([sys.executable, str(SOURCE / "install_schemas.py"), "--memory-dir", str(notes)], capture_output=True)
         self.assertEqual(result.returncode, 2)
         self.assertEqual(custom.read_text(), "custom schema\n")
-        self.assertEqual((notes / "schemas/Rule.md").read_text(), (REPO / "templates/schemas/Rule.md").read_text())
+        self.assertEqual((notes / "schemas/Rule.md").read_text(), (SOURCE / "templates/schemas/Rule.md").read_text())
         self.assertEqual(len(list((notes / "schemas").glob("Rule.md.bak.*"))), 1)
 
     def test_answer_can_supply_a_lesson_signal(self):
@@ -312,7 +335,7 @@ class WorkgraphTest(unittest.TestCase):
         hooks["hooks"]["Stop"][0]["hooks"].append(sibling)
         self.write_json("hooks.json", hooks)
         before = (self.codex / "basic-memory.json").read_bytes()
-        result = subprocess.run(["bash", str(REPO / "remove_workgraph_hooks.sh")], env=self.env, capture_output=True, text=True)
+        result = subprocess.run(["bash", str(SOURCE / "remove_workgraph_hooks.sh")], env=self.env, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.read_json("hooks.json")["hooks"]["Stop"], [{"hooks": [sibling]}])
         self.assertFalse((self.codex / "hooks/basic_memory_workgraph.py").exists())

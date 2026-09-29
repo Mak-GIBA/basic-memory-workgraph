@@ -83,7 +83,7 @@ bash install_basic_memory_workgraph.sh
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-export.txt
+.venv/bin/python -m pip install -r tools/basic-memory-workgraph/requirements-export.txt
 source .venv/bin/activate
 python3 -c 'import yaml; print(yaml.__version__)'
 ```
@@ -217,7 +217,7 @@ Codexへの依頼例:
 同じ範囲で指示が変われば既存ノートを更新し、異なるコンテキストでの指示は区別します。
 全文ログ、新規依頼、相づち、追加情報のない重複は自動保存しません。
 Correctionはそのまま学習用Caseにはならず、共有・学習利用の許可も自動では付けません。
-記入例と参照手順は[CORRECTIONS.md](templates/CORRECTIONS.md)を参照してください。
+記入例と参照手順は[CORRECTIONS.md](tools/basic-memory-workgraph/templates/CORRECTIONS.md)を参照してください。
 
 ### 修正から得た教訓を残したい
 
@@ -260,7 +260,7 @@ Correctionはそのまま学習用Caseにはならず、共有・学習利用の
 一つのセッションに別の成果物があればCaseを分けます。別セッションでも同じ成果物の継続と確認できれば
 同じCaseを更新します。単なる新規依頼や、学習・比較価値のない全作業記録は自動保存しません。
 検索・抽象化・採用推定はCodexが行い、CLIは構造と参照の整合性を検査します。
-詳しい形式は[CAPTURE.md](templates/CAPTURE.md)を参照してください。
+詳しい形式は[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)を参照してください。
 
 ### 継続的な好みを覚えてほしい
 
@@ -423,7 +423,7 @@ Gitやファイル転送などで渡してください。
 そのうえで、チーム共有を指定してレビュー済みにします。
 
 ```bash
-python3 workgraph_tools.py review \
+python3 tools/basic-memory-workgraph/workgraph_tools.py review \
   --memory-dir "$HOME/knowledge/codex-memory" \
   --note "rules/example.md" --sharing team
 ```
@@ -434,7 +434,7 @@ python3 workgraph_tools.py review \
 ### 手順2：共有用フォルダを出力する
 
 ```bash
-python3 workgraph_tools.py export-share \
+python3 tools/basic-memory-workgraph/workgraph_tools.py export-share \
   --memory-dir "$HOME/knowledge/codex-memory" \
   --scope team --output ./team-memory
 ```
@@ -452,7 +452,7 @@ python3 workgraph_tools.py export-share \
 受け取った `team-memory` フォルダを指定します。
 
 ```bash
-python3 workgraph_tools.py import-share \
+python3 tools/basic-memory-workgraph/workgraph_tools.py import-share \
   --memory-dir "$HOME/knowledge/imported-memory" --bundle ./team-memory
 ```
 
@@ -472,18 +472,18 @@ Skillを自動登録したりしません。登録後はBasic Memoryの通常の
 ## 6. 学習用JSONLを出力する
 
 **事例の保存、共有許可、学習利用許可はそれぞれ別です。** Caseを保存しただけでは学習対象になりません。
-[CAPTURE.md](templates/CAPTURE.md)の形式に沿ったCaseを確認・匿名化し、学習利用を明示します。
+[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)の形式に沿ったCaseを確認・匿名化し、学習利用を明示します。
 旧来の自由形式Caseを自動で補完・変換する機能はありません。
 
 [Python環境](#python-tools)を有効にし、`cases/example.md` を実際の相対パスへ置き換えて実行します。
 
 ```bash
 # ローカル学習利用を許可する。共有範囲はprivateにする。
-python3 workgraph_tools.py review \
+python3 tools/basic-memory-workgraph/workgraph_tools.py review \
   --memory-dir "$HOME/knowledge/codex-memory" \
   --note "cases/example.md" --training approved
 
-python3 workgraph_tools.py export-cases \
+python3 tools/basic-memory-workgraph/workgraph_tools.py export-cases \
   --memory-dir "$HOME/knowledge/codex-memory" --output ./cases.jsonl
 ```
 
@@ -510,7 +510,7 @@ JSONL外側の `format_version` は1を維持し、`interaction.version` でv1/v
 両方許可する場合は、一度のコマンドで両方を指定してください。
 
 ```bash
-python3 workgraph_tools.py review \
+python3 tools/basic-memory-workgraph/workgraph_tools.py review \
   --memory-dir "$HOME/knowledge/codex-memory" \
   --note "cases/example.md" --sharing team --training approved
 ```
@@ -555,10 +555,10 @@ exportは安全に出力できた項目を出し、`skipped` に除外理由を�
 
 ```bash
 # 保存先全体を点検。ノートやレビュー情報は変更しない。
-python3 workgraph_tools.py audit --memory-dir "$HOME/knowledge/codex-memory"
+python3 tools/basic-memory-workgraph/workgraph_tools.py audit --memory-dir "$HOME/knowledge/codex-memory"
 
 # 対象のCaseだけ点検。パスは実在するノートに置き換える。
-python3 workgraph_tools.py audit \
+python3 tools/basic-memory-workgraph/workgraph_tools.py audit \
   --memory-dir "$HOME/knowledge/codex-memory" --note "cases/example.md"
 ```
 
@@ -587,7 +587,7 @@ Plan／読み取り専用では、報告とその回答での参照見送りま�
 訂正後は根拠との照合と構造チェックを行い、読み返して懸念を解消してからcheckedに戻します。
 内容や状態を変えたら既存のprivacyレビューは失効し、exportには再レビューが必要です。
 何も変わらない点検では日時だけの更新をしません。importされたcheckedはunreviewedに戻り、
-needs_reviewは保持されます。詳細は[AUDIT.md](templates/AUDIT.md)を参照してください。
+needs_reviewは保持されます。詳細は[AUDIT.md](tools/basic-memory-workgraph/templates/AUDIT.md)を参照してください。
 
 <a id="details"></a>
 
@@ -595,7 +595,7 @@ needs_reviewは保持されます。詳細は[AUDIT.md](templates/AUDIT.md)を�
 
 ### 保存品質
 
-正本は[memory-policy.md](memory-policy.md)です。抽象Memoryの自動保存は、以下をすべて満たす知識に限ります。
+正本は[memory-policy.md](tools/basic-memory-workgraph/memory-policy.md)です。抽象Memoryの自動保存は、以下をすべて満たす知識に限ります。
 
 | 基準 | 内容 |
 |---|---|
@@ -651,9 +651,9 @@ MCPサーバー側で全クライアントの書き込みを強制的に制限�
 従来の7種類を維持し、新項目は任意項目として追加しています。既存ノートを一括変換しません。
 具体事例は `type: case` のMarkdown内に、版付きのJSONブロックとして保持します。
 通常のObservations／Relationsも使えるため、`generalized_to` / `learned_from` 等で抽象Memoryと結べます。
-詳細と記入例は[CAPTURE.md](templates/CAPTURE.md)を参照してください。
+詳細と記入例は[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)を参照してください。
 
-Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](templates/SKILL_REVIEW.md)にあります。
+Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](tools/basic-memory-workgraph/templates/SKILL_REVIEW.md)にあります。
 登録済みSkillのArtifactは `kind: skill` と `skill:<name>` を持ち、Workflowから `packaged_as` で結びます。
 実行手順はSkill、背景・根拠・適用条件はWork Graphに残します。関連付けのためだけにノート一式を作りません。
 
@@ -721,7 +721,7 @@ bash install_basic_memory_workgraph.sh --update \
 スキーマだけを更新する場合は、登録済みのMarkdown保存先を指定します。
 
 ```bash
-python3 install_schemas.py --memory-dir "$HOME/knowledge/codex-memory"
+python3 tools/basic-memory-workgraph/install_schemas.py --memory-dir "$HOME/knowledge/codex-memory"
 ```
 
 スキーマは、管理対象のYAML項目と本文を過去の配布版と比較して移行します。
@@ -736,7 +736,7 @@ Basic Memoryが追加した `permalink`、日時、管理対象外の追加メ�
 リポジトリで実行します。
 
 ```bash
-bash remove_workgraph_hooks.sh
+bash tools/basic-memory-workgraph/remove_workgraph_hooks.sh
 ```
 
 追加hooksとその設定・状態・CLIコピーを解除します。
@@ -751,7 +751,8 @@ Basic Memory、公式plugin、保存済みノート、スキーマ、登録済�
 
 ```bash
 python3 -m unittest discover -s tests -v
-bash -n install_basic_memory_workgraph.sh remove_workgraph_hooks.sh
+bash -n install_basic_memory_workgraph.sh
+bash -n tools/basic-memory-workgraph/remove_workgraph_hooks.sh
 ```
 
 テストは一時ディレクトリと架空の事例を使用します。実際の個人MemoryやSkillへは書き込みません。
@@ -760,6 +761,6 @@ bash -n install_basic_memory_workgraph.sh remove_workgraph_hooks.sh
 意味内容の判断例は[tests/POLICY_SCENARIOS.md](tests/POLICY_SCENARIOS.md)にあります。
 機械テストは、実際の会話に対する抽象化品質やCreatorレビューの正しさを証明するものではありません。
 
-リリース時は、変更前の配布済みテンプレートを `schema-history/<version>/` に残してから
+リリース時は、変更前の配布済みテンプレートを `tools/basic-memory-workgraph/schema-history/<version>/` に残してから
 現行テンプレートを変更します。更新処理はこの履歴を使い、実行時にGitやネットワークから取得しません。
-policy変更はリポジトリの `memory-policy.md` を編集し、`--configure-only` または `--update` で反映します。
+policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md` を編集し、`--configure-only` または `--update` で反映します。

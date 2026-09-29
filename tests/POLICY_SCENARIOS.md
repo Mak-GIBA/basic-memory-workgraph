@@ -1,6 +1,6 @@
 # 保存判断のドライラン
 
-`memory-policy.md` を指示として以下を評価する。Basic Memory の書き込みツールは使わず、
+`tools/basic-memory-workgraph/memory-policy.md` を指示として以下を評価する。Basic Memory の書き込みツールは使わず、
 各行について `create` / `update` / `skip` と理由だけを回答する。
 既存メモは各行に書かれたものだけとし、記載がない行は検索成功・一致なしとする。
 架空のシナリオであり、検証済みの実知識として保存しない。
