@@ -1,766 +1,87 @@
-# Basic Memory Work Knowledge Graph
+# Codex環境の導入・運用ツール集
 
-Codexでの作業から、次の仕事にも役立つ知識をBasic Memoryへ蓄積するためのツールです。
-成功した手順やユーザーの修正を振り返り、再利用できるルール・具体事例・Skillを関連付けます。
-修正指示を状況と望ましい出力の組として蓄積し、似た依頼の初回出力から活用できます。
+このリポジトリ（`basic-memory-workgraph`）は、Codexでの知識の蓄積、UI/UXの設計・実装支援、
+要件・設計文書の整理に使うインストーラーと運用ツールをまとめています。
+必要なものを個別に選んで導入できます。3つをすべて入れる必要や、決まった導入順序はありません。
 
-**導入直後は、再利用知識の自動評価が有効です。修正指示・具体事例の自動保存とSkillの自動登録は、設定で有効にします。**
-すべての会話を保存するものではありません。保存価値がなければ何も保存しません。
+## やりたいことから選ぶ
 
-| やりたいこと | 読む場所 |
-|---|---|
-| 初めてこのPCに入れる | [初回インストール](#start) |
-| すでに入っている版を更新する | [アップデート](#update) |
-| 普段のCodexで使う | [日常の使い方](#daily) |
-| 修正指示・具体事例の保存・Skill自動登録を有効にする | [設定を変更する](#modes) |
-| 改善シーケンスを途中から蓄積する | [段階的なCase保存](#progressive-mode) |
-| 保存した記憶の誤りを点検する | [記憶の点検](#audit) |
-| チームや別のPCへMemoryを渡す | [Memoryを共有する](#share) |
-| ローカルLLM向けの事例データを出す | [学習用JSONLを出力する](#training) |
-| 保存されない・更新で止まった | [困ったとき](#troubleshooting) |
+| やりたいこと | インストーラー | 主な導入対象 | 説明 |
+|---|---|---|---|
+| 作業から得た知識や修正指示を次の仕事で使う | `install_basic_memory_workgraph.sh` | Basic Memory、Codex plugin、独自のWorkgraph・hooks・管理CLI | [概要と収録ツール](docs/basic-memory-workgraph/README.md) |
+| UI/UXを検討し、Webアプリを作り、ブラウザーで確認する | `install_codex_ux_stack.sh` | Product Design、Build Web Apps、UIレビューSkill、Playwright MCP | [概要と収録ツール](docs/codex-ux-stack/README.md) |
+| 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
 
-以下の `bash` / `python3` コマンドは **Linux / WSL2のターミナル**で実行します。
-特に記載がなければ、`install_basic_memory_workgraph.sh` があるリポジトリのルートが作業場所です。
-「Codexへの依頼例」はCodexの会話欄へ入力してください。
+組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
+Workgraphで他の仕事にも役立つ知識を残す、といった使い分けができます。
+これは利用例であり、インストーラー同士を自動連携する仕組みではありません。
 
-<a id="start"></a>
+## はじめに
 
-## 1. 初回インストール
-
-Codex CLI、Python 3、`curl` を使えるLinux / WSL2環境が必要です。
-Gitで取得する場合は次のように実行します。すでにリポジトリがあれば、そのディレクトリへ移動します。
+Linux / WSL2のターミナルで利用します。Codex CLIはあらかじめ用意してください。
+必要なPython・Node.jsのバージョンなどは各導入ガイドに記載しています。
 
 ```bash
 git clone https://github.com/Mak-GIBA/basic-memory-workgraph.git
 cd basic-memory-workgraph
-bash install_basic_memory_workgraph.sh
 ```
 
-installerは `uv` / `uvx`、Basic Memory、公式Codex plugin、保存プロジェクト、
-スキーマ、設定と追加hooksを用意します。ECCの設定は変更しません。
+**引数なしで実行したときの動作はインストーラーごとに異なります。**
+まず必要なものの導入ガイドを開き、前提条件と変更内容を確認してください。
 
-### 導入直後の状態
+| 対象 | 引数なしの動作 | 導入手順 | 導入後 |
+|---|---|---|---|
+| Basic Memory Workgraph | 実際に導入する。Basic Memory本体の更新も試みる | [インストール・更新・解除](docs/basic-memory-workgraph/installation.md) | [使い方と設定](docs/basic-memory-workgraph/usage.md) |
+| Codex UX Stack | 不足するツールを実際に導入・登録する | [インストール・更新・解除](docs/codex-ux-stack/installation.md) | [使い方](docs/codex-ux-stack/usage.md) |
+| SpecKit Upstream | 導入予定を表示する。適用には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
 
-| 項目 | 既定値 |
-|---|---|
-| Basic Memoryプロジェクト | `codex-memory` |
-| Markdownの保存先 | `~/knowledge/codex-memory/` |
-| Codex設定先 | `~/.codex/`。`CODEX_HOME` 指定時はその場所 |
-| 再利用知識の自動評価 | `smart`：候補があるとき評価 |
-| 文脈付き修正指示の自動保存 | `off`：明示保存依頼時のみ |
-| 具体事例の自動保存 | `off`：明示的に依頼した事例のみ |
-| Skill化 | `review`：価値を判断するところまで。自動登録しない |
-| 共有・学習利用 | どちらも未許可 |
+## このリポジトリで管理するもの
 
-保存先を変えて新規導入する場合は、プロジェクト名とディレクトリをセットで指定します。
+- 3つのインストーラーと、それぞれの導入・利用ガイド。
+- Workgraphの保存方針、フック、ノートのスキーマ、更新・共有・点検用のPythonコード。
+- SpecKit Upstreamの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
 
-```bash
-MEMORY_PROJECT=work-memory \
-MEMORY_DIR="$HOME/knowledge/work-memory" \
-bash install_basic_memory_workgraph.sh
-```
-
-すでに導入済みなら、[アップデート](#update)を使ってください。
-引数なしの通常installerは、保存先を省略すると上記の既定値を使います。
-
-### Codex側で確認する
-
-新しいCodexセッションを開始し、`/plugins` で `codex@basic-memory` を確認します。
-`/hooks` では `basic_memory_workgraph.py recall`（UserPromptSubmit）と
-`basic_memory_workgraph.py save`（Stop）の2コマンドを確認し、必要なtrust設定を行います。
-反映されない場合はCodexを再起動します。Stopの判定だけで「保存評価中」とは表示しません。
-
-導入後は、[日常の使い方](#daily)に進めます。
-
-<a id="python-tools"></a>
-
-### 更新・共有・Skill登録に使うPython環境を準備する
-
-`--update`、共有・JSONL出力・Skill登録CLIにはPyYAMLが必要です。
-フックと `--configure-only` はPython標準ライブラリだけで動作します。
-
-依存を分離して導入するには、リポジトリで次を実行します。
-
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -r tools/basic-memory-workgraph/requirements-export.txt
-source .venv/bin/activate
-python3 -c 'import yaml; print(yaml.__version__)'
-```
-
-以降のコマンド例は、この環境を有効にした状態で使えます。新しいターミナルでは
-リポジトリに移動して `source .venv/bin/activate` を再実行してください。
-`venv` 自体が利用できない場合は、OSのPython環境にvenv機能を用意してください。
-Skill自動登録を使う場合も、登録CLIを実行するPythonからPyYAMLを参照できる必要があります。
-
-<a id="update"></a>
-
-## 2. アップデート
-
-**改定版のコードを取得してから、既存環境へ適用する**という2段階です。
-更新コマンド自体はGit操作やコードのダウンロードを行いません。
-
-### 手順1：リポジトリを新しい版にする
-
-Gitで取得している場合は、まずローカルの変更を確認します。
-
-```bash
-git status --short
-```
-
-変更がないことを確認し、公開済みの改定版を取得する場合:
-
-```bash
-git pull --ff-only
-```
-
-自分やCodexの未コミット変更がある場合は、先に内容を確認して保存・整理してください。
-手元で修正した版を適用したいだけなら、Gitで取得する手順は不要です。
-Gitを使わない場合は、改定版のリポジトリ一式を配置してください。
-
-### 手順2：更新内容を確認して適用する
-
-初回のみ[Python環境の準備](#python-tools)を済ませます。その後、リポジトリで実行します。
-
-```bash
-source .venv/bin/activate
-
-# 更新予定を確認する。この段階では書き込まない。
-bash install_basic_memory_workgraph.sh --update --dry-run
-
-# 更新を適用する。
-bash install_basic_memory_workgraph.sh --update
-```
-
-`primaryProject` とBasic Memoryの登録情報から、既存の保存先を自動検出します。
-設定・hooks・CLI・参照資料・スキーマ・Graph索引を更新し、現在の各モード、他のhooks、
-通常のMemoryノートを保持します。Basic Memory本体やpluginのパッケージ更新は行いません。
-
-適用後は、新しいCodexセッションを開始してください。
-
-### 更新結果の読み方
-
-コマンドはJSONで結果を表示します。
-
-| 項目 | 意味 |
-|---|---|
-| `dry_run` | `true` なら確認のみ |
-| `project` / `memory_dir` | 検出した更新先 |
-| `configuration` | 適用する保存先とモード |
-| `changed` | 更新したファイル。dry-runでは更新予定のファイル |
-| `preserved` | 上書きせず保持したスキーマ・索引と、その理由 |
-
-`changed: []` は更新する差分がない状態です。
-終了コードは、直後に `echo $?` で確認できます。
-
-| 終了コード | 状態 | 対処 |
-|---|---|---|
-| `0` | 更新成功、または変更なし | 新しいCodexセッションで利用する |
-| `1` | 入力・依存・処理のエラー | エラーメッセージを確認する |
-| `2` | カスタマイズ等により保持したファイルがある | `preserved` の内容を確認する |
-
-**終了コード2は「更新が全部失敗した」という意味ではありません。** 実更新では安全に更新できる
-設定等は反映され、個別編集があるスキーマ・索引は保持されます。dry-runでは何も変更しません。
-
-`preserved` の `path` が現在のファイル、`template` が改定版の参考ファイルです。
-自分の編集を残すならそのまま保持できます。新しい定義が必要なら、差分を確認して必要部分を
-取り込んでください。自動で強制上書きするオプションはありません。
-
-変更前のファイルは `.bak.*` にバックアップします。書き込み中のエラーでは変更済みファイルを
-復元し、バックアップを残します。同じ版を再実行しても、差分がなければバックアップを増やしません。
-
-### 用途ごとのコマンド
-
-| 用途 | コマンド | 保存済みスキーマへの変更 |
-|---|---|---|
-| 初回導入 | `bash install_basic_memory_workgraph.sh` | 作成・更新する |
-| 既存環境の更新 | `bash install_basic_memory_workgraph.sh --update` | 既知の旧版を安全に更新する |
-| モード変更・policyやhooksの反映 | `bash install_basic_memory_workgraph.sh --configure-only` | 変更しない |
-
-保存先を個別指定したい場合や、スキーマだけを更新したい場合は[更新の詳細](#update-details)を参照してください。
-
-<a id="daily"></a>
-
-## 3. 日常の使い方
-
-通常は、Codexへいつもどおり作業を依頼します。作業前に関連Memoryを検索し、
-成功した手順や修正から再利用できる知識が得られたら、保存するかを評価します。
-保存はCodexが行います。hookは検索・評価を促す役割で、直接Memoryを書き込むものではありません。
-
-### 過去の知識を使いたい
-
-Codexへの依頼例:
+ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 
 ```text
-この作業に関係する過去のCorrection・Rule・Workflow・CaseをBasic Memoryで確認してから進めて。
-今回にも当てはまる条件と、当てはまらない条件を区別して使ってください。
+install_basic_memory_workgraph.sh   知識の蓄積・再利用
+install_codex_ux_stack.sh            UI/UXの設計・実装支援
+install_speckit_upstream.sh          要件・設計文書の整理
+tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
+docs/                              インストーラー別の説明
+tests/                             検証コードとテスト用データ
 ```
 
-### 修正指示を次の初回出力へ反映したい
+Workgraphは`tools/basic-memory-workgraph/`も含むリポジトリ一式で使用します。
+UX StackとSpecKitはスクリプト単体で使用できます。
+個人のエディター設定（`.vscode/`）、Pythonキャッシュ、仮想環境はGit管理の対象外です。
 
-[文脈付き修正指示の保存](#correction-mode)を有効にすると、例えば次の指示を
-`corrections/` に残す候補として扱います。
+Basic Memory、OpenAIのplugin、VercelのSkill、Playwright、SpecKit等の外部ツールは、
+各提供元が管理しています。このリポジトリのインストーラーとWorkgraph／Workbenchの独自機能を、
+それらの公式配布物と混同しないでください。ECC自体を導入するインストーラーは含みません。
 
-```text
-意思決定者向けなので、比較表と推奨案を先にして、細かい説明は後ろにしてください。
-```
+[ドキュメント一覧](docs/README.md)から詳細を探せます。
+開発・検証や新しいインストーラーの説明追加は、[開発ガイド](docs/development.md)を参照してください。
 
-残すのは指示だけでなく、**目的・読者・成果物・制約と、望ましい出力・適用範囲**です。
-初回出力の問題や修正理由は、会話から分かる範囲だけ記録します。
-結果がまだ不明でも保存でき、「指示は確認済み／効果は未検証／承認は不明」と分けます。
+## 旧Workgraph READMEからの移動先
 
-次の依頼では、出力を作る前に関連するCorrectionを検索し、条件の合う履歴を初回出力へ反映します。
-上記なら、似た意思決定用の説明で比較と推奨を先に置く参考になります。
-技術解説にも一律適用したり、「常に短文を好む」という恒久的な好みに変えたりはしません。
-今回の明示指示は過去の履歴より優先します。引用された過去の指示も新しい実行許可ではありません。
+これまでトップREADMEにあったWorkgraphの説明は、以下へ移動しました。
+既存の明示アンカーは、この案内に残しています。
 
-同じ範囲で指示が変われば既存ノートを更新し、異なるコンテキストでの指示は区別します。
-全文ログ、新規依頼、相づち、追加情報のない重複は自動保存しません。
-Correctionはそのまま学習用Caseにはならず、共有・学習利用の許可も自動では付けません。
-記入例と参照手順は[CORRECTIONS.md](tools/basic-memory-workgraph/templates/CORRECTIONS.md)を参照してください。
-
-### 修正から得た教訓を残したい
-
-```text
-今回の修正から、別の案件でも使える教訓があればMemoryへ反映してください。
-今回だけの条件を一般化せず、適用条件と検証結果も残してください。
-```
-
-例えば「異なる分母の数値を比較した → 分母の違いを指摘された → 分母を揃えて再計算した」
-という流れなら、検証と追加価値がある場合に、条件付きのルールを残します。
-単に「テストが通った」「作業が完了した」だけでは保存しません。
-
-### 修正前後の具体事例も残したい
-
-```text
-このやり取りを、要求・初回出力・修正指示・改善後の結果が分かるCaseとして保存してください。
-必要な部分を匿名化して残し、関連するRuleがあればリンクしてください。
-共有や学習用出力はまだ許可しません。
-```
-
-これは、事例モードが `off` でも使える明示的な保存依頼です。
-有用な事例の選別・保存を自動にしたい場合は、[事例保存の設定](#modes)を有効にします。
-
-### 改善シーケンスから初回出力を良くしたい
-
-[progressiveモード](#progressive-mode)では、同じ成果物について
-「初回出力 → 修正指示 → 改善 → 次の修正 → その後の利用」を一つのCaseに積み重ねます。
-結果が出る前から保存でき、後でどの版に対する指示・行動だったかを辿れます。
-目的・読者・制約が似たCaseを次の出力前に検索し、採用された可能性のある特徴と失敗点を参照します。
-
-評価のプロンプトや「いいね」は不要です。修正後のcommit／push指示、出力を土台にした次の仕事、
-同じ形式の再利用、残りの修正範囲の限定などを、対象と文脈付きの観測事実として残します。
-観測事実と採用・受容の推定、技術的な検証結果は別々です。
-
-- commit／pushだけなら推定は暫定。途中退避やエージェントの自主的なcommitは採用の根拠にしません。
-- commitとpushを別々の高評価として加算しません。沈黙・時間経過・話題変更でも満足を推定しません。
-- 後から同じ問題を指摘されたり、元に戻すよう依頼されたら推定を見直します。以前の実際の指示は消しません。
-- 対象や順序が分からない箇所は不明のままにし、会話全文の収集やログからの復元はしません。
-
-一つのセッションに別の成果物があればCaseを分けます。別セッションでも同じ成果物の継続と確認できれば
-同じCaseを更新します。単なる新規依頼や、学習・比較価値のない全作業記録は自動保存しません。
-検索・抽象化・採用推定はCodexが行い、CLIは構造と参照の整合性を検査します。
-詳しい形式は[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)を参照してください。
-
-### 継続的な好みを覚えてほしい
-
-```text
-今後の案件でも、回答は日本語を基本にしてください。
-英文作成を依頼した場合は英語で構いません。この好みを覚えてください。
-```
-
-「今回のボタンだけ青くして」のような単発の修正を、恒久的な好みと推測することはありません。
-Plan/read-onlyモードでは、これらの依頼があっても書き込みを行いません。
-
-### 抽象Memory・Correction・Case・Skillの違い
-
-| 種類 | 残す内容 | 使い道 |
-|---|---|---|
-| Correction | 状況、修正指示、望ましい出力、適用範囲。効果は未検証でもよい | 出力前に参照し、同じ修正を繰り返すのを防ぐ |
-| 抽象Memory | 条件付きルール、再利用手順、確認方法 | 別タスクで判断・実行するときに使う |
-| Case | 要求、初回出力、修正、改善、結果の具体的な対比 | 類似案件の比較、学習データ候補に使う |
-| Skill | レビュー・検証済みの実行手順や補助資源 | 繰り返す仕事を実行しやすくする |
-
-抽象MemoryとCaseは別々に保存価値を判断し、両方が存在する場合に関連付けます。
-Skill化の背景や根拠はWorkflowに残し、登録したSkillへArtifactから辿れるようにします。
-
-<a id="modes"></a>
-
-## 4. 設定を変更する
-
-モード変更は、リポジトリで `--configure-only` を実行します。
-**指定した設定だけを変更し、省略した設定は維持します。** 変更後は新しいCodexセッションを開始してください。
-
-<a id="correction-mode"></a>
-
-### 文脈付き修正指示の自動保存を有効にする
-
-初めてこの機能を導入する既存環境では、[Python環境](#python-tools)で次を実行します。
-Correctionスキーマも更新し、既存の他の設定は維持します。
-
-```bash
-BM_CORRECTION_MODE=scoped bash install_basic_memory_workgraph.sh --update
-```
-
-以降の設定変更だけなら次でも切り替えられます。
-
-```bash
-BM_CORRECTION_MODE=scoped bash install_basic_memory_workgraph.sh --configure-only
-# 修正指示の自動保存だけを停止
-BM_CORRECTION_MODE=off bash install_basic_memory_workgraph.sh --configure-only
-```
-
-`scoped` は結果不明の修正も、分かっている文脈と限定された適用範囲で保存します。
-`case=off` でも使えます。既存環境の更新では勝手に有効化せず、既定値は `off` です。
-
-### 有用な具体事例の自動保存を有効にする
-
-```bash
-BM_CASE_MODE=reusable bash install_basic_memory_workgraph.sh --configure-only
-```
-
-成功・修正インタラクションのうち、比較や学習に価値があるものを選別します。
-会話全文を毎回保存する設定ではありません。
-
-<a id="progressive-mode"></a>
-
-### 改善シーケンスを途中から段階的に保存する
-
-[Python環境](#python-tools)で次を実行すると、Case v2・点検CLIを更新して有効化できます。
-
-```bash
-BM_CASE_MODE=progressive bash install_basic_memory_workgraph.sh --update
-```
-
-`reusable` は結果のある有用な事例、`progressive` は有用な未完了の改善過程から保存します。
-既存利用者の `caseMode` は更新時に保持し、未設定なら従来どおり `off` です。
-導入済みでモードだけ切り替える場合は `--configure-only` も使えます。
-
-### Skillの作成・登録まで自動で行う
-
-[Python環境](#python-tools)を用意し、次を実行します。
-
-```bash
-BM_SKILL_MODE=auto bash install_basic_memory_workgraph.sh --configure-only
-```
-
-利用可能な `skill-creator` 等で、既存Skillとの重複や、MemoryだけよりSkill化する価値があるかを
-レビューします。検証まで通ったものだけ登録します。Creator不在・検証不能なら候補に留めます。
-既存pluginや個人Skillは上書きしません。Workgraphが管理するSkillでも、ユーザー編集があれば自動更新を止めます。
-
-両方まとめて有効にすることもできます。
-
-```bash
-BM_CASE_MODE=reusable BM_SKILL_MODE=auto \
-bash install_basic_memory_workgraph.sh --configure-only
-```
-
-### 止める・元に戻す
-
-```bash
-# 事例の自動保存を止め、Skillはレビューまでにする。
-BM_CASE_MODE=off BM_SKILL_MODE=review \
-bash install_basic_memory_workgraph.sh --configure-only
-
-# 修正指示・事例保存・Skillレビューを含む自動処理をすべて止める。
-BM_AUTO_MODE=off bash install_basic_memory_workgraph.sh --configure-only
-
-# 自動評価を再開する。事例・Skillの設定は保存されていた値を使う。
-BM_AUTO_MODE=smart bash install_basic_memory_workgraph.sh --configure-only
-```
-
-**`BM_AUTO_MODE=off` の間は、他のモードが有効でも自動処理は動きません。**
-明示的な保存依頼は指定された範囲で扱えます。Skill登録CLIは `auto` 設定を要求します。
-
-### 全設定と現在値の確認
-
-| 設定 | 値 | 動作 |
-|---|---|---|
-| `BM_AUTO_MODE` | `smart`（既定） | 実装モード確認後、成功／修正／教訓等の候補があるとき評価 |
-| | `always` | 実装モード確認済みの各ターンで評価。保存基準は同じ |
-| | `off` | 修正指示を含む自動保存・Skillレビューと登録を停止 |
-| `BM_CORRECTION_MODE` | `off`（既定） | Correctionは明示保存依頼時のみ |
-| | `scoped` | 結果不明の修正指示も、文脈と適用範囲付きで保存 |
-| `BM_CASE_MODE` | `off`（既定） | 具体事例は明示保存依頼時のみ |
-| | `reusable` | 結果のある有用な具体事例を選別して保存 |
-| | `progressive` | 有用な修正シーケンスを途中から保存し、後続の採用・撤回の手掛かりも追加 |
-| `BM_SKILL_MODE` | `off` | 自動Skillレビューを停止 |
-| | `review`（既定） | Skill化の判断と理由まで |
-| | `auto` | レビュー・検証後の登録まで |
-
-現在の設定は次で確認できます。
-
-```bash
-cat "${CODEX_HOME:-$HOME/.codex}/basic-memory-workgraph/config.json"
-```
-
-新規導入時の内容は次のとおりです。更新時は既存の設定値を保持します。
-
-```json
-{
-  "mode": "smart",
-  "correctionMode": "off",
-  "caseMode": "off",
-  "skillMode": "review"
-}
-```
-
-<a id="share"></a>
-
-## 5. Memoryを共有する
-
-共有は、**対象の確認 → 共有範囲の指定 → export → 相手側でimport**の順に行います。
-ツールはローカルにファイルを出力します。送信・公開は行わないため、完成したフォルダを
-Gitやファイル転送などで渡してください。
-
-[Python環境](#python-tools)を有効にして実行します。以下の `rules/example.md` は例です。
-**実在するノートの、Memory保存先からの相対パスに置き換えてください。** スペースを含む場合も引用符で囲みます。
-独自の保存先を使っている場合は `--memory-dir` も置き換えてください。
-
-### 手順1：対象ノートを確認し、共有を指定する
-
-本文・タイトル・メタデータ・リンクを確認し、認証情報・機密情報・不要な個人情報を除きます。
-そのうえで、チーム共有を指定してレビュー済みにします。
-
-```bash
-python3 tools/basic-memory-workgraph/workgraph_tools.py review \
-  --memory-dir "$HOME/knowledge/codex-memory" \
-  --note "rules/example.md" --sharing team
-```
-
-`review` は内容確認済みであることと、出力用途の指定を記録するコマンドです。
-実行するだけで内容が匿名化されるわけではありません。一般的な秘密情報パターンは機械検査でも拒否します。
-
-### 手順2：共有用フォルダを出力する
-
-```bash
-python3 tools/basic-memory-workgraph/workgraph_tools.py export-share \
-  --memory-dir "$HOME/knowledge/codex-memory" \
-  --scope team --output ./team-memory
-```
-
-レビュー済みの `team` ノートとmanifestを出力します。Caseも含める場合は `--include-cases` を追加します。
-そのCase自体にもチーム共有の指定とレビューが必要です。
-
-`--scope public` はpublic指定のノートだけを選びます。teamとpublicは別々の区分です。
-共有対象外のノートをリンク経由で勝手に同梱せず、対象外や曖昧な宛先へのwikiリンクと
-ローカルMarkdownリンクを出力側で除去します。元ノートは変更しません。
-添付ファイル・実行ファイル・Skill本体は共有bundleに含めません。
-
-### 手順3：受け取った環境でimportする
-
-受け取った `team-memory` フォルダを指定します。
-
-```bash
-python3 tools/basic-memory-workgraph/workgraph_tools.py import-share \
-  --memory-dir "$HOME/knowledge/imported-memory" --bundle ./team-memory
-```
-
-この例は新しいディレクトリへ取り込みます。既存のBasic Memoryプロジェクトで使うなら、
-その登録済み保存先を指定してください。新しい保存先をBasic Memoryで利用する場合は、別途登録します。
-
-```bash
-bm project add imported-memory "$HOME/knowledge/imported-memory"
-```
-
-同じ内容の再importは無変更です。同名で内容が違う場合は上書きせず、取り込み全体を止めて衝突を報告します。
-取り込んだノートは `private`・学習対象外へ戻し、出所を保持します。受け取った指示を自動で実行したり、
-Skillを自動登録したりしません。登録後はBasic Memoryの通常の同期・検索から利用できます。
-
-<a id="training"></a>
-
-## 6. 学習用JSONLを出力する
-
-**事例の保存、共有許可、学習利用許可はそれぞれ別です。** Caseを保存しただけでは学習対象になりません。
-[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)の形式に沿ったCaseを確認・匿名化し、学習利用を明示します。
-旧来の自由形式Caseを自動で補完・変換する機能はありません。
-
-[Python環境](#python-tools)を有効にし、`cases/example.md` を実際の相対パスへ置き換えて実行します。
-
-```bash
-# ローカル学習利用を許可する。共有範囲はprivateにする。
-python3 tools/basic-memory-workgraph/workgraph_tools.py review \
-  --memory-dir "$HOME/knowledge/codex-memory" \
-  --note "cases/example.md" --training approved
-
-python3 tools/basic-memory-workgraph/workgraph_tools.py export-cases \
-  --memory-dir "$HOME/knowledge/codex-memory" --output ./cases.jsonl
-```
-
-1行1事例の汎用JSONLを出力します。
-
-| JSONLの項目 | 内容 |
+| 旧項目 | 新しい説明 |
 |---|---|
-| `format_version` | 出力形式のバージョン |
-| `source_id` | 元ノートのパスから作った識別子 |
-| `interaction` | v1は従来形式。v2は文脈、順序付きsteps、採用推定、根拠、記憶の訂正履歴など |
-| `integrity_status` | v2のみ。保存時の整合性点検状態。要点検のノートは出力しない |
-| `relations` | 関係の種類と宛先の識別子。関連ノート本文は同梱しない |
-
-JSONL外側の `format_version` は1を維持し、`interaction.version` でv1/v2を区別します。
-要約と抜粋、検証結果とユーザー承認、暗黙的な採用推定を区別して保持します。
-推定を満足の確定ラベルに変換せず、未完了や不明の状態も残します。後段で対象を選別し、
-要求・修正を入力、改善後の出力を教師データとしてSFT等の形式へ変換できます。
-要約を原文扱いしたり、不明な結果を成功扱いしたりしないでください。
-このツールの担当は汎用JSONLまでで、SFT形式への変換、LoRA学習、モデルへの投入は含みません。
-
-### 共有と学習の両方を許可したい場合
-
-`review` は、省略すると共有範囲をprivate、学習利用をexcludedにします。
-両方許可する場合は、一度のコマンドで両方を指定してください。
-
-```bash
-python3 tools/basic-memory-workgraph/workgraph_tools.py review \
-  --memory-dir "$HOME/knowledge/codex-memory" \
-  --note "cases/example.md" --sharing team --training approved
-```
-
-ノートの本文やメタデータを編集した後は、内容の指紋が変わるため再レビューが必要です。
-自動保存で共有・学習の許可を付けることはありません。
-
-<a id="troubleshooting"></a>
-
-## 7. 困ったとき
-
-| 状況 | 確認・対処 |
-|---|---|
-| 新機能が動かない | 新しいCodexセッションを開始し、`/plugins` と `/hooks` を確認する |
-| 教訓が保存されない | `mode`、検証根拠、再利用価値、既存Memoryとの重複を確認する。価値がなければ保存しないのが正常 |
-| 修正指示が保存されない | `correctionMode=scoped`、実装モード、重複や機密情報の有無を確認する |
-| 終了時の評価が出ない | Planでは正常。実装モードでも当該ターンの有効化が必要。更新後は新しいセッションを開始する |
-| 具体事例が増えない | 既定は `caseMode=off`。明示保存依頼、`reusable`、`progressive` を用途に応じて使う |
-| Skillが作成されない | 既定は `skillMode=review`。`auto` でもCreator・検証・追加価値が必要 |
-| `PyYAML` が必要と表示された | [Python環境の準備](#python-tools)を実行し、同じ環境でコマンドを使う |
-| 更新で終了コード2になった | `preserved` を確認。対象を上書きせず保持した通知であり、全更新の失敗ではない |
-| 保存先が見つからない／不一致 | `primaryProject` とBasic Memory登録情報を確認。[更新の詳細](#update-details)を参照 |
-| 記憶の順序や解釈がおかしい | [audit](#audit)で構造を確認し、会話の根拠と照合する |
-| `needs_review` でexportが止まる | 根拠付きの訂正・点検後に共有／学習レビューをやり直す。フラグだけ消して通さない |
-| exportの件数が0になった | 共有／学習用途の指定とレビュー状態を確認。編集後は再レビューが必要 |
-| `Missing or stale privacy review` | 内容を確認して `review` を再実行する。共有・学習両方を許可するなら両引数を指定する |
-| `Output already exists` | 既存の出力は上書きしないため、新しい `--output` を指定する |
-| importで `conflicts` が返った | 同名ノートの差分を確認するか、別の保存先へ取り込む。既存ノートは上書きされない |
-| 秘密情報の検査で拒否された | 内容を匿名化して再レビューする。検査を通っても人名・業務機密の確認は必要 |
-
-共有・学習CLIでは `--dry-run` を付けると書き込みせず確認できます。
-ただし、出力先がすでに存在する場合など、通常実行と同じ入力制約は適用されます。
-CLIの終了コードは0が成功、1が入力・処理エラー、2が除外項目またはimport衝突ありです。
-exportは安全に出力できた項目を出し、`skipped` に除外理由を表示します。
-
-<a id="audit"></a>
-
-### 保存した記憶を点検する
-
-点検するタイミングは、保存・更新後、再利用前、新しい情報と矛盾したとき、手動依頼時です。
-定期巡回ジョブは追加していません。まず構造だけを読み取り専用で確認できます。
-
-```bash
-# 保存先全体を点検。ノートやレビュー情報は変更しない。
-python3 tools/basic-memory-workgraph/workgraph_tools.py audit --memory-dir "$HOME/knowledge/codex-memory"
-
-# 対象のCaseだけ点検。パスは実在するノートに置き換える。
-python3 tools/basic-memory-workgraph/workgraph_tools.py audit \
-  --memory-dir "$HOME/knowledge/codex-memory" --note "cases/example.md"
-```
-
-JSONで問題種別・位置・対応候補と、影響がありそうな派生ノート（最大2段）を報告します。
-終了コードは0＝構造上の指摘なし、2＝指摘あり、1＝入力・処理エラーです。
-`--dry-run` も指定できますが、auditは常に読み取り専用です。
-既存の自由形式Caseは未対応扱いで捨てず、構造検査の対象外として報告します。
-
-CLIが検出するのはID重複、参照切れ、記録順序と対象の矛盾、根拠なしの採用推定などです。
-**構造検査に通っても、実際の会話の順序や解釈が正しいとは限りません。**
-Codexへの依頼例:
-
-```text
-このCaseの修正順序と評価対象を、利用可能な会話の根拠と照合して。
-確定できる誤りは根拠と訂正履歴を残して直し、不明なら要点検として扱って。
-このCaseから導いたRuleやWorkflowへの影響も確認して。
-```
-
-実装モードでは、確定できる誤りを必要な範囲だけ訂正し、匿名化した変更前後・理由・根拠を残します。
-実際に失敗した試行や後からの方針変更は、記憶の誤りと混同して消しません。
-判断できなければ `integrity_status=needs_review` と具体的な懸念を残し、成功事例としての参照やexportを保留します。
-派生知識は独立した根拠を確認し、一括削除・一括修正はしません。
-Plan／読み取り専用では、報告とその回答での参照見送りまでです。
-
-点検状態は `unreviewed` / `checked` / `needs_review` で、共有・学習許可とは別です。
-訂正後は根拠との照合と構造チェックを行い、読み返して懸念を解消してからcheckedに戻します。
-内容や状態を変えたら既存のprivacyレビューは失効し、exportには再レビューが必要です。
-何も変わらない点検では日時だけの更新をしません。importされたcheckedはunreviewedに戻り、
-needs_reviewは保持されます。詳細は[AUDIT.md](tools/basic-memory-workgraph/templates/AUDIT.md)を参照してください。
-
-<a id="details"></a>
-
-## 8. 保存方針・配置・仕組み
-
-### 保存品質
-
-正本は[memory-policy.md](tools/basic-memory-workgraph/memory-policy.md)です。抽象Memoryの自動保存は、以下をすべて満たす知識に限ります。
-
-| 基準 | 内容 |
-|---|---|
-| 再利用性 | 元の案件以外で使える具体的な場面がある |
-| 有用性 | 次回の判断・手順を改善し、失敗や再調査を減らす |
-| 根拠 | 実際の確認で裏付けられている。十分な検証なら1回でもよい |
-| 持続性 | 適用条件・例外・再確認条件が明確 |
-| 追加価値 | 既存メモや容易に確認できる一般知識にない価値がある |
-
-明示された継続的な好みも、範囲と例外を添えて保存できます。
-作業日誌、完了報告、成果物一覧、一般論、根拠のない推測は自動保存しません。
-progressiveの採用推定は、観測事実と根拠を添えた暫定的な解釈として区別します。
-新しい根拠・条件がなければ、既存ノートへ利用日時だけを追記することもありません。
-重複検索に失敗した場合は、自動保存を見送ります。
-
-`smart` は日本語・英語の修正・調整・成功・採用／撤回の手掛かりと、Codexが意味的に認識した候補を使います。
-すべてを捕捉する保証はありません。候補検出は保存の許可ではなく、内容の判断はCodexが行います。
-
-### Planでは参照のみ、実装モードで保存評価
-
-開始時フックは検索方針と、そのセッション・ターンだけの有効化コマンドを渡します。
-Codexが**現在は実装モードかつ書き込み可能**と確認した場合にだけ、回答前にその補助コマンドを実行します。
-通常はユーザーがコマンドを操作する必要はありません。Plan／読み取り専用や追加評価中は実行しません。
-終了時フックは有効化済みターンだけ、一度の保存評価を依頼します。
-
-Planでも過去のMemoryを検索・参照できます。終了時の短い判定プロセス自体は呼ばれますが、
-保存評価の追加ターンは起動しません。トークンなし・古いトークン・別ターン・設定不備・`auto=off`も評価しません。
-更新前に始まったターンはトークンがないため、追加評価を見送ります。
-
-Codex 0.157.1のフック入力の `permission_mode` は承認設定由来で、Plan／実装モードを
-判別できません（[該当実装](https://github.com/openai/codex/blob/rust-v0.157.1/codex-rs/core/src/hook_runtime.rs#L1031)）。
-このため有効化はCodexによるモード確認に依存し、確認漏れでは追加評価を見送ります。
-`permission_mode=plan` が明示された場合も起動を拒否します。途中でPlanへ変わった場合は、
-有効化済みでも保存を行わないようpolicyで要求します。ホスト側のモードを直接検証する仕組みではありません。
-
-状態にはランダムな制御トークン、候補・有効化フラグ、形式版のみを保持し、会話本文は記録しません。
-トークンは終了時に消費し、同じ評価の並行実行・再実行を防ぎます。raw transcriptの読み取りは行いません。
-MCPサーバー側で全クライアントの書き込みを強制的に制限する仕組みではありません。
-
-### ノートの配置
-
-| Folder | 用途 |
-|---|---|
-| `rules/` | 条件付きのルール、明示された継続的な好み |
-| `workflows/` | 再利用手順、Skill化判断と背景 |
-| `validations/` | 再利用できる確認方法 |
-| `cases/` | 具体的インタラクション、既存の自由形式事例 |
-| `corrections/` | 明示保存依頼または `correction=scoped` による文脈付き修正指示 |
-| `artifacts/` | 成果物や登録済みSkillへの参照 |
-| `projects/` | 明示依頼による長期スコープ |
-| `schemas/` | ノート構造の定義 |
-
-従来の7種類を維持し、新項目は任意項目として追加しています。既存ノートを一括変換しません。
-具体事例は `type: case` のMarkdown内に、版付きのJSONブロックとして保持します。
-通常のObservations／Relationsも使えるため、`generalized_to` / `learned_from` 等で抽象Memoryと結べます。
-詳細と記入例は[CAPTURE.md](tools/basic-memory-workgraph/templates/CAPTURE.md)を参照してください。
-
-Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](tools/basic-memory-workgraph/templates/SKILL_REVIEW.md)にあります。
-登録済みSkillのArtifactは `kind: skill` と `skill:<name>` を持ち、Workflowから `packaged_as` で結びます。
-実行手順はSkill、背景・根拠・適用条件はWork Graphに残します。関連付けのためだけにノート一式を作りません。
-
-### 共有・学習用メタデータ
-
-| frontmatter | 既定 | 意味 |
-|---|---|---|
-| `sharing_scope` | `private` | `team` / `public` の明示で共有対象を指定 |
-| `training_use` | `excluded` | `approved` の明示で学習利用を指定 |
-| `privacy_review` | `pending` | 内容レビューの状態 |
-| `review_sha256` | なし | 本文・メタデータに結び付いたレビューの指紋 |
-| `integrity_status` | `unreviewed`扱い | 整合性の点検状態。`needs_review` は共有・学習用出力を保留 |
-
-項目がない旧ノートはprivate・学習対象外として扱います。
-これはCLIの出力対象を選ぶための指定であり、ファイル自体のアクセス制御や暗号化ではありません。
-
-### インストール先のファイル
-
-以下は `${CODEX_HOME:-$HOME/.codex}` 配下です。
-
-| 配置 | 内容 |
-|---|---|
-| `basic-memory.json` | 保存先と共通policy。`checkpointOnCompact=false` |
-| `basic-memory-workgraph/config.json` | 評価・事例・Skillのモード |
-| `basic-memory-workgraph/memory-policy.md` | 開始・終了hookの共通基準 |
-| `basic-memory-workgraph/templates/` | 事例形式、Skillレビュー、スキーマの参照資料 |
-| `basic-memory-workgraph/workgraph_tools.py` | 共有・JSONL出力・点検・Skill登録CLI |
-| `basic-memory-workgraph/workgraph_sequence.py` | Case v2の構造・根拠参照検証 |
-| `hooks/basic_memory_workgraph.py` | 方針注入、検索案内、保存評価依頼 |
-| `hooks.json` | hook登録 |
-
-導入済みCLIは、リポジトリ以外の場所からも実行できます。
-
-```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/basic-memory-workgraph/workgraph_tools.py" --help
-```
-
-この場合も、そのPython環境にPyYAMLが必要です。
-公式pluginの設定探索はその仕様に従います。プロジェクトの `.codex/basic-memory.json` に
-設定がある場合、ユーザー設定より優先されることがあります。
-既存の `captureEvents` は保持します（未設定ならtrue）。公式pluginのイベント記録とは別に、
-本フックでは本文を記録しません。圧縮時の自動checkpointは無効です。
-
-<a id="update-details"></a>
-
-### 更新の詳細
-
-Basic Memory登録ファイルの探索順は次のとおりです。先に該当した設定先を使います。
-
-1. `BASIC_MEMORY_CONFIG_DIR` 指定時：その配下の `config.json`
-2. `XDG_CONFIG_HOME` 指定時：その配下の `basic-memory/config.json`
-3. どちらも未指定：`~/.basic-memory/config.json`
-
-明示的に別の登録ファイルを使う場合:
-
-```bash
-bash install_basic_memory_workgraph.sh --update \
-  --basic-memory-config "/path/to/basic-memory/config.json" --dry-run
-```
-
-`MEMORY_PROJECT` / `--project` で別の登録済みローカルプロジェクトを選べます。
-`MEMORY_DIR` / `--memory-dir` を指定する場合は、登録済みパスと一致する必要があります。
-未登録・保存先不明・cloudプロジェクトを推測して更新しません。
-
-スキーマだけを更新する場合は、登録済みのMarkdown保存先を指定します。
-
-```bash
-python3 tools/basic-memory-workgraph/install_schemas.py --memory-dir "$HOME/knowledge/codex-memory"
-```
-
-スキーマは、管理対象のYAML項目と本文を過去の配布版と比較して移行します。
-Basic Memoryが追加した `permalink`、日時、管理対象外の追加メタデータは保持します。
-定義の変更・追加、本文編集、移行で失われる可能性があるコメントは、カスタマイズとして保持・通知します。
-最新の内容なら再整形もしません。通常installerも同じ処理を使います。
-
-<a id="uninstall"></a>
-
-## 9. 解除する
-
-リポジトリで実行します。
-
-```bash
-bash tools/basic-memory-workgraph/remove_workgraph_hooks.sh
-```
-
-追加hooksとその設定・状態・CLIコピーを解除します。
-Basic Memory、公式plugin、保存済みノート、スキーマ、登録済みSkillと管理manifest、
-`basic-memory.json` は残ります。共通policyとcheckpoint無効設定も残ります。
-
-<a id="development"></a>
-
-## 開発・検証
-
-[Python環境](#python-tools)を用意し、リポジトリで実行します。
-
-```bash
-python3 -m unittest discover -s tests -v
-bash -n install_basic_memory_workgraph.sh
-bash -n tools/basic-memory-workgraph/remove_workgraph_hooks.sh
-```
-
-テストは一時ディレクトリと架空の事例を使用します。実際の個人MemoryやSkillへは書き込みません。
-設定維持、スキーマ移行、保存モード、共有境界、JSONLの情報保持、importの衝突、Skill登録の保護、
-更新のdry-run・再実行・失敗時の復元などを確認します。外部パッケージ導入はモックで検証します。
-意味内容の判断例は[tests/POLICY_SCENARIOS.md](tests/POLICY_SCENARIOS.md)にあります。
-機械テストは、実際の会話に対する抽象化品質やCreatorレビューの正しさを証明するものではありません。
-
-リリース時は、変更前の配布済みテンプレートを `tools/basic-memory-workgraph/schema-history/<version>/` に残してから
-現行テンプレートを変更します。更新処理はこの履歴を使い、実行時にGitやネットワークから取得しません。
-policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md` を編集し、`--configure-only` または `--update` で反映します。
+| <a id="start"></a>初回インストール | [初回インストール](docs/basic-memory-workgraph/installation.md#start) |
+| <a id="python-tools"></a>Python環境の準備 | [Python環境の準備](docs/basic-memory-workgraph/installation.md#python-tools) |
+| <a id="update"></a>アップデート | [アップデート](docs/basic-memory-workgraph/installation.md#update) |
+| <a id="daily"></a>日常の使い方 | [日常の使い方](docs/basic-memory-workgraph/usage.md#daily) |
+| <a id="modes"></a>設定を変更する | [設定を変更する](docs/basic-memory-workgraph/usage.md#modes) |
+| <a id="correction-mode"></a>文脈付き修正指示の保存 | [文脈付き修正指示の保存](docs/basic-memory-workgraph/usage.md#correction-mode) |
+| <a id="progressive-mode"></a>段階的なCase保存 | [段階的なCase保存](docs/basic-memory-workgraph/usage.md#progressive-mode) |
+| <a id="share"></a>Memoryを共有する | [Memoryを共有する](docs/basic-memory-workgraph/sharing.md#share) |
+| <a id="training"></a>学習用JSONL出力 | [学習用JSONL出力](docs/basic-memory-workgraph/sharing.md#training) |
+| <a id="troubleshooting"></a>困ったとき | [困ったとき](docs/basic-memory-workgraph/troubleshooting.md#troubleshooting) |
+| <a id="audit"></a>記憶の点検 | [記憶の点検](docs/basic-memory-workgraph/troubleshooting.md#audit) |
+| <a id="details"></a>保存方針・配置・仕組み | [保存方針・配置・仕組み](docs/basic-memory-workgraph/reference.md#details) |
+| <a id="update-details"></a>更新の詳細 | [更新の詳細](docs/basic-memory-workgraph/installation.md#update-details) |
+| <a id="uninstall"></a>解除 | [解除](docs/basic-memory-workgraph/installation.md#uninstall) |
+| <a id="development"></a>開発・検証 | [開発・検証](docs/development.md#development) |
