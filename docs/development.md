@@ -32,6 +32,7 @@ python3 -m unittest discover -s tests -v
 bash -n install_basic_memory_workgraph.sh
 bash -n install_codex_ux_stack.sh
 bash -n install_speckit_upstream.sh
+bash -n install_codex_github_pm.sh
 bash -n tools/basic-memory-workgraph/remove_workgraph_hooks.sh
 ```
 
@@ -52,9 +53,11 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | Workgraph | 上記のPythonテスト | 設定、保存形式、共有、更新等のローカル処理。実際の外部パッケージ導入は含まない |
 | UX Stack | Bash構文確認、実装と配布元・カタログの照合 | このリポジトリに専用の自動テストはない。実導入とブラウザー操作の確認は別途必要 |
 | SpecKit Upstream | `bash install_speckit_upstream.sh --self-test` | 一時環境とモックSpecKitによる検証。実Codex・公式CLIの取得を含むE2Eテストではない |
+| GitHub Project Director | `bash install_codex_github_pm.sh --self-test` | 一時環境での導入・更新・解除、読み取り補助、Skillの静的な指示内容を検証。実GitHubへの書き込みやモデルの出力品質を保証しない |
 
 構文確認や文書レビューのためにインストーラーの通常実行を行わないでください。
-WorkgraphとUX Stackは引数なしで実際に導入します。SpecKitの`--extract`もファイルを書き込む操作です。
+Workgraph、UX Stack、GitHub Project Directorは引数なしで実際に導入します。
+SpecKitとGitHub Project Directorの`--extract`もファイルを書き込む操作です。
 
 ## 新しいインストーラーの説明を追加する
 
@@ -101,6 +104,14 @@ SpecKit Upstreamの資料と実装はシェルスクリプト内のZIPに含ま�
 `--extract`で未使用の一時ディレクトリへ展開し、`README_COMMANDS.md`と`workbench/`、`assets/`を確認できます。
 展開物やBase64資材をそのままdocsへ複製せず、利用者向けの説明を保守します。
 この操作はインストールしませんが展開先へ書き込みます。既存の空でないディレクトリは使えません。
+
+### GitHub Project Directorの埋め込み資料
+
+GitHub Project Directorも単一ファイル内に資料と実装を持ちます。
+`bash install_codex_github_pm.sh --extract /tmp/github-pm-review`で、未使用または空のディレクトリへ展開できます。
+`README_EXTRACTED.md`、`scripts/install_github_pm.py`、`skills/github-project-director/`を確認し、
+利用者向けの説明は[専用ガイド](codex-github-pm/README.md)で保守します。
+展開物を補助ディレクトリへ複製する必要はありません。
 
 ## ドキュメントだけを変更した場合の確認
 

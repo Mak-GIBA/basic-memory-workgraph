@@ -1,8 +1,8 @@
 # Codex環境の導入・運用ツール集
 
 このリポジトリ（`basic-memory-workgraph`）は、Codexでの知識の蓄積、UI/UXの設計・実装支援、
-要件・設計文書の整理に使うインストーラーと運用ツールをまとめています。
-必要なものを個別に選んで導入できます。3つをすべて入れる必要や、決まった導入順序はありません。
+要件・設計文書の整理、GitHubでのタスク管理に使うインストーラーと運用ツールをまとめています。
+必要なものを個別に選んで導入できます。4つをすべて入れる必要や、決まった導入順序はありません。
 
 ## やりたいことから選ぶ
 
@@ -11,14 +11,16 @@
 | 作業から得た知識や修正指示を次の仕事で使う | `install_basic_memory_workgraph.sh` | Basic Memory、Codex plugin、独自のWorkgraph・hooks・管理CLI | [概要と収録ツール](docs/basic-memory-workgraph/README.md) |
 | UI/UXを検討し、Webアプリを作り、ブラウザーで確認する | `install_codex_ux_stack.sh` | Product Design、Build Web Apps、UIレビューSkill、Playwright MCP | [概要と収録ツール](docs/codex-ux-stack/README.md) |
 | 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
+| 要件からIssueを整理し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
 
 組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
-Workgraphで他の仕事にも役立つ知識を残す、といった使い分けができます。
+GitHub Project DirectorでIssueや進捗を整理し、Workgraphで他の仕事にも役立つ知識を残す、といった使い分けができます。
 これは利用例であり、インストーラー同士を自動連携する仕組みではありません。
 
 ## はじめに
 
-Linux / WSL2のターミナルで利用します。Codex CLIはあらかじめ用意してください。
+基本はLinux / WSL2のターミナルで利用します。GitHub Project DirectorはmacOSにも対応します。
+Codex CLIはあらかじめ用意してください。
 必要なPython・Node.jsのバージョンなどは各導入ガイドに記載しています。
 
 ```bash
@@ -34,12 +36,13 @@ cd basic-memory-workgraph
 | Basic Memory Workgraph | 実際に導入する。Basic Memory本体の更新も試みる | [インストール・更新・解除](docs/basic-memory-workgraph/installation.md) | [使い方と設定](docs/basic-memory-workgraph/usage.md) |
 | Codex UX Stack | 不足するツールを実際に導入・登録する | [インストール・更新・解除](docs/codex-ux-stack/installation.md) | [使い方](docs/codex-ux-stack/usage.md) |
 | SpecKit Upstream | 導入予定を表示する。適用には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
+| GitHub Project Director | ユーザー共通のSkillを実際に導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/codex-github-pm/installation.md) | [使い方](docs/codex-github-pm/usage.md) |
 
 ## このリポジトリで管理するもの
 
-- 3つのインストーラーと、それぞれの導入・利用ガイド。
+- 4つのインストーラーと、それぞれの導入・利用ガイド。
 - Workgraphの保存方針、フック、ノートのスキーマ、更新・共有・点検用のPythonコード。
-- SpecKit Upstreamの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
+- SpecKit UpstreamとGitHub Project Directorの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
 
 ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 
@@ -47,17 +50,18 @@ cd basic-memory-workgraph
 install_basic_memory_workgraph.sh   知識の蓄積・再利用
 install_codex_ux_stack.sh            UI/UXの設計・実装支援
 install_speckit_upstream.sh          要件・設計文書の整理
+install_codex_github_pm.sh          GitHubのIssue・Projects・進捗管理
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ
 ```
 
 Workgraphは`tools/basic-memory-workgraph/`も含むリポジトリ一式で使用します。
-UX StackとSpecKitはスクリプト単体で使用できます。
+UX Stack、SpecKit、GitHub Project Directorはスクリプト単体で使用できます。
 個人のエディター設定（`.vscode/`）、Pythonキャッシュ、仮想環境はGit管理の対象外です。
 
-Basic Memory、OpenAIのplugin、VercelのSkill、Playwright、SpecKit等の外部ツールは、
-各提供元が管理しています。このリポジトリのインストーラーとWorkgraph／Workbenchの独自機能を、
+Basic Memory、OpenAIのplugin、VercelのSkill、Playwright、SpecKit、GitHub CLI等の外部ツールは、
+各提供元が管理しています。このリポジトリのインストーラーとWorkgraph／Workbench／GitHub Project Directorの独自機能を、
 それらの公式配布物と混同しないでください。ECC自体を導入するインストーラーは含みません。
 
 [ドキュメント一覧](docs/README.md)から詳細を探せます。
