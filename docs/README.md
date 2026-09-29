@@ -11,6 +11,7 @@
 | UI/UXを設計・実装・確認する | [Codex UX Stack](codex-ux-stack/README.md) | [導入手順](codex-ux-stack/installation.md) | [使い方](codex-ux-stack/usage.md) |
 | 要件・設計・検証計画を整理する | [SpecKit Upstream](speckit-upstream/README.md) | [導入手順](speckit-upstream/installation.md) | [使い方](speckit-upstream/usage.md) |
 | GitHubのIssue・Projects・進捗を整理する | [GitHub Project Director](codex-github-pm/README.md) | [導入手順](codex-github-pm/installation.md) | [使い方](codex-github-pm/usage.md) |
+| 根拠に基づいて技術・実現方式を比較する | [Design Research](design-research/README.md) | [導入手順](design-research/installation.md) | [使い方](design-research/usage.md) |
 
 ## Workgraphを詳しく使う
 
@@ -22,7 +23,7 @@
 
 `bash`や`python3`のコードブロックはターミナルで実行します。特に指定がなければ、
 このリポジトリのルートが作業場所です。`text`の依頼例はCodexの会話欄へ入力します。
-SpecKitのプロジェクト操作、UX StackとGitHub Project Directorの利用例は、作業対象のプロジェクト側で行います。
+SpecKitのプロジェクト操作、UX Stack・GitHub Project Director・Design Researchの利用例は、作業対象のプロジェクト側で行います。
 
 「Plugin」は機能をまとめた配布単位、「Skill」はCodexが参照する作業手順、
 「MCP」は外部ツールをCodexから呼び出すための接続です。
