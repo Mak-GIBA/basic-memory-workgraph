@@ -10,7 +10,7 @@
 | 知識を蓄積する | [Basic Memory Workgraph](basic-memory-workgraph/README.md) | [導入手順](basic-memory-workgraph/installation.md) | [使い方と設定](basic-memory-workgraph/usage.md) |
 | UI/UXを設計・実装・確認する | [Codex UX Stack](codex-ux-stack/README.md) | [導入手順](codex-ux-stack/installation.md) | [使い方](codex-ux-stack/usage.md) |
 | 要件・設計・検証計画を整理する | [SpecKit Upstream](speckit-upstream/README.md) | [導入手順](speckit-upstream/installation.md) | [使い方](speckit-upstream/usage.md) |
-| GitHubのIssue・Projects・進捗を整理する | [GitHub Project Director](codex-github-pm/README.md) | [導入手順](codex-github-pm/installation.md) | [使い方](codex-github-pm/usage.md) |
+| GitHubのIssue・PR・Projects・進捗を整理する | [GitHub Project Director](codex-github-pm/README.md) | [導入手順](codex-github-pm/installation.md) | [使い方](codex-github-pm/usage.md) |
 | 根拠に基づいて技術・実現方式を比較する | [Design Research](design-research/README.md) | [導入手順](design-research/installation.md) | [使い方](design-research/usage.md) |
 
 ## Workgraphを詳しく使う

@@ -11,7 +11,7 @@
 | 作業から得た知識や修正指示を次の仕事で使う | `install_basic_memory_workgraph.sh` | Basic Memory、Codex plugin、独自のWorkgraph・hooks・管理CLI | [概要と収録ツール](docs/basic-memory-workgraph/README.md) |
 | UI/UXを検討し、Webアプリを作り、ブラウザーで確認する | `install_codex_ux_stack.sh` | Product Design、Build Web Apps、UIレビューSkill、Playwright MCP | [概要と収録ツール](docs/codex-ux-stack/README.md) |
 | 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
-| 要件からIssueを整理し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
+| Issue・PRを読みやすく作成し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
 | 論文・公式資料・実験を根拠に実現方式を比較する | `install_design_research.sh` | 独自のDesign Research Skill、文献調査CLI、比較・判断のテンプレート | [概要と収録ツール](docs/design-research/README.md) |
 
 組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
@@ -38,7 +38,7 @@ cd basic-memory-workgraph
 | Basic Memory Workgraph | 実際に導入する。Basic Memory本体の更新も試みる | [インストール・更新・解除](docs/basic-memory-workgraph/installation.md) | [使い方と設定](docs/basic-memory-workgraph/usage.md) |
 | Codex UX Stack | 不足するツールを実際に導入・登録する | [インストール・更新・解除](docs/codex-ux-stack/installation.md) | [使い方](docs/codex-ux-stack/usage.md) |
 | SpecKit Upstream | 導入予定を表示する。適用には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
-| GitHub Project Director | ユーザー共通のSkillを実際に導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/codex-github-pm/installation.md) | [使い方](docs/codex-github-pm/usage.md) |
+| GitHub Project Director | ユーザー共通のSkillと共通AGENTSの適用ルールを導入する。既存の導入は保持する | [インストール・更新・解除](docs/codex-github-pm/installation.md) | [使い方](docs/codex-github-pm/usage.md) |
 | Design Research | ユーザー共通のSkillを実際に導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/design-research/installation.md) | [使い方](docs/design-research/usage.md) |
 
 ## このリポジトリで管理するもの
@@ -53,7 +53,7 @@ cd basic-memory-workgraph
 install_basic_memory_workgraph.sh   知識の蓄積・再利用
 install_codex_ux_stack.sh            UI/UXの設計・実装支援
 install_speckit_upstream.sh          要件・設計文書の整理
-install_codex_github_pm.sh          GitHubのIssue・Projects・進捗管理
+install_codex_github_pm.sh          GitHubのIssue・PR・Projects・進捗管理
 install_design_research.sh          根拠に基づく実現方式・技術の比較
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 docs/                              インストーラー別の説明
