@@ -1,0 +1,5 @@
+interface:
+  display_name: "ECC Error Handling"
+  short_description: "例外処理や再試行の設計に必要なECC原本だけを参照する入口"
+policy:
+  allow_implicit_invocation: true

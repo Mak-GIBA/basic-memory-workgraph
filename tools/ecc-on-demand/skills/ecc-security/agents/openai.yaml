@@ -1,0 +1,5 @@
+interface:
+  display_name: "ECC Security Review"
+  short_description: "認証や秘密情報を扱う変更でECCの安全性レビュー原本を参照"
+policy:
+  allow_implicit_invocation: true

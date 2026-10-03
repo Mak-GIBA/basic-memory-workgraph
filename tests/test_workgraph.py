@@ -398,6 +398,30 @@ class WorkgraphTest(unittest.TestCase):
             self.assertEqual(self.hook("save", {**event, "last_assistant_message": "lesson"}), {})
             self.assertEqual(self.state_files(), [])
 
+    def test_success_and_reuse_candidates_request_one_evaluation_without_capture(self):
+        self.assertEqual(self.install(BM_CASE_MODE='progressive').returncode, 0)
+        prompts = ('この手順を使って次のインポーターを作って', '同じ形式で次の資料も',
+                   '検証済みの復旧手順です', 'Reuse this procedure',
+                   'I used this in the next report', 'Build on that result')
+        for index, prompt in enumerate(prompts):
+            with self.subTest(prompt=prompt):
+                event = {'session_id': 'success', 'turn_id': str(index), 'prompt': prompt}
+                self.hook('recall', event)
+                self.assertTrue(json.loads(self.state_files()[0].read_text())['candidate'])
+                self.activate(event)
+                self.assertEqual(self.hook('save', event)['decision'], 'block')
+                self.assertEqual(self.hook('save', event), {})
+        self.assertFalse(list(self.home.rglob('cases/*.md')))
+
+    def test_semantic_success_without_keyword_uses_existing_attestation(self):
+        self.assertEqual(self.install(BM_CASE_MODE='progressive').returncode, 0)
+        event = {'session_id': 'success', 'turn_id': 'semantic', 'prompt': 'これを土台に次へ進めて'}
+        self.hook('recall', event)
+        self.assertFalse(json.loads(self.state_files()[0].read_text())['candidate'])
+        self.activate(event, semantic=True)
+        self.assertEqual(self.hook('save', event)['decision'], 'block')
+        self.assertEqual(self.hook('save', event), {})
+
     def test_attestation_command_is_quoted_and_semantic_candidate_is_supported(self):
         self.assertEqual(self.install().returncode, 0)
         event = {"session_id": "semantic", "turn_id": "one", "prompt": "結論を先頭へ"}

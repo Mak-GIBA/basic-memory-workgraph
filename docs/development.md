@@ -34,6 +34,10 @@ bash -n install_codex_ux_stack.sh
 bash -n install_speckit_upstream.sh
 bash -n install_codex_github_pm.sh
 bash -n install_design_research.sh
+bash -n install_codex_ecc.sh
+bash -n install_codex_office.sh
+bash -n install_codex_yomiyasu.sh
+bash -n install_herdr.sh
 bash -n tools/basic-memory-workgraph/remove_workgraph_hooks.sh
 ```
 
@@ -56,10 +60,14 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | SpecKit Upstream | `bash install_speckit_upstream.sh --self-test` | 一時環境とモックSpecKitによる検証。実Codex・公式CLIの取得を含むE2Eテストではない |
 | GitHub Project Director | `bash install_codex_github_pm.sh --self-test` | 一時環境での導入・更新・解除、読み取り補助、Skillの静的な指示内容を検証。実GitHubへの書き込みやモデルの出力品質を保証しない |
 | Design Research | `bash install_design_research.sh --self-test --json` | 一時環境で資材・導入・Python補助・調査資料の初期化・編集保護・強制更新・解除を検証。実API検索、証拠の真偽、モデルの判断品質は検証しない |
+| Codex ECC | `python3 -m unittest discover -s tests -p 'test*ecc*.py' -v`、Bash構文確認 | 模擬Codexによる新規導入、既存再利用、更新失敗・再実行、復元、設定維持と原本取得。新規環境への実ダウンロードは別途確認が必要 |
+| Office Workbench | `bash install_codex_office.sh --self-test` | 一時環境で導入・編集保護・文書処理を検証。通信・Codexは模擬し、実PDFライブラリがない対象はSKIP。実OfficeCLIや描画のE2E確認は別途必要 |
+| yomiyasu | `bash install_codex_yomiyasu.sh --self-test` | 一時HOME・作業ディレクトリと模擬上流で導入・更新・解除・検査を確認。配布元への実通信やモデルの文章品質は検証しない |
+| Herdr | `python3 -m unittest discover -s tests -p 'test_install_herdr.py' -v` | 一時HOMEで取得・Bash設定・workspace照合・再実行を検証。実ダウンロードや実セッションの起動は含まない |
 
 構文確認や文書レビューのためにインストーラーの通常実行を行わないでください。
-Workgraph、UX Stack、GitHub Project Director、Design Researchは引数なしで実際に導入します。
-SpecKit、GitHub Project Director、Design Researchの`--extract`もファイルを書き込む操作です。
+Workgraph、UX Stack、GitHub Project Director、Design Research、Herdrは引数なしで実際に導入します。
+SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasuの`--extract`もファイルを書き込む操作です。
 
 ## 新しいインストーラーの説明を追加する
 
@@ -123,6 +131,18 @@ Design Researchは圧縮JSON内にSkill・Pythonコード・参照資料・テ�
 利用者向けの説明は[専用ガイド](design-research/README.md)で保守し、展開物をリポジトリへ複製しません。
 `--dry-run --json`で予定、`--status --json`で導入状態、`--doctor --json`で環境を確認できます。
 これらは実インストールを行いません。`--doctor`は導入済み資材の整合性検査ではありません。
+
+### Office Workbenchとyomiyasuの埋め込み資料
+
+どちらもスクリプト単体に独自資材とテストを含み、`--extract DIRECTORY`で展開できます。
+Office Workbenchは`README_JA.md`と`install.py`、yomiyasuは`installer.py`、`SKILL.md`、`references/`、`scripts/`を確認します。
+展開物はレビュー用の一時ディレクトリに置き、利用者向けの説明は専用ガイドで保守します。
+
+### 日本語の説明を推敲する
+
+yomiyasuを使う場合は、修正前後を別のUTF-8ファイルに残してlintとcompareを実行します。
+コマンド、設定名、数値、条件、否定、断定の強さを保持し、表や番号付き手順は用途に合えば残します。
+検査結果は見直し候補として扱い、警告を消すためだけに意味を変えません。
 
 ## ドキュメントだけを変更した場合の確認
 

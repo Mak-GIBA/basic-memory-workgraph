@@ -79,7 +79,9 @@ an observed result, and a concrete future use for comparison or learning. Do not
 save every completed task. A merely cosmetic one-off edit without learning value
 is not a case. Do not require inventing a general rule to justify a useful case.
 
-Store approved cases in cases/ using the versioned interaction format in CAPTURE.md:
+Store cases meeting the effective capture criteria in cases/ using CAPTURE.md;
+explicit acceptance is not a prerequisite for private capture or contextual reuse.
+Use the versioned interaction format:
 structured summaries plus only necessary sanitized excerpts, with provenance of
 summary versus excerpt and ordered correction rounds. Preserve verification and
 acceptance separately. Unknown initial output, checks, and acceptance remain unknown;
@@ -96,9 +98,16 @@ Case capture is NOT permission to share the case or use it for training.
 
 ## Progressive sequences, implicit adoption and integrity
 
-case=progressive admits useful unfinished correction sequences with a concrete
-future comparison/learning use. Begin with a meaningful correction, not every new
-request. Keep one Case for the same deliverable and purpose; extend it with new
+case=progressive admits useful unfinished correction sequences and evidence-backed
+success cases with a concrete future comparison/learning use. Start from a meaningful
+correction, observed downstream use/reuse request, or a non-obvious verified result;
+no preceding correction or explicit approval is required. Each entry needs material
+new information and a concrete reusable characteristic with its scope and limits.
+Routine completion, generic passing tests, praise alone and ordinary new requests
+are insufficient. Verification-only cases keep assessments empty and acceptance
+unknown; checks establish only the property tested, not adoption. Reusable mode
+still requires an observed result; off still requires an explicit save request.
+Keep one Case for the same deliverable and purpose; extend it with new
 outputs, corrections, meaningful later actions and results. A different deliverable
 gets a separate Case. Cross-session continuation requires evidence of identity,
 not just similarity. Follow the v2 format in CAPTURE.md. Never reconstruct missing
@@ -126,6 +135,13 @@ Before reuse, compare context first, then inspect integrity and evidence behind
 adoption/reuse. Read the ordered sequence rather than treating a search summary as
 proof. Negative and unfinished Cases can still explain pitfalls. Matching scoped
 evidence can improve the initial output; an inferred preference is not a global rule.
+Unknown acceptance is not a reason to discard otherwise applicable knowledge.
+Choose evidence for the claim being reused: verification for a tested property,
+user behavior for adoption of an aspect, and explicit instructions for desired output.
+In searchable Observations summarize context, reusable characteristics, evidence kind
+and limits; keep the full sequence only in Interaction. Inspect existing meaningful
+relations when useful, not merely to increase link counts. Preserve prior observations
+when later evidence changes an assessment; do not transfer reception across versions.
 
 Inspect memory after a write, before reuse, when contradictory evidence appears,
 and on a manual audit request. Follow AUDIT.md. The local audit CLI is read-only:
@@ -194,8 +210,10 @@ The Stop evaluation requires a token enabled for the current session and turn.
 When the start hook supplies an arm command, run it before the final answer ONLY
 after confirming the active mode is implementation/default and not read-only.
 Never arm in Plan/read-only mode or during a Stop-hook continuation. An arm command
-does not change the collaboration mode or authorize a write. If a correction or
-lesson is recognized semantically, use --candidate even when no keyword matched.
+does not change the collaboration mode or authorize a write. If a correction,
+non-obvious verified result, downstream use, reuse request, reversal, memory error
+or lesson is recognized semantically, use --candidate even when no keyword matched.
+Candidate detection requests evaluation, not capture.
 If already saved, do not request a duplicate write during the Stop evaluation.
 The token gates the extra evaluation only; it is not a server-side permission
 boundary. Missing/invalid tokens suppress the extra turn. Never read transcript

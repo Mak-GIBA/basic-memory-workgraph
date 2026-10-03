@@ -5,12 +5,18 @@ Use `cases/`, `type: case`, `schema: Case`, `capture_kind: interaction_case`, an
 `sharing_scope: private`, `training_use: excluded`, `privacy_review: pending`.
 No schema migration or note rewrite is required for existing v1/freeform Cases.
 
-One Case covers the same deliverable and purpose. Start after a meaningful correction
-with future comparison value; append material steps from the available conversation
+One Case covers the same deliverable and purpose. In progressive mode, start from a
+meaningful correction, observed downstream use/reuse request, or non-obvious verified
+result with future comparison value. A preceding correction or explicit acceptance
+is not required. Require material new information, a concrete reusable characteristic,
+scope and limits. Routine completion, generic passing tests, praise alone and ordinary
+new requests are insufficient. Reusable mode still requires an observed result; off
+requires an explicit save request. Append material steps from the available conversation
 and evidence, including unfinished sequences. Search/read before creating or updating.
 Similar work is not proof of continuity. Preserve old steps; do not invent missing ones.
 
-Keep a compact searchable summary of context, mismatch and relevant changes in normal
+Keep a compact searchable summary of context, reusable characteristics, evidence kind,
+limits, and any mismatch or relevant changes in normal
 Observations. The single JSON block under `## Interaction` is the canonical sequence.
 Do not duplicate the full history in prose. Relations link real independently admitted
 Corrections/Rules/Workflows; do not create a node per utterance.
@@ -54,6 +60,14 @@ Corrections/Rules/Workflows; do not create a node per utterance.
 
 ## Implicit adoption assessment
 
+Private capture, explicit acceptance, inferred adoption, verification and export
+permission are separate decisions. Unknown acceptance does not block capture or
+reuse. For verification-only cases use `assessments: []`, `acceptance: unknown`,
+and `acceptance_evidence_ids: []`; never manufacture user actions or corrections.
+In a success case the first output has null target_id and change. Record later
+use as an action on that output, not as a fictional correction. A reuse request is
+evidence of intended reuse; only observed execution supports claiming actual use.
+
 No evaluation prompt or praise is expected. Read the observed sequence:
 user-requested delivery after revisions, downstream use, reuse of a format, explicit
 narrowing of remaining changes, repeated corrections, or reversals. Autonomous
@@ -74,6 +88,15 @@ summary. Extract applicable output characteristics and pitfalls for the initial
 answer. Negative/unfinished Cases can help too. Current instructions take precedence.
 A needs_review record is not a positive precedent. See AUDIT.md for grounded repair
 and checking dependent knowledge. No-op recall/review produces no write.
+
+Choose evidence for the specific claim: verified properties from checks, adopted
+aspects from user behavior, desired output from instructions. Do not filter all
+unknown-acceptance cases out or rank explicit acceptance above contextual fit.
+For example, a verified recovery procedure can inform a matching failure even
+without user feedback; its test says nothing about preference or satisfaction.
+Use normal Observations such as `[context]`, `[reusable_characteristic]`,
+`[evidence_kind]` and `[limits]` as a compact search index. These are prose
+conventions, not new required schema fields; JSON remains the canonical sequence.
 
 ## Fictional v2 example
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "ECC Library"
+  short_description: "API・テスト・DB・Docker等のECC原本を必要時に検索する入口"
+policy:
+  allow_implicit_invocation: true

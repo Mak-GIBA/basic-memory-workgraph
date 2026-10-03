@@ -12,18 +12,27 @@
 | 要件・設計・検証計画を整理する | [SpecKit Upstream](speckit-upstream/README.md) | [導入手順](speckit-upstream/installation.md) | [使い方](speckit-upstream/usage.md) |
 | GitHubのIssue・PR・Projects・進捗を整理する | [GitHub Project Director](codex-github-pm/README.md) | [導入手順](codex-github-pm/installation.md) | [使い方](codex-github-pm/usage.md) |
 | 根拠に基づいて技術・実現方式を比較する | [Design Research](design-research/README.md) | [導入手順](design-research/installation.md) | [使い方](design-research/usage.md) |
+| ECCを導入し、必要なスキルだけ参照する | [Codex ECC](codex-ecc/README.md) | [導入・更新・復元](codex-ecc/installation.md) | [使い方](codex-ecc/usage.md) |
+| PDF・Word・PowerPointを閲覧・編集する | [Office Workbench](codex-office/README.md) | [導入手順](codex-office/installation.md) | [使い方](codex-office/usage.md) |
+| 日本語の文章を意味を保って整える | [yomiyasu](codex-yomiyasu/README.md) | [導入手順](codex-yomiyasu/installation.md) | [使い方](codex-yomiyasu/usage.md) |
+| 作業ディレクトリからターミナルworkspaceを開く | [Herdr](herdr/README.md) | [導入とBash設定](herdr/installation.md) | [使い方](herdr/usage.md) |
 
 ## Workgraphを詳しく使う
 
 - [Memoryの共有・インポート・学習用JSONL出力](basic-memory-workgraph/sharing.md)
 - [保存方針・配置・仕組み](basic-memory-workgraph/reference.md)
 - [困ったとき・記憶の点検](basic-memory-workgraph/troubleshooting.md)
+- [採用エビデンスの設計と評価](basic-memory-workgraph/evidence-design.md)
+
+## ECCの管理CLIを詳しく使う
+
+[ECCを必要なときに読む](ecc-on-demand.md)で、原本の検索・取得、更新・復元、停止する起動時処理を説明しています。
 
 ## 文書の読み方
 
 `bash`や`python3`のコードブロックはターミナルで実行します。特に指定がなければ、
 このリポジトリのルートが作業場所です。`text`の依頼例はCodexの会話欄へ入力します。
-SpecKitのプロジェクト操作、UX Stack・GitHub Project Director・Design Researchの利用例は、作業対象のプロジェクト側で行います。
+SpecKitのプロジェクト操作、各Skillの利用例、Herdrの起動は、作業対象のプロジェクト側で行います。
 
 「Plugin」は機能をまとめた配布単位、「Skill」はCodexが参照する作業手順、
 「MCP」は外部ツールをCodexから呼び出すための接続です。

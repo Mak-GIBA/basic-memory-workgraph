@@ -28,6 +28,10 @@ A clean report does not prove that a sequence really happened in that order.
    differ from autonomous execution, routine prearranged delivery and checkpoints.
    Correlated actions share an episode group. Repeated corrections/reversals on
    the same output must be considered; determine which aspect they affect.
+   No correction and unknown acceptance are valid in a success Case. Checks alone
+   warrant verification, not an adoption assessment. Inspect searchable Observations
+   against the canonical sequence too: a stale summary must not imply approval or
+   current validity after a reversal. Preserve earlier observations when reassessing.
 4. If evidence determines the correct content, repair that content only. In v2,
    append a `repairs` record with reason, evidence and minimal sanitized before/after
    values. For legacy notes use a concise `## Integrity` explanation. Keep stable

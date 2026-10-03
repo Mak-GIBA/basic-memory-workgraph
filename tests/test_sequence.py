@@ -79,6 +79,64 @@ class SequenceTest(unittest.TestCase):
         payload['latest_output_id'] = 'o2'
         self.assertEqual(sequence_issues(payload), [])
 
+    def success(self, signal=None):
+        """A useful first attempt; no fabricated correction or acceptance."""
+        payload = data()
+        output = dict(payload['steps'][0], content=piece('Recovery procedure with a bounded retry and rollback'))
+        check = dict(payload['steps'][5], target_id='o1',
+                     content=piece('Injected an interrupted write; rollback retained the prior valid data'))
+        payload.update(steps=[output, check], latest_output_id='o1', assessments=[])
+        payload['context'].update(purpose='Recover interrupted writes', audience='Maintainers',
+                                  deliverable='Recovery procedure', constraints='Preserve prior valid data',
+                                  scope='Interrupted local writes with an existing valid backup')
+        payload['request'] = piece('Produce a recovery procedure for interrupted writes')
+        payload['transfer_use'] = 'Recover interrupted local writes in other tools with the same backup guarantee'
+        if signal:
+            payload['steps'].append(dict(data()['steps'][-1], target_id='o1', signal=signal,
+                content=piece('Use this recovery procedure for the next importer')))
+            payload['assessments'] = [dict(data()['assessments'][0], target_id='o1',
+                aspect='Choice of recovery procedure for the next importer', judgment='supported',
+                evidence_ids=['a2'], rationale=piece('Requested reuse; execution and satisfaction remain unknown'))]
+        return payload
+
+    def test_success_without_correction_or_rating_round_trips(self):
+        for signal in (None, 'reuse_request', 'downstream_use'):
+            with self.subTest(signal=signal):
+                payload = self.success(signal)
+                if signal == 'downstream_use':
+                    payload['steps'][-1]['content'] = piece('The user reports using this procedure in another importer')
+                    payload['assessments'][0]['rationale'] = piece('Reported downstream use of the procedure; satisfaction unknown')
+                self.assertFalse(any(s['kind'] == 'correction' for s in payload['steps']))
+                self.assertEqual(sequence_issues(payload), [])
+                rel = self.note(payload)
+                # Capture and local audit do not require acceptance or export approval.
+                self.assertEqual(wg.audit(self.args(note=rel))['issues'], [])
+                self.output = self.root / f'{signal}-unreviewed.jsonl'
+                self.assertEqual(wg.export_cases(self.args())['exported'], 0)
+                self.review(rel)
+                self.output = self.root / f'{signal}-reviewed.jsonl'
+                self.assertEqual(wg.export_cases(self.args())['exported'], 1)
+                exported = json.loads(self.output.read_text())['interaction']
+                self.assertEqual(exported, payload)
+                self.assertEqual(exported['acceptance'], 'unknown')
+
+    def test_verification_does_not_become_adoption_or_acceptance(self):
+        payload = self.success()
+        payload['assessments'] = [dict(data()['assessments'][0], target_id='o1',
+            evidence_ids=['v1'], judgment='supported')]
+        self.assertIn('unsupported_adoption', self.codes(payload))
+        payload.update(acceptance='accepted', acceptance_evidence_ids=['v1'])
+        self.assertIn('unsupported_acceptance', self.codes(payload))
+
+    def test_success_reception_does_not_transfer_to_revised_output(self):
+        payload = self.success('reuse_request')
+        payload['steps'].append(dict(payload['steps'][0], id='o2', target_id='o1',
+                                    change=piece('Changed the retry behavior')))
+        payload.update(latest_output_id='o2', outcome='unverified')
+        self.assertEqual(sequence_issues(payload), [])
+        payload['assessments'][0]['target_id'] = 'o2'
+        self.assertIn('evidence_target_mismatch', self.codes(payload))
+
     def test_structural_errors_have_controlled_locations(self):
         modifications = [
             (lambda d: d['steps'][2].update(id='o1'), 'duplicate_id'),

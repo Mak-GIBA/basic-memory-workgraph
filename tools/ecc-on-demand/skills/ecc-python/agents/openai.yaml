@@ -1,0 +1,5 @@
+interface:
+  display_name: "ECC Python"
+  short_description: "Python実装に必要なECC原本だけを取得して参照する入口"
+policy:
+  allow_implicit_invocation: true

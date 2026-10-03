@@ -1,8 +1,9 @@
 # Codex環境の導入・運用ツール集
 
 このリポジトリ（`basic-memory-workgraph`）は、Codexでの知識の蓄積、UI/UXの設計・実装支援、
-要件・設計文書の整理、GitHubでのタスク管理、根拠に基づく技術選定に使うインストーラーと運用ツールをまとめています。
-必要なものを個別に選んで導入できます。5つをすべて入れる必要や、決まった導入順序はありません。
+要件・設計文書の整理、GitHubでのタスク管理、技術選定、文書編集、日本語の推敲に使うインストーラーと運用ツールをまとめています。
+ECCのスキルを必要なときに読む構成や、作業ディレクトリからHerdrを開く設定も用意しています。
+必要なものを個別に選んで導入できます。すべてを入れる必要や、決まった導入順序はありません。
 
 ## やりたいことから選ぶ
 
@@ -13,6 +14,10 @@
 | 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
 | Issue・PRを読みやすく作成し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
 | 論文・公式資料・実験を根拠に実現方式を比較する | `install_design_research.sh` | 独自のDesign Research Skill、文献調査CLI、比較・判断のテンプレート | [概要と収録ツール](docs/design-research/README.md) |
+| ECCの原本を保持し、必要なスキルだけ参照する | `install_codex_ecc.sh` | ECC標準プラグイン、入口4件、適用・更新・復元用の管理CLI | [概要と収録ツール](docs/codex-ecc/README.md) |
+| PDF・Word・PowerPointを読み、原本を保護して編集する | `install_codex_office.sh` | OfficeCLI、文書処理ライブラリ、Office Workbench Skill・CLI | [概要と収録ツール](docs/codex-office/README.md) |
+| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
+| 作業ディレクトリに対応するターミナルworkspaceを開く | `install_herdr.sh` | Herdr、`herdr-open`、Bashの呼び出し設定 | [概要と収録ツール](docs/herdr/README.md) |
 
 組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
 GitHub Project DirectorでIssueや進捗を整理し、Workgraphで他の仕事にも役立つ知識を残す、といった使い分けができます。
@@ -22,7 +27,8 @@ Design Researchは方式選定の根拠と判断をまとめ、要件・設計�
 ## はじめに
 
 基本はLinux / WSL2のターミナルで利用します。GitHub Project DirectorとDesign ResearchはmacOSにも対応します。
-Codex CLIはあらかじめ用意してください。
+Codex用のツールを使う場合は、Codex CLIをあらかじめ用意してください。
+HerdrはCodexから独立して使えます。OSへの対応範囲は各ガイドで確認してください。
 必要なPython・Node.jsのバージョンなどは各導入ガイドに記載しています。
 
 ```bash
@@ -40,12 +46,16 @@ cd basic-memory-workgraph
 | SpecKit Upstream | 導入予定を表示する。適用には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
 | GitHub Project Director | ユーザー共通のSkillと共通AGENTSの適用ルールを導入する。既存の導入は保持する | [インストール・更新・解除](docs/codex-github-pm/installation.md) | [使い方](docs/codex-github-pm/usage.md) |
 | Design Research | ユーザー共通のSkillを実際に導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/design-research/installation.md) | [使い方](docs/design-research/usage.md) |
+| Codex ECC | 通信せず予定を表示する。導入・設定には`--apply`が必要 | [インストール・更新・復元](docs/codex-ecc/installation.md) | [使い方](docs/codex-ecc/usage.md) |
+| Office Workbench | 導入予定を表示する。実行には`--apply`が必要 | [インストール・更新・解除](docs/codex-office/installation.md) | [使い方](docs/codex-office/usage.md) |
+| yomiyasu | 導入予定を表示する。実行には`--apply`が必要 | [インストール・更新・解除](docs/codex-yomiyasu/installation.md) | [使い方](docs/codex-yomiyasu/usage.md) |
+| Herdr | 不足するHerdrを導入し、Bash設定を変更する。予定表示は`--dry-run` | [インストールとBash設定](docs/herdr/installation.md) | [使い方](docs/herdr/usage.md) |
 
 ## このリポジトリで管理するもの
 
-- 5つのインストーラーと、それぞれの導入・利用ガイド。
+- 用途別のインストーラーと、それぞれの導入・利用ガイド。
 - Workgraphの保存方針、フック、ノートのスキーマ、更新・共有・点検用のPythonコード。
-- SpecKit Upstream、GitHub Project Director、Design Researchの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
+- SpecKit Upstream、GitHub Project Director、Design Research、Office Workbench、yomiyasuの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
 
 ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 
@@ -55,18 +65,27 @@ install_codex_ux_stack.sh            UI/UXの設計・実装支援
 install_speckit_upstream.sh          要件・設計文書の整理
 install_codex_github_pm.sh          GitHubのIssue・PR・Projects・進捗管理
 install_design_research.sh          根拠に基づく実現方式・技術の比較
+install_codex_ecc.sh                ECC導入と必要なときに読む入口4件の設定
+install_codex_office.sh             PDF・Word・PowerPointの閲覧・編集
+install_codex_yomiyasu.sh           意味を保った日本語の推敲
+install_herdr.sh                   作業ディレクトリに対応するHerdrの起動
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
+tools/ecc-on-demand/               ECCの管理CLI・入口資材・導入処理
 docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ
 ```
 
 Workgraphは`tools/basic-memory-workgraph/`も含むリポジトリ一式で使用します。
-UX Stack、SpecKit、GitHub Project Director、Design Researchはスクリプト単体で使用できます。
+Codex ECCも`tools/ecc-on-demand/`を含むリポジトリ一式で使用します。
+UX Stack、SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasu、Herdrはスクリプト単体で使用できます。
 個人のエディター設定（`.vscode/`）、Pythonキャッシュ、仮想環境はGit管理の対象外です。
 
 Basic Memory、OpenAIのplugin、VercelのSkill、Playwright、SpecKit、GitHub CLI等の外部ツールは、
 各提供元が管理しています。このリポジトリのインストーラーとWorkgraph／Workbench／GitHub Project Director／Design Researchの独自機能を、
-それらの公式配布物と混同しないでください。ECC自体を導入するインストーラーは含みません。
+それらの公式配布物と混同しないでください。ECCの原本はCodex標準のプラグイン機能で導入します。
+
+ECC導入済みの環境では、[ECCを必要なときに読む](docs/ecc-on-demand.md)の管理CLIで、
+原本を保持したまま常設スキルを4つの入口に絞れます。
 
 [ドキュメント一覧](docs/README.md)から詳細を探せます。
 開発・検証や新しいインストーラーの説明追加は、[開発ガイド](docs/development.md)を参照してください。

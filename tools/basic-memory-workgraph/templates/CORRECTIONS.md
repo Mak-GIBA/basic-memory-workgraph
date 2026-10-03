@@ -62,7 +62,10 @@ edits, leaving privacy_review=pending. Read back once after writing.
 
 Only independently admitted abstract lessons become Rules. A useful full interaction
 may become a Case under its separate admission rules. In case=progressive, useful
-ongoing sequences use v2 and keep the observed stages instead of overwriting them. Link existing nodes with
+ongoing sequences and evidence-backed successes use v2 and keep the observed stages
+instead of overwriting them. A success without a correction needs no Correction node.
+Unknown acceptance does not prevent contextual reuse of the recorded instruction;
+it does prevent claiming that the user approved the result. Link existing nodes with
 `occurred_in [[Case]]` or `generalized_to [[Rule]]` when meaningful. No companion
 nodes are required. Corrections are excluded from `export-cases`; they can inform
 a later approved structured Case, without inventing unknown outcomes. Sharing
