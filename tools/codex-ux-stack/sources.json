@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "guidelines": {
+    "repository": "vercel-labs/agent-skills",
+    "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+    "directory": "skills/web-design-guidelines"
+  },
+  "critique": {
+    "repository": "Thecsiz/ux-critique",
+    "commit": "3da293cafb639195bf71797590081d4ffb0045ba",
+    "directory": "skills/ux-critique"
+  },
+  "architecture_reference": "https://github.com/affaan-m/ECC/blob/ef648e01899ba3e8dc6371642deaaf64b4477775/scripts/gan-harness.sh"
+}

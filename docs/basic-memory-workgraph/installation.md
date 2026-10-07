@@ -22,6 +22,9 @@ Codexのplugin導入機能を使える環境と、外部配布元への接続も
 初回導入はBasic Memory本体やpluginの版を固定していません。通信先にはAstral、Python・Pythonパッケージの配布元、
 pluginの配布元が含まれます。`--update`はローカルのWorkgraph更新で、外部パッケージの更新とは別です。
 配置するファイルと設定は[リファレンス](reference.md)に記載しています。
+共通`AGENTS.md`には、メモリ共有・取り込みの依頼で共有手順を読む管理ブロックを追加します。
+GitHub共有CLIも配置しますが、共有先の設定や送信はインストール時には行いません。
+GitHub経由で使うときだけgit・gh・ログインが必要です。これらの導入・接続は別途案内します。
 初回導入全体の一括ロールバックはなく、途中で停止すると先に導入した外部ツール等は残ります。
 
 <a id="start"></a>
@@ -222,6 +225,8 @@ Basic Memoryが追加した `permalink`、日時、管理対象外の追加メ�
 bash tools/basic-memory-workgraph/remove_workgraph_hooks.sh
 ```
 
-追加hooksとその設定・状態・CLIコピーを解除します。
+追加hooksとその設定・状態・CLIコピー、共通AGENTSのメモリ共有用管理ブロックを解除します。
+GitHub共有profileと取り込みの指紋も解除対象です。受信ノートとGitHubのデータは残ります。
+取り込み状態を失った保存先へ再設定すると上書きを防ぐため停止するので、再導入前に必要な設定・状態を退避してください。
 Basic Memory、公式plugin、保存済みノート、スキーマ、登録済みSkillと管理manifest、
 `basic-memory.json` は残ります。共通policyとcheckpoint無効設定も残ります。

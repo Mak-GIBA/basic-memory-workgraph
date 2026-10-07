@@ -12,6 +12,8 @@ import tempfile
 
 
 SOURCE = Path(__file__).resolve().parent
+SHARING_BEGIN = "<!-- basic-memory-github-sharing:begin -->"
+SHARING_END = "<!-- basic-memory-github-sharing:end -->"
 MANAGED_HOOKS = (
     "basic_memory_recall.py", "basic_memory_auto_remember.py",
     "basic_memory_workgraph_recall.py", "basic_memory_workgraph_save.py",
@@ -120,8 +122,33 @@ def prepare_configuration(codex_dir, project=None, mode=None, case_mode=None, sk
         if source.is_file():
             changes.append((auto_dir / "templates" / source.relative_to(SOURCE / "templates"),
                             source.read_text(encoding="utf-8")))
-    for name in ("workgraph_tools.py", "workgraph_sequence.py", "requirements-export.txt"):
+    for name in ("workgraph_tools.py", "workgraph_sequence.py", "workgraph_github.py", "requirements-export.txt"):
         changes.append((auto_dir / name, (SOURCE / name).read_text(encoding="utf-8")))
+    # This entrypoint applies only to explicit memory sharing requests. It never
+    # grants sharing permission or schedules uploads from automatic save hooks.
+    agents_path = codex_dir / "AGENTS.md"
+    agents = agents_path.read_text(encoding="utf-8") if agents_path.exists() else ""
+    workflow = auto_dir / "templates/GITHUB_SHARING.md"
+    block = (SHARING_BEGIN + "\n"
+             "メモリをGitHub経由で共有・送信・取り込み・更新する依頼では、作業前に\n"
+             "次の手順書を読み、該当する手順だけを適用する。英語の同等表現も対象。\n"
+             "『メモリを共有して』『共有メモリを取り込んで』等は、共有方式が未指定なら\n"
+             "設定済みの共有先を確認し、複数の方式・対象があれば必要な一点だけ確認する。\n"
+             "自動保存・一般のGitHub操作・Cloudアップロードの依頼にはこの経路を強制しない。\n"
+             "共有許可とレビューを自動付与せず、未設定・未ログインなら必要な接続支援を提案する。\n"
+             "既存の許可を再利用するが、PRマージ・公開・共有範囲の拡大を推測しない。\n"
+             "Workflow file (JSON-quoted absolute path): " + json.dumps(str(workflow), ensure_ascii=False) + "\n"
+             + SHARING_END)
+    if agents.count(SHARING_BEGIN) != agents.count(SHARING_END) or agents.count(SHARING_BEGIN) > 1:
+        raise ValueError("Malformed Basic Memory sharing AGENTS block; preserve and repair manually")
+    if SHARING_BEGIN in agents:
+        begin, end = agents.index(SHARING_BEGIN), agents.index(SHARING_END) + len(SHARING_END)
+        if agents.index(SHARING_END) < begin:
+            raise ValueError("Malformed Basic Memory sharing AGENTS block")
+        agents = agents[:begin] + block + agents[end:]
+    else:
+        agents = agents + ("\n" if agents and not agents.endswith("\n") else "") + ("\n" if agents else "") + block + "\n"
+    changes.append((agents_path, agents))
     # Already-running sessions may still have the previous command paths cached.
     for action in ("recall", "save"):
         legacy = codex_dir / "hooks" / f"basic_memory_workgraph_{action}.py"

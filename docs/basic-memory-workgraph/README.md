@@ -20,6 +20,7 @@ Codexでの作業から、次の仕事にも役立つ知識をBasic Memoryへ蓄
 | Workgraphの方針・スキーマ・Graph索引 | このリポジトリ | Rule、Workflow、Validation、Correction、Case等の保存基準と形式を定義 |
 | Workgraphの追加hooks | このリポジトリ | 作業前の知識検索と、作業後の保存価値の評価をCodexへ促す |
 | `workgraph_tools.py` / `workgraph_sequence.py` | このリポジトリ | 共有、インポート、JSONL出力、記憶の構造点検、Skill登録とCaseの整合性検証 |
+| `workgraph_github.py`と共有手順 | このリポジトリ | privateリポジトリへのPR作成と、マージ後の取り込み・更新 |
 
 Basic Memoryが保存・検索の基盤、Workgraphが「何を、どの形で残して再利用するか」の運用を担当します。
 追加hook自体はMemoryを書き込みません。検索・判断・保存はCodexが行います。
@@ -31,6 +32,7 @@ Basic Memoryが保存・検索の基盤、Workgraphが「何を、どの形で�
 - 文脈付きの修正指示を保存し、次回の初回出力に反映する。
 - 改善過程をCaseとして記録し、ルールやWorkflowへ関連付ける。
 - レビューした知識だけを共有したり、許可したCaseを学習用JSONLへ出力したりする。
+- メモリ共有の依頼からGitHubへPRを作成し、相手側で取り込み・更新する。
 - 繰り返す手順をSkill化する価値を検討し、設定を有効にした場合は検証後に登録する。
 
 **導入直後は再利用知識の自動評価が有効です。修正指示・具体事例の自動保存とSkillの自動登録は、設定で有効にします。**

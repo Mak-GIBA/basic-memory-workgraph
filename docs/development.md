@@ -56,10 +56,10 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | 対象 | 検証方法 | 分かること・制限 |
 |---|---|---|
 | Workgraph | 上記のPythonテスト | 設定、保存形式、共有、更新等のローカル処理。実際の外部パッケージ導入は含まない |
-| UX Stack | Bash構文確認、実装と配布元・カタログの照合 | このリポジトリに専用の自動テストはない。実導入とブラウザー操作の確認は別途必要 |
+| UX Stack | Pythonテスト、Bash構文確認、任意の実Chromiumチェック | 一時環境で導入・編集保護・反復・停止・画像管理を確認。実モデル反復の完了とGUI呼び出しは未確認。[検証範囲](codex-ux-stack/validation.md) |
 | SpecKit Upstream | `bash install_speckit_upstream.sh --self-test` | 一時環境とモックSpecKitによる検証。実Codex・公式CLIの取得を含むE2Eテストではない |
 | GitHub Project Director | `bash install_codex_github_pm.sh --self-test` | 一時環境での導入・更新・解除、読み取り補助、Skillの静的な指示内容を検証。実GitHubへの書き込みやモデルの出力品質を保証しない |
-| Design Research | `bash install_design_research.sh --self-test --json` | 一時環境で資材・導入・Python補助・調査資料の初期化・編集保護・強制更新・解除を検証。実API検索、証拠の真偽、モデルの判断品質は検証しない |
+| Design Research | `bash install_design_research.sh --self-test --json`、`python3 -B -m unittest discover -s tests -p 'test*design_research*.py' -v` | 単体配布・編集保護・バックアップ・切り替え復旧、実ローカルHTTP／PoC、根拠・中断復旧を検証。モデルとOSサンドボックス起動は模擬。[検証範囲](design-research/validation.md)参照 |
 | Codex ECC | `python3 -m unittest discover -s tests -p 'test*ecc*.py' -v`、Bash構文確認 | 模擬Codexによる新規導入、既存再利用、更新失敗・再実行、復元、設定維持と原本取得。新規環境への実ダウンロードは別途確認が必要 |
 | Office Workbench | `bash install_codex_office.sh --self-test` | 一時環境で導入・編集保護・文書処理を検証。通信・Codexは模擬し、実PDFライブラリがない対象はSKIP。実OfficeCLIや描画のE2E確認は別途必要 |
 | yomiyasu | `bash install_codex_yomiyasu.sh --self-test` | 一時HOME・作業ディレクトリと模擬上流で導入・更新・解除・検査を確認。配布元への実通信やモデルの文章品質は検証しない |
@@ -67,7 +67,7 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 
 構文確認や文書レビューのためにインストーラーの通常実行を行わないでください。
 Workgraph、UX Stack、GitHub Project Director、Design Research、Herdrは引数なしで実際に導入します。
-SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasuの`--extract`もファイルを書き込む操作です。
+UX Stack、SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasuの`--extract`もファイルを書き込む操作です。
 
 ## 新しいインストーラーの説明を追加する
 
@@ -127,10 +127,16 @@ GitHub Project Directorも単一ファイル内に資料と実装を持ちます
 
 Design Researchは圧縮JSON内にSkill・Pythonコード・参照資料・テンプレートを持ちます。
 `bash install_design_research.sh --extract /tmp/design-research-review`で、未使用または空のディレクトリへ展開できます。
-展開先の`SKILL.md`、`scripts/`、`references/`、`templates/`と、シェル内の導入処理を照合します。
-利用者向けの説明は[専用ガイド](design-research/README.md)で保守し、展開物をリポジトリへ複製しません。
+正本は`tools/design-research/skill/`と`tools/design-research/install_design_research.py`です。
+`python3 -B tools/design-research/build_installer.py`で単体配布物を再生成し、
+`python3 -B tools/design-research/build_installer.py --check`で正本と一致するか確認します。
+展開先の`SKILL.md`、`scripts/`、`references/`、`templates/`と正本を照合できます。
+利用者向けの説明は[専用ガイド](design-research/README.md)で保守します。
 `--dry-run --json`で予定、`--status --json`で導入状態、`--doctor --json`で環境を確認できます。
-これらは実インストールを行いません。`--doctor`は導入済み資材の整合性検査ではありません。
+これらは実インストールを行いません。`--doctor`は導入済み資材の整合性と
+構造化Codex実行・コマンド用サンドボックスの準備を分けて診断します。
+`scripts/gan-harness.sh`の実行テストはCodex判断とサンドボックス起動を模擬し、
+ローカルHTTP・PoC・実ファイル・ログは実際に扱います。モデルの判断品質と実機の隔離効果は別途確認します。
 
 ### Office Workbenchとyomiyasuの埋め込み資料
 

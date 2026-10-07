@@ -1,21 +1,21 @@
 # インストール・更新・解除
 
-[docs一覧](../README.md) · [概要と収録ツール](README.md) · [使い方](usage.md)
+[docs一覧](../README.md) · [概要](README.md) · [使い方](usage.md) · [検証結果](validation.md)
 
 ## 前提条件
 
-- Linux / WSL2 / macOS、Bash、Python 3.10以上。調査CLIはホスト単位のロックにUnix向け機能を使います。
-- Skillを利用するCodex環境と、配置先への書き込み権限。
-- 文献の実検索を行う場合はネットワーク接続。導入自体には不要です。
+- Linux / WSL2 / macOS、Bash、Python 3.10以上、配置先への書き込み権限。
+- ハーネスには、認証済みCodex CLIと動作するコマンド用サンドボックス。
+- 文献・公開資料を実際に調べる場合は通信環境。
 
-Python標準ライブラリで動き、pip・npmによる依存導入やLLM APIキーは不要です。
-Codex本体、ブラウザー・PDFツール、MCPはインストーラーに含みません。
-[トップREADME](../../README.md#はじめに)の手順で取得し、リポジトリのルートで実行します。
-スクリプト単体を保存した場合は、その保存先で実行してください。
+Python標準ライブラリを使います。pip・npm・ECC・別のLLM APIキーの導入は不要です。
+Codex本体やアプリ側のテスト依存、ブラウザー、MCPは含みません。
+この版の制御テストはLinuxで確認しています。macOSの実機確認は未実施です。
+
+[トップREADME](../../README.md#はじめに)から取得し、保存先で次を実行します。
+スクリプト単体でも使えます。**引数なしで実際にインストールします。**
 
 ## 初回導入
-
-**引数なしで実際にインストールします。** 予定だけを確認するには`--dry-run`を使います。
 
 ```bash
 bash install_design_research.sh --dry-run --json
@@ -24,84 +24,27 @@ bash install_design_research.sh --status --json
 bash install_design_research.sh --doctor --json
 ```
 
-既定では`${CODEX_HOME:-~/.codex}/skills/design-research/`に配置します。
-前のGitHub Project Directorの既定値`~/.agents/skills/`とは異なります。
+新規のユーザー共通配置は `~/.agents/skills/design-research/` です。
+導入結果には、実際の配置先とBashで呼び出す診断コマンドを表示します。
+導入後にSkillが見つからない場合はCodexを再起動してください。
 
-特定のプロジェクトへ導入する場合は、通常実行の代わりに次を使います。
-`/path/to/repo`は実際のプロジェクトへ置き換えてください。
+プロジェクトだけで使う場合は、通常の導入の代わりに次を指定します。
+`/path/to/repo`は実際の対象へ置き換えてください。
 
 ```bash
 bash install_design_research.sh --project /path/to/repo
-bash install_design_research.sh --project /path/to/repo --status --json
 ```
 
-この場合は`PROJECT/.codex/skills/design-research/`を作成します。
-別のSkill探索先を使う場合は`--skills-dir PATH`で親ディレクトリを指定します。
-導入後にSkillが見つからない場合は、新しいCodexセッションを開始してください。
+新規配置は `PROJECT/.agents/skills/design-research/` です。
+別の探索先は `--skills-dir PATH` で親ディレクトリを指定します。
+更新・解除・診断にも、選んだ配置先の指定を付けます。
 
-## オプション
+## 既存版からの更新
 
-| オプション・環境変数 | 既定値 | 動作 |
-|---|---|---|
-| `--help` / `-h` | — | ヘルプを表示 |
-| `--version` | — | インストーラーの版を表示 |
-| `--skills-dir PATH` | 未指定 | Skill探索先の親ディレクトリを指定 |
-| `--project PATH` | 未指定 | `PATH/.codex/skills`を親ディレクトリとして使用 |
-| `CODEX_HOME` | `~/.codex` | 上記2つが未指定の場合に、その下の`skills`を使用 |
-| `PYTHON_BIN` | `python3` | Python 3.10以上のコマンド／パスを指定 |
-| `--dry-run` | 無効 | 導入・更新・解除の予定だけを表示 |
-| `--update` | 無効 | 管理対象Skillを配布資材へ置き換え |
-| `--force` | 無効 | 編集済みの管理対象Skillもバックアップ後に置き換え・解除。単独では更新を意味する |
-| `--uninstall` | 無効 | 管理対象Skillをバックアップ先へ移動して解除 |
-| `--status` | 無効 | 所有情報・版・ファイルハッシュに基づく導入状態を表示 |
-| `--doctor` | 無効 | Python、Codex CLIの有無、任意環境変数の有無などをオフラインで診断 |
-| `--self-test` | 無効 | 一時ディレクトリで内蔵テストを実行 |
-| `--print-mcp-config` | 無効 | 任意のMCP設定例を表示。登録や設定変更はしない |
-| `--extract DIR` | 未指定 | 埋め込みSkillを未使用または空のディレクトリへ展開 |
-| `--json` | 無効 | 通常の結果表示をJSONのみにする。MCP設定例の表示はTOMLのまま |
-
-`--project`と`--skills-dir`は併用できません。
-`--update`・`--uninstall`・`--status`・`--doctor`・`--self-test`・`--print-mcp-config`・`--extract`は相互排他です。
-`--dry-run`は導入・更新・解除にのみ使えます。`--force`も診断・状態表示・テスト・設定例表示・展開には使えません。
-既定以外の配置先を選んだ場合、更新・解除・状態確認にも同じ指定を付けます。
-
-## 取得元・配置・変更内容
-
-| 対象 | 取得元・版 | 配置・変更 |
-|---|---|---|
-| Skill・補助コード・資料・雛形 | スクリプト内の圧縮JSON、v1.1.0。資材全体と各ファイルのSHA-256を照合 | 選択した親ディレクトリの`design-research/` |
-| 所有情報 | 導入時に生成 | Skill内の`.design-research-install.json` |
-| 更新・解除時のバックアップ | 以前のSkillディレクトリ全体 | Skill親ディレクトリの1階層上にある`.design-research-backups/<配置先の識別子>/<日時とID>/` |
-
-既定のバックアップ先は`${CODEX_HOME:-~/.codex}/.design-research-backups/`配下です。
-導入はネットワーク通信をせず、MCP・`config.toml`・hooks・既存の他のSkillを変更しません。
-調査を始めるときの出力や通信・キャッシュは[使い方](usage.md)を参照してください。
-
-導入せずに資料を読むには次のように展開します。例のパスが空か未使用であることを確認してください。
-この操作は展開先へ書き込みます。
-
-```bash
-bash install_design_research.sh --extract /tmp/design-research-review
-```
-
-展開先に`SKILL.md`、`agents/`、`scripts/`、`references/`、`templates/`が作成されます。
-導入処理そのものはシェルスクリプト内のPythonを確認してください。
-
-## 導入確認
-
-`--status --json`で`state: "installed"`、`version: "1.1.0"`、`modified: false`を確認します。
-未導入は`absent`、所有情報を認識できない既存ディレクトリは`unmanaged`です。
-`modified`は管理対象の変更・欠落に加えて追加ファイルも検出します。Pythonキャッシュは除外します。
-状態表示は`absent`でも正常終了するため、終了コードだけでは導入済みか判断できません。
-
-`--doctor`は導入済みファイルを検査する機能ではありません。
-Codex CLIと任意の`SEMANTIC_SCHOLAR_API_KEY`・`CROSSREF_MAILTO`の有無を示しますが、
-APIへ接続せず、認証や検索の成功を保証しません。キーの値は表示しません。
-
-## 更新・再実行
-
-引数なしの再実行は既存の管理対象Skillを保持します。版が違う場合や編集がある場合も自動で更新しません。
-新しい配布スクリプトを取得したら、次で更新します。
+旧版の `~/.codex/skills`、`CODEX_HOME/skills`、プロジェクトの `.codex/skills` に
+既存のDesign Researchが1つあれば、その場所を再利用します。
+新しい場所へ重複して導入しません。旧配置の自動移動も行いません。
+現在のCodexでSkillが見つかるかは、更新後に確認してください。
 
 ```bash
 bash install_design_research.sh --update --dry-run --json
@@ -109,35 +52,107 @@ bash install_design_research.sh --update
 bash install_design_research.sh --status --json
 ```
 
-ローカル編集や追加ファイルがあると通常の更新・解除は停止します。
-内容を確認したうえで`--update --force`を指定すると、旧ディレクトリ全体をバックアップ先へ移し、
-新しい配布資材だけを有効な配置先へ置きます。**追加ファイルやローカル編集はバックアップに残り、更新後のSkillへ自動で引き継がれません。**
-所有情報のない同名ディレクトリは`--force`でも上書きしません。
+引数なしの再実行は既存の管理対象Skillを保持します。更新には `--update` が必要です。
+候補の配置先に同名Skillが複数あれば停止し、候補を表示します。
+`--skills-dir`で更新対象の親を明示してください。
 
-同時実行はロックで拒否し、導入前後に資材と配置先を確認します。
-新しい配置への切り替えが失敗した場合は、移動済みの旧ディレクトリを戻す処理があります。
-失敗時はエラーと実際の配置・バックアップを確認してから再実行してください。
+編集・欠落・追加ファイルがある場合は、通常の更新・解除を止めます。
+確認後に `--update --force` を指定すると、旧ディレクトリ全体をコピーして
+ハッシュを照合し、新しい資材へ切り替えます。
+**ローカル編集と追加ファイルはバックアップに残り、新版へ自動で引き継がれません。**
+所有情報のない同名ディレクトリは `--force` でも上書きしません。
 
-## 解除
+## 状態確認と診断
+
+`--status --json` の `state: "installed"`、`version: "1.2.0"`、`modified: false` を確認します。
+未導入は `absent`、所有情報を認識できない既存ディレクトリは `unmanaged` です。
+追加ファイルも変更として検出します。Pythonキャッシュは除きます。
+状態表示は未導入でも正常終了するため、終了コードだけでは導入済みか判断できません。
+
+`--doctor --json` は、導入状態と実行環境を分けて表示します。
+
+| 項目 | 確認する内容 |
+|---|---|
+| `installed_integrity` | 導入済みSkillの所有情報・ファイルの整合性 |
+| `installed_harness_ready` | 現在の版のハーネス資材が導入されているか |
+| `harness_environment_ready` | Codex CLI、構造化execの引数、コマンド用サンドボックスの起動 |
+| `ready` | 現在のハーネスと実行環境が揃っているか |
+
+未準備なら終了コード2です。診断はモデルを呼び出さず、学術APIにも接続しません。
+認証・モデル応答・実API検索・Codex画面からの実行成功まで保証するものではありません。
+旧版のファイルが整合していても、新しいハーネスが未導入なら準備完了にはしません。
+サンドボックスに問題があれば実行を止め、制限を外して続行しません。
+
+## オプション
+
+| オプション・環境変数 | 動作 |
+|---|---|
+| `--help` / `-h`、`--version` | ヘルプ／版を表示 |
+| `--skills-dir PATH` | Skill配置先の親を明示 |
+| `--project PATH` | プロジェクト内の配置先を選択。新規は `.agents/skills` |
+| `CODEX_HOME` | 既存配置を探す際に `CODEX_HOME/skills` も確認 |
+| `PYTHON_BIN` | 使用するPython 3.10以上。既定は `python3` |
+| `--dry-run` | 導入・更新・解除の予定を表示。配置先・バックアップへ書き込まない |
+| `--update` | 管理対象Skillを新版へ置き換え |
+| `--force` | 編集済みの管理対象もバックアップ後に更新・解除。単独なら更新扱い |
+| `--uninstall` | バックアップ後、管理対象Skillを解除 |
+| `--status` | 導入状態を表示 |
+| `--doctor` | 導入済み資材とハーネスの実行環境を診断 |
+| `--self-test` | 一時ディレクトリで内蔵テストを実行 |
+| `--print-mcp-config` | 任意のMCP設定例を表示。登録・変更は行わない |
+| `--extract DIR` | 埋め込み資材を未使用／空のディレクトリへ展開 |
+| `--json` | 結果をJSONで表示。MCP設定例はTOML |
+
+`--project` と `--skills-dir` は併用できません。
+操作モードの `--update`・`--uninstall`・`--status`・`--doctor`・`--self-test`・
+`--print-mcp-config`・`--extract` は相互排他です。
+`--dry-run` と `--force` は、診断・状態表示・テスト・設定例表示・展開には使えません。
+
+## 資材とバックアップ
+
+| 対象 | 保存先・扱い |
+|---|---|
+| Skill・Bash・Python・資料 | 選んだSkill親の `design-research/`。埋め込み資材全体と各ファイルのSHA-256を照合 |
+| 所有情報 | Skill内の `.design-research-install.json` |
+| バックアップ | Skill親の1階層上の `.design-research-backups/<配置先の識別子>/<日時とID>/` |
+
+新規のユーザー共通配置では、バックアップは `~/.agents/.design-research-backups/` 配下です。
+更新・解除時は旧資材をコピーし、バックアップが別のファイルシステムでも退避できる形にしています。
+新しい資材を検査した後、配置先と同じ親の一時ディレクトリを使って切り替えます。
+切り替えに失敗した場合は旧配置を戻します。失敗時は表示された配置先・バックアップを確認してください。
+同時実行はロックで拒否し、親を含むシンボリックリンクの配置先も拒否します。
+
+導入は通信せず、`config.toml`、hooks、MCP、他のSkillを変更しません。
+研究・レビュー成果物は利用先プロジェクトに保存され、更新・解除の対象に含めません。
+
+## 展開して確認する・解除する
+
+```bash
+bash install_design_research.sh --extract /tmp/design-research-inspection
+bash install_design_research.sh --self-test --json
+```
+
+展開先は未使用か空にしてください。展開はその場所へ書き込みます。
+`SKILL.md`、`agents/`、`scripts/`、`references/`、`templates/` を確認できます。
+保守用の正本は [tools/design-research](../../tools/design-research/) です。
+配布物を使う側には、正本ディレクトリの同梱は不要です。
 
 ```bash
 bash install_design_research.sh --uninstall --dry-run --json
 bash install_design_research.sh --uninstall
 ```
 
-管理対象Skillのディレクトリ全体をバックアップ先へ移動します。ファイル単位の削除ではありません。
-編集や追加がある場合は停止し、`--uninstall --force`を明示した場合にそれらも含めて退避します。
-調査成果物、文献キャッシュ、バックアップは解除後も残ります。自動復元用の専用オプションはありません。
+編集済みの解除は、内容を確認したうえで `--uninstall --force` を使います。
+成果物・キャッシュ・バックアップは残ります。自動復元専用のオプションはありません。
 
 ## 困ったとき
 
-| 状況 | 確認・対処 |
+| 状況 | 対処 |
 |---|---|
-| Pythonエラー | Python 3.10以上を用意し、必要なら`PYTHON_BIN`を指定 |
-| 資材チェックサムの不一致 | スクリプトの欠損・変更を確認し、元の配布物を再取得 |
-| `unmanaged`または上書き拒否 | 同名ディレクトリと所有情報を確認し、既存内容を保護して配置を整理 |
-| ローカル編集で停止 | 差分・追加ファイルを確認。置き換え・退避を望む場合のみ`--force`を使用 |
-| シンボリックリンクで停止 | 親ディレクトリも含め、実ディレクトリの配置先を使用 |
-| ロックが残っている | 実行中のインストーラーがないことを確認してから残存ロックを扱う |
-| Skillが見えない | 配置先と`SKILL.md`を確認し、新しいCodexセッションを開始 |
-| 検索失敗・キャッシュなし | [使い方](usage.md)の通信許可・取得範囲・オフラインの説明を確認 |
+| Pythonエラー | Python 3.10以上を用意し、必要なら `PYTHON_BIN` を指定 |
+| チェックサム不一致 | 配布物の欠損・変更を確認し、元の配布スクリプトを取得 |
+| 同名Skillが複数／`unmanaged` | 候補と所有情報を確認し、対象の親を `--skills-dir` で明示。管理外の内容は保護 |
+| 編集で更新が止まる | 差分を確認し、置き換える場合だけ `--force` を使用 |
+| Skillが表示されない | 実際の配置先と `SKILL.md` を確認し、Codexを再起動 |
+| サンドボックス起動失敗 | ホストのCodex実行環境を確認し、doctorを再実行。実行制限を外して回避しない |
+| 調査・検証で停止 | [使い方](usage.md#停止と再開)で状態・根拠・再開可否を確認 |

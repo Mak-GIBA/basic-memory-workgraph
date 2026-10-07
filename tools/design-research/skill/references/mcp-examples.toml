@@ -1,0 +1,16 @@
+# OPTIONAL EXAMPLES ONLY. The installer does not edit Codex MCP configuration.
+# Review current provider terms/authentication before registering anything.
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+# Authentication may be required depending on the selected Context7 setup.
+# Prefer its official setup flow rather than hard-coding credentials.
+
+[mcp_servers.exa]
+url = "https://mcp.exa.ai/mcp"
+
+# GitHub/project and Memory tools should be reused when already configured.
+# Do not duplicate an existing equivalent server merely because this file lists it.

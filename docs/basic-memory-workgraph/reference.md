@@ -102,6 +102,10 @@ Skillのレビュー基準と登録手順は[SKILL_REVIEW.md](../../tools/basic-
 | `basic-memory-workgraph/templates/` | 事例形式、Skillレビュー、スキーマの参照資料 |
 | `basic-memory-workgraph/workgraph_tools.py` | 共有・JSONL出力・点検・Skill登録CLI |
 | `basic-memory-workgraph/workgraph_sequence.py` | Case v2の構造・根拠参照検証 |
+| `basic-memory-workgraph/workgraph_github.py` | privateリポジトリへのPR作成・取り込み・更新CLI |
+| `basic-memory-workgraph/github-sharing.json` | 初回setupで保存する共有先・送信元・プロジェクトの設定 |
+| `basic-memory-workgraph/github-state/` | 取り込み済みノートの指紋・取得コミット・操作ロック。本文は保持しない |
+| `AGENTS.md`の管理ブロック | メモリ共有・取り込みの依頼から共有手順を読む入口。他の指示は保持 |
 | `hooks/basic_memory_workgraph.py` | 方針注入、検索案内、保存評価依頼 |
 | `hooks.json` | hook登録 |
 
@@ -112,6 +116,8 @@ python3 "${CODEX_HOME:-$HOME/.codex}/basic-memory-workgraph/workgraph_tools.py" 
 ```
 
 この場合も、そのPython環境にPyYAMLが必要です。
+GitHub共有CLIにはgit・ghも必要です。認証情報はgh・Gitの既存設定を使い、共有設定には保存しません。
+定期送信や保存hookからの送信はありません。操作例は[GitHub経由の共有](github-sharing.md)を参照してください。
 公式pluginの設定探索はその仕様に従います。プロジェクトの `.codex/basic-memory.json` に
 設定がある場合、ユーザー設定より優先されることがあります。
 既存の `captureEvents` は保持します（未設定ならtrue）。公式pluginのイベント記録とは別に、

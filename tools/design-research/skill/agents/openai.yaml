@@ -1,0 +1,6 @@
+interface:
+  display_name: "Design Research"
+  short_description: "Bashハーネスで研究・比較・実測とバックエンド改善を独立評価する"
+  default_prompt: "Use $design-research and execute the installed gan-harness.sh to research, compare and verify this problem; choose audit or run for an existing backend according to the requested scope."
+policy:
+  allow_implicit_invocation: true

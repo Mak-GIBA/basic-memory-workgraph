@@ -1,115 +1,96 @@
 # Codex UX Stack：インストール・更新・解除
 
-[概要と収録ツール](README.md) · [使い方](usage.md) · [docs一覧](../README.md)
+[概要](README.md) · [使い方](usage.md) · [検証範囲](validation.md) · [docs一覧](../README.md)
 
-## 前提条件
+## 前提条件と導入
 
-- Linux / WSL2、Bash、Codex CLI。
-- `codex plugin`と`codex mcp`を使える環境。
-- Node.js 20以上と`npx`。これはこのインストーラーが検査する条件です。
-- `--deep`を使う場合はGit。
-- pluginカタログ、npm、Skillの配布元へのネットワーク接続。任意追加ではGitHubにも接続します。
+Linux / WSL2、Bash、Python 3.10以上、Node.js 20以上、npm、構造化exec出力・plugin・MCPに対応する認証済みCodex CLIが必要です。
+ハーネスの実行にはGit、ChromiumのOS依存ライブラリ、Codexサンドボックスを起動できるホスト環境も必要です。
 
-リポジトリ一式の取得方法は[トップREADME](../../README.md)を参照してください。
-以下のコマンドはリポジトリのルートで実行します。通常ユーザーで利用します。
+リポジトリのルートで実行します。スクリプト1ファイルだけをコピーして実行することもできます。
 
-## 初回導入
-
-```bash
-# ヘルプの表示だけ
+~~~bash
 bash install_codex_ux_stack.sh --help
-
-# 標準の4ツールを実際に導入・登録
+bash install_codex_ux_stack.sh --dry-run
 bash install_codex_ux_stack.sh
-```
+bash install_codex_ux_stack.sh --doctor
+~~~
 
-ux-critiqueも導入する場合は、代わりに次を実行します。標準の4ツールも対象です。
-
-```bash
-bash install_codex_ux_stack.sh --deep
-```
-
-**dry-run機能はありません。引数なしでも実際に変更します。**
-既存のplugin・Skill・MCP登録が検出された場合は、通常はその項目をスキップします。
-スキップは配置・登録の検出に基づき、動作や全ファイルの整合性を保証する検査ではありません。
+**引数なしは実際に導入します。** --dry-runは予定表示だけで、ダウンロード・登録・導入先への書き込みを行いません。
+インストーラーはCodexのログイン、対象アプリへの依存追加、データ移行を行いません。
 
 ## オプション
 
 | オプション | 動作 |
 |---|---|
-| なし | 標準4ツールのうち不足するものを導入・登録 |
-| `--deep` | 第三者Skillのux-critiqueを追加 |
-| `--force` | 検出済みの対象も再導入・再登録 |
-| `--deep --force` | ux-critiqueを含めて再導入 |
-| `--help` / `-h` | ヘルプを表示して終了 |
+| なし | 不足する標準構成を導入 |
+| --deep | 固定コミットのux-critiqueも導入 |
+| --force | このインストーラーが導入した未編集の対象を再配置・再登録 |
+| --dry-run | 導入・解除の予定表示 |
+| --status | 資材と登録の検査。ブラウザーは起動しない |
+| --doctor | 資材・登録に加え、Chromium起動とCodexサンドボックスを確認 |
+| --uninstall | このインストーラーが導入した未編集の対象だけを解除 |
+| --extract PATH | 空または未使用のディレクトリへソースを展開。導入はしない |
+| --codex-home PATH | Codex設定と実行環境の保存先 |
+| --skills-root PATH | 新規Skillの保存先 |
+| --bin-dir PATH | 起動コマンドの保存先 |
+| --no-browser-download | Chromium取得を省略。実行可能かは別途確認 |
+| --help / -h | ヘルプ表示 |
 
-ここでの`--deep`は「追加ツールも入れる」という指定です。
-導入後にux-critiqueへ渡すレビュー深度の`--deep`とは別です。
+既存のSkillは指定先と従来のCodexディレクトリを確認し、重複導入を避けます。
+手動導入や編集済みの対象は--forceでも置き換えません。無効化されている対象pluginは自動で有効化せず原因を報告します。
 
-## 取得元・変更内容
+## 取得元・版・配置
 
-| 対象 | スクリプトが行う処理 | 配置・設定 |
+| 対象 | 取得・版 | 新規の保存先 |
 |---|---|---|
-| Product Design | `product-design@openai-curated-remote`を追加 | Codex CLIが管理するplugin環境 |
-| Build Web Apps | `build-web-apps@openai-curated-remote`を追加 | Codex CLIが管理するplugin環境 |
-| web-design-guidelines | `skills@latest`で`vercel-labs/agent-skills`から指定Skillを取得 | `--global --agent codex`の配置先。実際の場所はskills CLIの一覧で確認 |
-| Playwright MCP | `playwright`という名前で`npx -y @playwright/mcp@latest`を登録 | CodexのMCP設定 |
-| ux-critique | `Thecsiz/ux-critique`を一時ディレクトリにcloneして資材をコピー | `~/.codex/skills/ux-critique/` |
+| Product Design / Build Web Apps | openai-curated-remoteのCodex管理版。実際の版を記録 | Codexのplugin環境 |
+| web-design-guidelines | vercel-labs/agent-skillsのコミット063bee94c3f4df8453406c830b0a7df0f2860278 | ~/.agents/skills/web-design-guidelines/ |
+| ux-critique | Thecsiz/ux-critiqueのコミット3da293cafb639195bf71797590081d4ffb0045ba | ~/.agents/skills/ux-critique/ |
+| ハーネス・専用Skill | 配布物1.0.0 | ~/.agents/skills/ux-gan-harness/ |
+| ブラウザー環境 | Playwright 1.63.0 / Playwright MCP 0.0.83、埋め込みnpm lockfile | CODEX_HOME/ux-stack/runtime/ |
+| 起動コマンド | ハーネスのBashへ渡すラッパー | ~/.local/bin/ux-gan-harness |
+| 導入記録・バックアップ | ハッシュ、版、処理結果、旧資材 | CODEX_HOME/ux-stack/ |
 
-インストーラーは外部ツールのバージョンを固定しません。MCPのパッケージ取得は、登録後の起動時にも発生し得ます。
-ux-critiqueにはSkill、エージェントメタデータ、参照資料、スクリプト、知識ベース、ライセンス類を配置します。
+CODEX_HOMEの省略時は~/.codexです。ChromiumはPlaywrightのキャッシュへ取得し、PLAYWRIGHT_BROWSERS_PATHがあればその設定を使います。
+標準MCPは固定版のNodeエントリーポイントと、取得したChromiumの実行パスを使います。
+既存のMCPは独自設定を保護します。配置前に資材を検査し、再配置時は旧資材をbackups/へ残します。
 
-ux-critiqueの保存先はスクリプト内で`$HOME/.codex/skills/ux-critique`に固定されており、
-`CODEX_HOME`へ置き換える処理はありません。pluginとMCPの設定先はCodex CLI側の設定に従います。
-このスクリプトはWorkgraphのhooksや保存方針、アプリのコードを編集しません。
+skills@latestへの依存は外しました。取得するSkillの正本は[sources.json](../../tools/codex-ux-stack/sources.json)、
+ブラウザーの正本は[npm lockfile](../../tools/codex-ux-stack/browser/package-lock.json)です。配布元にあるライセンス・参照資材も保存します。
+ライセンスファイルがない原本は、その事実をUPSTREAM_SOURCE.jsonに記録します。
 
-## 導入確認
+## 更新・確認
 
-```bash
-codex plugin list
-codex mcp get playwright --json
-npx -y skills@latest list --global --agent codex
-```
-
-`npx`による一覧取得でもCLIのダウンロードが起きる場合があります。
-`--deep`でコピーしたux-critiqueは、Codex側のSkill候補と保存先でも確認してください。
-
-Codexを終了して新しいセッションを開始し、pluginとSkillを利用します。
-実際のブラウザー操作は[使い方](usage.md)の例で別途確認します。
-末尾の一覧コマンドは失敗しても処理を継続するため、完了メッセージだけで全機能の動作確認済みとは判断しません。
-
-## 更新・再実行
-
-```bash
-# 不足分だけを導入
+~~~bash
+bash install_codex_ux_stack.sh --status
+bash install_codex_ux_stack.sh --doctor
 bash install_codex_ux_stack.sh
-
-# 標準構成を再導入・再登録
 bash install_codex_ux_stack.sh --force
-
-# 任意追加を含めて再導入
 bash install_codex_ux_stack.sh --deep --force
-```
+~~~
 
-`--force`はpluginを一度削除して追加し、Playwright MCPも削除して登録し直します。
-独自のMCP起動オプションがある場合は事前に控えてください。
-`--deep --force`では既存のux-critiqueフォルダーを削除してから再配置するため、手動編集は失われます。
-一括バックアップ・ロールバック機能はなく、途中で失敗すると先に成功した導入分は残ります。
+対象ごとにINSTALLED・SKIP・FAILEDを表示します。一部が失敗すると終了コード1とINCOMPLETEになります。
+先に導入した対象は残り、原因を解消して再実行できます。plugin・MCPを含む一括ロールバックはありません。
+ファイルの置き換えに失敗した場合は直前の資材を復元します。
 
-## 解除
+COMPLETEは導入処理の完了です。ブラウザー、Codexサンドボックス、モデル、アプリの操作は別の確認です。
+Skillが候補に出なければCodexを再起動して$ux-gan-harnessを入力してください。
+起動コマンドがPATHにない場合は、保存先の絶対パスでも使えます。
 
-一括アンインストール機能はありません。不要な項目だけ個別に解除します。
+## 解除・復旧
 
-```bash
-codex plugin remove product-design@openai-curated-remote
-codex plugin remove build-web-apps@openai-curated-remote
-codex mcp remove playwright
-```
+~~~bash
+bash install_codex_ux_stack.sh --uninstall --dry-run
+bash install_codex_ux_stack.sh --uninstall
+~~~
 
-Skillは導入先と手動編集の有無を確認して個別に削除します。
-web-design-guidelinesはskills CLIの管理対象とリンク先を確認し、CLIの削除手順に従ってください。
-ux-critiqueはこのスクリプトがコピーした`~/.codex/skills/ux-critique/`が対象です。
-MCP登録の削除はnpmキャッシュやブラウザーの削除ではありません。作成済みアプリや成果物も残ります。
+導入記録にある未編集の対象だけを解除します。
+もともと存在した対象、編集済みの資材・設定、アプリの成果物、ブラウザーキャッシュ、バックアップは残ります。
+解除できない依存対象がある場合はブラウザー環境も保護し、未完了を報告します。
+
+手動編集を保持して更新する場合は、保存先とmanifest.json、バックアップを比較してください。
+編集を別の場所へ保存し、導入先を空けて再実行した後に必要な変更を戻せます。
 
 <a id="troubleshooting"></a>
 
@@ -117,11 +98,13 @@ MCP登録の削除はnpmキャッシュやブラウザーの削除ではあり�
 
 | 状況 | 確認・対処 |
 |---|---|
-| pluginが見つからない | `codex plugin list --available --json`で配布名・利用可否を確認。スクリプトは`openai-curated-remote`を指定している |
-| `plugin` / `mcp`コマンドに未対応 | 対応するCodex CLIを用意する |
-| Node.jsの条件で停止 | `node --version`、`command -v node`、`command -v npx`を確認する |
-| Skillが候補に出ない | Codexを再起動し、導入先とSkillの有効・無効設定を確認する |
-| Playwright MCPが起動しない | 登録された起動コマンド、Node.js、通信、ブラウザーとOS依存関係を[公式資料](https://github.com/microsoft/playwright-mcp)で確認する |
-| 途中まで導入して止まった | エラーと一覧を確認し、原因を直して再実行。`--force`は既存内容を置き換える範囲を確認してから使う |
+| pluginが見つからない | codex plugin list --available --jsonで配布名・marketplaceを確認 |
+| Skillが候補に出ない | 保存先とSkillの無効化設定を確認 |
+| Chromiumが起動しない | doctorで原因を確認し、PlaywrightのOS依存ライブラリを用意 |
+| 独自MCP設定が残る | その設定を検査。ハーネスは失敗理由を記録してローカル経路へ切替可能 |
+| bwrap・ユーザー名前空間の権限エラー | ホスト／コンテナーのCodexサンドボックス対応を修復。権限は迂回せず停止 |
+| 編集済みとして再導入が止まる | ハッシュと内容を比較し、編集を別に保管してから更新 |
+| ダウンロードやnpmが失敗 | 既存資材は削除されない。原因を解消して再実行 |
+| 起動コマンドが見つからない | ~/.local/bin/ux-gan-harness doctorを実行するかbin-dirをPATHへ追加 |
 
-配布カタログは環境や時期によって変わります。別marketplaceへ推測で切り替える前に、実際の一覧を確認してください。
+参考：[Codexの非対話実行](https://developers.openai.com/codex/noninteractive/)、[Skillの配置と呼び出し](https://developers.openai.com/codex/skills/)、[Playwright MCP](https://github.com/microsoft/playwright-mcp)、[Linuxサンドボックス](https://github.com/openai/codex/blob/main/codex-rs/linux-sandbox/README.md)。
