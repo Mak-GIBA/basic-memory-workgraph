@@ -32,7 +32,7 @@ speckit-workbench doctor
 PYTHON_BIN=/absolute/path/python3.12 bash install_speckit_upstream.sh --dry-run
 ```
 
-独自資材はファイル内から一時領域に展開します。既存の`specify`がなければ、
+独自資材はスクリプト内から一時領域に展開します。既存の`specify`がなければ、
 専用venvを作って`specify-cli==1.0.8`と依存パッケージを取得します。
 既存CLIがある場合は`version`と`init --help`で必要な機能を確認し、非対応なら停止します。
 この確認は完全な互換性や配布元の認証を保証するものではありません。
@@ -67,7 +67,7 @@ bash install_speckit_upstream.sh --apply --skip-specify
 |---|---|
 | `~/.local/bin/speckit-workbench` | Workbenchの起動用スクリプト |
 | `~/.local/bin/specify` | このインストーラーでSpecKitを用意した場合の起動用スクリプト |
-| `~/.local/share/speckit-workbench/releases/1.2.1/` | Workbenchコード、テンプレート、参照資料、ガイド |
+| `~/.local/share/speckit-workbench/releases/1.3.0/` | Workbenchコード、テンプレート、参照資料、ガイド |
 | `~/.local/share/speckit-workbench/tooling/specify-1.0.8/` | 必要な場合に作成するSpecKit専用venv |
 | `~/.local/share/speckit-workbench/backups/` | 更新時のバックアップ |
 | `~/.config/speckit-workbench/install.json` | 管理対象とハッシュ等の導入記録 |
@@ -126,6 +126,11 @@ speckit-workbench commands
 更新対象は未編集の管理資材だけです。手動編集したSkill等は`--update`でも上書きせず停止します。
 同一内容の再実行はスキップし、SpecKit本体は自動更新しません。旧リリースとバックアップは残ります。
 導入後はCodexを再起動し、`$upstream-`の入力候補を確認してください。
+
+1.3.0では、既存要件・評価方法・実現方式を見直し、必要な場合にDesign Researchを明示して実行するSkill手順を追加しました。
+文書・台帳の形式は1.2.1から変更していないため、attachの再実行は不要です。Skillの更新だけで新しい手順を利用できます。
+既存文書の本文・要件・根拠を変更した場合は、通常どおり再レビューします。
+Design Researchは別途[導入・更新](../design-research/installation.md)します。SpecKitの更新だけではDesign Researchは導入・更新されません。
 
 1.2.0以前からの更新では、通常のMarkdown本文を固定していない旧承認が`LEGACY_APPROVAL_UNBOUND`になります。
 文書・承認履歴を消さずに、`$upstream-review`で内容を再確認し、明示承認後に`$upstream-approve`、gateを実施します。

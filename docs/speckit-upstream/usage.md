@@ -1,6 +1,6 @@
 # SpecKit Upstream：使い方
 
-[概要と収録ツール](README.md) · [導入手順](installation.md) · [docs一覧](../README.md)
+[概要と収録ツール](README.md) · [導入手順](installation.md) · [既存要件・設計の見直し](reassessment.md) · [docs一覧](../README.md)
 
 ## 最初の操作
 
@@ -41,6 +41,25 @@ $upstream-existing このリポジトリの予約管理機能を整理してく�
 これらは明示呼び出し専用の独自Skillです。公式の`$speckit-*`とは名前が異なります。
 `$upstream-bug`も診断・上流整理の入口であり、自動修正を許可する指示ではありません。
 コマンド一覧はターミナルの`speckit-workbench commands`でも確認できます。
+
+## 既存要件・設計を見直す
+
+現状の整理は`$upstream-existing`、要件の妥当性・曖昧さ・評価方法の点検は`$upstream-check`から始めます。
+処理結果・受入条件・品質契約を変更する改善は`$upstream-change`、外部挙動を保つ内部設計の改善は`$upstream-refactor`へ進めます。
+
+Workbench 1.3.0のSkillには、方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合にDesign Researchを使う手順があります。
+使用理由と`research/audit`を明示し、導入済みのハーネスを実行します。
+単純な文書修正には研究を一律要求せず、未導入・旧版・実行不能では必要な研究を未実行として残します。
+Design Researchを自動導入したり、アプリを自動修正したりする手順は含めていません。
+
+[ユースケース別ガイド](reassessment.md)に、7つの場面の判断基準、Codex入力例、成果物、仕様への反映先をまとめています。
+
+```text
+$upstream-change 検索の精度を改善するため、現行方式と品質要件を見直して。
+Design Researchのresearchを明示して実行し、現行案を含む候補を同じ評価条件で比較して。
+必要な小さなPoCの結果を品質要件・設計判断・検証計画の変更案へ戻して。
+アプリ実装はまだ変更しないで。
+```
 
 ## 文書を作成・検査する
 
@@ -133,23 +152,31 @@ Goalだけの状態や、必須文書が空・見出しだけの状態ではREAD
 `check`・`gate`は検査失敗時に非ゼロで終了します。CIやマージ条件への接続は自動では行いません。
 `gate --verify`は古い記録の利用を検出しますが、同じユーザーによる改ざんを防ぐ権限制御ではありません。
 
-## 成果物の保存先
+<a id="成果物の保存先"></a>
 
-| 場所 | 内容 |
-|---|---|
-| `docs/upstream/` | 目的、関係者、要求、設計、As-Is、検証計画等の正本Markdown |
-| `docs/upstream/traceability/` | traceが生成する対応表・索引 |
-| `docs/upstream/governance/reviews/` | reviewで保存するレビュー対象と内容 |
-| `docs/upstream/governance/approvals.md` | 承認状態の要約 |
-| `specs/<feature>/` | SpecKitで個別機能の作業を進める際の仕様・plan・tasks |
-| `.specify/workbench.json` | system ID、文書の登録・探索先、承認profile |
-| `.specify/workbench/approvals.jsonl` | 承認・撤回の台帳 |
-| `.specify/workbench/gate-ready.json` | gateで記録する対象ファイルのハッシュと検査結果 |
-| `.agents/skills/speckit-*/` | 新規の公式統合で配置するプロジェクト用Skill |
+## 成果物の保存先と確認先
+
+パスは対象プロジェクトのルートからの相対パスです。
+要件の確認、方式の比較、精度の評価など、確認したいことに応じて読むファイルは[成果物の保存先と確認先](reassessment.md#成果物の保存先と確認先)で案内しています。
+
+| 確認したいこと | 場所 | 内容 |
+|---|---|---|
+| 目的・要件・設計・評価条件 | `docs/upstream/` | 目的、関係者、要求、設計、As-Is、検証計画等の正本Markdown |
+| 上流項目間の対応関係 | `docs/upstream/traceability/matrix.md`・同ディレクトリの`index.json` | traceが生成する対応表・索引 |
+| 今回の承認対象 | `docs/upstream/governance/reviews/<review-id>.md`・同名の`.json` | reviewで保存する対象ID・本文・根拠 |
+| 承認状態の要約 | `docs/upstream/governance/approvals.md` | 承認・未承認・再承認の状態 |
+| 個別機能の仕様と作業計画 | `specs/<feature>/` | SpecKitで作成する仕様・plan・tasks |
+| 文書の実際の配置・登録先 | `.specify/workbench.json` | system ID、`docs_dir`・`extra_docs`、承認profile |
+| 承認・撤回の履歴 | `.specify/workbench/approvals.jsonl` | 承認・撤回の台帳 |
+| ready判定の記録 | `.specify/workbench/gate-ready.json` | 対象ファイルのハッシュと検査結果。現在も有効かは`gate --verify`で確認 |
+| 方式比較・実測・研究の状態 | `docs/design-research/<slug>/` | Design Researchの報告・実行根拠・状態。実行ごとの保存版は`runs/<run-id>/reports/` |
 
 `specs/<feature>/`の具体的な内容やレビュー記録は、対応する作業・コマンドで作成します。
 attachだけですべての成果物が完成するわけではありません。
 `--docs-dir`を変更した場合、上流文書の保存先は設定値に従います。
+Skill実行後の回答にも、確認したいことと実際の成果物へのリンクを対応させた表を付けます。
+表には作成・更新・既存参照・未作成・未実行の状態を示します。
+新規の公式統合で配置するプロジェクト用Skillは`.agents/skills/speckit-*/`にあります。
 
 項目のJSON形式や追跡ルールの詳細は、導入済み資材の`assets/references/TRACE_FORMAT.md`、
-文書運用は`METHOD.md`を参照してください。[資料の配置・展開方法](installation.md)
+文書運用は`METHOD.md`、成果物の案内方法は`ARTIFACTS.md`を参照してください。[資料の配置・展開方法](installation.md)

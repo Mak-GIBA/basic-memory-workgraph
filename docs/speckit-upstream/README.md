@@ -1,6 +1,6 @@
 # SpecKit Upstream
 
-[docs一覧](../README.md) · [導入手順](installation.md) · [使い方](usage.md)
+[docs一覧](../README.md) · [導入手順](installation.md) · [使い方](usage.md) · [既存要件・設計の見直し](reassessment.md)
 
 実装前に、目的・要求・ストーリー・仕様・設計・検証計画を整理するための環境です。
 対象スクリプトは[install_speckit_upstream.sh](../../install_speckit_upstream.sh)です。
@@ -18,8 +18,8 @@
 Spec Kitは仕様を計画や実装タスクにつなげるためのツールキットです。
 [Spec Kit公式リポジトリ](https://github.com/github/spec-kit)
 
-Workbenchはその周辺に、目的や要求から設計・検証計画までを関連付けて管理する手順を追加します。
-**この追加キットはSpecKit・OpenAI・ECCの公式配布物ではありません。**
+Workbenchは、目的や要求から設計・検証計画までを関連付けて管理する手順を追加します。
+**この追加キットはSpecKit・OpenAI・ECCの公式配布物ではありません**。
 文書の構成や追跡方法は独自の運用で、規格への完全準拠を保証するものでもありません。
 
 ## どのような場面で使うか
@@ -27,10 +27,15 @@ Workbenchはその周辺に、目的や要求から設計・検証計画まで�
 - 新しいアプリについて、何のために何を作るかを実装前に決めたい。
 - 既存アプリの現状と、合意済み仕様・今後の変更案を分けたい。
 - 要件変更が設計やテスト計画のどこに影響するか追いたい。
+- 既存の要件・評価方法を再評価し、より精度を出すための実現方式を比較したい。
 - 承認した文書が後から変わっていないか確認したい。
 
 Codexからは`$upstream-new`などのSkillを呼び出します。
 8つのコマンドと一連の操作は[使い方](usage.md)にまとめています。
+
+Workbench 1.3.0では、判断を左右する技術的な不確実性がある場合に、別途導入した[Design Research](../design-research/README.md)の利用を明示して`research/audit`を実行する手順を追加しました。
+得られた根拠を要件・設計判断・検証計画へ戻します。
+利用条件、入力例、未導入時の扱いは[ユースケース別ガイド](reassessment.md)を参照してください。
 
 ## 導入は2段階
 
@@ -39,7 +44,7 @@ Codexからは`$upstream-new`などのSkillを呼び出します。
 
 公式の`specify` CLIが見つからない場合は、`specify-cli==1.0.8`を専用venvへ取得します。
 既存CLIは互換性を確認して再利用し、自動更新しません。
-ここで説明するWorkbenchの版は1.2.1です。[導入手順](installation.md)
+ここで説明するWorkbenchの版は1.3.0です。[導入手順](installation.md)
 
 ## 検査できることの範囲
 
@@ -50,10 +55,10 @@ SkillはCodexへの指示であり、アクセス制御や全操作の強制停�
 
 ## 詳細資料の確認方法
 
-インストール後の`releases/1.2.1/README_COMMANDS.md`と`assets/references/`に、
+インストール後の`releases/1.3.0/README_COMMANDS.md`と`assets/references/`に、
 操作ガイド、文書運用の方式、項目形式、参照資料が配置されます。
 導入前でもスクリプトの`--extract`で読みやすいソースへ展開できます。
-具体的な保存先と展開方法は[導入手順](installation.md)を参照してください。
+導入資材の保存先と展開方法は[導入手順](installation.md)、作業で作る文書・研究報告の保存先は[成果物一覧](reassessment.md#成果物の保存先と確認先)を参照してください。
 
 このガイドは埋め込みREADMEとPython実装を基準にしています。
 外部Spec Kitの一般説明は2026-09-29に確認しましたが、最新版の操作を固定版へそのまま適用する前提ではありません。
