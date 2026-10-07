@@ -56,7 +56,7 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | 対象 | 検証方法 | 分かること・制限 |
 |---|---|---|
 | Workgraph | 上記のPythonテスト | 設定、保存形式、共有、更新等のローカル処理。実際の外部パッケージ導入は含まない |
-| UX Stack | Pythonテスト、Bash構文確認、任意の実Chromiumチェック | 一時環境で導入・編集保護・反復・停止・画像管理を確認。実モデル反復の完了とGUI呼び出しは未確認。[検証範囲](codex-ux-stack/validation.md) |
+| UX Stack | Pythonテスト、Skill・配布物の検査、任意の実Chromiumチェック | OOUI資料の標準導入・更新・共有、編集保護、反復・停止、関連移動と状態保持、画像管理を一時環境で確認。実モデル反復の完了とGUI呼び出しは未確認。[検証範囲](codex-ux-stack/validation.md) |
 | SpecKit Upstream | `bash install_speckit_upstream.sh --self-test` | 一時環境とモックSpecKitによる検証。実Codex・公式CLIの取得を含むE2Eテストではない |
 | GitHub Project Director | `bash install_codex_github_pm.sh --self-test` | 一時環境での導入・更新・解除、読み取り補助、Skillの静的な指示内容を検証。実GitHubへの書き込みやモデルの出力品質を保証しない |
 | Design Research | `bash install_design_research.sh --self-test --json`、`python3 -B -m unittest discover -s tests -p 'test*design_research*.py' -v` | 単体配布・編集保護・バックアップ・切り替え復旧、実ローカルHTTP／PoC、根拠・中断復旧を検証。モデルとOSサンドボックス起動は模擬。[検証範囲](design-research/validation.md)参照 |

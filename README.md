@@ -10,7 +10,7 @@ ECCのスキルを必要なときに読む構成や、作業ディレクトリ�
 | やりたいこと | インストーラー | 主な導入対象 | 説明 |
 |---|---|---|---|
 | 作業から得た知識や修正指示を次の仕事で使う | `install_basic_memory_workgraph.sh` | Basic Memory、Codex plugin、独自のWorkgraph・hooks・管理CLI | [概要と収録ツール](docs/basic-memory-workgraph/README.md) |
-| 画像からUI/UXをレビューし、初見ユーザー向けの改善と再確認を反復する | `install_codex_ux_stack.sh` | UI/UX GAN Harness、Product Design、Build Web Apps、UIレビューSkill、Playwright | [概要と収録ツール](docs/codex-ux-stack/README.md) |
+| OOUIから画面と操作を設計し、実装・画像付き検証・改善を進める | `install_codex_ux_stack.sh` | ooui-design、認知負荷の参照資料、UI/UX GAN Harness、Product Design、Build Web Apps、UIレビューSkill、Playwright | [概要と収録ツール](docs/codex-ux-stack/README.md) |
 | 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
 | Issue・PRを読みやすく作成し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
 | 目的に貢献するコアロジックの方式を比較・検証・改善する | `install_design_research.sh` | 独自のDesign Research Skill、BashのGANハーネス、文献調査CLI、証拠台帳 | [概要と収録ツール](docs/design-research/README.md) |
@@ -74,7 +74,7 @@ install_codex_yomiyasu.sh           意味を保った日本語の推敲
 install_herdr.sh                   作業ディレクトリに対応するHerdrの起動
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 tools/ecc-on-demand/               ECCの管理CLI・入口資材・導入処理
-tools/codex-ux-stack/              画像付きレビューと修正反復・単体配布の正本
+tools/codex-ux-stack/              OOUI設計・認知負荷の資料・画像付きレビュー・単体配布の正本
 docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ
 ```
