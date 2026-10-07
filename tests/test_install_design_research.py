@@ -3,12 +3,14 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tools/design-research"
@@ -67,6 +69,23 @@ class InstallerTests(unittest.TestCase):
         self.assertTrue(result["dry_run"])
         self.assertFalse((self.home / ".agents").exists())
         self.assertFalse((self.home / ".codex").exists())
+
+    def test_installed_skill_local_reference_links_resolve(self):
+        skill_root = self.root / "確認用 Skill 資材"
+        result = self.output("--skills-dir", str(skill_root))
+        target = Path(result["target"])
+        guides = [target / "SKILL.md", *sorted((target / "references").glob("*.md"))]
+        checked = 0
+        for guide in guides:
+            for destination in re.findall(r"\]\(([^)]+)\)", guide.read_text("utf-8")):
+                parts = urlsplit(destination.strip().strip("<>"))
+                if parts.scheme or parts.netloc or not parts.path:
+                    continue
+                reference = (guide.parent / unquote(parts.path)).resolve()
+                self.assertTrue(reference.is_relative_to(target), str(reference))
+                self.assertTrue(reference.is_file(), f"{guide}: {destination}")
+                checked += 1
+        self.assertGreater(checked, 0)
 
     def test_project_scope_and_explicit_scope(self):
         project = self.root / "project"

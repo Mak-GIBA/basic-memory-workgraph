@@ -1,6 +1,6 @@
 # Implementation references
 
-Updated for the standalone installer and harness v1.2.0 on 2026-10-04. These are implementation references, not evidence that a particular architecture is universally best.
+Implementation references checked for the standalone installer and harness v1.2.0 on 2026-10-04. The v1.2.1 instruction update on 2026-10-07 focuses on core logic, multi-source reading and optional Workgraph retention; it does not revalidate these external references. These are implementation references, not evidence that a particular architecture is universally best.
 
 - [OpenAI, Build skills](https://learn.chatgpt.com/docs/build-skills): current local repository/user discovery uses `.agents/skills`; keep instructions focused and supporting scripts/resources in the skill. Older installs are detected and reused rather than duplicated.
 - [OpenAI, Non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode): structured `codex exec` output, output files, sandboxes and reuse of saved CLI authentication. Actual local capabilities are checked by doctor.

@@ -7,12 +7,13 @@ Run the installed `scripts/gan-harness.sh` with Bash. It delegates to Python sta
 | Mode | Outcome | Application source |
 |---|---|---|
 | `research` | Compare methods, algorithms, architectures or evaluation designs; run necessary small local PoCs | Preserved |
-| `audit` | Inspect a backend and execute relevant checks; report problems and unknowns | Preserved |
-| `run` | Fix requested backend problems, then execute checks and an independent review | Only the scoped fixer may edit |
+| `audit` | Inspect core logic and relevant backend behavior; execute checks and report problems/unknowns | Preserved |
+| `run` | Improve requested core logic/backend behavior, then execute checks and an independent review | Only the scoped fixer may edit |
 | `resume RUN_ID` | Continue an unfinished run after checking identity, source, evidence and test environment | Original mode applies |
 | `doctor` | Check structured Codex exec capabilities and a read-only command sandbox smoke test | Preserved; no report workspace |
 
-Choose research for non-app targets unless server behavior is actually the question. An API, database or agent framework is not required.
+Choose research for method/evaluation comparisons and non-app research targets. Use audit/run when the request is to inspect/improve existing application logic, whether or not it has a server. An API, database or agent framework is not required.
+Start from the main purpose, the core logic contributing to it and the intended outcome. Keep the current/minimal baseline and hard constraints visible; backend checks support the requested goal and relevant constraints.
 
 ## Commands and limits
 
@@ -33,6 +34,7 @@ The planner freezes criteria once. It can schedule at most 8 academic-provider r
 ## Independent roles and evidence
 
 The planner, research producer, reviewer and scoped fixer use separate `codex exec` processes with structured output. Read-only roles do not edit source; the fixer uses workspace-write. The parent executes checks and owns receipts. A fixer's claim does not resolve a finding.
+Method/accuracy comparisons follow the multi-source reading guidance in [protocol.md](protocol.md). Existing execution/source gates check recorded evidence, not the quality of reading multiple papers; source counts are not a new completion gate.
 
 Every mandatory runtime criterion needs a successful current-iteration receipt tied to the exact source fingerprint. A failed check for that criterion cannot be hidden by another successful check. An issue stays in subsequent reviews and needs new evidence before resolution. Static observations use archived source lines, not imaginary runtime results. Review also explains added complexity and a simpler alternative.
 
@@ -59,6 +61,21 @@ The harness kills only its own process groups, archives sanitized stdout/stderr,
 - `research-log.json` and `status.json`: actual source/check scope, status and stopping reason.
 
 `runs/RUN_ID/` preserves state, role invocations/prompts/outputs, access receipts, generated PoC code, execution receipts, stdout/stderr and report snapshots. Prior deliverables and an optional input review are archived under `inputs/` before publication.
+
+Guide the user by the question they want to check, using actual links under the resolved project root and slug:
+
+| What to check | Artifact relative to `PROJECT/docs/design-research/SLUG/` |
+|---|---|
+| Completion, run ID and stopping reason | `status.json`; follow its `state_path` to `runs/RUN_ID/state.json` for execution state and scope |
+| Candidate comparison and conditional recommendation | `design-research.md` and `decision.md`, when a research dossier exists |
+| Findings, reproduction and expected/actual behavior | `review.md` and its Evidence links |
+| Sources, measured results and reproducible evidence | `evidence.json`, when available, plus report Evidence links and `research-log.json`; follow receipts to stdout/stderr and saved artifacts |
+| Reports from a particular execution | `runs/RUN_ID/reports/` and its actual files |
+| Requested fixes and independently checked before/after results | `fix-report.md` and its evidence for changes actually made in `run` mode |
+| Retained detailed verification/experiment records | Actual note references under `artifacts/design-research/SLUG/RUN_ID/` in the configured Memory project; see [memory-workgraph.md](memory-workgraph.md) |
+
+Check `status.json` first. Top-level reports can change on a later run with the same slug, and a run stopped before review can leave prior reports in place. Match report run IDs and use this run's snapshots for historical references. A missing dossier/report is an unproduced artifact; link existing status/state instead. The presence of `fix-report.md` during research/audit does not establish that application fixes were made. Include only relevant, existing files in the final navigation table and state unexecuted or blocked work explicitly.
+Memory paths belong to the selected Basic Memory project, not the target repository's report directory. The outer skill chooses useful records and saves them when permitted; report the actual saved references/status. The harness itself does not install Workgraph or perform Memory writes.
 
 Evidence records have stable EV IDs, workspace-relative paths, SHA-256, iteration and source fingerprint. Before each role/resume the parent rechecks registered artifacts and execution outputs. Declare `artifact_paths` in planned checks/experiments for generated JSON, plots or images; results must exist and are archived. Readable issue evidence links point to actual receipts and raw results. PNG/JPEG/GIF results also render inline. Screenshots are only produced if an actual applicable check captures them; this backend kit does not install a browser or infer a visual review.
 

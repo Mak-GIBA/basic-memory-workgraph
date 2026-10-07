@@ -29,8 +29,18 @@ Do not increase confidence just because more agents repeat a claim. Separate rol
 Conclusions outside a paper's dataset/task/model/resource conditions are inferences, not reproduced findings.
 Prefer qualitative trade-off explanations to false numerical precision. Evaluate time-to-deliver and operational complexity alongside experimental performance.
 
+## Read multiple works in depth
+
+For method or accuracy comparisons, normally read at least two independent relevant primary works, including papers where applicable. Compare their methods, evaluation data/task/model/version, metrics, baseline/control, resources, results and limitations. Read the decisive methods, evaluation and discussion sections; inspect rendered tables/equations/figures when the decision depends on them. An abstract, search snippet or retrieval receipt does not establish this depth.
+
+Record source IDs and exact pages/sections with claims and applicability conditions in the existing dossier. Group preprint/published versions and mirrored material as one study. Include conflicting or negative evidence, explain differences in conditions, and distinguish literature results from this project's measurements. The reviewer revisits decisive passages rather than accepting the producer's summary.
+
+Use the existing budget; thorough reading does not require expanding search calls. If access or the budget prevents sufficient reading, identify what is missing and keep the affected recommendation provisional/deferred. Do not invent additional works or claim full-text reading from partial access. This is a skill/role instruction; the harness does not add a numerical source-count gate or prove reading quality.
+
 ## Apply the right depth
 
-For non-app projects, investigate the method, algorithm, evaluation or verification question. Do not invent API/database work. For a backend, test relevant behavior such as invalid input, authorization, persistence, duplicate processing, retries and recovery only where the application actually implements it.
+Start with the project's main purpose and the core logic contributing to it: retrieval/ranking, extraction, classification, inference, decision rules or other domain computation. Define outcome metrics and representative success/failure cases against the current/minimal baseline. Prioritize improvements that affect that purpose while preserving hard constraints.
 
-A small reproducible defect need not trigger a paper survey or a new architecture. Keep the current/minimal baseline visible, and justify every added dependency, service or setting against a simpler alternative. Research preserves application source; an explicitly requested backend fix uses `run`, with actual checks and a separate reviewer after each change.
+For non-app projects, investigate the method, algorithm, evaluation or verification question. Do not invent API/database work. Backend behavior is included when relevant; test invalid input, authorization, persistence, duplicate processing, retries and recovery where the application actually implements them and they affect the requested outcome or constraints.
+
+A small reproducible defect need not trigger a paper survey or a new architecture. Keep the current/minimal baseline visible, and justify every added dependency, service or setting against a simpler alternative. Research preserves application source; explicitly requested core-logic/backend improvements use `run`, with actual checks and a separate reviewer after each change.

@@ -20,7 +20,7 @@ import zlib
 
 NAME = "design-research"
 OWNER = "basic-memory-workgraph/design-research"
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 MANIFEST = ".design-research-install.json"
 PAYLOAD_MARKER = b"\n__DESIGN_RESEARCH_PAYLOAD__\n"
 PAYLOAD_SHA256 = "__PAYLOAD_SHA256__"
@@ -315,7 +315,7 @@ def print_human_summary(result: dict) -> None:
         print("  GAN harness: bash <skill>/scripts/gan-harness.sh research|audit|run|resume|doctor")
         print("  Diagnose: bash " + shlex.quote(str(Path(result["target"]) / "scripts/gan-harness.sh")) +
               " doctor --project .")
-        print("  Codex prompt: '$design-research インストール済みgan-harness.shを実行して、研究・比較を進めて'")
+        print("  Codex prompt: '$design-research インストール済みgan-harness.shで、目的に貢献するコアロジックを比較・検証して'")
         print("  Install performed no network access and did not modify MCP configuration.")
         print("  Start a new Codex session if the skill is not discovered in the current one.")
     elif action == "uninstall":

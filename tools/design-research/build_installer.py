@@ -28,7 +28,7 @@ def bundle():
                        "data_b64": base64.b64encode(data).decode(),
                        "mode": 0o755 if name in
                        {"scripts/research.py", "scripts/harness.py", "scripts/gan-harness.sh"} else 0o644}
-    payload = {"schema_version": 1, "name": "design-research", "version": "1.2.0", "files": files}
+    payload = {"schema_version": 1, "name": "design-research", "version": "1.2.1", "files": files}
     data = zlib.compress(json.dumps(payload, ensure_ascii=False, sort_keys=True,
                                    separators=(",", ":")).encode(), level=9)
     return payload, data

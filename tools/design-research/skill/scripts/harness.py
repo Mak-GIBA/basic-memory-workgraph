@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded research/backend generator and independent verifier (stdlib only)."""
+"""Bounded core-logic research/improvement and independent verifier (stdlib only)."""
 from __future__ import annotations
 
 import argparse
@@ -30,7 +30,7 @@ from runtime import (Blocked, Cancelled, assert_source, atomic_json, capture,
                      test_environment, sanitize_tree)
 
 HERE = Path(__file__).resolve().parent
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 SEVERITIES = ["Critical", "High", "Medium", "Low"]
 ID = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}")
 
@@ -130,6 +130,14 @@ Read those receipts and their stdout/stderr; a successful command proves only wh
 Use stable issue IDs, retaining every previous issue, including resolved ones.
 Runtime pass/resolution needs current successful test/experiment evidence, not code inspection.
 Source access receipts verify retrieval, not interpretation. Read decisive source sections.
+Anchor decisions and checks in the project's main purpose, its contributing core logic,
+the requested outcome and hard constraints. Include backend behavior where relevant.
+For method/accuracy comparisons normally read at least two independent primary works in
+depth: methods, evaluation data/model/metrics, baseline/control, results and limitations.
+Compare contradictory findings and applicability; record exact source/page/section locators.
+Abstracts/snippets are insufficient. Preprint/publication versions of one study count once.
+If access/budget prevents adequate reading, explain the gap and keep affected conclusions
+provisional/deferred. Follow skill_directory/references/protocol.md within existing limits.
 Use the user's language for findings and concise explanations. Return the requested JSON.
 """
 
@@ -137,8 +145,12 @@ Use the user's language for findings and concise explanations. Return the reques
 def role_prompt(role, state):
     instructions = {
         "planner": """Inspect requirements, current implementation/manifests/tests and prior decisions.
+Identify the main purpose and core computation/decision rules to improve (for example
+retrieval/ranking, extraction, classification, inference or domain logic). Freeze criteria
+that measure contribution to that purpose, maintaining required contracts and constraints.
 Set domain=research for method/algorithm/evaluation/comparison work, especially non-app projects.
-For an existing application's server behavior use backend. Do not force every project into an API.
+For existing application logic/behavior checked by audit/run use backend, including core
+logic without a server. Do not force every project into an API.
 Name the current/simplest baseline, hard constraints and actual success criteria. Each criterion
 needs a unique ID, kind and acceptance. Required runtime criteria need executable checks.
 Discover existing safe test commands, honoring supplied --test-command. Do not manufacture
@@ -149,6 +161,8 @@ Comparison research normally includes 2-3 distinct candidates and a current/mini
 Record existing complexity. Scope tests to applicable normal/error/recovery behavior.
 Do not execute checks or experiments yourself: the harness will run declared commands.""",
         "producer": """Research or revise the proposed comparison using the goal and frozen criteria.
+Tie alternatives to the core-logic outcome and compare relevant primary works in depth,
+including methods, experimental conditions, baselines, results, limits and contradictions.
 Return a complete scholarly dossier as a JSON string following the bundled
 references/evidence-format.md contract. Keep decision status proposed/provisional/deferred.
 Use sources actually read, exact locators and reported/inferred/hypothesis/unknown distinctions.
@@ -161,6 +175,9 @@ Experiments are planned until the supplied real receipts show execution. Avoid u
 Address selected review issues, at most 3 root-cause groups. Do not grow scope or complexity.
 Do not claim your own proposed change has been verified.""",
         "reviewer": """Independently inspect current evidence and the supplied proposal or code.
+Evaluate contribution to the main purpose and the core logic against the frozen criteria.
+Revisit decisive primary passages and compare source independence, experimental conditions,
+limitations and conflicting results; retrieval/producer summaries alone are insufficient.
 Try to disprove the leading approach: unsupported claims, unfair conditions, unmeasured
 assumptions, failure/recovery, authorization, storage results, duplicate processing, retries,
 version mismatch and a simpler alternative. Apply only checks relevant to this target.
@@ -180,7 +197,8 @@ Critique new dependencies/services/settings; prefer the smallest coherent soluti
 complexity_ok needs an explanation, including any simpler alternative.
 Do not edit application, proposal, evidence or reports.""",
         "fixer": """Reproduce the selected current issues using their evidence and apply the smallest
-coherent backend fix. You may edit only application source/tests needed for selected issues.
+coherent improvement to the requested core logic or relevant backend behavior, tied to the
+main purpose and frozen criteria. You may edit only source/tests needed for selected issues.
 Do not edit any harness output, source evidence, repository rules or final report.
 Preserve existing uncommitted edits. Do not rewrite architecture for a small bug.
 Do not run unsafe checks: the harness will execute required checks in an isolated copy.
@@ -884,7 +902,7 @@ def execution(args):
 
 
 def parser():
-    p = argparse.ArgumentParser(description="Design Research / backend GAN harness")
+    p = argparse.ArgumentParser(description="Design Research / core-logic and backend GAN harness")
     p.add_argument("--version", action="version", version=VERSION)
     commands = p.add_subparsers(dest="mode", required=True)
     for mode in ("research", "audit", "run", "resume", "doctor"):
