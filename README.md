@@ -3,7 +3,7 @@
 このリポジトリ（`basic-memory-workgraph`）は、Codexでの知識の蓄積、UI/UXの設計・実装支援、
 要件・設計文書の整理、GitHubでのタスク管理、技術選定、文書編集、日本語の推敲に使うインストーラーと運用ツールをまとめています。
 ECCのスキルを必要なときに読む構成や、作業ディレクトリからHerdrを開く設定も用意しています。
-必要なものを個別に選んで導入できます。すべてを入れる必要や、決まった導入順序はありません。
+全ツールを一括導入するか、必要なものを選んで導入できます。すべてを入れる必要はありません。
 
 ## やりたいことから選ぶ
 
@@ -39,7 +39,23 @@ git clone https://github.com/Mak-GIBA/basic-memory-workgraph.git
 cd basic-memory-workgraph
 ```
 
-**引数なしで実行したときの動作はインストーラーごとに異なります。**
+全9ツールの標準導入は、[一括インストーラー](docs/installation.md)から実行できます。
+引数なしでは予定を表示し、`--apply`を付けると導入します。個別選択にも対応します。
+実行前に、導入ガイドで前提条件と変更範囲を確認してください。
+
+```bash
+bash install_all.sh --list
+bash install_all.sh --dry-run
+bash install_all.sh --apply
+```
+
+UI/UX設計と日本語の推敲だけを導入する例です。
+
+```bash
+bash install_all.sh --only ux-stack,yomiyasu --apply
+```
+
+**各ツールの個別インストーラーは、引数なしで実行したときの動作が異なります。**
 まず必要なものの導入ガイドを開き、前提条件と変更内容を確認してください。
 
 | 対象 | 引数なしの動作 | 導入手順 | 導入後 |
@@ -63,6 +79,7 @@ cd basic-memory-workgraph
 ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 
 ```text
+install_all.sh                     全9ツールの一括導入・個別選択
 install_basic_memory_workgraph.sh   知識の蓄積・再利用
 install_codex_ux_stack.sh            UI/UXの設計・実装支援
 install_speckit_upstream.sh          要件・設計文書の整理
@@ -79,6 +96,7 @@ docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ
 ```
 
+一括インストーラーはリポジトリ一式で使用し、各ツールの個別インストーラーを呼び出します。
 Workgraphは`tools/basic-memory-workgraph/`も含むリポジトリ一式で使用します。
 Codex ECCも`tools/ecc-on-demand/`を含むリポジトリ一式で使用します。
 UX Stack、SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasu、Herdrはスクリプト単体で使用できます。

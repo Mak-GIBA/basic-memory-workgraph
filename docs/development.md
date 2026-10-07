@@ -7,6 +7,7 @@
 ルートには`install_*.sh`を置き、補助コード・配布資材・解除スクリプトは
 `tools/<installer-id>/`にまとめます。説明は`docs/<installer-id>/`、検証は`tests/`に置きます。
 単一ファイルで動くインストーラーに、空の補助ディレクトリを作る必要はありません。
+全ツールの共通入口は`install_all.sh`、導入ガイドは`docs/installation.md`です。
 
 WorkgraphのPythonコード、hooks、保存方針、テンプレート、スキーマ履歴、依存一覧は
 `tools/basic-memory-workgraph/`にあります。旧スキーマ履歴とハッシュは更新判定で使うため、Git管理を維持します。
@@ -29,6 +30,7 @@ python3 tools/basic-memory-workgraph/workgraph_tools.py --help
 
 ```bash
 python3 -m unittest discover -s tests -v
+bash -n install_all.sh
 bash -n install_basic_memory_workgraph.sh
 bash -n install_codex_ux_stack.sh
 bash -n install_speckit_upstream.sh
@@ -55,6 +57,7 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 
 | 対象 | 検証方法 | 分かること・制限 |
 |---|---|---|
+| 一括インストーラー | `python3 -m unittest discover -s tests -p 'test_install_all.py' -v`、Bash構文確認 | 一時HOMEと模擬インストーラーで全9ツール・個別選択・予定表示・設定保持の更新経路・失敗集計・中断を確認。実取得や全ツールの連続導入は含まない |
 | Workgraph | 上記のPythonテスト | 設定、保存形式、共有、更新等のローカル処理。実際の外部パッケージ導入は含まない |
 | UX Stack | Pythonテスト、Skill・配布物の検査、任意の実Chromiumチェック | OOUI資料の標準導入・更新・共有、編集保護、反復・停止、関連移動と状態保持、画像管理を一時環境で確認。実モデル反復の完了とGUI呼び出しは未確認。[検証範囲](codex-ux-stack/validation.md) |
 | SpecKit Upstream | `bash install_speckit_upstream.sh --self-test` | 一時環境とモックSpecKitによる検証。実Codex・公式CLIの取得を含むE2Eテストではない |
@@ -77,6 +80,11 @@ UX Stack、SpecKit、GitHub Project Director、Design Research、Office Workbenc
 2. 各ファイルの`TODO`と仮の名称を実装に基づいて置き換えます。スクリプトへの相対リンクも追加します。
 3. [トップREADME](../README.md)の用途別一覧と実行時の挙動、[docs索引](README.md)へ同じIDで登録します。
 4. 実行例、相対リンク、アンカーを確認し、説明とコードを同じ変更でレビューします。
+
+一括導入の対象にも追加する場合は、`install_all.sh`のID・スクリプト・説明・実行引数、
+[一括ガイド](installation.md)の一覧、`tests/test_install_all.py`を揃えます。
+通常実行が予定表示のみのインストーラーには、適用に必要な引数を付けます。
+既存設定を初期化する経路や、編集を強制的に上書きするオプションは既定で使いません。
 
 雛形のコピー例です。`example-tool`は実際のIDに置き換えてください。
 
