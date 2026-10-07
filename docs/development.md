@@ -115,6 +115,16 @@ SpecKit Upstreamの資料と実装はシェルスクリプト内のZIPに含ま�
 展開物やBase64資材をそのままdocsへ複製せず、利用者向けの説明を保守します。
 この操作はインストールしませんが展開先へ書き込みます。既存の空でないディレクトリは使えません。
 
+1.3.0の内蔵自己テストは、導入されたSkill・flowから参照する資料の存在と、flowが研究を起動せず対象文書を変更しないことも確認します。
+既存要件・方式の見直しでは、[ユースケース別ガイド](speckit-upstream/reassessment.md)と内蔵`REASSESSMENT.md`を照合し、次の条件を点検します。
+
+- 精度改善・評価方法の比較には`research`、バックエンドの実測には`audit`を使う。
+- 単純な文書修正には研究を要求しない。
+- 未導入・旧版・実行不能の場合は必要な研究を未実行とする。
+- 根拠が不足する採用判断は保留し、仕様を変更した場合は再レビューする。
+
+この点検はSkillの静的レビューです。実CodexによるDesign Researchの選択・実行と研究の結論の品質は、実モデルで別途確認します。
+
 ### GitHub Project Directorの埋め込み資料
 
 GitHub Project Directorも単一ファイル内に資料と実装を持ちます。
@@ -132,6 +142,9 @@ Design Researchは圧縮JSON内にSkill・Pythonコード・参照資料・テ�
 `python3 -B tools/design-research/build_installer.py --check`で正本と一致するか確認します。
 展開先の`SKILL.md`、`scripts/`、`references/`、`templates/`と正本を照合できます。
 利用者向けの説明は[専用ガイド](design-research/README.md)で保守します。
+コアロジック・複数文献の読解・Memory保存について、Skillとハーネスの各役割の指示を揃えます。
+Memory保存は外側のSkillが担当し、ハーネスの子役は書き込みません。詳細は`references/memory-workgraph.md`です。
+ローカルリンク先の存在は導入テストで確認し、指示の点検と実モデルの動作評価は区別します。
 `--dry-run --json`で予定、`--status --json`で導入状態、`--doctor --json`で環境を確認できます。
 これらは実インストールを行いません。`--doctor`は導入済み資材の整合性と
 構造化Codex実行・コマンド用サンドボックスの準備を分けて診断します。
