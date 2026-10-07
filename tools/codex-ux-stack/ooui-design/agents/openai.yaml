@@ -1,0 +1,4 @@
+interface:
+  display_name: "OOUI Design"
+  short_description: "対象から画面と操作を整理し、認知負荷・機能・表示・実操作を確認する"
+  default_prompt: "$ooui-design 利用者が扱う対象からこのアプリの画面と操作を設計し、認知負荷を抑えながら実装とブラウザー確認まで進めてください。"
