@@ -19,7 +19,7 @@ import urllib.request
 import uuid
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 PLUGINS = ["product-design@openai-curated-remote", "build-web-apps@openai-curated-remote"]
 
 
@@ -135,7 +135,7 @@ class Installer:
 
     def locate_skill(self, name):
         candidates = [self.skills_root / name, self.codex_home / "skills" / name,
-                      Path.home() / ".codex/skills" / name]
+                      Path.home() / ".codex/skills" / name, Path.home() / ".agents/skills" / name]
         return next((p for p in candidates if p.exists() or p.is_symlink()), candidates[0])
 
     def needs_tree(self, name, dest):
@@ -313,17 +313,48 @@ class Installer:
                 self.run(["node", str(stage / "node_modules/playwright/cli.js"), "install", "chromium"], 600)
             self.replace_tree("browser-runtime", stage, self.runtime)
 
+    def design_source(self):
+        spec = self.sources["design"]
+        root = ROOT / spec["directory"]
+        for name in spec["references"]:
+            path = root / "references" / name
+            if not path.is_file() or not path.read_text(encoding="utf-8").strip():
+                raise InstallError("Missing/empty design reference: " + name)
+        if not (root / "SKILL.md").is_file():
+            raise InstallError("Bundled ooui-design lacks SKILL.md")
+        return root, spec
+
+    def install_design(self):
+        dest = self.locate_skill("ooui-design")
+        if not self.needs_tree("ooui-design", dest):
+            return
+        source, _ = self.design_source()
+        if self.args.dry_run:
+            self.record("ooui-design", "planned", message="Bundled OOUI skill and cognitive-load references -> " + str(dest))
+            return
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix=".ux-design-", dir=dest.parent) as tmp:
+            stage = Path(tmp) / "ooui-design"
+            shutil.copytree(source, stage, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"))
+            self.replace_tree("ooui-design", stage, dest)
+
     def install_harness(self):
         dest = self.locate_skill("ux-gan-harness")
         if self.needs_tree("ux-gan-harness", dest):
             if self.args.dry_run:
                 self.record("ux-gan-harness", "planned", message=str(dest))
             else:
+                design, spec = self.design_source()
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 with tempfile.TemporaryDirectory(prefix=".ux-harness-", dir=dest.parent) as tmp:
                     stage = Path(tmp) / "ux-gan-harness"
                     shutil.copytree(ROOT / "skill", stage,
                                     ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"))
+                    references = stage / "references/design"
+                    references.mkdir(parents=True)
+                    for name in spec["references"]:
+                        shutil.copy2(design / "references" / name, references / name)
+                    (references / "index.json").write_text(json.dumps(spec, indent=2) + "\n", encoding="utf-8")
                     (stage / "runtime.json").write_text(json.dumps({"runtime": str(self.runtime)}) + "\n")
                     for p in (stage / "scripts").iterdir():
                         p.chmod(0o755)
@@ -393,9 +424,24 @@ class Installer:
             results.append({"name": ref, "ok": ok})
         mcp = any(p.get("name") == "playwright" and p.get("enabled", True) for p in self.mcp_list())
         results.append({"name": "playwright-mcp", "ok": mcp})
-        for name in ("web-design-guidelines", "ux-gan-harness"):
+        for name in ("web-design-guidelines", "ooui-design", "ux-gan-harness"):
             results.append({"name": name + "-skill",
                             "ok": (self.locate_skill(name) / "SKILL.md").is_file()})
+        for skill, subdir in (("ooui-design", "references"), ("ux-gan-harness", "references/design")):
+            root = self.locate_skill(skill) / subdir
+            for name in self.sources["design"]["references"]:
+                path = root / name
+                try:
+                    readable = path.is_file() and bool(path.read_text(encoding="utf-8").strip())
+                except (OSError, UnicodeError):
+                    readable = False
+                results.append({"name": skill + "-" + name, "ok": readable})
+        index = self.locate_skill("ux-gan-harness") / "references/design/index.json"
+        try:
+            compatible = json.loads(index.read_text()) == self.sources["design"]
+        except (OSError, ValueError):
+            compatible = False
+        results.append({"name": "harness-design-index", "ok": compatible})
         harness = self.locate_skill("ux-gan-harness") / "scripts/gan-harness.sh"
         results.append({"name": "harness-entry", "ok": harness.is_file()})
         if launch and harness.is_file():
@@ -404,8 +450,12 @@ class Installer:
             with contextlib.suppress(ValueError):
                 item["details"] = json.loads(r.stdout)
             results.append(item)
+        yomiyasu = (self.locate_skill("yomiyasu") / "SKILL.md").is_file()
+        recommendation = {"name": "yomiyasu", "available": yomiyasu,
+                          "message": "日本語UI文言の確認に利用を推奨します。" if yomiyasu else
+                          "日本語UIにはyomiyasuの利用を推奨します。別配布のinstall_codex_yomiyasu.sh --applyで導入できます。"}
         print(json.dumps({"version": VERSION, "ready": all(r["ok"] for r in results),
-                          "checks": results}, ensure_ascii=False, indent=2))
+                          "checks": results, "recommendations": [recommendation]}, ensure_ascii=False, indent=2))
         return 0 if all(r["ok"] for r in results) else 1
 
     def uninstall(self):
@@ -455,7 +505,8 @@ class Installer:
 
     def apply(self):
         tasks = [(ref, lambda ref=ref: self.install_plugin(ref)) for ref in PLUGINS]
-        tasks += [("web-design-guidelines", lambda: self.install_remote_skill("web-design-guidelines", "guidelines")),
+        tasks += [("ooui-design", self.install_design),
+                  ("web-design-guidelines", lambda: self.install_remote_skill("web-design-guidelines", "guidelines")),
                   ("browser-runtime", self.install_runtime), ("ux-gan-harness", self.install_harness),
                   ("playwright-mcp", self.install_mcp)]
         if self.args.deep:
@@ -478,7 +529,9 @@ class Installer:
             "No changes made" if self.args.dry_run else
             "Installation operations completed. Use --doctor to check actual browser readiness.")
         if not self.args.dry_run:
-            say("USE", "$ux-gan-harness をCodexで選択し、実在するgan-harness.shを実行するよう指示してください。")
+            say("USE", "$ooui-design で対象・画面・操作を設計し、既存のデザイン・実装スキルへ渡してください。")
+            say("REVIEW", "$ux-gan-harness で実画面と操作を再確認できます。実在するgan-harness.shを実行してください。")
+            say("COPY", "日本語UIの文言にはyomiyasuの利用を推奨します。未導入なら別配布のinstall_codex_yomiyasu.sh --applyを利用できます。")
             say("CLI", str(self.bin_dir / "ux-gan-harness") + " doctor")
             if str(self.bin_dir) not in os.environ.get("PATH", "").split(os.pathsep):
                 say("PATH", "The launcher is outside PATH; use its absolute path or add the bin directory.")
@@ -486,7 +539,7 @@ class Installer:
 
 
 def parse(argv=None):
-    p = argparse.ArgumentParser(description="Codex UX Stack + screenshot-first GAN harness installer")
+    p = argparse.ArgumentParser(description="Codex UX Stack: OOUI design, cognitive-load references and screenshot-first GAN harness")
     p.add_argument("--deep", action="store_true", help="Also install pinned ux-critique")
     p.add_argument("--force", action="store_true", help="Reapply owned unchanged items; preserve custom/unmanaged items")
     p.add_argument("--dry-run", action="store_true", help="Show changes without installation/downloads")

@@ -9,7 +9,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parent
 TARGET = ROOT.parents[1] / "install_codex_ux_stack.sh"
 files = [ROOT / "install_ux_stack.py", ROOT / "sources.json"]
-files += sorted(p for folder in ("skill", "browser") for p in (ROOT / folder).rglob("*")
+files += sorted(p for folder in ("skill", "browser", "ooui-design") for p in (ROOT / folder).rglob("*")
                 if p.is_file() and "node_modules" not in p.parts and "__pycache__" not in p.parts)
 bundle = io.BytesIO()
 with zipfile.ZipFile(bundle, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:

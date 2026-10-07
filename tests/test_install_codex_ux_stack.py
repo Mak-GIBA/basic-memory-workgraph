@@ -5,6 +5,7 @@ import json
 import errno
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import tarfile
@@ -105,6 +106,12 @@ class InstallerTests(unittest.TestCase):
     def mock_state(self):
         return json.loads((self.home/".codex/mock.json").read_text())
 
+    def status(self, *args):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = mod.main(["--status", *args])
+        return code, json.loads(output.getvalue())
+
     def test_dry_run_writes_nothing_and_does_not_fetch(self):
         before=set(self.home.rglob("*"))
         with patch.object(mod.Installer,"download_source",side_effect=AssertionError("downloaded")):
@@ -121,7 +128,113 @@ class InstallerTests(unittest.TestCase):
         r=subprocess.run(["bash",str(self.home/".local/bin/ux-gan-harness"),"--version"],
                          cwd=self.base,capture_output=True,text=True)
         self.assertEqual(r.returncode,0,r.stderr)
-        self.assertEqual(r.stdout.strip(),"1.0.0")
+        self.assertEqual(r.stdout.strip(),"1.1.0")
+
+    def test_standard_design_and_harness_use_same_references_without_optional_skills(self):
+        self.assertEqual(self.invoke(),0)
+        components = self.manifest()["components"]
+        self.assertIn("ooui-design",components)
+        self.assertNotIn("ux-critique",components)
+        self.assertNotIn("yomiyasu",components)
+        self.assertEqual({p["pluginId"] for p in self.mock_state()["installed"]},set(mod.PLUGINS))
+        spec = json.loads((SOURCE/"sources.json").read_text())["design"]
+        design = self.home/".agents/skills/ooui-design"
+        bundled = self.home/".agents/skills/ux-gan-harness/references/design"
+        for name in spec["references"]:
+            expected = (SOURCE/"ooui-design/references"/name).read_bytes()
+            self.assertEqual((design/"references"/name).read_bytes(),expected)
+            self.assertEqual((bundled/name).read_bytes(),expected)
+        self.assertEqual(json.loads((bundled/"index.json").read_text()),spec)
+        code, status = self.status()
+        self.assertEqual(code,0)
+        self.assertTrue(status["ready"])
+        self.assertFalse(status["recommendations"][0]["available"])
+        self.assertFalse((self.home/".agents/skills/yomiyasu").exists())
+
+    def test_design_user_edits_survive_force_and_uninstall(self):
+        self.assertEqual(self.invoke(),0)
+        path = self.home/".agents/skills/ooui-design/references/cognitive-load.md"
+        edited = path.read_text()+"\nUser-specific guidance\n"
+        path.write_text(edited)
+        self.assertEqual(self.invoke("--force"),1)
+        self.assertEqual(path.read_text(),edited)
+        self.assertEqual(self.invoke("--uninstall"),1)
+        self.assertEqual(path.read_text(),edited)
+
+    def test_custom_root_preserves_existing_design_and_finds_recommended_yomiyasu(self):
+        design = self.home/".agents/skills/ooui-design"
+        design.mkdir(parents=True);(design/"SKILL.md").write_text("User OOUI skill")
+        yomiyasu = self.home/".agents/skills/yomiyasu"
+        yomiyasu.mkdir();(yomiyasu/"SKILL.md").write_text("User writing skill")
+        custom = self.base/"custom skills"
+        args = ("--skills-root",str(custom))
+        self.assertEqual(self.invoke("--force",*args),0)
+        self.assertNotIn("ooui-design",self.manifest()["components"])
+        self.assertFalse((custom/"ooui-design").exists())
+        self.assertEqual((design/"SKILL.md").read_text(),"User OOUI skill")
+        code, status = self.status(*args)
+        self.assertEqual(code,1)  # Unmanaged skill has none of the required references.
+        self.assertTrue(status["recommendations"][0]["available"])
+        self.assertEqual(self.invoke("--uninstall",*args),0)
+        self.assertTrue(design.exists())
+        self.assertTrue(yomiyasu.exists())
+
+    def test_legacy_harness_requires_force_to_add_its_own_guidance(self):
+        self.assertEqual(self.invoke(),0)
+        harness = self.home/".agents/skills/ux-gan-harness"
+        shutil.rmtree(harness/"references/design")
+        shutil.rmtree(self.home/".agents/skills/ooui-design")
+        manifest = self.manifest()
+        del manifest["components"]["ooui-design"]
+        manifest["version"] = "1.0.0"
+        manifest["components"]["ux-gan-harness"].update(version="1.0.0",sha256=mod.tree_hash(harness))
+        mod.write_json(self.home/".codex/ux-stack/manifest.json",manifest)
+        old_hash = mod.tree_hash(harness)
+        self.assertEqual(self.invoke(),0)
+        self.assertTrue((self.home/".agents/skills/ooui-design/SKILL.md").is_file())
+        self.assertEqual(mod.tree_hash(harness),old_hash)
+        self.assertEqual(self.status()[0],1)
+        self.assertEqual(self.invoke("--force"),0)
+        self.assertEqual(self.status()[0],0)
+        self.assertEqual(self.manifest()["components"]["ux-gan-harness"]["version"],"1.1.0")
+        backups = self.home/".codex/ux-stack/backups"
+        self.assertTrue(any(mod.tree_hash(p)==old_hash for p in backups.glob("ux-gan-harness-*")))
+
+    def test_status_reports_missing_empty_and_invalid_utf8_references(self):
+        self.assertEqual(self.invoke(),0)
+        for skill, subdir in (("ooui-design","references"),("ux-gan-harness","references/design")):
+            path = self.home/".agents/skills"/skill/subdir/"cognitive-load.md"
+            original = path.read_bytes()
+            for replacement in (None,b" \n",b"\xff"):
+                with self.subTest(skill=skill,replacement=replacement):
+                    if replacement is None:path.unlink()
+                    else:path.write_bytes(replacement)
+                    code, status = self.status()
+                    self.assertEqual(code,1)
+                    check = next(c for c in status["checks"] if c["name"]==skill+"-cognitive-load.md")
+                    self.assertFalse(check["ok"])
+                    path.write_bytes(original)
+        index = self.home/".agents/skills/ux-gan-harness/references/design/index.json"
+        index.write_text("invalid JSON")
+        self.assertEqual(self.status()[0],1)
+
+    def test_installed_harness_uses_own_bundle_without_sibling_design_skill(self):
+        self.assertEqual(self.invoke(),0)
+        harness = self.home/".agents/skills/ux-gan-harness"
+        module_spec = importlib.util.spec_from_file_location("installed_ux_harness",harness/"scripts/harness.py")
+        installed = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(installed)
+        before = installed.design_guidance()
+        shutil.rmtree(self.home/".agents/skills/ooui-design")
+        self.assertEqual(installed.design_guidance(),before)
+        self.assertEqual(before["version"],"1.1.0")
+        for ref in before["references"]:
+            self.assertTrue(Path(ref["path"]).is_relative_to(harness))
+            self.assertEqual(ref["sha256"],mod.sha(Path(ref["path"])))
+        # A sibling core skill must not mask a broken installed harness bundle.
+        shutil.copytree(SOURCE/"ooui-design",self.home/".agents/skills/ooui-design")
+        (harness/"references/design/review-policy.md").unlink()
+        with self.assertRaises(installed.Blocked):installed.design_guidance()
 
     def test_force_keeps_custom_mcp_options(self):
         self.assertEqual(self.invoke(),0)
@@ -160,6 +273,7 @@ class InstallerTests(unittest.TestCase):
         os.environ["UX_MOCK_FAIL_NPM"]="1"
         self.assertEqual(self.invoke(),1)
         self.assertFalse((self.home/".local/bin/ux-gan-harness").exists())
+        self.assertTrue((self.home/".agents/skills/ooui-design").exists())
         self.assertFalse(self.mock_state()["servers"])
         self.assertNotIn("browser-runtime",self.manifest()["components"])
         os.environ["UX_MOCK_FAIL_NPM"]=""
@@ -185,6 +299,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(self.invoke(),0)
         self.assertEqual(self.invoke("--uninstall"),0)
         self.assertTrue(foreign.exists())
+        self.assertFalse((self.home/".agents/skills/ooui-design").exists())
         self.assertFalse((self.home/".local/bin/ux-gan-harness").exists())
         self.assertFalse(self.mock_state()["servers"])
         self.assertFalse(self.mock_state()["installed"])
@@ -261,10 +376,13 @@ class InstallerTests(unittest.TestCase):
         r=subprocess.run(["bash",str(installer),"--extract",str(dest)],
                          cwd=self.base,capture_output=True,text=True)
         self.assertEqual(r.returncode,0,r.stderr)
-        for rel in ["install_ux_stack.py","sources.json","skill/SKILL.md","skill/agents/openai.yaml",
-                    "skill/references/runtime.md","skill/scripts/gan-harness.sh",
-                    "skill/scripts/harness.py","skill/scripts/visual-browser.cjs",
-                    "browser/package.json","browser/package-lock.json"]:
+        expected = {Path("install_ux_stack.py"),Path("sources.json")}
+        expected.update(p.relative_to(SOURCE) for folder in ("skill","browser","ooui-design")
+                        for p in (SOURCE/folder).rglob("*")
+                        if p.is_file() and "__pycache__" not in p.parts and "node_modules" not in p.parts)
+        actual = {p.relative_to(dest) for p in dest.rglob("*") if p.is_file()}
+        self.assertEqual(expected,actual)
+        for rel in expected:
             self.assertEqual((SOURCE/rel).read_bytes(),(dest/rel).read_bytes())
         r=subprocess.run(["bash",str(installer),"--help"],cwd=self.base,capture_output=True,text=True)
         self.assertEqual(r.returncode,0)

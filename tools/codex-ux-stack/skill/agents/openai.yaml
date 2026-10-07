@@ -1,4 +1,4 @@
 interface:
   display_name: "UI/UX GAN Harness"
-  short_description: "画像からUI/UXをレビューし、主要操作の改善と再確認を自動反復する"
+  short_description: "OOUIと認知負荷の基準で実画面と操作をレビューし、改善と再確認を反復する"
   default_prompt: "$ux-gan-harness インストール済みのgan-harness.shを実際に起動し、このアプリを画像でレビューして、初見ユーザーが迷わず使えるよう修正と再確認を反復してください。"

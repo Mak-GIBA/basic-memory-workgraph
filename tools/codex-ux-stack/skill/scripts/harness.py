@@ -26,7 +26,7 @@ import uuid
 import zlib
 
 HERE = Path(__file__).resolve().parent
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 VIEWPORTS = {"desktop": (1440, 900), "tablet": (768, 1024), "mobile": (390, 844)}
 PERSPECTIVES = ["first_time", "mistake", "hurried", "skips_explanation"]
 STATES = ["normal", "empty", "invalid_input", "cancel", "back", "double_click",
@@ -86,6 +86,37 @@ def runtime_root():
     return Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "ux-stack/runtime"
 
 
+def design_guidance():
+    """Use the harness's own bundle; source checkouts use the distribution's canonical files."""
+    root = HERE.parent / "references/design"
+    try:
+        if root.exists():
+            spec = json.loads((root / "index.json").read_text(encoding="utf-8"))
+        else:
+            distribution = HERE.parents[1]
+            if not (distribution / "install_ux_stack.py").is_file():
+                raise Blocked("Missing bundled design references; update the owned harness with --force")
+            spec = json.loads((distribution / "sources.json").read_text(encoding="utf-8"))["design"]
+            root = distribution / spec["directory"] / "references"
+        required = {"review-policy.md", "ooui-modeling.md", "cognitive-load.md", "quality-gates.md", "sources.md"}
+        if (set(spec["references"]) != required or len(spec["references"]) != len(required)
+                or spec["entry"] != "review-policy.md" or spec["version"] != VERSION):
+            raise Blocked("Invalid design reference index")
+        references = []
+        summary = None
+        for name in spec["references"]:
+            path = root / name
+            body = path.read_text(encoding="utf-8")
+            if not body.strip():
+                raise Blocked("Empty design reference: " + name)
+            references.append({"name": name, "path": str(path.resolve()), "sha256": digest(path)})
+            if name == spec["entry"]:
+                summary = body
+        return {"version": spec["version"], "summary": summary, "references": references}
+    except (OSError, UnicodeError, ValueError, KeyError, TypeError) as e:
+        raise Blocked("Cannot read bundled design references; update the owned harness with --force") from e
+
+
 def capabilities():
     checks = {}
     for name in ("codex", "node", "git"):
@@ -99,6 +130,12 @@ def capabilities():
     root = runtime_root()
     checks["playwright_package"] = (root / "node_modules/playwright/package.json").is_file()
     checks["bridge"] = (HERE / "visual-browser.cjs").is_file()
+    try:
+        design_guidance()
+        checks["design_references"] = True
+    except Blocked as e:
+        checks["design_references"] = False
+        checks["design_error"] = str(e)
     return checks
 
 
@@ -561,7 +598,9 @@ BASE_PROMPT = """You are a role in a screenshot-first UI/UX generator/evaluator 
 Follow repository rules and the user's scope. You are NOT doing human usability testing.
 Write human-facing report fields in Japanese unless the user's brief requests another
 language. Preserve the schema keys and enum values.
-Treat the app as a first-time user with low/moderate IT literacy and little domain knowledge.
+Use the audience in the user's brief; otherwise start with a first-time user with
+low/moderate IT literacy and little domain knowledge. Preserve needed expert workflows.
+Apply the supplied design_guidance summary to each role; read linked details as needed.
 Do not infer meaning that is not in the UI. Choose each next action AFTER looking at a
 screenshot; then interact and look at the resulting screenshot. DOM/accessibility text
 is allowed to locate a control after that visual decision, and code only to investigate
@@ -583,13 +622,15 @@ def role_prompt(role, state, role_dir):
             "screenshots_directory": str(role_dir / "screenshots"),
             "browser_backend": state["backend"], "fallback_reason": state["fallback_reason"],
             "user_brief": state["config"]["brief"], "reference_urls": state["config"]["reference_urls"],
-            "repository_rule_files": state["rules"]}
+            "repository_rule_files": state["rules"], "design_guidance": design_guidance()}
     instructions = {
         "planner": """FIRST open the top page, look at its image, and record your first impression
 before reading application UI source. Identify purpose, next step, primary action,
 unknown terms and hesitations. Then discover screens/flows from actual navigation and
 README/routes. Do not propose new features. Mark the actual core flows required and list
 applicable states (do not assume every flow has a form). Capture all three viewport widths.
+Identify the visible objects, attributes, collection/detail views, contextual actions,
+related-object navigation and retained state. Note justified fixed-target/task-first flows.
 Suggest existing required test commands from repo instructions/manifests; never destructive
 production operations. Ready requires at least one target screenshot, screens and main flows.""",
         "references": """Find about three comparable apps for this purpose using web search and
@@ -598,6 +639,8 @@ real publicly accessible screens or official UI screenshots, with source URL and
 An official screenshot is NOT live app operation. Do not sign up, log in, pay or post.
 For each observed design pattern record why it helps a novice, a focused application to
 the target and what should NOT be copied. If a source is inaccessible record the limitation.
+Compare object/action context, navigation, memory support, information priority and recovery,
+not just styling. A pattern is a proposal for this audience, not proof it improves this app.
 Ready requires at least one genuinely image-observed app, with meaningful patterns and
 an attempted comparison of three candidates. Otherwise return partial/blocked.
 Use official_reference evidence. Do not copy an entire competitor UI into this app.""",
@@ -612,13 +655,25 @@ Carry ALL earlier issues forward. Only mark resolved after
 replaying that operation with fresh image evidence of its outcome. Do not accept a fixer's
 claim as verification. Judge current primary action, step count, decision points and mobile
 density. Compare simplicity to the baseline, with images: regressed=true if fixes cluttered
-the UI, added competing actions or made the main task harder. Good labels may replace vague
+the UI, hid required information, increased searching/backtracking/re-entry, lost state,
+added competing actions or made the main task harder. Element/step counts alone do not
+establish regression. Good labels may replace vague
 icons; prefer removing/merging/reordering over adding permanent help/panels/buttons.
+In screen_reviews.information/interaction describe objects, views, action context and
+justified exceptions. In friction identify remembering, searching, comparing, mapping,
+guessing and backtracking burdens with actual flow evidence. Record the representative
+flow and counting method in simplicity.change_rationale; link step_count/decision_points
+to observed operations, and describe re-entry, recovery and hidden required information.
+Check functional completeness, display bugs and actual outcomes independently of OOUI.
 Blocking friction must represent obstacles or meaningful uncertainty in a main task.
 Separate open findings from unverified ones, and report limitations instead of guessing.""",
         "fixer": """Fix the selected highest-impact root-cause groups, at most three groups.
 Reproduce the image-grounded findings first. Preserve other working-tree edits and existing
 features. Prefer consolidation, removal of duplication, information order and precise copy.
+Use object/context and cognitive-load guidance for each selected issue. Preserve required
+information, appropriate confirmations, expert actions and drafts; do not create unnecessary
+object pages or force every workflow into a list/detail layout. For Japanese UI drafts,
+recommend available yomiyasu while preserving meaning and short labels; never install it.
 For every added visible control/explanation, explain why a simpler change is insufficient.
 Do not expand scope or add unsolicited features. Make the smallest coherent fix, run
 appropriate existing checks and report every changed source file relative to project.
@@ -841,6 +896,8 @@ def publish(state, run_dir):
             + " / ".join(f"{s} {stats[s]}件" for s in SEVERITIES) + "（未解消件数）。",
             f"発見した対象は{len(plan['screens'])}画面、{len(plan['flows'])}主要フロー。未確認はcoverageで区別。",
             "AIが初見ユーザーの視点で実画面を評価した結果。人間のユーザーテストは未実施。", ""]
+    text += ["OOUIの構造、認知負荷、機能の充足、表示、実操作を分けて確認します。"
+             "適用した共通基準・参照資料と版は各ロールのprompt.txtに保存しています。", ""]
     for k, label in [("purpose", "何のサービスか"), ("next_action", "最初の操作"),
                      ("primary_cta", "主操作"), ("unknown_terms", "分からない言葉"),
                      ("hesitations", "初見で迷った点")]:
@@ -929,7 +986,10 @@ def publish(state, run_dir):
             fixes += ["初回ベースライン後に発見されたため、変更前は該当反復の記録を参照。", ""]
         fixes += ["変更後（別の評価実行で再確認）:", "",
                   evidence_md(issue["verified_after_ids"], ev, fix_path), ""]
-    fixes += ["## 画面の簡潔さ", "", json.dumps(audit["simplicity"], ensure_ascii=False), "",
+    fixes += ["## 画面の簡潔さ", "",
+              "情報の発見、判断、状態保持、往復・再入力と表示密度を、同じフローの前後で比較します。"
+              "要素数や操作数だけで良否を決めず、AIの所見と測定値を区別します。", "",
+              json.dumps(audit["simplicity"], ensure_ascii=False), "",
               "## 検証", "", "| Command | Result |", "|---|---|"]
     fixes += [f"| {cell(t['command'])} | {'PASS' if t['passed'] else 'FAIL'} |"
               for t in state.get("tests", [])]
@@ -1142,6 +1202,8 @@ def execution(args):
         checks = capabilities()
         if not checks["codex_exec"]:
             raise Blocked("Codex CLI with structured exec output is required")
+        if not checks["design_references"]:
+            raise Blocked(checks["design_error"])
         sandbox_smoke(project)
         if "backend" not in state:
             state["backend"], state["fallback_reason"] = select_backend(state["config"])

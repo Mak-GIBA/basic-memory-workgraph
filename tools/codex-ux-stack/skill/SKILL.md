@@ -1,11 +1,19 @@
 ---
 name: ux-gan-harness
-description: Run the installed Bash harness to review a rendered web app with screenshot evidence, compare similar apps, and optionally iterate UX fixes. Use for visual UI/UX audits or improving novice user flows. Review-only requests use audit; fixing requires a request to improve or fix the app.
+description: Run the installed Bash harness to review a rendered web app with screenshots and actual operations, using OOUI and cognitive-load guidance, compare similar apps, and optionally iterate UX fixes. Review-only requests use audit; fixing requires a request to improve or fix the app.
 ---
 
 # UI/UX GAN Harness
 
 Use the real [gan-harness.sh](scripts/gan-harness.sh). Do not replace its execution with a prose review or invent a successful run.
+
+The harness supplies the same bundled OOUI and cognitive-load review policy to its planner,
+reference researcher, fixer and independent reviewer. Follow the audience in the user's brief.
+Evaluate object/action context, retained state and unnecessary remembering/searching/backtracking,
+as well as functional completeness, visual defects and actual outcomes. Fixed-target procedures,
+search, bulk actions and necessary confirmations are judged in context. Element counts alone
+do not establish improvement or regression. Available yomiyasu is recommended for Japanese UI
+drafts; preserve meaning and short labels, and do not install it during a run.
 
 1. Read the target repository's rules. Discover its start command, test commands and URL from the supplied context, README, manifests and running servers. This setup discovery is allowed before screenshots; do not infer UX findings from UI code.
 2. Choose `audit` when the user asks for review only, forbids code edits, or has not requested fixes. Choose `run` when fixes are requested. A request to install or author this harness does not authorize fixing an unrelated app.

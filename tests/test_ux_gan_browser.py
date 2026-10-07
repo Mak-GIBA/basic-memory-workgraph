@@ -23,6 +23,51 @@ error.textContent='';result.textContent='保存しました: '+title.value};
 cancel.onclick=()=>{if(confirm('入力内容を破棄しますか？')){title.value='';result.textContent='取り消しました'}};</script>
 </html>"""
 
+# A frontend-only fixture: document collections, contextual actions and retained
+# navigation state. It tests browser evidence/operations, not skill design quality.
+DOCUMENTS="""<!doctype html><html lang="ja"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>文書管理テスト</title>
+<style>body{font-family:sans-serif;margin:24px auto;padding:16px;max-width:800px}
+button,select,textarea{font-size:16px;padding:10px}li{margin:16px 0}textarea{display:block;box-sizing:border-box;width:100%;min-height:120px}
+[hidden]{display:none}label{display:inline-block;margin:8px 0}</style>
+<section id="collection"><h1>文書</h1><label for="kind">文書の種類</label>
+<select id="kind"><option value="all">すべて</option><option value="pdf">PDF</option></select>
+<ul id="documents"></ul><div id="bulk" hidden><span id="count"></span>
+<button id="archive">選択した文書をアーカイブ</button></div></section>
+<section id="detail" hidden><a href="#">文書一覧に戻る</a><h1 id="name"></h1>
+<label for="note">文書のメモ</label><textarea id="note"></textarea><button id="save-note">メモを保存</button>
+<h2>関連文書</h2><a id="related"></a></section><p id="result" role="status"></p>
+<script>
+const docs=[{id:'a',name:'設計仕様',kind:'pdf',related:'b'},
+{id:'b',name:'利用規約',kind:'pdf',related:'a'},{id:'c',name:'作業メモ',kind:'note',related:'a'}];
+const selected=new Set(),drafts=new Map(),archived=new Set();
+const get=id=>document.getElementById(id);
+function render(){
+ const id=location.hash.slice(1),doc=docs.find(d=>d.id===id);
+ get('collection').hidden=Boolean(doc);get('detail').hidden=!doc;
+ if(doc){get('name').textContent=doc.name;get('note').value=drafts.get(id)||'';
+ const related=docs.find(d=>d.id===doc.related);get('related').href='#'+related.id;
+ get('related').textContent=related.name;return;}
+ get('documents').replaceChildren();
+ for(const d of docs.filter(d=>!archived.has(d.id)&&(get('kind').value==='all'||d.kind===get('kind').value))){
+ const li=document.createElement('li'),label=document.createElement('label'),box=document.createElement('input'),link=document.createElement('a');
+ box.type='checkbox';box.id='select-'+d.id;box.checked=selected.has(d.id);
+ box.onchange=()=>{box.checked?selected.add(d.id):selected.delete(d.id);updateBulk()};
+ label.append(box,document.createTextNode(d.name+'を選択'));link.href='#'+d.id;link.id='open-'+d.id;link.textContent=d.name;
+ li.append(label,document.createTextNode(' · '),link);get('documents').append(li);}
+ if(!get('documents').children.length){const li=document.createElement('li');li.textContent='該当する文書はありません';get('documents').append(li)}
+ updateBulk();
+}
+function updateBulk(){get('bulk').hidden=!selected.size;get('count').textContent=selected.size+'件を選択中'}
+get('kind').onchange=render;
+get('note').oninput=()=>drafts.set(location.hash.slice(1),get('note').value);
+get('save-note').onclick=()=>get('result').textContent=get('name').textContent+'のメモを保存しました: '+get('note').value;
+get('archive').onclick=()=>{if(confirm(selected.size+'件の文書をアーカイブしますか？')){
+ const count=selected.size;for(const id of selected)archived.add(id);selected.clear();render();
+ get('result').textContent=count+'件の文書をアーカイブしました';}};
+addEventListener('hashchange',render);render();
+</script></html>"""
+
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
@@ -95,6 +140,48 @@ class BrowserTests(unittest.TestCase):
         self.assertTrue(result["isError"])
         self.assertIn("view-only",result["content"][0]["text"])
         self.tool("ux_capture")
+
+    def test_object_navigation_retains_filter_selection_and_draft_then_bulk_operation(self):
+        (self.base/"documents.html").write_text(DOCUMENTS)
+        self.tool("ux_navigate",url=self.url+"/documents.html")
+        self.tool("ux_select",selector="#kind",value="pdf")
+        self.tool("ux_click",selector="#select-a")
+        self.tool("ux_click",selector="#select-b")
+        self.tool("ux_click",selector="#open-a")
+        self.tool("ux_fill",selector="#note",value="公開前に確認する下書き")
+        self.tool("ux_click",selector="#related")
+        related = json.loads(self.tool("ux_inspect")["content"][0]["text"])
+        self.assertTrue(related["url"].endswith("#b"))
+        self.tool("ux_back")
+        self.tool("ux_click",selector="#save-note")
+        saved = json.loads(self.tool("ux_inspect")["content"][0]["text"])
+        self.assertIn("設計仕様のメモを保存しました: 公開前に確認する下書き",saved["visible_text"])
+        self.tool("ux_back")
+        collection = json.loads(self.tool("ux_inspect")["content"][0]["text"])
+        self.assertIn("2件を選択中",collection["visible_text"])
+        self.assertNotIn("作業メモ",collection["visible_text"])
+        self.tool("ux_resize",width=768,height=1024)
+        pending = self.tool("ux_click",selector="#archive")
+        self.assertIn("2件の文書",json.loads(pending["content"][0]["text"])["pending_dialog"])
+        self.tool("ux_dialog",accept=False)
+        cancelled = json.loads(self.tool("ux_inspect")["content"][0]["text"])
+        self.assertIn("2件を選択中",cancelled["visible_text"])
+        self.tool("ux_click",selector="#archive")
+        self.tool("ux_dialog",accept=True)
+        mobile = self.tool("ux_resize",width=390,height=844)
+        meta = json.loads(mobile["content"][0]["text"])
+        result = json.loads(self.tool("ux_inspect")["content"][0]["text"])
+        self.assertEqual(result["title"],"文書管理テスト")
+        self.assertIn("該当する文書はありません",result["visible_text"])
+        self.assertIn("2件の文書をアーカイブしました",result["visible_text"])
+        self.assertFalse(result["console"])
+        self.assertEqual(meta["frames"][-1]["viewport"],{"width":390,"height":844})
+        receipts = [json.loads(s) for s in (self.out/"browser-receipts.jsonl").read_text().splitlines()]
+        frames = [r for r in receipts if r["kind"]=="frame"]
+        self.assertEqual({(r["viewport"]["width"],r["viewport"]["height"]) for r in frames},
+                         {(1440,900),(768,1024),(390,844)})
+        for frame in frames:
+            self.assertEqual(hashlib.sha256(Path(frame["path"]).read_bytes()).hexdigest(),frame["sha256"])
 
     def test_confirm_can_be_cancelled_then_accepted_without_blocking(self):
         self.tool("ux_navigate",url=self.url)

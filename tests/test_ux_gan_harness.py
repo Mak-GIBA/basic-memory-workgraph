@@ -5,6 +5,7 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import struct
 import subprocess
 import sys
@@ -166,6 +167,44 @@ class HarnessTests(unittest.TestCase):
         self.assertIn("変更後", report)
         self.assertGreaterEqual(report.count("!["), 2)
         self.assertTrue((self.project/"docs/ui-ux-reference-apps.md").is_file())
+        guidance = h.design_guidance()
+        prompts = list(folder.glob("*-*/prompt.txt"))
+        self.assertEqual({p.parent.name.split("-",1)[1] for p in prompts},
+                         {"planner","references","reviewer","fixer"})
+        for prompt in prompts:
+            inputs = json.loads(prompt.read_text().split("\nINPUT:\n",1)[1])
+            self.assertEqual(inputs["design_guidance"],guidance)
+            for ref in inputs["design_guidance"]["references"]:
+                self.assertEqual(ref["sha256"],h.digest(Path(ref["path"])))
+
+    def test_missing_guidance_blocks_before_model_and_fails_doctor(self):
+        scripts = self.base/"installed-harness/scripts"
+        scripts.mkdir(parents=True)
+        with patch.object(h,"HERE",scripts):
+            self.assertEqual(self.invoke(),1)
+            self.assertFalse(h.capabilities()["design_references"])
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(h.main(["doctor","--project",str(self.project)]),1)
+        state, folder = self.state()
+        self.assertEqual(state["status"],"blocked")
+        self.assertFalse(list(folder.glob("*-*/prompt.txt")))
+
+    def test_invalid_guidance_index_and_empty_reference_are_rejected(self):
+        scripts = self.base/"installed-harness/scripts"
+        scripts.mkdir(parents=True)
+        bundle = scripts.parent/"references/design"
+        shutil.copytree(ROOT/"tools/codex-ux-stack/ooui-design/references",bundle)
+        spec = json.loads((ROOT/"tools/codex-ux-stack/sources.json").read_text())["design"]
+        for key, value in (("version","1.0.0"),("entry","ooui-modeling.md"),
+                           ("references",spec["references"]+["../SKILL.md"])):
+            with self.subTest(key=key):
+                (bundle/"index.json").write_text(json.dumps({**spec,key:value}))
+                with patch.object(h,"HERE",scripts):
+                    with self.assertRaises(h.Blocked):h.design_guidance()
+        (bundle/"index.json").write_text(json.dumps(spec))
+        (bundle/"cognitive-load.md").write_text(" \n")
+        with patch.object(h,"HERE",scripts):
+            with self.assertRaises(h.Blocked):h.design_guidance()
 
     def test_audit_preserves_source_and_archives_existing_report_images(self):
         docs=self.project/"docs"
