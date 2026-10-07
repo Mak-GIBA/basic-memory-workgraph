@@ -64,6 +64,7 @@ AIによる評価と人間のユーザーテストは別です。[検証範囲�
 
 [エムニの記事](https://zenn.dev/emuni/articles/ooui-agent-skill)を手順と検証範囲、
 [スターフェスティバルの記事](https://zenn.dev/stafes_blog/articles/shota1995m-ooui)を使い分けの参考にし、
-[OOUIの一次資料](https://www.sociomedia.co.jp/7279)と、提供された[UX Tips.md](../../UX%20Tips.md)も参照しています。
+[OOUIの一次資料](https://www.sociomedia.co.jp/7279)と、提供されたUI/UX設計Tipsも参照しています。
+29項目の設計・確認・例外は[認知負荷のTips](../../tools/codex-ux-stack/ooui-design/references/cognitive-load.md)へ整理しています。
 独自に整理した[参照資料と出典](../../tools/codex-ux-stack/ooui-design/references/sources.md)を同梱しているため、
 インストールや通常の利用に記事への接続は必要ありません。OOUIの構造と、機能・表示・操作の完成度は別々に確認します。

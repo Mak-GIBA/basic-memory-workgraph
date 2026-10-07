@@ -19,7 +19,7 @@ import urllib.request
 import uuid
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 PLUGINS = ["product-design@openai-curated-remote", "build-web-apps@openai-curated-remote"]
 
 

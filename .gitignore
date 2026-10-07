@@ -2,3 +2,4 @@ __pycache__/
 .venv/
 *.py[cod]
 /.vscode/
+/UX Tips.md

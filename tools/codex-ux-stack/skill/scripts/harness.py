@@ -26,7 +26,7 @@ import uuid
 import zlib
 
 HERE = Path(__file__).resolve().parent
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 VIEWPORTS = {"desktop": (1440, 900), "tablet": (768, 1024), "mobile": (390, 844)}
 PERSPECTIVES = ["first_time", "mistake", "hurried", "skips_explanation"]
 STATES = ["normal", "empty", "invalid_input", "cancel", "back", "double_click",

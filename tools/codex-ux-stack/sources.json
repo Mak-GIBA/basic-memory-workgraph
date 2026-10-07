@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "design": {
     "directory": "ooui-design",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "entry": "review-policy.md",
     "references": [
       "review-policy.md",
