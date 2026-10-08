@@ -47,7 +47,7 @@ $upstream-existing このリポジトリの予約管理機能を整理してく�
 現状の整理は`$upstream-existing`、要件の妥当性・曖昧さ・評価方法の点検は`$upstream-check`から始めます。
 処理結果・受入条件・品質契約を変更する改善は`$upstream-change`、外部挙動を保つ内部設計の改善は`$upstream-refactor`へ進めます。
 
-Workbench 2.0.0のSkillには、方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合にDesign Researchを使う手順があります。
+Workbench 2.0.1のSkillには、方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合にDesign Researchを使う手順があります。
 使用理由と`research/audit`を明示し、導入済みのハーネスを実行します。
 単純な文書修正には研究を一律要求せず、未導入・旧版・実行不能では必要な研究を未実行として残します。
 Design Researchを自動導入したり、アプリを自動修正したりする手順は含めていません。

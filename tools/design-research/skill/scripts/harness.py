@@ -30,7 +30,7 @@ from runtime import (Blocked, Cancelled, assert_source, atomic_json, capture,
                      test_environment, sanitize_tree)
 
 HERE = Path(__file__).resolve().parent
-VERSION = "2.0.0"
+VERSION = "2.0.1"
 SEVERITIES = ["Critical", "High", "Medium", "Low"]
 ID = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}")
 
@@ -138,7 +138,12 @@ Compare contradictory findings and applicability; record exact source/page/secti
 Abstracts/snippets are insufficient. Preprint/publication versions of one study count once.
 If access/budget prevents adequate reading, explain the gap and keep affected conclusions
 provisional/deferred. Follow skill_directory/references/protocol.md within existing limits.
-Use the user's language for findings and concise explanations. Return the requested JSON.
+Use the user's language for findings and concise explanations. For Japanese research, review
+and verification report drafts, reading the available yomiyasu skill and polishing narrative
+fields before returning JSON is recommended. Preserve claims, terms, IDs, numbers, conditions,
+outcomes, evidence links, quotations and certainty. Keep schema keys/enums, receipts, code and
+raw records unchanged. If unavailable, continue writing checks without installing the skill.
+Do not rewrite published reports or archived snapshots. Return the requested JSON.
 """
 
 

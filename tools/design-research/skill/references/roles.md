@@ -3,6 +3,10 @@
 Use these as perspectives in one session or as prompts for native subagents if the host actually supports them.
 They are not executable agent registrations. Do not assume parallelism, independent runs, or improved accuracy without evidence.
 Share the same user goal, hard constraints, allowed tools, privacy rules, evaluation criteria, and budget with every role.
+For Japanese report drafts, reading the available yomiyasu skill and polishing narrative fields
+before returning structured results is recommended. Preserve claims, terms, IDs, numbers,
+conditions, outcomes, evidence, quotations and certainty, along with keys/enums and code.
+If unavailable, continue writing checks without installing it. Preserve generated reports and archives.
 Anchor every role in the project's main purpose, the core logic contributing to it and the outcome being improved. Include relevant backend behavior and hard constraints. For method/accuracy comparisons follow [protocol.md](protocol.md): read multiple independent primary works in depth, compare their conditions/limitations and cite decisive passages.
 
 ## Researcher / candidate designer

@@ -26,7 +26,7 @@ import uuid
 import zlib
 
 HERE = Path(__file__).resolve().parent
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 VIEWPORTS = {"desktop": (1440, 900), "tablet": (768, 1024), "mobile": (390, 844)}
 PERSPECTIVES = ["first_time", "mistake", "hurried", "skips_explanation"]
 STATES = ["normal", "empty", "invalid_input", "cancel", "back", "double_click",
@@ -598,9 +598,18 @@ BASE_PROMPT = """You are a role in a screenshot-first UI/UX generator/evaluator 
 Follow repository rules and the user's scope. You are NOT doing human usability testing.
 Write human-facing report fields in Japanese unless the user's brief requests another
 language. Preserve the schema keys and enum values.
+For Japanese report drafts, reading the available yomiyasu skill and polishing the narrative
+fields before returning JSON is recommended. Preserve claims, terms, IDs, numbers, conditions,
+outcomes, evidence links, quotations and certainty. Keep keys/enums and raw records unchanged.
+If the skill is unavailable, continue writing checks; do not install it or edit published reports.
 Use the audience in the user's brief; otherwise start with a first-time user with
 low/moderate IT literacy and little domain knowledge. Preserve needed expert workflows.
 Apply the supplied design_guidance summary to each role; read linked details as needed.
+Follow its Basic Memory recall procedure for relevant past feedback using available read-only
+tools. Check the original context and exceptions against this brief, reuse already-read notes,
+and cite applied notes in existing findings. Current screenshots and operations establish
+current issues/resolutions. Unavailable Memory or no matching notes does not block this role.
+Do not write Memory, create projects or change its settings.
 Do not infer meaning that is not in the UI. Choose each next action AFTER looking at a
 screenshot; then interact and look at the resulting screenshot. DOM/accessibility text
 is allowed to locate a control after that visual decision, and code only to investigate

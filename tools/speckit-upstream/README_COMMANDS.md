@@ -1,4 +1,4 @@
-# SpecKit Upstream Workbench 2.0.0
+# SpecKit Upstream Workbench 2.0.1
 
 単一のinstall_speckit_upstream.shで独自CLI・資材・Skillを導入します。SpecKit本体は同梱せず、既存CLIを再利用します。
 必要な場合に取得する公式CLIの固定版はspecify-cli==1.0.8です。
@@ -23,6 +23,10 @@ Python 3.11以上が必要です。通信せず独自資材だけ導入する場
 
 新規の正本は要件・設計・検証の3文書。内容、内部記録、旧形式の扱いは[ARTIFACTS.md](assets/references/ARTIFACTS.md)を参照してください。
 必要なResearch結果も1本のreport.mdにまとめます。詳細な[見直し手順](assets/references/REASSESSMENT.md)と[項目・節の形式](assets/references/TRACE_FORMAT.md)を備えています。
+
+日本語の要件・設計・検証文書、研究・レビュー報告には、利用可能なyomiyasuで下書きを一度推敲することを推奨します。
+主張、数値、ID、条件、確認結果、根拠と断定の強さを保ち、レビュー・承認前に仕上げます。
+未導入でも執筆を続け、承認済み本文を変える場合は再レビューします。固定済み資料や生ログは保持します。
 
 ## 入口と確認
 

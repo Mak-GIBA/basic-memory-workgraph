@@ -9,7 +9,7 @@ import argparse, base64, hashlib, io, os, sys, tempfile, textwrap, zipfile
 from pathlib import Path
 
 HEADER = r'''#!/usr/bin/env bash
-# SpecKit Upstream Workbench 2.0.0 — single-file installer / Linux, WSL2
+# SpecKit Upstream Workbench 2.0.1 — single-file installer / Linux, WSL2
 # Add THIS FILE ONLY to your repository. No sibling ZIP or scripts are required.
 # Custom companion to official SpecKit. Does not alter ECC, Basic Memory, hooks,
 # Codex config.toml, AGENTS.md, app sources, databases, or Git remotes.
@@ -80,7 +80,7 @@ try:
     if not {'install.py','swb.py','README_COMMANDS.md'}<=names:fail('incomplete embedded resources')
     args=sys.argv[2:]
     if '--help' in args or '-h' in args:
-        print('Single-file global SpecKit upstream installer 2.0.0\n'
+        print('Single-file global SpecKit upstream installer 2.0.1\n'
               '  --dry-run (default)          show installation plan\n'
               '  --apply                     apply global installation\n'
               '  --update                    update unmodified owned companion files only\n'

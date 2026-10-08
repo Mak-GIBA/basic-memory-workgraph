@@ -12,6 +12,7 @@ from .common import WorkbenchError, atomic_write, inside, json_text, load_projec
 from .layout import COMPACT, DOCUMENTS, compact, destination
 from .trace import inspect, parse_file
 from .approval_core import DEPENDENCY_LINKS, load_events
+from . import VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 LINK = re.compile(r'(\]\()([^\s)]+)([^)]*\))')
@@ -171,7 +172,7 @@ def migrate(root: Path, apply: bool = False, include: list[str] | None = None) -
             raise WorkbenchError('統合先が2MBを超えます。対象を整理してから移行してください: '+target)
     # Preserve custom/official docs. Update their links only when explicitly included.
     preserved = sorted(set(result['documents'])-sources-set(records)-derived)
-    newconfig = dict(config, document_layout=COMPACT, workbench_version='2.0.0')
+    newconfig = dict(config, document_layout=COMPACT, workbench_version=VERSION)
     newconfig['required_docs'] = list(destinations.values())+[p for p in config.get('required_docs', []) if p not in sources and p not in known]
     newconfig['extra_docs'] = list(dict.fromkeys(mapping[p].split('#')[0] if p in sources else p for p in config.get('extra_docs', [])))
     moved = {r['id'] for r in result['items'] if r['_file'] in sources}

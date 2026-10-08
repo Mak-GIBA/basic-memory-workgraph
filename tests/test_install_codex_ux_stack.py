@@ -128,7 +128,7 @@ class InstallerTests(unittest.TestCase):
         r=subprocess.run(["bash",str(self.home/".local/bin/ux-gan-harness"),"--version"],
                          cwd=self.base,capture_output=True,text=True)
         self.assertEqual(r.returncode,0,r.stderr)
-        self.assertEqual(r.stdout.strip(),"1.1.1")
+        self.assertEqual(r.stdout.strip(),mod.VERSION)
 
     def test_standard_design_and_harness_use_same_references_without_optional_skills(self):
         self.assertEqual(self.invoke(),0)
@@ -196,7 +196,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(self.status()[0],1)
         self.assertEqual(self.invoke("--force"),0)
         self.assertEqual(self.status()[0],0)
-        self.assertEqual(self.manifest()["components"]["ux-gan-harness"]["version"],"1.1.1")
+        self.assertEqual(self.manifest()["components"]["ux-gan-harness"]["version"],mod.VERSION)
         backups = self.home/".codex/ux-stack/backups"
         self.assertTrue(any(mod.tree_hash(p)==old_hash for p in backups.glob("ux-gan-harness-*")))
 
@@ -227,7 +227,7 @@ class InstallerTests(unittest.TestCase):
         before = installed.design_guidance()
         shutil.rmtree(self.home/".agents/skills/ooui-design")
         self.assertEqual(installed.design_guidance(),before)
-        self.assertEqual(before["version"],"1.1.1")
+        self.assertEqual(before["version"],mod.VERSION)
         for ref in before["references"]:
             self.assertTrue(Path(ref["path"]).is_relative_to(harness))
             self.assertEqual(ref["sha256"],mod.sha(Path(ref["path"])))

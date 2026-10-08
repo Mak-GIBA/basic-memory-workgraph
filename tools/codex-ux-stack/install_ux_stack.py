@@ -19,7 +19,7 @@ import urllib.request
 import uuid
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 PLUGINS = ["product-design@openai-curated-remote", "build-web-apps@openai-curated-remote"]
 
 
@@ -452,8 +452,8 @@ class Installer:
             results.append(item)
         yomiyasu = (self.locate_skill("yomiyasu") / "SKILL.md").is_file()
         recommendation = {"name": "yomiyasu", "available": yomiyasu,
-                          "message": "日本語UI文言の確認に利用を推奨します。" if yomiyasu else
-                          "日本語UIにはyomiyasuの利用を推奨します。別配布のinstall_codex_yomiyasu.sh --applyで導入できます。"}
+                          "message": "日本語UI文言と設計・レビュー・改善レポートの推敲に利用を推奨します。" if yomiyasu else
+                          "日本語UI文言とレポートにはyomiyasuの利用を推奨します。別配布のinstall_codex_yomiyasu.sh --applyで導入できます。"}
         print(json.dumps({"version": VERSION, "ready": all(r["ok"] for r in results),
                           "checks": results, "recommendations": [recommendation]}, ensure_ascii=False, indent=2))
         return 0 if all(r["ok"] for r in results) else 1
@@ -531,7 +531,8 @@ class Installer:
         if not self.args.dry_run:
             say("USE", "$ooui-design で対象・画面・操作を設計し、既存のデザイン・実装スキルへ渡してください。")
             say("REVIEW", "$ux-gan-harness で実画面と操作を再確認できます。実在するgan-harness.shを実行してください。")
-            say("COPY", "日本語UIの文言にはyomiyasuの利用を推奨します。未導入なら別配布のinstall_codex_yomiyasu.sh --applyを利用できます。")
+            say("COPY", "日本語UI文言とレポートにはyomiyasuの利用を推奨します。未導入なら別配布のinstall_codex_yomiyasu.sh --applyを利用できます。")
+            say("MEMORY", "設計・レビューでは、利用可能なBasic Memoryから関連する過去の指摘を検索して参照します。")
             say("CLI", str(self.bin_dir / "ux-gan-harness") + " doctor")
             if str(self.bin_dir) not in os.environ.get("PATH", "").split(os.pathsep):
                 say("PATH", "The launcher is outside PATH; use its absolute path or add the bin directory.")

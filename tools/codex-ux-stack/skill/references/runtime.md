@@ -20,6 +20,15 @@ distribution. `doctor` and execution preflight reject missing, empty or invalid 
 Each role's `prompt.txt` includes the policy summary, version, reference paths and hashes;
 read the detailed references only when relevant. Role result schemas and CLI flags are unchanged.
 
+Version 1.1.2 adds read-only recall of related past feedback from the existing Basic Memory
+project to that shared policy. Each role checks the note's original context and exceptions
+against the current brief; current screenshots and operations still establish findings and
+resolution. Already-read supplied notes may be reused. Missing Memory, failed lookup or no
+matching notes does not block execution, and the harness does not install/configure/write Memory.
+Reading available yomiyasu and polishing Japanese UI drafts and report narrative fields before
+returning JSON is recommended. Preserve evidence, IDs, numbers, conditions, outcomes, keys/enums
+and certainty; published reports and archived results remain parent-owned generated artifacts.
+
 OOUI observations go into screen information/interaction; remembering, searching, comparing,
 guessing, backtracking and re-entry go into flow friction and simplicity. The representative
 flow and counting method belong in simplicity's rationale. Required information, appropriate

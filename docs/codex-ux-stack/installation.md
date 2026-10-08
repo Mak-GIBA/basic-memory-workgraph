@@ -44,11 +44,11 @@ bash install_codex_ux_stack.sh --doctor
 
 | 対象 | 取得・版 | 新規の保存先 |
 |---|---|---|
-| ooui-design・参照資料 | 配布物1.1.1。OOUIと認知負荷の基準を同梱 | ~/.agents/skills/ooui-design/ |
+| ooui-design・参照資料 | 配布物1.1.2。OOUIと認知負荷の基準を同梱 | ~/.agents/skills/ooui-design/ |
 | Product Design / Build Web Apps | openai-curated-remoteのCodex管理版。実際の版を記録 | Codexのplugin環境 |
 | web-design-guidelines | vercel-labs/agent-skillsのコミット063bee94c3f4df8453406c830b0a7df0f2860278 | ~/.agents/skills/web-design-guidelines/ |
 | ux-critique | Thecsiz/ux-critiqueのコミット3da293cafb639195bf71797590081d4ffb0045ba | ~/.agents/skills/ux-critique/ |
-| ハーネス・専用Skill・共通設計基準 | 配布物1.1.1 | ~/.agents/skills/ux-gan-harness/ |
+| ハーネス・専用Skill・共通設計基準 | 配布物1.1.2 | ~/.agents/skills/ux-gan-harness/ |
 | ブラウザー環境 | Playwright 1.63.0 / Playwright MCP 0.0.83、埋め込みnpm lockfile | CODEX_HOME/ux-stack/runtime/ |
 | 起動コマンド | ハーネスのBashへ渡すラッパー | ~/.local/bin/ux-gan-harness |
 | 導入記録・バックアップ | ハッシュ、版、処理結果、旧資材 | CODEX_HOME/ux-stack/ |
@@ -63,9 +63,11 @@ skills@latestへの依存は外しました。取得するSkillの正本は[sour
 
 OOUIと認知負荷の参照資料は、同じ正本からooui-designとハーネスへ配置します。
 ハーネスには自身の資料を同梱するため、別のSkill配置先には依存しません。
-yomiyasuは日本語UI文言の確認に利用を推奨します。導入する場合は
+yomiyasuは日本語UI文言と設計・レビュー・改善レポートの推敲に利用を推奨します。導入する場合は
 [既存の別インストーラー](../codex-yomiyasu/installation.md)を使ってください。
 status / doctorには利用可能かを表示しますが、未導入でもUX Stackの導入失敗にはしません。
+Basic Memoryが利用可能なら、スキルは既存の設定に従って関連する過去の指摘を参照します。
+参照は読み取りのみで、未導入・参照不能でも作業を続けます。UX StackからMemoryの導入・設定変更は行いません。
 
 ## 更新・確認
 

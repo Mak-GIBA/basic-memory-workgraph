@@ -20,7 +20,7 @@ import zlib
 
 NAME = "design-research"
 OWNER = "basic-memory-workgraph/design-research"
-VERSION = "2.0.0"
+VERSION = "2.0.1"
 MANIFEST = ".design-research-install.json"
 PAYLOAD_MARKER = b"\n__DESIGN_RESEARCH_PAYLOAD__\n"
 PAYLOAD_SHA256 = "__PAYLOAD_SHA256__"

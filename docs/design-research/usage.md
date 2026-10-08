@@ -2,6 +2,10 @@
 
 [docs一覧](../README.md) · [概要](README.md) · [導入手順](installation.md) · [検証結果](validation.md)
 
+日本語の調査・レビュー・検証レポートには、利用可能なyomiyasuで下書きを一度推敲することを推奨します。
+主張、専門用語、数値、ID、条件、確認結果、根拠と断定の強さを保ちます。未導入でも執筆を続けます。
+子ロールは説明欄を整えてからJSONとして返します。生成済みレポート、台帳、生ログ、過去の保存版は保持します。
+
 ## 調査の中心はコアロジックの改善
 
 最初に、プロジェクトの主要な目的、目的に貢献するコアロジック、改善する指標、維持する制約を確認します。
@@ -49,7 +53,7 @@ $design-research
 $design-research
 /path/to/project の抽出ロジックを、gan-harness.sh のauditモードで実際に検証して。
 主要な目的と期待する出力を確認し、代表的な入力と失敗ケースで現行の精度・誤りを確かめて。
-評価条件、再現手順、結果、改善案をreview.mdへ残して。コードは変更しないで。
+評価条件、再現手順、結果、改善案をreport.mdへ残して。コードは変更しないで。
 ```
 
 関連するバックエンドをレビューする場合は、次の依頼例を使えます。
@@ -58,7 +62,7 @@ $design-research
 $design-research
 /path/to/project のAPIと保存処理を、gan-harness.sh のauditモードで実際に検証して。
 通常入力、不正入力、二重送信、失敗後の復旧を、存在する機能に絞って確認して。
-本番データを使わず、根拠付きのreview.mdを作って。コードは変更しないで。
+本番データを使わず、根拠付きのreport.mdを作って。コードは変更しないで。
 ```
 
 問題の修正まで進める場合は、次のように依頼します。
@@ -87,7 +91,7 @@ Skill自身の配置先を使うため、新規の `.agents/skills` と既存の
 
 ## SpecKitの要件・設計見直しと組み合わせる
 
-SpecKit Upstream Workbench 2.0.0の`existing/check/change/refactor/bug` Skillには、
+SpecKit Upstream Workbench 2.0.1の`existing/check/change/refactor/bug` Skillには、
 方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合に、Design Researchの利用を明示して実行する手順があります。
 要件の必要性、評価方法、処理精度、内部設計、不具合、条件変更の使い分けは[ユースケース別ガイド](../speckit-upstream/reassessment.md)を参照してください。
 各キットは別途導入します。Design Researchを単独で使う場合、SpecKitの導入や文書は必須ではありません。

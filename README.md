@@ -24,7 +24,7 @@ GitHub Project DirectorでIssueや進捗を整理し、Workgraphで他の仕事�
 これは利用例であり、インストーラー同士を自動連携する仕組みではありません。
 Design Researchはコアロジックの方式選定・小さな実験と、依頼された改善・再検証を行えます。関連するバックエンドも対象です。
 UX Stackとそれぞれ単独で利用でき、既存のUI/UXレビューは任意で引き継げます。
-SpecKit Upstream 2.0.0のSkillには、要件・評価方法・精度改善を見直す際、必要に応じてDesign Researchの利用を明示して実行する手順があります。
+SpecKit Upstream 2.0.1のSkillには、要件・評価方法・精度改善を見直す際、必要に応じてDesign Researchの利用を明示して実行する手順があります。
 研究結果を仕様へ戻す流れと成果物の確認先は、[ユースケース別の使い方](docs/speckit-upstream/reassessment.md)を参照してください。
 
 ## はじめに

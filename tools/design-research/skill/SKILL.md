@@ -26,7 +26,14 @@ Use the real [gan-harness.sh](scripts/gan-harness.sh). Report its command, run I
 5. Follow phase messages until completion. `blocked`, `cancelled`, `plateau` and `limit_reached` are incomplete outcomes. Preserve interrupted fix diffs and start a fresh audit/run. Resume an interrupted review with `resume <run-id> --project <target>`.
 6. Read `docs/design-research/<slug>/report.md` and representative raw results. The opening shows this run's ID, outcome, conclusion and unresolved work, including an early stop. Comparison, evidence, findings, and actual changes live in that one report; omit unused sections. Link its run-specific snapshot when feeding results into upstream design/verification.
 7. Apply [memory-workgraph.md](references/memory-workgraph.md) only when permitted by the current persistence policy. Harness children never write Memory. Include a saved reference only when it adds value to this answer.
-8. Finish with the conclusion, changes, remaining decisions/unexecuted work, and one actual report link with the relevant section. Do not routinely list JSON ledgers, logs, state or separate decision/fix reports. Explain whether `research_complete`, `reviewed`, or a stopped outcome occurred; audit completion does not establish passing behavior or human acceptance. For Japanese authored reports, use the available yomiyasu skill while preserving IDs, numbers, conditions and evidence.
+8. Finish with the conclusion, changes, remaining decisions/unexecuted work, and one actual report link with the relevant section. Do not routinely list JSON ledgers, logs, state or separate decision/fix reports. Explain whether `research_complete`, `reviewed`, or a stopped outcome occurred; audit completion does not establish passing behavior or human acceptance.
+
+For Japanese research, review and verification report drafts, reading the available yomiyasu
+skill and polishing the prose once is recommended. Preserve claims, terminology, IDs, numbers,
+conditions, outcomes, evidence, quotations and certainty. Children polish narrative fields
+before returning structured results, retaining JSON keys/enums, receipt references and code.
+Do not rewrite generated reports, ledgers or archived snapshots after publication. If yomiyasu
+is unavailable, continue writing checks; do not install it or change settings during a run.
 
 New topics use the compact report and `.internal/` records. Existing legacy topics retain their layout until explicitly migrated with `gan-harness.sh migrate --project <target> --slug <topic>` (preview); add `--apply` to consolidate after inspecting the content and backup. Never migrate during a running harness or silently migrate on installation/update.
 

@@ -59,6 +59,13 @@ The current report is published at start and on early failures, even without a r
 
 Finish with a conclusion, changes/remaining work and one existing report link with relevant sections. Add representative raw evidence or internal state only to investigate a result or blockage. Retained Memory references are optional and follow [memory-workgraph.md](memory-workgraph.md); the harness never writes Memory.
 
+For Japanese research, review and verification report drafts, reading available yomiyasu and
+polishing the narrative once is recommended. Children apply it to explanatory fields before
+returning structured results, preserving claims, terms, IDs, numbers, conditions, outcomes,
+evidence, quotations and certainty. Keep keys/enums, code and raw records intact. Reports are
+rendered from these validated results; do not edit generated reports or archived snapshots
+after publication. If yomiyasu is unavailable, continue writing checks without installing it.
+
 Legacy topics without `.internal/layout.json` retain their former report/record locations and behavior. Check root `status.json` against legacy report IDs. Update/install alone does not transform them. Run `gan-harness.sh migrate --project PROJECT --slug SLUG` to preview consolidated content, link changes and backups; `--apply` applies it. Active runs, corrupt records, unknown headings, incoming custom links and existing destination files block migration. Historical runs/snapshots stay byte-identical. Migration does not rerun research or grant adoption approval.
 
 Evidence records have stable EV IDs, workspace-relative paths, SHA-256, iteration and source fingerprint. Before each role/resume the parent rechecks registered artifacts and execution outputs. Declare `artifact_paths` in planned checks/experiments for generated JSON, plots or images; results must exist and are archived. Readable issue evidence links point to actual receipts and raw results. PNG/JPEG/GIF results also render inline. Screenshots are only produced if an actual applicable check captures them; this backend kit does not install a browser or infer a visual review.

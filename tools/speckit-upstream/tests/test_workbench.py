@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from workbench.common import *
+from workbench import VERSION
 from workbench.project_ops import attach,add_item,prompt,register_doc,official_plan,CORE_SKILLS
 from workbench.trace import inspect,parse_file,save_report
 from workbench.installer import install,uninstall,dependency_plan
@@ -111,7 +112,7 @@ class InstallTests(Base):
         p=locations()['skill']/'SKILL.md';p.parent.mkdir(parents=True);p.write_text('someone else')
         with self.assertRaises(WorkbenchError):install(True)
     def test_global_launcher_runs(self):
-        install(True);r=command([str(locations()['bin']/'speckit-workbench'),'--version']);self.assertEqual(r.returncode,0);self.assertEqual(r.stdout.strip(),'2.0.0')
+        install(True);r=command([str(locations()['bin']/'speckit-workbench'),'--version']);self.assertEqual(r.returncode,0);self.assertEqual(r.stdout.strip(),VERSION)
     def test_dependency_reused(self):self.assertEqual(dependency_plan(False)['status'],'reuse')
     def test_skip_dependency(self):self.assertEqual(dependency_plan(True)['status'],'skipped')
     def test_dependency_failure(self):

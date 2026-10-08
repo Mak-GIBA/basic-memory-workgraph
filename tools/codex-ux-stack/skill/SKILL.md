@@ -12,8 +12,21 @@ reference researcher, fixer and independent reviewer. Follow the audience in the
 Evaluate object/action context, retained state and unnecessary remembering/searching/backtracking,
 as well as functional completeness, visual defects and actual outcomes. Fixed-target procedures,
 search, bulk actions and necessary confirmations are judged in context. Element counts alone
-do not establish improvement or regression. Available yomiyasu is recommended for Japanese UI
-drafts; preserve meaning and short labels, and do not install it during a run.
+do not establish improvement or regression. Reading the available yomiyasu skill and polishing
+Japanese UI drafts, design notes and review/fix-report prose is recommended. Preserve claims,
+terms, IDs, numbers, conditions, outcomes, evidence and certainty; keep short labels concise.
+For child results, polish narrative fields before returning JSON, retaining its keys/enums and
+evidence references. Do not rewrite generated reports or archived results after publication.
+If yomiyasu is unavailable, continue the writing checks without installing it during a run.
+
+Before design, review or fixes, search and read relevant past feedback in the configured
+Basic Memory project when available. Follow the recall procedure in the bundled OOUI
+review policy, supplied as design_guidance to every role.
+Compare the prior context, scope, exceptions and evidence with the current audience and brief.
+Use matching feedback as a design/check candidate, verifying current issues and resolutions
+with fresh screenshots and operations. Cite an applied note and why it fits in existing
+findings; do not create another report. Memory recall is read-only, and unavailable Memory
+or no matching notes does not block a run.
 
 1. Read the target repository's rules. Discover its start command, test commands and URL from the supplied context, README, manifests and running servers. This setup discovery is allowed before screenshots; do not infer UX findings from UI code.
 2. Choose `audit` when the user asks for review only, forbids code edits, or has not requested fixes. Choose `run` when fixes are requested. A request to install or author this harness does not authorize fixing an unrelated app.

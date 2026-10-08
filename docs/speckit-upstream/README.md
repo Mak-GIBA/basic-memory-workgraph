@@ -22,6 +22,10 @@
 既存の旧形式はインストーラー更新だけでは変わりません。[任意の移行](usage.md#既存資料を3文書へ移行する)を使えます。
 SpecKit公式の機能別spec.md・plan.md・tasks.mdは必要な詳細の参照先として保持します。
 
+日本語の要件・設計・検証文書、研究・レビュー報告は、利用可能なyomiyasuで下書きを一度推敲することを推奨します。
+主張、数値、ID、条件、確認結果、根拠と断定の強さを保ち、レビュー・承認前に本文を仕上げます。
+未導入でも執筆を続けます。承認済み本文を変える場合は再レビューします。
+
 ## 導入するツールと役割
 
 | ツール・資材 | 提供元 | 役割 |
@@ -49,7 +53,7 @@ Workbenchは、目的や要求から設計・検証計画までを関連付け�
 Codexからは`$upstream-new`などのSkillを呼び出します。
 8つのコマンドと一連の操作は[使い方](usage.md)にまとめています。
 
-Workbench 2.0.0でも、判断を左右する技術的な不確実性がある場合は、別途導入した[Design Research](../design-research/README.md)の利用を明示して`research/audit`を実行します。
+Workbench 2.0.1でも、判断を左右する技術的な不確実性がある場合は、別途導入した[Design Research](../design-research/README.md)の利用を明示して`research/audit`を実行します。
 得られた根拠を要件・設計判断・検証計画へ戻します。
 利用条件、入力例、未導入時の扱いは[ユースケース別ガイド](reassessment.md)を参照してください。
 
@@ -60,7 +64,7 @@ Workbench 2.0.0でも、判断を左右する技術的な不確実性がある�
 
 公式の`specify` CLIが見つからない場合は、`specify-cli==1.0.8`を専用venvへ取得します。
 既存CLIは互換性を確認して再利用し、自動更新しません。
-ここで説明するWorkbenchの版は2.0.0です。[導入手順](installation.md)
+ここで説明するWorkbenchの版は2.0.1です。[導入手順](installation.md)
 
 ## 検査できることの範囲
 
@@ -71,7 +75,7 @@ SkillはCodexへの指示であり、アクセス制御や全操作の強制停�
 
 ## 詳細資料の確認方法
 
-インストール後の`releases/2.0.0/README_COMMANDS.md`と`assets/references/`に、
+インストール後の`releases/2.0.1/README_COMMANDS.md`と`assets/references/`に、
 操作ガイド、文書運用の方式、項目形式、参照資料が配置されます。
 導入前でもスクリプトの`--extract`で読みやすいソースへ展開できます。
 導入資材の保存先と展開方法は[導入手順](installation.md)、作業で作る文書・研究報告の保存先は[成果物一覧](reassessment.md#成果物の保存先と確認先)を参照してください。

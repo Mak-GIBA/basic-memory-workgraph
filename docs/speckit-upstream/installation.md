@@ -67,7 +67,7 @@ bash install_speckit_upstream.sh --apply --skip-specify
 |---|---|
 | `~/.local/bin/speckit-workbench` | Workbenchの起動用スクリプト |
 | `~/.local/bin/specify` | このインストーラーでSpecKitを用意した場合の起動用スクリプト |
-| `~/.local/share/speckit-workbench/releases/2.0.0/` | Workbenchコード、テンプレート、参照資料、ガイド |
+| `~/.local/share/speckit-workbench/releases/2.0.1/` | Workbenchコード、テンプレート、参照資料、ガイド |
 | `~/.local/share/speckit-workbench/tooling/specify-1.0.8/` | 必要な場合に作成するSpecKit専用venv |
 | `~/.local/share/speckit-workbench/backups/` | 更新時のバックアップ |
 | `~/.config/speckit-workbench/install.json` | 管理対象とハッシュ等の導入記録 |
@@ -128,7 +128,7 @@ speckit-workbench commands
 導入後はCodexを再起動し、`$upstream-`の入力候補を確認してください。
 
 既存要件・評価方法・実現方式を見直し、必要な場合にDesign Researchを明示して実行する手順も利用できます。
-2.0.0は新規プロジェクトの雛形を3文書へ変更します。既存資料・承認履歴は保持し、attach再実行やSkill更新だけでは移行しません。任意移行は[使い方](usage.md#既存資料を3文書へ移行する)を参照してください。
+2.0.1は新規プロジェクトの雛形を3文書へ変更します。既存資料・承認履歴は保持し、attach再実行やSkill更新だけでは移行しません。任意移行は[使い方](usage.md#既存資料を3文書へ移行する)を参照してください。
 既存文書の本文・要件・根拠を変更した場合は、通常どおり再レビューします。
 Design Researchは別途[導入・更新](../design-research/installation.md)します。SpecKitの更新だけではDesign Researchは導入・更新されません。
 

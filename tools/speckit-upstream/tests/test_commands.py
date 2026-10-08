@@ -23,7 +23,7 @@ class CommandTests(Base):
             install(True,skip_specify=True)
             install(True,skip_specify=True)
         m=read_json(locations()['config']/'install.json')
-        self.assertEqual(m['workbench_version'],'2.0.0')
+        self.assertEqual(m['workbench_version'],VERSION)
     def test_six_explicit_commands_installed(self):
         install(True)
         for name in COMMANDS:
