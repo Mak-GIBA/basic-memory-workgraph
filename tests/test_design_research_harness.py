@@ -263,13 +263,13 @@ class HarnessTests(unittest.TestCase):
     def run_harness(self, mode, *args, scenario="normal"):
         env = {**self.env, "DR_FAKE_SCENARIO": scenario}
         command = ["bash", str(SCRIPTS / "gan-harness.sh"), mode, "--project", str(self.project)]
-        if mode not in {"doctor", "resume"}:
+        if mode not in {"doctor", "resume", "migrate"}:
             command += ["--brief", "Controlled fixture evaluation", "--phase-timeout", "30"]
         command.extend(args)
         return subprocess.run(command, env=env, capture_output=True, text=True, timeout=35)
 
     def state(self):
-        status = json.loads((self.workspace / "status.json").read_text())
+        status = json.loads((self.workspace / ".internal/status.json").read_text())
         return json.loads((self.workspace / status["state_path"]).read_text())
 
     def test_audit_runs_real_http_checks_without_editing_source(self):
@@ -297,8 +297,8 @@ class HarnessTests(unittest.TestCase):
         records = [r for r in state["evidence"].values() if r["kind"] == "test"]
         self.assertEqual([r["exit_code"] for r in records], [1, 0])
         self.assertEqual(state["review"]["issues"][0]["status"], "resolved")
-        self.assertIn("変更前の証拠", (self.workspace / "fix-report.md").read_text())
-        self.assertIn("変更後の独立レビュー", (self.workspace / "fix-report.md").read_text())
+        self.assertIn("変更前の証拠", (self.workspace / "report.md").read_text())
+        self.assertIn("変更後の独立レビュー", (self.workspace / "report.md").read_text())
         receipt = json.loads((self.workspace / records[-1]["path"]).read_text())
         output = json.loads((self.workspace / receipt["outputs"]["stdout"]["path"]).read_text())
         self.assertEqual(output["saved_count"], 1)
@@ -319,8 +319,12 @@ class HarnessTests(unittest.TestCase):
         self.assertGreaterEqual(metrics["baseline_seconds"], 0)
         artifact = receipt["artifacts"][0]
         self.assertEqual(json.loads((self.workspace / artifact["path"]).read_text()), metrics)
-        actual = json.loads((self.workspace / "evidence.json").read_text())
+        actual = json.loads((self.workspace / ".internal/evidence.json").read_text())
         self.assertTrue(evidence.verify_artifacts(actual, self.workspace, state["evidence"])["valid"])
+        result = subprocess.run([sys.executable, '-B', str(SCRIPTS/'research.py'), 'validate',
+                                 str(self.workspace/'.internal/evidence.json'), '--check-artifacts'],
+                                env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 
     def test_false_runtime_pass_is_rejected(self):
         result = self.run_harness("audit", scenario="false_pass")
@@ -469,7 +473,7 @@ class HarnessTests(unittest.TestCase):
 
     def test_report_evidence_links_resolve(self):
         self.run_harness("run")
-        for name in ["review.md", "fix-report.md", "reference-implementations.md"]:
+        for name in ["report.md"]:
             text = (self.workspace / name).read_text()
             for target in re.findall(r"\]\(([^)]+)\)", text):
                 if not target.startswith(("http:", "https:")):
@@ -527,6 +531,92 @@ class HarnessTests(unittest.TestCase):
                                 env=self.env, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_one_primary_report_with_only_applicable_sections(self):
+        for mode in ('audit', 'research', 'run'):
+            result = self.run_harness(mode)
+            self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+            self.assertEqual([p.name for p in self.workspace.glob('*.md')], ['report.md'])
+            report = (self.workspace/'report.md').read_text()
+            self.assertEqual('### 候補の比較' in report, mode=='research')
+            self.assertEqual('## 変更と再検証' in report, mode=='run')
+            self.assertIn(self.state()['run_id'],report)
+            self.assertFalse((self.workspace/'status.json').exists())
+
+    def test_failed_new_run_replaces_current_summary_and_preserves_prior_snapshot(self):
+        self.assertEqual(self.run_harness('audit').returncode,0)
+        prior=(self.workspace/'report.md').read_bytes();old_id=self.state()['run_id']
+        self.env['DR_FAKE_SANDBOX_FAIL']='1'
+        self.assertEqual(self.run_harness('audit').returncode,2)
+        state=self.state();report=(self.workspace/'report.md').read_text()
+        self.assertNotEqual(old_id,state['run_id']);self.assertIn('**blocked**',report)
+        self.assertIn('レビュー未成立',report);self.assertNotIn('### 確認結果',report)
+        self.assertEqual((self.workspace/'runs'/state['run_id']/'inputs/report.md').read_bytes(),prior)
+        self.assertTrue((self.workspace/'runs'/old_id/'reports/report.md').is_file())
+        result=self.run_harness('audit','--review',str(self.root/'missing-review.md'))
+        self.assertEqual(result.returncode,2,result.stdout+result.stderr)
+        current=self.state();text=(self.workspace/'report.md').read_text()
+        self.assertNotEqual(state['run_id'],current['run_id'])
+        self.assertIn(current['run_id'],text);self.assertIn('**blocked**',text)
+        self.assertIn('--review needs',text);self.assertIn('レビュー未成立',text)
+
+    def test_legacy_migration_preview_backup_and_immutable_history(self):
+        self.workspace.mkdir(parents=True)
+        (self.workspace/'review.md').write_text('Legacy input')
+        self.assertEqual(self.run_harness('research').returncode,0)
+        state=json.loads((self.workspace/json.loads((self.workspace/'status.json').read_text())['state_path']).read_text())
+        before={p.relative_to(self.workspace).as_posix():p.read_bytes() for p in self.workspace.rglob('*') if p.is_file()}
+        result=self.run_harness('migrate','--slug','review')
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        preview=json.loads(result.stdout);self.assertFalse(preview['applied'])
+        self.assertIn('Candidate Comparison',preview['content'])
+        self.assertEqual(before,{p.relative_to(self.workspace).as_posix():p.read_bytes() for p in self.workspace.rglob('*') if p.is_file()})
+        result=self.run_harness('migrate','--slug','review','--apply')
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        changed=json.loads(result.stdout)
+        for name in changed['sources']:
+            self.assertEqual((Path(changed['backup'])/name).read_bytes(),before[name])
+        for name,data in before.items():
+            if name.startswith('runs/'):
+                self.assertEqual((self.workspace/name).read_bytes(),data)
+        self.assertEqual(self.state()['run_id'],state['run_id'])
+        self.assertEqual([p.name for p in self.workspace.glob('*.md')],['report.md'])
+        self.assertIn('already_compact',self.run_harness('migrate','--slug','review','--apply').stdout)
+
+    def test_migrated_topic_can_run_and_resume_with_unchanged_receipts(self):
+        self.workspace.mkdir(parents=True);(self.workspace/'review.md').write_text('Legacy')
+        self.assertEqual(self.run_harness('research',scenario='review_fail').returncode,2)
+        old=json.loads((self.workspace/'status.json').read_text())
+        self.assertEqual(self.run_harness('migrate','--slug','review','--apply').returncode,0)
+        result=self.run_harness('resume',old['run_id'])
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertIn('research_complete',(self.workspace/'report.md').read_text())
+
+    def test_migration_refuses_active_corrupt_or_conflicting_workspace(self):
+        self.workspace.mkdir(parents=True);(self.workspace/'review.md').write_text('Legacy')
+        self.run_harness('audit')
+        import fcntl
+        with (self.workspace.parent/'.gan.lock').open('a+') as lock:
+            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            result=self.run_harness('migrate','--slug','review','--apply')
+        self.assertEqual(result.returncode,2);self.assertIn('running',result.stdout)
+        ledger=self.workspace/'evidence.json';ledger.write_text('{broken')
+        result=self.run_harness('migrate','--slug','review','--apply')
+        self.assertEqual(result.returncode,2);self.assertFalse((self.workspace/'report.md').exists())
+        ledger.unlink();(self.workspace/'report.md').write_text('foreign')
+        result=self.run_harness('migrate','--slug','review','--apply')
+        self.assertEqual(result.returncode,2);self.assertEqual((self.workspace/'report.md').read_text(),'foreign')
+
+    def test_migration_rebased_links_resolve(self):
+        self.workspace.mkdir(parents=True);(self.workspace/'review.md').write_text('Legacy')
+        self.assertEqual(self.run_harness('research').returncode,0)
+        self.assertEqual(self.run_harness('migrate','--slug','review','--apply').returncode,0)
+        for target in re.findall(r'\]\(([^)]+)\)',(self.workspace/'report.md').read_text()):
+            if target.startswith(('http:','https:')):continue
+            name,_,anchor=target.partition('#');path=self.workspace/name
+            self.assertTrue(path.is_file(),target)
+            if anchor:self.assertIn('id="'+anchor+'"',path.read_text(),target)
+
+
     def test_recursive_execution_is_refused(self):
         self.env["DR_GAN_CHILD"] = "1"
         result = self.run_harness("audit")
@@ -540,11 +630,82 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("Production", result.stdout)
         self.assertIn("Production", self.state()["reason"])
-        status = json.loads((self.workspace / "status.json").read_text())
+        status = json.loads((self.workspace / ".internal/status.json").read_text())
         self.assertIn("Production", status["reason"])
         result = self.run_harness("audit", "--url", "https://example.com")
         self.assertEqual(result.returncode, 2)
         self.assertIn("local isolated", result.stdout)
+
+
+class CompactReportUnitTests(unittest.TestCase):
+    def test_termination_during_migration_restores_originals(self):
+        import signal,migration
+        with tempfile.TemporaryDirectory() as temp:
+            project=Path(temp);workspace=project/'docs/design-research/topic';workspace.mkdir(parents=True)
+            (workspace/'review.md').write_text('Original prose')
+            original={p.name:p.read_bytes() for p in workspace.iterdir()}
+            write=migration.atomic_bytes;interrupted=[]
+            def interrupt_once(path,data):
+                if Path(path)==workspace/'report.md' and not interrupted:
+                    interrupted.append(True);os.kill(os.getpid(),signal.SIGTERM)
+                return write(path,data)
+            with patch.object(migration,'atomic_bytes',side_effect=interrupt_once):
+                with self.assertRaisesRegex(runtime.Blocked,'Migration interrupted'):
+                    harness.main(['migrate','--project',str(project),'--slug','topic','--apply'])
+            self.assertEqual({p.relative_to(workspace).as_posix():p.read_bytes()
+                              for p in workspace.rglob('*') if p.is_file()},original)
+
+    def test_duplicate_ledger_ids_block_migration_before_writing(self):
+        from dossier import blank_dossier
+        import migration
+        with tempfile.TemporaryDirectory() as temp:
+            project=Path(temp);workspace=project/'docs/design-research/topic';workspace.mkdir(parents=True)
+            (workspace/'review.md').write_text('Legacy prose')
+            data=blank_dossier('Question');data['sources']=[{'id':'S1'},{'id':'S1'}]
+            (workspace/'evidence.json').write_text(json.dumps(data))
+            before={p.name:p.read_bytes() for p in workspace.iterdir()}
+            with self.assertRaisesRegex(runtime.Blocked,'Duplicate ledger ID'):
+                migration.migrate(project,'topic',True)
+            self.assertEqual({p.relative_to(workspace).as_posix():p.read_bytes()
+                              for p in workspace.rglob('*') if p.is_file()},before)
+            (workspace/'status.json').write_text('{}')
+            with self.assertRaisesRegex(runtime.Blocked,'Malformed status record'):
+                migration.migrate(project,'topic',True)
+            self.assertFalse((workspace/'report.md').exists())
+
+    def test_cancelled_report_shows_current_state_without_previous_claims(self):
+        from layout import initialize
+        from report import publish
+        with tempfile.TemporaryDirectory() as temp:
+            workspace=Path(temp);initialize(workspace)
+            run=workspace/'runs/RUN2';run.mkdir(parents=True)
+            state={'run_id':'RUN2','status':'running','phase':'planning','iteration':1,
+                   'config':{'brief':'Current question'},'expected_source':{'head':''},
+                   'evidence':{},'sources':{}}
+            publish(state,workspace,run)
+            state.update(status='cancelled',reason='Interrupted by signal 15')
+            publish(state,workspace,run)
+            text=(workspace/'report.md').read_text()
+            self.assertIn('**cancelled**',text);self.assertIn('Interrupted by signal 15',text)
+            self.assertIn('レビュー未成立',text)
+            self.assertNotIn('候補の比較',text);self.assertNotIn('変更と再検証',text)
+
+    def test_migration_write_failure_restores_original_documents(self):
+        import migration
+        with tempfile.TemporaryDirectory() as temp:
+            project=Path(temp);workspace=project/'docs/design-research/topic';workspace.mkdir(parents=True)
+            (workspace/'review.md').write_text('# Old review\nHuman prose remains.\n')
+            original={p.name:p.read_bytes() for p in workspace.iterdir()}
+            write=migration.atomic_bytes;failed=[]
+            def fail_once(path,data):
+                if Path(path)==workspace/'report.md' and not failed:
+                    failed.append(True);raise OSError('simulated migration failure')
+                return write(path,data)
+            with patch.object(migration,'atomic_bytes',side_effect=fail_once):
+                with self.assertRaisesRegex(OSError,'simulated'):migration.migrate(project,'topic',True)
+            self.assertEqual({p.relative_to(workspace).as_posix():p.read_bytes()
+                              for p in workspace.rglob('*') if p.is_file()},original)
+
 
 
 class EvidenceUnitTests(unittest.TestCase):

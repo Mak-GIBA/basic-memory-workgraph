@@ -64,7 +64,7 @@ bash install_design_research.sh --status --json
 
 ## 状態確認と診断
 
-`--status --json` の `state: "installed"`、`version: "1.2.1"`、`modified: false` を確認します。
+`--status --json` の `state: "installed"`、`version: "2.0.0"`、`modified: false` を確認します。
 未導入は `absent`、所有情報を認識できない既存ディレクトリは `unmanaged` です。
 追加ファイルも変更として検出します。Pythonキャッシュは除きます。
 状態表示は未導入でも正常終了するため、終了コードだけでは導入済みか判断できません。
@@ -158,3 +158,5 @@ bash install_design_research.sh --uninstall
 | Skillが表示されない | 実際の配置先と `SKILL.md` を確認し、Codexを再起動 |
 | サンドボックス起動失敗 | ホストのCodex実行環境を確認し、doctorを再実行。実行制限を外して回避しない |
 | 調査・検証で停止 | [使い方](usage.md#停止と再開)で状態・根拠・再開可否を確認 |
+
+2.0.0は新規topicを1報告書にまとめます。更新だけでは既存資料を移行しません。[任意の移行](usage.md#既存資料を1報告書へ移行する)を参照してください。

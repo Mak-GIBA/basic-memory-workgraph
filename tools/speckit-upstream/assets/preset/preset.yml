@@ -1,0 +1,25 @@
+schema_version: "1.0"
+preset:
+  id: "upstream-trace"
+  name: "Upstream Traceability Companion"
+  version: "1.0.0"
+  description: "Add purpose, requirements, design and verification traceability to project documents"
+  author: "SpecKit Workbench companion"
+  license: "MIT"
+requires:
+  speckit_version: ">=1.0.8"
+provides:
+  templates:
+    - type: "template"
+      name: "spec-template"
+      file: "templates/spec-addendum.md"
+      strategy: "append"
+    - type: "template"
+      name: "plan-template"
+      file: "templates/plan-addendum.md"
+      strategy: "append"
+    - type: "template"
+      name: "tasks-template"
+      file: "templates/tasks-addendum.md"
+      strategy: "append"
+tags: ["requirements", "traceability"]

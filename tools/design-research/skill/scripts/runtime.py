@@ -63,6 +63,19 @@ def atomic_json(path, value):
         temp.unlink(missing_ok=True)
 
 
+def atomic_bytes(path, data):
+    path = regular_path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_name(path.name+'.tmp-'+uuid.uuid4().hex[:8])
+    try:
+        with temp.open('xb') as stream:
+            os.chmod(temp,0o600)
+            stream.write(data)
+        os.replace(temp,path)
+    finally:
+        temp.unlink(missing_ok=True)
+
+
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 

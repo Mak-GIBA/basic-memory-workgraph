@@ -36,12 +36,13 @@ def create_run(root: Path, slug: str, question: str, templates: Path) -> Path:
         raise ResearchError("Research workspace already exists; choose another slug. Existing work is never overwritten.")
     target.mkdir(mode=0o700)
     try:
-        for source, dest in (("report.md", "design-research.md"), ("decision.md", "decision.md")):
-            text = (templates / source).read_text("utf-8")
-            (target / dest).write_text(text.replace("{{QUESTION}}", question).replace("{{DATE}}", dt.date.today().isoformat()), "utf-8")
-        (target / "evidence.json").write_text(json.dumps(blank_dossier(question), ensure_ascii=False, indent=2) + "\n", "utf-8")
-        (target / "research-log.json").write_text(json.dumps({"schema_version": 1, "searches": [], "read_sources": [],
-                                                              "failed_requests": [], "stop_reason": None}, indent=2) + "\n", "utf-8")
+        from layout import initialize, record_path
+        initialize(target)
+        text = (templates / "report.md").read_text("utf-8")
+        (target / "report.md").write_text(text.replace("{{QUESTION}}", question).replace("{{DATE}}", dt.date.today().isoformat()), "utf-8")
+        record_path(target, "evidence.json").write_text(json.dumps(blank_dossier(question), ensure_ascii=False, indent=2) + "\n", "utf-8")
+        record_path(target, "research-log.json").write_text(json.dumps({"schema_version": 1, "searches": [], "read_sources": [],
+                                                                      "failed_requests": [], "stop_reason": None}, indent=2) + "\n", "utf-8")
     except BaseException:
         shutil.rmtree(target)
         raise

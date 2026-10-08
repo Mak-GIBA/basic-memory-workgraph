@@ -20,7 +20,7 @@ import zlib
 
 NAME = "design-research"
 OWNER = "basic-memory-workgraph/design-research"
-VERSION = "1.2.1"
+VERSION = "2.0.0"
 MANIFEST = ".design-research-install.json"
 PAYLOAD_MARKER = b"\n__DESIGN_RESEARCH_PAYLOAD__\n"
 PAYLOAD_SHA256 = "__PAYLOAD_SHA256__"
@@ -286,7 +286,7 @@ def run_self_test(payload: dict, decoded: dict[str, bytes]) -> dict:
         proc = subprocess.run([sys.executable, "-B", str(target / "scripts/research.py"), "init",
                                "--slug", "self-test", "--question", "Compare A and B", "--root", str(workspace_root)],
                               text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=20, env=env)
-        if proc.returncode != 0 or not (workspace_root / "self-test" / "evidence.json").is_file():
+        if proc.returncode != 0 or not (workspace_root / "self-test" / ".internal" / "evidence.json").is_file():
             fail("Bundled workspace initializer smoke test failed.")
         skill_md = target / "SKILL.md"
         skill_md.write_text(skill_md.read_text("utf-8") + "\n<!-- self-test edit -->\n", "utf-8")

@@ -1,0 +1,22 @@
+{
+  "@DOCS@/README.md": "00.md",
+  "@DOCS@/product/vision.md": "01.md",
+  "@DOCS@/product/stakeholders.md": "02.md",
+  "@DOCS@/product/context.md": "03.md",
+  "@DOCS@/product/capabilities.md": "04.md",
+  "@DOCS@/product/business-rules.md": "05.md",
+  "@DOCS@/product/glossary.md": "06.md",
+  "@DOCS@/requirements/system-requirements.md": "07.md",
+  "@DOCS@/requirements/quality-operations.md": "08.md",
+  "@DOCS@/requirements/interfaces-data.md": "09.md",
+  "@DOCS@/architecture/overview.md": "10.md",
+  "@DOCS@/architecture/runtime.md": "11.md",
+  "@DOCS@/architecture/deployment-operations.md": "12.md",
+  "@DOCS@/architecture/decisions/README.md": "13.md",
+  "@DOCS@/as-is/baseline.md": "14.md",
+  "@DOCS@/changes/README.md": "15.md",
+  "@DOCS@/verification/plan.md": "16.md",
+  "@DOCS@/questions.md": "17.md",
+  "@DOCS@/governance.md": "18.md",
+  ".specify/workbench/constitution.proposed.md": "constitution-proposed.md"
+}

@@ -24,7 +24,7 @@ GitHub Project DirectorでIssueや進捗を整理し、Workgraphで他の仕事�
 これは利用例であり、インストーラー同士を自動連携する仕組みではありません。
 Design Researchはコアロジックの方式選定・小さな実験と、依頼された改善・再検証を行えます。関連するバックエンドも対象です。
 UX Stackとそれぞれ単独で利用でき、既存のUI/UXレビューは任意で引き継げます。
-SpecKit Upstream 1.3.0のSkillには、要件・評価方法・精度改善を見直す際、必要に応じてDesign Researchの利用を明示して実行する手順があります。
+SpecKit Upstream 2.0.0のSkillには、要件・評価方法・精度改善を見直す際、必要に応じてDesign Researchの利用を明示して実行する手順があります。
 研究結果を仕様へ戻す流れと成果物の確認先は、[ユースケース別の使い方](docs/speckit-upstream/reassessment.md)を参照してください。
 
 ## はじめに
@@ -91,6 +91,8 @@ install_codex_yomiyasu.sh           意味を保った日本語の推敲
 install_herdr.sh                   作業ディレクトリに対応するHerdrの起動
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 tools/ecc-on-demand/               ECCの管理CLI・入口資材・導入処理
+tools/speckit-upstream/            3文書の上流整理・承認・任意移行・単体配布の正本
+tools/design-research/             調査・検証の1報告書・ハーネス・単体配布の正本
 tools/codex-ux-stack/              OOUI設計・認知負荷の資料・画像付きレビュー・単体配布の正本
 docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ

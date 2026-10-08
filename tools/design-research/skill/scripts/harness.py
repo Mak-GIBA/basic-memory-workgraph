@@ -30,7 +30,7 @@ from runtime import (Blocked, Cancelled, assert_source, atomic_json, capture,
                      test_environment, sanitize_tree)
 
 HERE = Path(__file__).resolve().parent
-VERSION = "1.2.1"
+VERSION = "2.0.0"
 SEVERITIES = ["Critical", "High", "Medium", "Low"]
 ID = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}")
 
@@ -812,6 +812,7 @@ def execution(args):
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise Blocked("Another Design Research harness is already running for this project") from exc
+        setup_error = None
         if args.mode == "resume":
             if not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", args.run_id):
                 raise Blocked("Invalid run ID")
@@ -839,6 +840,8 @@ def execution(args):
         else:
             workspace = regular_path(parent / args.slug)
             workspace.mkdir(parents=True, exist_ok=True)
+            from layout import initialize
+            initialize(workspace)
             run_id = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + "-" + uuid.uuid4().hex[:8]
             run_dir = regular_path(workspace / "runs" / run_id)
             run_dir.mkdir(parents=True)
@@ -848,27 +851,39 @@ def execution(args):
                      "created_at": now(), "config": config, "evidence": {}, "sources": {},
                      "plateau": 0, "expected_source": fingerprint(project, workspace)}
             state["original_source"] = state["expected_source"]
-            inputs = run_dir / "inputs"
-            inputs.mkdir()
-            # Preserve prior deliverables and optional UI/UX review before any publish.
-            for old in workspace.iterdir():
-                if old.is_file() and not old.is_symlink():
-                    shutil.copy2(old, inputs / old.name)
-            if args.review:
-                source = regular_path(args.review)
-                if not source.is_file() or source.stat().st_size > 2 * 1024 * 1024:
-                    raise Blocked("--review needs an existing bounded text report")
-                text = scrub(source.read_text("utf-8"))
-                path = inputs / "supplied-review.md"
-                path.write_text(text, "utf-8")
-                state["input_review"] = path.relative_to(workspace).as_posix()
-            state["test_env_hash"] = sha256(config["test_env_file"]) if config["test_env_file"] else ""
-            save(state, run_dir)
+            try:
+                inputs = run_dir / "inputs"
+                inputs.mkdir()
+                # Preserve prior deliverables and optional UI/UX review before any publish.
+                for old in workspace.iterdir():
+                    if old.is_file() and not old.is_symlink():
+                        shutil.copy2(old, inputs / old.name)
+                from layout import record_path
+                for name in ("status.json", "evidence.json", "research-log.json"):
+                    old = record_path(workspace, name)
+                    if old.is_file():
+                        shutil.copy2(old, inputs / name)
+                if args.review:
+                    source = regular_path(args.review)
+                    if not source.is_file() or source.stat().st_size > 2 * 1024 * 1024:
+                        raise Blocked("--review needs an existing bounded text report")
+                    text = scrub(source.read_text("utf-8"))
+                    path = inputs / "supplied-review.md"
+                    path.write_text(text, "utf-8")
+                    state["input_review"] = path.relative_to(workspace).as_posix()
+                state["test_env_hash"] = sha256(config["test_env_file"]) if config["test_env_file"] else ""
+                save(state, run_dir)
+            except (Blocked, Cancelled, KeyboardInterrupt, OSError, ValueError) as exc:
+                setup_error = exc
         log(f"run {state['run_id']} / {state['config']['mode']} / {workspace}")
         state["status"] = "running"
         save(state, run_dir)
+        from report import publish
         explicit_env = {}
         try:
+            if setup_error is not None:
+                raise setup_error
+            publish(state, workspace, run_dir)
             if state["config"]["test_env_file"] and sha256(state["config"]["test_env_file"]) != state["test_env_hash"]:
                 raise Blocked("Test environment changed; start a fresh audit/run")
             capabilities = codex_capabilities(project)
@@ -905,9 +920,13 @@ def parser():
     p = argparse.ArgumentParser(description="Design Research / core-logic and backend GAN harness")
     p.add_argument("--version", action="version", version=VERSION)
     commands = p.add_subparsers(dest="mode", required=True)
-    for mode in ("research", "audit", "run", "resume", "doctor"):
+    for mode in ("research", "audit", "run", "resume", "doctor", "migrate"):
         sub = commands.add_parser(mode)
         sub.add_argument("--project", default=".")
+        if mode == "migrate":
+            sub.add_argument("--slug", required=True)
+            sub.add_argument("--apply", action="store_true")
+            continue
         if mode == "doctor":
             continue
         if mode == "resume":
@@ -933,6 +952,16 @@ def parser():
 
 def main(argv=None):
     args = parser().parse_args(argv)
+    if args.mode == "migrate":
+        from migration import migrate
+        def interrupted(signum,frame):
+            raise Blocked('Migration interrupted; applying changes are rolled back')
+        previous=signal.signal(signal.SIGTERM,interrupted)
+        try:
+            print(json.dumps(migrate(args.project, args.slug, args.apply), ensure_ascii=False, indent=2))
+            return 0
+        finally:
+            signal.signal(signal.SIGTERM,previous)
     if args.mode == "doctor":
         project = regular_path(args.project)
         result = codex_capabilities(project if project.is_dir() else None)

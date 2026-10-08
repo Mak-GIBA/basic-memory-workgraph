@@ -1,0 +1,6 @@
+{
+  "@DOCS@/requirements.md": "requirements.md",
+  "@DOCS@/design.md": "design.md",
+  "@DOCS@/verification.md": "verification.md",
+  ".specify/workbench/constitution.proposed.md": "constitution-proposed.md"
+}

@@ -137,7 +137,7 @@ Accepted additionally needs authentic `accepted_by` and ISO `accepted_at`; the a
 Schema version 1 remains compatible with the existing ledger and structural validator. Local source paths and experiment artifact paths are relative to the ledger's workspace, never absolute paths, traversal paths or symlinks. Optional `sha256` values must match the actual file. An executed experiment with a nonexistent or empty artifact is rejected by strict checks even if its schema is valid.
 
 ```bash
-python3 -B <skill-dir>/scripts/research.py validate PROJECT/docs/design-research/SLUG/evidence.json --check-artifacts
+python3 -B <skill-dir>/scripts/research.py validate PROJECT/docs/design-research/SLUG/.internal/evidence.json --check-artifacts
 python3 -B <skill-dir>/scripts/research.py validate PROJECT/docs/design-research/SLUG/runs/RUN_ID/reports/evidence.json --check-artifacts --artifacts-root PROJECT/docs/design-research/SLUG
 ```
 

@@ -1,6 +1,6 @@
 interface:
   display_name: "Design Research"
   short_description: "コアロジックの方式比較・実測と改善をBashハーネスで独立評価する"
-  default_prompt: "Use $design-research and execute the installed gan-harness.sh to improve the core logic contributing to the project's main goal, including relevant backend behavior; compare multiple primary works in depth and retain useful verification/experiment details in configured Workgraph when permitted."
+  default_prompt: "Use $design-research and execute the installed gan-harness.sh to improve the core logic contributing to the project's main goal, including relevant backend behavior; compare multiple primary works in depth and present the conclusion, evidence, changes and remaining work in one report.md. Retain useful verification/experiment details in configured Workgraph only when permitted."
 policy:
   allow_implicit_invocation: true

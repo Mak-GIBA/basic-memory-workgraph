@@ -78,7 +78,7 @@ def main(argv=None):
             data = json.loads(args.path.read_text("utf-8"))
             if args.check_artifacts:
                 from evidence import verify_artifacts
-                result = verify_artifacts(data, args.artifacts_root or args.path.parent)
+                result = verify_artifacts(data, args.artifacts_root or (args.path.parent.parent if args.path.parent.name == ".internal" else args.path.parent))
             else:
                 result = validate_dossier(data)
             emit(result)

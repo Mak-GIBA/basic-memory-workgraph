@@ -77,7 +77,7 @@ Optional MCP registration examples are in `mcp-examples.toml`; the installer onl
 ## Ledger validation
 
 ```bash
-python3 -B "$DR" validate docs/design-research/TOPIC/evidence.json --check-artifacts
+python3 -B "$DR" validate docs/design-research/TOPIC/.internal/evidence.json --check-artifacts
 ```
 
 Plain `validate` remains the schema-v1 structural check. `--check-artifacts` additionally requires local artifacts to exist and verifies optional hashes. `--artifacts-root PATH` selects the original workspace when validating an archived ledger. This does not authenticate execution or scientific conclusions; parent-owned harness receipts and independent review provide additional checks.

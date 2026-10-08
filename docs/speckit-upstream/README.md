@@ -6,6 +6,22 @@
 対象スクリプトは[install_speckit_upstream.sh](../../install_speckit_upstream.sh)です。
 独自資材を内蔵した単一ファイルで、隣にZIPやPythonファイルを置く必要はありません。
 
+## まず読む資料
+
+新規プロジェクトの上流資料は要件・設計・検証の3文書です。研究を実行した場合も1本の報告書にまとめます。
+各文書は結論・確認してほしいこと・未確認を先に置き、必要な詳細を後に続けます。
+
+| 確認したいこと | 正本 | 主な内容 |
+|---|---|---|
+| 何を作る・維持するか | `docs/upstream/requirements.md` | 目的・利用者・範囲、機能・品質・制約、現状と期待、不明点 |
+| どう実現するか | `docs/upstream/design.md` | 構成・動作・データ・API・運用、選定理由と変更影響 |
+| どこまで確認できたか | `docs/upstream/verification.md` | 受入条件、確認方法、実際の結果、未実行、証拠 |
+| 研究・実測から何が分かったか | `docs/design-research/<slug>/report.md` | 結論、比較、検証、変更前後、残る確認。実行した場合のみ |
+
+レビューのスナップショット、JSON索引、承認台帳、生ログは内部記録として残ります。
+既存の旧形式はインストーラー更新だけでは変わりません。[任意の移行](usage.md#既存資料を3文書へ移行する)を使えます。
+SpecKit公式の機能別spec.md・plan.md・tasks.mdは必要な詳細の参照先として保持します。
+
 ## 導入するツールと役割
 
 | ツール・資材 | 提供元 | 役割 |
@@ -33,7 +49,7 @@ Workbenchは、目的や要求から設計・検証計画までを関連付け�
 Codexからは`$upstream-new`などのSkillを呼び出します。
 8つのコマンドと一連の操作は[使い方](usage.md)にまとめています。
 
-Workbench 1.3.0では、判断を左右する技術的な不確実性がある場合に、別途導入した[Design Research](../design-research/README.md)の利用を明示して`research/audit`を実行する手順を追加しました。
+Workbench 2.0.0でも、判断を左右する技術的な不確実性がある場合は、別途導入した[Design Research](../design-research/README.md)の利用を明示して`research/audit`を実行します。
 得られた根拠を要件・設計判断・検証計画へ戻します。
 利用条件、入力例、未導入時の扱いは[ユースケース別ガイド](reassessment.md)を参照してください。
 
@@ -44,7 +60,7 @@ Workbench 1.3.0では、判断を左右する技術的な不確実性がある�
 
 公式の`specify` CLIが見つからない場合は、`specify-cli==1.0.8`を専用venvへ取得します。
 既存CLIは互換性を確認して再利用し、自動更新しません。
-ここで説明するWorkbenchの版は1.3.0です。[導入手順](installation.md)
+ここで説明するWorkbenchの版は2.0.0です。[導入手順](installation.md)
 
 ## 検査できることの範囲
 
@@ -55,7 +71,7 @@ SkillはCodexへの指示であり、アクセス制御や全操作の強制停�
 
 ## 詳細資料の確認方法
 
-インストール後の`releases/1.3.0/README_COMMANDS.md`と`assets/references/`に、
+インストール後の`releases/2.0.0/README_COMMANDS.md`と`assets/references/`に、
 操作ガイド、文書運用の方式、項目形式、参照資料が配置されます。
 導入前でもスクリプトの`--extract`で読みやすいソースへ展開できます。
 導入資材の保存先と展開方法は[導入手順](installation.md)、作業で作る文書・研究報告の保存先は[成果物一覧](reassessment.md#成果物の保存先と確認先)を参照してください。

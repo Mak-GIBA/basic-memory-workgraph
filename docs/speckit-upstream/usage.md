@@ -47,7 +47,7 @@ $upstream-existing このリポジトリの予約管理機能を整理してく�
 現状の整理は`$upstream-existing`、要件の妥当性・曖昧さ・評価方法の点検は`$upstream-check`から始めます。
 処理結果・受入条件・品質契約を変更する改善は`$upstream-change`、外部挙動を保つ内部設計の改善は`$upstream-refactor`へ進めます。
 
-Workbench 1.3.0のSkillには、方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合にDesign Researchを使う手順があります。
+Workbench 2.0.0のSkillには、方式の有効性・評価方法・精度改善について、判断を左右する不確実性がある場合にDesign Researchを使う手順があります。
 使用理由と`research/audit`を明示し、導入済みのハーネスを実行します。
 単純な文書修正には研究を一律要求せず、未導入・旧版・実行不能では必要な研究を未実行として残します。
 Design Researchを自動導入したり、アプリを自動修正したりする手順は含めていません。
@@ -73,7 +73,7 @@ speckit-workbench doctor --project .
 # ドラフト文書の構造検査
 speckit-workbench check --project . --phase draft
 
-# 要件等の対応表・索引を生成して保存
+# 要件等の対応索引を内部に保存
 speckit-workbench trace --project . --write
 ```
 
@@ -156,27 +156,36 @@ Goalだけの状態や、必須文書が空・見出しだけの状態ではREAD
 
 ## 成果物の保存先と確認先
 
-パスは対象プロジェクトのルートからの相対パスです。
-要件の確認、方式の比較、精度の評価など、確認したいことに応じて読むファイルは[成果物の保存先と確認先](reassessment.md#成果物の保存先と確認先)で案内しています。
+新規の正本は次の3文書と、必要な研究報告です。`--docs-dir`を指定した場合は設定値に従います。
 
-| 確認したいこと | 場所 | 内容 |
+| 確認したいこと | 正本 | 主な内容 |
 |---|---|---|
-| 目的・要件・設計・評価条件 | `docs/upstream/` | 目的、関係者、要求、設計、As-Is、検証計画等の正本Markdown |
-| 上流項目間の対応関係 | `docs/upstream/traceability/matrix.md`・同ディレクトリの`index.json` | traceが生成する対応表・索引 |
-| 今回の承認対象 | `docs/upstream/governance/reviews/<review-id>.md`・同名の`.json` | reviewで保存する対象ID・本文・根拠 |
-| 承認状態の要約 | `docs/upstream/governance/approvals.md` | 承認・未承認・再承認の状態 |
-| 個別機能の仕様と作業計画 | `specs/<feature>/` | SpecKitで作成する仕様・plan・tasks |
-| 文書の実際の配置・登録先 | `.specify/workbench.json` | system ID、`docs_dir`・`extra_docs`、承認profile |
-| 承認・撤回の履歴 | `.specify/workbench/approvals.jsonl` | 承認・撤回の台帳 |
-| ready判定の記録 | `.specify/workbench/gate-ready.json` | 対象ファイルのハッシュと検査結果。現在も有効かは`gate --verify`で確認 |
-| 方式比較・実測・研究の状態 | `docs/design-research/<slug>/` | Design Researchの報告・実行根拠・状態。実行ごとの保存版は`runs/<run-id>/reports/` |
+| 何を作る・維持するか | `docs/upstream/requirements.md` | 目的・利用者・範囲、機能・品質・制約、現状と期待、不明点 |
+| どう実現するか | `docs/upstream/design.md` | 構成・動作・データ・API・運用、選定理由と変更影響 |
+| どこまで確認できたか | `docs/upstream/verification.md` | 受入条件、確認方法、実際の結果、未実行、証拠 |
+| 研究・実測から何が分かったか | `docs/design-research/<slug>/report.md` | 結論、比較、検証、変更前後、残る確認。実行した場合のみ |
 
-`specs/<feature>/`の具体的な内容やレビュー記録は、対応する作業・コマンドで作成します。
-attachだけですべての成果物が完成するわけではありません。
-`--docs-dir`を変更した場合、上流文書の保存先は設定値に従います。
-Skill実行後の回答にも、確認したいことと実際の成果物へのリンクを対応させた表を付けます。
-表には作成・更新・既存参照・未作成・未実行の状態を示します。
-新規の公式統合で配置するプロジェクト用Skillは`.agents/skills/speckit-*/`にあります。
+内部のレビュー・承認要約・索引は`.specify/workbench/`に、ResearchのJSONは`.internal/`に保存します。
+ユーザーが通常確認するのは、主資料の該当する節と結論です。承認待ちでは対象IDと固定済みreview packetへのリンク1つを加えます。
+公式の`specs/<feature>/spec.md`・`plan.md`・`tasks.md`は必要な機能詳細として参照します。
+文書の内容は固有の`<!-- upstream:section ID -->`と`<!-- /upstream:section -->`で囲みます。
+節を編集した場合はその節、節外の共通条件を編集した場合は文書全体、上位依存を変更した場合は関連下位の再確認が必要です。
+節のない旧文書は文書全体を固定します。有効な旧承認を更新だけで失効させません。
 
-項目のJSON形式や追跡ルールの詳細は、導入済み資材の`assets/references/TRACE_FORMAT.md`、
-文書運用は`METHOD.md`、成果物の案内方法は`ARTIFACTS.md`を参照してください。[資料の配置・展開方法](installation.md)
+## 既存資料を3文書へ移行する
+
+```bash
+# 本文・移動元・リンク変更・再レビュー対象・バックアップ先を確認。まだ書き込まない
+speckit-workbench migrate --project .
+# 確認した統合を適用
+speckit-workbench migrate --project . --apply
+# 自分で作った追加の上流資料も統合する場合だけ明示する
+speckit-workbench migrate --project . --include-doc docs/upstream/custom.md --apply
+```
+
+標準の旧19文書と旧CLIの既定itemファイルを統合します。混在した種別を持つ旧文書は、本文の適用範囲を保つため一つの節として移します。
+公式SpecKit資料とユーザー独自の追加文書は保持します。保持する文書から移動元へのリンクがある場合、先にリンクを直すか追加文書を明示して移行します。
+元の文章・設定は`.specify/workbench/migrations/`にバックアップし、ID・出典・証拠・承認履歴を残します。
+配置と本文の固定範囲が変わる項目は再レビューが必要です。過去の承認を自動で付け直しません。
+重複ID・壊れた記録・リンクの解決不能・統合先の競合では停止し、途中の適用に失敗した場合は文書と設定を戻します。
+適用済みの再実行は変更しません。Researchの移行方法は[Researchの使い方](../design-research/usage.md#既存資料を1報告書へ移行する)にあります。

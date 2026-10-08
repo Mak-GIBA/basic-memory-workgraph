@@ -52,30 +52,14 @@ The harness kills only its own process groups, archives sanitized stdout/stderr,
 
 ## Files and evidence links
 
-`PROJECT/docs/design-research/SLUG/` contains readable deliverables:
+`PROJECT/docs/design-research/SLUG/report.md` is the single human report for new topics. Read its opening for run ID, status, stopping reason, conclusion, decisions and unknowns. Research adds candidate comparison/claims/experiments; audit adds checks/findings; actual fixes add before/after evidence. Do not create empty fix/comparison/reference reports.
 
-- `review.md`: severity, target, reproduction, expected/actual results, impact, recommended improvement and linked evidence.
-- `fix-report.md`: declared changes and independent before/after evidence.
-- `reference-implementations.md`: useful primary-source designs, applicability and limits.
-- `design-research.md`, `evidence.json`, `decision.md`: produced when a research dossier is available.
-- `research-log.json` and `status.json`: actual source/check scope, status and stopping reason.
+Machine records live under `.internal/`: `status.json`, `evidence.json` when a dossier exists, and `research-log.json`. State, role outputs, receipts, raw logs and generated artifacts stay in `runs/RUN_ID/`. Prior inputs are archived before publishing, and each run has a `runs/RUN_ID/reports/report.md` snapshot with links rebased to its receipts and snapshotted ledgers.
+The current report is published at start and on early failures, even without a review. Old successful results remain in history and must not be presented as this run's result. Use the specific run's snapshot for durable upstream references.
 
-`runs/RUN_ID/` preserves state, role invocations/prompts/outputs, access receipts, generated PoC code, execution receipts, stdout/stderr and report snapshots. Prior deliverables and an optional input review are archived under `inputs/` before publication.
+Finish with a conclusion, changes/remaining work and one existing report link with relevant sections. Add representative raw evidence or internal state only to investigate a result or blockage. Retained Memory references are optional and follow [memory-workgraph.md](memory-workgraph.md); the harness never writes Memory.
 
-Guide the user by the question they want to check, using actual links under the resolved project root and slug:
-
-| What to check | Artifact relative to `PROJECT/docs/design-research/SLUG/` |
-|---|---|
-| Completion, run ID and stopping reason | `status.json`; follow its `state_path` to `runs/RUN_ID/state.json` for execution state and scope |
-| Candidate comparison and conditional recommendation | `design-research.md` and `decision.md`, when a research dossier exists |
-| Findings, reproduction and expected/actual behavior | `review.md` and its Evidence links |
-| Sources, measured results and reproducible evidence | `evidence.json`, when available, plus report Evidence links and `research-log.json`; follow receipts to stdout/stderr and saved artifacts |
-| Reports from a particular execution | `runs/RUN_ID/reports/` and its actual files |
-| Requested fixes and independently checked before/after results | `fix-report.md` and its evidence for changes actually made in `run` mode |
-| Retained detailed verification/experiment records | Actual note references under `artifacts/design-research/SLUG/RUN_ID/` in the configured Memory project; see [memory-workgraph.md](memory-workgraph.md) |
-
-Check `status.json` first. Top-level reports can change on a later run with the same slug, and a run stopped before review can leave prior reports in place. Match report run IDs and use this run's snapshots for historical references. A missing dossier/report is an unproduced artifact; link existing status/state instead. The presence of `fix-report.md` during research/audit does not establish that application fixes were made. Include only relevant, existing files in the final navigation table and state unexecuted or blocked work explicitly.
-Memory paths belong to the selected Basic Memory project, not the target repository's report directory. The outer skill chooses useful records and saves them when permitted; report the actual saved references/status. The harness itself does not install Workgraph or perform Memory writes.
+Legacy topics without `.internal/layout.json` retain their former report/record locations and behavior. Check root `status.json` against legacy report IDs. Update/install alone does not transform them. Run `gan-harness.sh migrate --project PROJECT --slug SLUG` to preview consolidated content, link changes and backups; `--apply` applies it. Active runs, corrupt records, unknown headings, incoming custom links and existing destination files block migration. Historical runs/snapshots stay byte-identical. Migration does not rerun research or grant adoption approval.
 
 Evidence records have stable EV IDs, workspace-relative paths, SHA-256, iteration and source fingerprint. Before each role/resume the parent rechecks registered artifacts and execution outputs. Declare `artifact_paths` in planned checks/experiments for generated JSON, plots or images; results must exist and are archived. Readable issue evidence links point to actual receipts and raw results. PNG/JPEG/GIF results also render inline. Screenshots are only produced if an actual applicable check captures them; this backend kit does not install a browser or infer a visual review.
 

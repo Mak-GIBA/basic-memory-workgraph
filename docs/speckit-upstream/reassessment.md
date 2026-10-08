@@ -3,7 +3,7 @@
 [概要](README.md) · [使い方](usage.md) · [導入手順](installation.md) · [Design Research](../design-research/README.md)
 
 既存の要件が今も必要か、評価方法が適切か、より精度を出せる実現方式があるかを、目的と根拠から見直します。
-Workbench 1.3.0のSkillには、判断を左右する技術的な不確実性がある場合に、Design Researchの使用理由とモードを示して実行する手順があります。
+Workbench 2.0.0のSkillには、判断を左右する技術的な不確実性がある場合に、Design Researchの使用理由とモードを示して実行する手順があります。
 単純な文書修正や確認済み仕様の整理では、研究を一律に要求しません。
 
 ここで扱う「精度」には、要件・設計判断の確かさと、検索・抽出・分類・推論などの処理結果の精度があります。
@@ -12,53 +12,19 @@ Workbench 1.3.0のSkillには、判断を左右する技術的な不確実性が
 
 ## 成果物の保存先と確認先
 
-以下のパスは、このSkillを使う対象プロジェクトのルートからの相対パスです。
-上流文書の保存先には既定の`docs/upstream/`を示しています。
-`--docs-dir`を変更した場合は、`speckit-workbench paths --project .`と`.specify/workbench.json`の`docs_dir`を確認してください。
-既存文書を登録して使う場合は、`extra_docs`と各IDの参照先にある実際の正本を読みます。
+対象プロジェクトで通常読むのは次の資料です。実際の`docs_dir`・slug・run IDを使って確認します。
 
-### 要件・設計・検証・承認を確認する
-
-| 確認したいこと | 既定の保存先 | 見る内容 |
+| 確認したいこと | 正本 | 主な内容 |
 |---|---|---|
-| 要件が必要な理由、目的と対象範囲 | `docs/upstream/product/vision.md` | 目的、対象・対象外、要求の根拠 |
-| 現在の挙動と合意済み仕様の違い | `docs/upstream/as-is/baseline.md` | 観測した現状、根拠、未確認事項 |
-| 機能要件・受入条件 | `docs/upstream/requirements/system-requirements.md` | 要件ID、期待挙動、受入条件、状態 |
-| 精度目標・品質・運用制約 | `docs/upstream/requirements/quality-operations.md` | 指標、目標・下限、性能・費用・運用条件 |
-| データ・API・互換性の契約 | `docs/upstream/requirements/interfaces-data.md` | 入出力、データ条件、変更しない契約 |
-| 採用を提案する方式と理由 | `docs/upstream/architecture/decisions/README.md` | 現行案と候補、比較条件、採否理由、適用・見直し条件、研究への参照 |
-| 評価データ・手順・期待結果 | `docs/upstream/verification/plan.md` | 評価条件と検証計画、実施・未実施、実行根拠。計画と結果を区別する |
-| 今回の変更理由と影響 | `docs/upstream/changes/README.md` | 維持・変更・廃止の提案、関連ID、旧判断との関係 |
-| 未決定事項・追加確認 | `docs/upstream/questions.md` | 未確認事項、確認方法、判断待ち |
-| 目的から要件・設計・検証へのつながり | `docs/upstream/traceability/matrix.md`、同ディレクトリの`index.json` | `trace`が生成する対応表・索引。本文の正本は上記文書 |
-| 今回承認してほしい内容 | `docs/upstream/governance/reviews/<review-id>.md`、同名の`.json` | `review`で固定した対象ID、本文、根拠、内容ハッシュ |
-| 承認・撤回の記録と現在の状態 | `docs/upstream/governance/approvals.md`、`.specify/workbench/approvals.jsonl` | 要約と台帳。現在の未承認・再承認は`approval-plan`でも確認する |
-| 上流のready判定と、その後の変更 | `.specify/workbench/gate-ready.json` | `gate`の記録。現在も有効かは`gate --verify`で確認する。アプリのテスト合格を示すものではない |
+| 何を作る・維持するか | `docs/upstream/requirements.md` | 目的・利用者・範囲、機能・品質・制約、現状と期待、不明点 |
+| どう実現するか | `docs/upstream/design.md` | 構成・動作・データ・API・運用、選定理由と変更影響 |
+| どこまで確認できたか | `docs/upstream/verification.md` | 受入条件、確認方法、実際の結果、未実行、証拠 |
+| 研究・実測から何が分かったか | `docs/design-research/<slug>/report.md` | 結論、比較、検証、変更前後、残る確認。実行した場合のみ |
 
-### 研究・実測の結果を確認する
-
-Design Researchの保存先は`docs/design-research/<slug>/`です。次の表は、このディレクトリからの相対パスを示します。
-まず`status.json`の実行ID・状態を確認し、今回の実行に対応する報告を読みます。
-
-| 確認したいこと | 保存先 | 見る内容 |
-|---|---|---|
-| 実行が完了したか、なぜ止まったか | `status.json`、その`state_path`が示す`runs/<run-id>/state.json` | 実行ID、状態、停止理由、対象版、実行状態 |
-| 候補の比較と条件付き推奨 | `design-research.md`、`decision.md` | 比較結果、採用案、未確認・再検討条件。研究台帳がある場合のみ作成 |
-| 監査指摘・不具合の再現結果 | `review.md` | 重要度、再現手順、期待・実際の結果、Evidenceへのリンク |
-| 出典・実測・生の結果 | `evidence.json`、報告のEvidenceリンク、`research-log.json` | 出典と実行記録。リンク先の実行記録、標準出力・標準エラー、生成結果まで確認する |
-| 特定の実行で得た報告を後から確認 | `runs/<run-id>/reports/` | その実行の報告保存版。仕様からは実行IDとこの保存版を参照する |
-| 別途依頼した修正と、その前後の検証 | `fix-report.md`とそのEvidenceリンク | `run`で実際に行った修正と検証。この連携の`research/audit`でファイルがあるだけでは修正済みとは判断できない |
-
-同じslugで再実行するとトップレベル報告は更新されます。
-ただし、レビュー前に停止した場合は過去の報告が残ることもあるため、実行IDを照合します。
-研究台帳や報告が成立していない場合、該当ファイルは未作成です。`attach`で置かれた雛形も完成した仕様ではありません。
-
-### Skill実行後の回答で確認する
-
-Skillは最終回答に「確認したいこと / 実際の成果物へのリンク / 今回の状態・確認箇所」の表を付けます。
-今回作成・更新したファイルと、判断に使った既存の正本を区別し、設定された保存先と実際のslug・実行ID・review IDで案内します。
-研究の状態・比較結果・実行根拠、仕様への反映先、承認待ちの資料を、この表から確認できます。
-未実行・未作成・対象外は理由とともに示し、存在しないファイルのリンクは作りません。
+研究の結論は設計の選定理由へ、評価条件と実際の結果は検証へ戻します。全文の複製や個別のdecision/fix報告は作りません。
+最新のreport.mdは実行前・停止時にも状態を表示します。仕様から長期参照する場合は`runs/<run-id>/reports/report.md`を使います。
+旧形式は任意の移行まで既存の正本を案内します。[配置・移行](usage.md#成果物の保存先と確認先)
+Skillの最終回答は結論と該当する正本へのリンクを中心にし、判断待ち・未実行を明示します。内部記録は必要な調査だけ補足します。
 
 ## 最初に入口を選ぶ
 
@@ -229,7 +195,7 @@ $upstream-change docs/design-research/<slug>/runs/<run-id>/reports/の研究結�
 
 ## 研究結果を仕様へ戻す
 
-研究の正本は`docs/design-research/<slug>/`に置きます。報告・証拠台帳の有無は実行結果に従い、存在しないファイルへのリンクは作りません。
+研究の正本は`docs/design-research/<slug>/report.md`です。報告・証拠台帳の有無は実行結果に従い、存在しないファイルへのリンクは作りません。
 上流文書には判断に必要な要約と関連ID、run ID、保存版の報告・実行根拠へのリンクを残します。
 
 | 反映先 | 残す内容 |
@@ -242,7 +208,7 @@ $upstream-change docs/design-research/<slug>/runs/<run-id>/reports/の研究結�
 要件IDを可能な限り維持し、廃止・置き換えは`retired/supersedes`と履歴で追跡します。
 要約と参照は項目の`sources`と通常Markdown本文へ記載します。
 参照する外部ファイルの中身は承認ハッシュに含まれないため、採用判断と適用条件を承認対象の文書にも残します。
-同じslugのトップレベル報告は更新され得るので、実行ごとの`runs/<run-id>/reports/`と実際の根拠を参照します。
+同じslugのトップレベル報告は更新され得るので、実行ごとの`runs/<run-id>/reports/report.md`と実際の根拠を参照します。
 
 `research_complete`は条件付き提案の完成、`reviewed`は監査報告の完成です。目標精度の達成や採用承認を終了コードから判断しません。
 未完了の研究や必須条件の不足は確認待ちとして残し、実行結果だけの追記と仕様の変更を区別します。
