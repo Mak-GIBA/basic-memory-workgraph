@@ -20,6 +20,7 @@
 
 ## Workgraphを詳しく使う
 
+- [ナレッジグラフの構造と具体例](basic-memory-workgraph/knowledge-graph.md)
 - [Memoryの共有・インポート・学習用JSONL出力](basic-memory-workgraph/sharing.md)
 - [保存方針・配置・仕組み](basic-memory-workgraph/reference.md)
 - [困ったとき・記憶の点検](basic-memory-workgraph/troubleshooting.md)
