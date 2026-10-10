@@ -1,5 +1,7 @@
 # ECC MCPの導入判断
 
+**追加の再評価:** 未知URLからの文書探索、生成コードの実行、注文成立・console/network診断、実モデルによる情報保持まで測った[最新の比較と導入判断](mcp-workflow-evaluation.md)を参照してください。以下は初回調査の記録です。初回の停止・測定値は書き換えず保存しています。
+
 2026年10月10日に、現在のCodexと既存ツールを基準に調べ直しました。初回の既定追加はContext7とPlaywrightに絞り、Chrome DevTools、Parallel Search、Cloudflare Docsは用途に応じて選択します。Sequential Thinkingの一律追加とToken Optimizerの登録は見送ります。既存の接続を削除・無効化する判断ではありません。
 
 実測値と採点コードは親側で確認しました。研究ハーネスは`producer-design`のモデル工程が1800.009秒で停止し、その研究runの独立レビューまで完了していません。runは`20261010T084640Z-9997a580`、実行は`gan-harness.sh research`（`comparison`、`effectiveness`、`--reader-friendly --allow-network`）です。以下は限定した測定に基づく導入判断であり、研究ハーネスが一般的な効果を承認したという意味ではありません。

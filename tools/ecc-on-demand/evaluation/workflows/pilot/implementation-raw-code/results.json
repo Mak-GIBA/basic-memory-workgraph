@@ -1,0 +1,196 @@
+{
+  "contract_sha256": "24af6884b8570895de3b593dc39b10f7379e856dee2d61bbbf404d1e93359e87",
+  "rows": [
+    {
+      "outputs": {
+        "implementation": "from pydantic import BaseModel, Field\n\n\nclass Product(BaseModel):\n    count: int = Field(default=0, ge=1, validate_default=True)\n"
+      },
+      "sources": {
+        "implementation": [
+          "https://docs.pydantic.dev/2.10/concepts/fields/#validate-default-values",
+          "https://docs.pydantic.dev/2.10/concepts/fields/#numeric-constraints",
+          "https://docs.pydantic.dev/2.10/concepts/conversion_table/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 260577,
+        "cached_input_tokens": 228736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 643,
+        "reasoning_output_tokens": 18
+      },
+      "elapsed_seconds": 49.146,
+      "prompt_sha256": "646a7b3c20b592f30f6af840f5005c9e0c067ca2450548c7b8f53b9ac07ec0f9",
+      "checked_at": "2026-10-10T14:21:36.384720+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "actual_behavior": [],
+      "grader_error": "generated code failed execution",
+      "contract_sha256": "24af6884b8570895de3b593dc39b10f7379e856dee2d61bbbf404d1e93359e87",
+      "correct": 0,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "implementation": "from pydantic import BaseModel, Field\n\n\nclass Product(BaseModel):\n    count: int = Field(default=0, ge=1, validate_default=True)\n"
+      },
+      "sources": {
+        "implementation": [
+          "https://github.com/pydantic/pydantic/blob/v2.10.6/docs/concepts/fields.md",
+          "https://github.com/pydantic/pydantic/blob/v2.10.6/docs/concepts/strict_mode.md"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 89998,
+        "cached_input_tokens": 79488,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 339,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 25.345,
+      "prompt_sha256": "646a7b3c20b592f30f6af840f5005c9e0c067ca2450548c7b8f53b9ac07ec0f9",
+      "checked_at": "2026-10-10T14:22:01.795136+00:00",
+      "candidate": "context7",
+      "trial": 1,
+      "actual_behavior": [],
+      "grader_error": "generated code failed execution",
+      "contract_sha256": "24af6884b8570895de3b593dc39b10f7379e856dee2d61bbbf404d1e93359e87",
+      "correct": 0,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "implementation": "from pydantic import BaseModel, Field\n\n\nclass Product(BaseModel):\n    count: int = Field(default=0, ge=1, validate_default=True)\n"
+      },
+      "sources": {
+        "implementation": [
+          "https://github.com/pydantic/pydantic/blob/v2.10.6/docs/concepts/fields.md",
+          "https://github.com/pydantic/pydantic/blob/v2.10.6/docs/concepts/strict_mode.md"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 71235,
+        "cached_input_tokens": 67072,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 351,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 20.034,
+      "prompt_sha256": "646a7b3c20b592f30f6af840f5005c9e0c067ca2450548c7b8f53b9ac07ec0f9",
+      "checked_at": "2026-10-10T14:22:21.877533+00:00",
+      "candidate": "context7",
+      "trial": 2,
+      "actual_behavior": [],
+      "grader_error": "generated code failed execution",
+      "contract_sha256": "24af6884b8570895de3b593dc39b10f7379e856dee2d61bbbf404d1e93359e87",
+      "correct": 0,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "implementation": "from pydantic import BaseModel, Field\n\n\nclass Product(BaseModel):\n    count: int = Field(default=0, ge=1, validate_default=True)\n"
+      },
+      "sources": {
+        "implementation": [
+          "https://pydantic.dev/docs/validation/latest/concepts/fields/#validate-default-values",
+          "https://pydantic.dev/docs/validation/latest/api/pydantic/fields/#pydantic.fields.Field",
+          "https://pydantic.dev/docs/validation/latest/concepts/models/#data-conversion"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 319563,
+        "cached_input_tokens": 280832,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 615,
+        "reasoning_output_tokens": 18
+      },
+      "elapsed_seconds": 47.112,
+      "prompt_sha256": "646a7b3c20b592f30f6af840f5005c9e0c067ca2450548c7b8f53b9ac07ec0f9",
+      "checked_at": "2026-10-10T14:23:09.045735+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "actual_behavior": [],
+      "grader_error": "generated code failed execution",
+      "contract_sha256": "24af6884b8570895de3b593dc39b10f7379e856dee2d61bbbf404d1e93359e87",
+      "correct": 0,
+      "total": 4
+    }
+  ]
+}

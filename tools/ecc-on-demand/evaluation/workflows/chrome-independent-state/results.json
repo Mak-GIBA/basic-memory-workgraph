@@ -1,0 +1,1187 @@
+{
+  "contract_sha256": "a86a6dec7b5f3572bd3045fc5af675b894eba803b265cf2e21a5f7cf25b203c3",
+  "rows": [
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 246263,
+        "cached_input_tokens": 228352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1830,
+        "reasoning_output_tokens": 101
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:46811\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"cat > /tmp/ecc-workflow-ajhzt4wd/ui.cjs <<'NODE'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const browser=await chromium.connectOverCDP('http://127.0.0.1:46811');const context=await browser.newContext();const page=await context.newPage();await page.goto('http://127.0.0.1:37233/');await page.getByRole('button',{name:'Start order'}).click();console.log(await page.locator('body').innerText());console.log(await page.locator('input').evaluateAll(es=>es.map(e=>({type:e.type,placeholder:e.placeholder,aria:e.getAttribute('aria-label')}))));await context.close();process.exit(0);})();\nNODE\nnode /tmp/ecc-workflow-ajhzt4wd/ui.cjs\"",
+          "aggregated_output": "Quantity Coupon Review\n[\n  { type: 'number', placeholder: '', aria: null },\n  { type: 'text', placeholder: '', aria: null }\n]\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'NODE'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');for(const c of b.contexts())for(const p of c.pages())console.log(p.url(),await p.locator('body').ariaSnapshot());process.exit(0)})();\nNODE\"",
+          "aggregated_output": "chrome://new-tab-page/ - iframe\n- combobox \"Search Google or type a URL\"\n- button \"Search by voice\"\n- button \"Search by image\"\n- link \"Web Store\":\n  - /url: https://chrome.google.com/webstore?hl=en\n- button \"More actions for Web Store shortcut\"\n- text: Web Store\n- button \"Add shortcut\"\n- button \"Customize Chrome\":\n  - img\n  - text: Customize Chrome\n- img\nhttp://127.0.0.1:37233/ - main:\n  - text: Quantity\n  - spinbutton \"Quantity\": \"2\"\n  - text: Coupon\n  - textbox \"Coupon\"\n  - button \"Review\"\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed",
+          "command": "/bin/bash -lc \"python - <<'PY'\np='/tmp/ecc-workflow-ajhzt4wd/ui.cjs'\ns=open(p).read();s=s.replace(\\\"console.log(await page.locator('body').innerText());\\\", \\\"await page.locator('input[type=number]').fill('2');await page.locator('input[type=text]').fill('SAVE10');await page.getByRole('button',{name:'Review',exact:true}).click();console.log(await page.locator('body').innerText());\\\")\nopen(p,'w').write(s)\nPY\nnode /tmp/ecc-workflow-ajhzt4wd/ui.cjs\"",
+          "aggregated_output": "node:internal/process/promises:394\n    triggerUncaughtException(err, true /* fromPromise */);\n    ^\n\nlocator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=text]')\u001b[22m\n\n    at /tmp/ecc-workflow-ajhzt4wd/ui.cjs:2:351 {\n  log: [ \"  - waiting for locator('input[type=text]')\" ],\n  name: 'TimeoutError'\n}\n\nNode.js v24.15.0\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed",
+          "command": "/bin/bash -lc \"node - <<'NODE'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=b.contexts().find(c=>c.pages().some(p=>p.url().startsWith('http://127.0.0.1:37233')));const p=c.pages()[0];await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review',exact:true}).click();console.log(await p.locator('body').ariaSnapshot());process.exit(0)})();\nNODE\"",
+          "aggregated_output": "[stdin]:1\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=b.contexts().find(c=>c.pages().some(p=>p.url().startsWith('http://127.0.0.1:37233')));const p=c.pages()[0];await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review',exact:true}).click();console.log(await p.locator('body').ariaSnapshot());process.exit(0)})();\n                                                                                                                                                                                                                                                                            ^\n\nTypeError: Cannot read properties of undefined (reading 'pages')\n    at [stdin]:1:269\n\nNode.js v24.15.0\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"python - <<'PY'\np='/tmp/ecc-workflow-ajhzt4wd/ui.cjs';s=open(p).read().replace(\\\"page.locator('input[type=number]')\\\",\\\"page.getByRole('spinbutton',{name:'Quantity'})\\\").replace(\\\"page.locator('input[type=text]')\\\",\\\"page.getByRole('textbox',{name:'Coupon'})\\\");open(p,'w').write(s)\nPY\nnode /tmp/ecc-workflow-ajhzt4wd/ui.cjs\"",
+          "aggregated_output": "306Confirm\n[]\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"python - <<'PY'\np='/tmp/ecc-workflow-ajhzt4wd/ui.cjs';s=open(p).read();s=s.replace(\\\"console.log(await page.locator('body').innerText());\\\", \\\"console.log('REVIEW',await page.locator('body').ariaSnapshot());await page.getByRole('button',{name:'Confirm',exact:true}).click();console.log('CONFIRM',await page.locator('body').ariaSnapshot());const logs=[];const net=[];page.on('console',m=>logs.push({type:m.type(),text:m.text()}));page.on('response',r=>net.push({url:r.url(),status:r.status()}));await page.goto('http://127.0.0.1:37233/#diagnosis');await page.waitForTimeout(800);console.log('DIAGNOSIS',await page.locator('body').ariaSnapshot());console.log('CONSOLE',logs);console.log('NETWORK',net);\\\");open(p,'w').write(s)\nPY\nnode /tmp/ecc-workflow-ajhzt4wd/ui.cjs\"",
+          "aggregated_output": "REVIEW - main:\n  - status: \"306\"\n  - button \"Confirm\"\nCONFIRM - main:\n  - status: \"306\"\n  - button \"Confirm\"\nDIAGNOSIS - main:\n  - status: order-2-SAVE10\nCONSOLE []\nNETWORK [ { url: 'http://127.0.0.1:37233/api/order', status: 200 } ]\n[]\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'NODE'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();const logs=[],net=[];p.on('console',m=>logs.push({type:m.type(),text:m.text()}));p.on('response',r=>net.push({url:r.url(),status:r.status()}));await p.goto('http://127.0.0.1:37233/#diagnosis');await p.waitForTimeout(600);console.log(await p.locator('body').ariaSnapshot());console.log(JSON.stringify({logs,net}));await c.close();process.exit(0)})();\nNODE\"",
+          "aggregated_output": "- main:\n  - status: failure\n{\"logs\":[{\"type\":\"error\",\"text\":\"Failed to load resource: the server responded with a status of 503 (Service Unavailable)\"},{\"type\":\"error\",\"text\":\"E_CHECKOUT_RETRY 503\"}],\"net\":[{\"url\":\"http://127.0.0.1:37233/\",\"status\":200},{\"url\":\"http://127.0.0.1:37233/api/failure\",\"status\":503},{\"url\":\"http://127.0.0.1:37233/api/diagnosis\",\"status\":200}]}\n"
+        }
+      ],
+      "elapsed_seconds": 96.133,
+      "prompt_sha256": "626fe24a7b4710bae36a2b7ee84839b82d00c93e553e2cf648fe0f125c017080",
+      "checked_at": "2026-10-10T14:33:48.047037+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "a86a6dec7b5f3572bd3045fc5af675b894eba803b265cf2e21a5f7cf25b203c3",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [],
+        "diagnosis": [
+          "https://developer.chrome.com/docs/devtools/network",
+          "https://developer.chrome.com/docs/devtools/console"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_console_message",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 286746,
+        "cached_input_tokens": 267008,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 692,
+        "reasoning_output_tokens": 20
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:46811\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:37233/"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Pages\n1: New Tab (chrome://new-tab-page/)\n2: Workflow fixture (http://127.0.0.1:37233/) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=1_2 button \"Start order\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "uid": "1_2",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=2_0 StaticText \"Quantity \"\n    uid=2_1 spinbutton \"Quantity \" valuemax=\"0\" valuemin=\"0\" valuetext=\"\"\n    uid=2_2 StaticText \"Coupon \"\n    uid=2_3 textbox \"Coupon \"\n    uid=2_4 button \"Review\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill_form",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "elements": [
+              {
+                "uid": "2_1",
+                "value": "2"
+              },
+              {
+                "uid": "2_3",
+                "value": "SAVE10"
+              }
+            ],
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully filled out the form\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=2_0 StaticText \"Quantity \"\n    uid=2_1 spinbutton \"Quantity \" value=\"2\" valuemax=\"0\" valuemin=\"0\" valuetext=\"2\"\n    uid=2_2 StaticText \"Coupon \"\n    uid=2_3 textbox \"Coupon \" focusable focused value=\"SAVE10\"\n    uid=2_4 button \"Review\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "uid": "2_4",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=4_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=4_1 StaticText \"306\"\n    uid=4_2 button \"Confirm\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "uid": "4_2",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=5_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=5_1 StaticText \"order-2-SAVE10\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "url": "http://127.0.0.1:37233/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully navigated to http://127.0.0.1:37233/#diagnosis.\n## Pages\n1: New Tab (chrome://new-tab-page/)\n2: Workflow fixture (http://127.0.0.1:37233/#diagnosis) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/#diagnosis\"\n  uid=1_1 main\n    uid=5_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=5_1 StaticText \"order-2-SAVE10\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "type": "reload"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully reloaded the page.\n## Pages\n1: New Tab (chrome://new-tab-page/)\n2: Workflow fixture (http://127.0.0.1:37233/#diagnosis) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=7_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/#diagnosis\"\n  uid=7_1 main\n    uid=7_2 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=7_3 StaticText \"failure\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Console messages\nShowing 1-2 of 2 (Page 1 of 1).\nmsgid=1 [error] Failed to load resource: the server responded with a status of 503 (Service Unavailable) (0 args)\nmsgid=2 [error] E_CHECKOUT_RETRY 503 (2 args)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Network requests\nShowing 1-4 of 4 (Page 1 of 1).\nreqid=5 GET http://127.0.0.1:37233/#diagnosis [200]\nreqid=6 GET http://127.0.0.1:37233/api/failure [503]\nreqid=7 POST http://127.0.0.1:37233/api/diagnosis [200]\nreqid=8 GET http://127.0.0.1:37233/favicon.ico [200]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "reqid": 6
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Request http://127.0.0.1:37233/api/failure\nStatus: 503\n### Request Headers\n- sec-ch-ua-platform:\"Linux\"\n- referer:http://127.0.0.1:37233/\n- user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36\n- sec-ch-ua:\"Chromium\";v=\"148\", \"Google Chrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"\n- sec-ch-ua-mobile:?0\n- accept:*/*\n- accept-encoding:gzip, deflate, br, zstd\n- accept-language:en-US,en;q=0.9\n- connection:keep-alive\n- host:127.0.0.1:37233\n- sec-fetch-dest:empty\n- sec-fetch-mode:cors\n- sec-fetch-site:same-origin\n### Response Headers\n- content-type:text/html\n- date:Sat, 10 Oct 2026 14:34:20 GMT\n- server:BaseHTTP/0.6 Python/3.12.3\n### Response Body\nfailure"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_console_message",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 2,
+            "msgid": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "ID: 2\nMessage: error> E_CHECKOUT_RETRY 503\n### Arguments\nArg #0: E_CHECKOUT_RETRY\nArg #1: 503\n### Stack trace\nat  (VM123 127.0.0.1:37233:4:153)\n--- Promise.then -----------------------\nat  (VM123 127.0.0.1:37233:4:136)\nNote: line and column numbers use 1-based indexing"
+              }
+            ],
+            "structured_content": null
+          }
+        }
+      ],
+      "elapsed_seconds": 47.141,
+      "prompt_sha256": "626fe24a7b4710bae36a2b7ee84839b82d00c93e553e2cf648fe0f125c017080",
+      "checked_at": "2026-10-10T14:34:35.188194+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "chrome",
+      "trial": 1,
+      "contract_sha256": "a86a6dec7b5f3572bd3045fc5af675b894eba803b265cf2e21a5f7cf25b203c3",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://developer.chrome.com/docs/devtools/console"
+        ],
+        "diagnosis": [
+          "https://developer.chrome.com/docs/devtools/network",
+          "https://developer.chrome.com/docs/devtools/console"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_console_message",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 291902,
+        "cached_input_tokens": 260608,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 719,
+        "reasoning_output_tokens": 28
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:46811\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:37233/"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Pages\n1: Workflow fixture (http://127.0.0.1:37233/#diagnosis)\n2: New Tab (chrome://new-tab-page/)\n3: Workflow fixture (http://127.0.0.1:37233/) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=1_2 button \"Start order\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "uid": "1_2",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=2_0 StaticText \"Quantity \"\n    uid=2_1 spinbutton \"Quantity \" valuemax=\"0\" valuemin=\"0\" valuetext=\"\"\n    uid=2_2 StaticText \"Coupon \"\n    uid=2_3 textbox \"Coupon \"\n    uid=2_4 button \"Review\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill_form",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "elements": [
+              {
+                "uid": "2_1",
+                "value": "2"
+              },
+              {
+                "uid": "2_3",
+                "value": "SAVE10"
+              }
+            ],
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully filled out the form\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=2_0 StaticText \"Quantity \"\n    uid=2_1 spinbutton \"Quantity \" value=\"2\" valuemax=\"0\" valuemin=\"0\" valuetext=\"2\"\n    uid=2_2 StaticText \"Coupon \"\n    uid=2_3 textbox \"Coupon \" autocomplete=\"list\" focusable focused haspopup=\"menu\" value=\"SAVE10\"\n    uid=2_4 button \"Review\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "uid": "2_4",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=4_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=4_1 StaticText \"306\"\n    uid=4_2 button \"Confirm\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "uid": "4_2",
+            "includeSnapshot": true
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully clicked on the element\n## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/\"\n  uid=1_1 main\n    uid=5_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=5_1 StaticText \"order-2-SAVE10\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "url": "http://127.0.0.1:37233/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully navigated to http://127.0.0.1:37233/#diagnosis.\n## Pages\n1: Workflow fixture (http://127.0.0.1:37233/#diagnosis)\n2: New Tab (chrome://new-tab-page/)\n3: Workflow fixture (http://127.0.0.1:37233/#diagnosis) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=1_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/#diagnosis\"\n  uid=1_1 main\n    uid=5_0 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=5_1 StaticText \"order-2-SAVE10\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "type": "reload"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Successfully reloaded the page.\n## Pages\n1: Workflow fixture (http://127.0.0.1:37233/#diagnosis)\n2: New Tab (chrome://new-tab-page/)\n3: Workflow fixture (http://127.0.0.1:37233/#diagnosis) [selected]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Latest page snapshot\nuid=7_0 RootWebArea \"Workflow fixture\" url=\"http://127.0.0.1:37233/#diagnosis\"\n  uid=7_1 main\n    uid=7_2 status atomic live=\"polite\" relevant=\"additions text\"\n      uid=7_3 StaticText \"failure\"\n"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Network requests\nShowing 1-4 of 4 (Page 1 of 1).\nreqid=5 GET http://127.0.0.1:37233/#diagnosis [200]\nreqid=6 GET http://127.0.0.1:37233/api/failure [503]\nreqid=7 POST http://127.0.0.1:37233/api/diagnosis [200]\nreqid=8 GET http://127.0.0.1:37233/favicon.ico [200]"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Console messages\nShowing 1-2 of 2 (Page 1 of 1).\nmsgid=1 [error] Failed to load resource: the server responded with a status of 503 (Service Unavailable) (0 args)\nmsgid=2 [error] E_CHECKOUT_RETRY 503 (2 args)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "reqid": 6
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "## Request http://127.0.0.1:37233/api/failure\nStatus: 503\n### Request Headers\n- sec-ch-ua-platform:\"Linux\"\n- referer:http://127.0.0.1:37233/\n- user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36\n- sec-ch-ua:\"Chromium\";v=\"148\", \"Google Chrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"\n- sec-ch-ua-mobile:?0\n- accept:*/*\n- accept-encoding:gzip, deflate, br, zstd\n- accept-language:en-US,en;q=0.9\n- connection:keep-alive\n- host:127.0.0.1:37233\n- sec-fetch-dest:empty\n- sec-fetch-mode:cors\n- sec-fetch-site:same-origin\n### Response Headers\n- content-type:text/html\n- date:Sat, 10 Oct 2026 14:35:06 GMT\n- server:BaseHTTP/0.6 Python/3.12.3\n### Response Body\nfailure"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_console_message",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "pageId": 3,
+            "msgid": 2
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "ID: 2\nMessage: error> E_CHECKOUT_RETRY 503\n### Arguments\nArg #0: E_CHECKOUT_RETRY\nArg #1: 503\n### Stack trace\nat  (VM123 127.0.0.1:37233:4:153)\n--- Promise.then -----------------------\nat  (VM123 127.0.0.1:37233:4:136)\nNote: line and column numbers use 1-based indexing"
+              }
+            ],
+            "structured_content": null
+          }
+        }
+      ],
+      "elapsed_seconds": 47.559,
+      "prompt_sha256": "626fe24a7b4710bae36a2b7ee84839b82d00c93e553e2cf648fe0f125c017080",
+      "checked_at": "2026-10-10T14:35:22.748345+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "chrome",
+      "trial": 2,
+      "contract_sha256": "a86a6dec7b5f3572bd3045fc5af675b894eba803b265cf2e21a5f7cf25b203c3",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 172368,
+        "cached_input_tokens": 156032,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1411,
+        "reasoning_output_tokens": 40
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:46811\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:37233/');await p.getByText('Start order',{exact:true}).click();console.log(await p.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "- main:\n  - text: Quantity\n  - spinbutton \"Quantity\"\n  - text: Coupon\n  - textbox \"Coupon\"\n  - button \"Review\"\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:37233/');console.log(await p.locator('body').innerText());console.log(await p.locator('input').evaluateAll(es=>es.map(e=>({type:e.type,placeholder:e.placeholder,aria:e.getAttribute('aria-label')}))));await c.close();await b.disconnect?.();})();\nJS\"",
+          "aggregated_output": "Start order\n[]\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:37233/');await p.getByText('Start order',{exact:true}).click();await p.getByRole('spinbutton',{name:'Quantity'}).fill('2');await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review',exact:true}).click();console.log(await p.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "- main:\n  - status: \"306\"\n  - button \"Confirm\"\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:37233/');await p.getByText('Start order',{exact:true}).click();await p.getByRole('spinbutton',{name:'Quantity'}).fill('2');await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review',exact:true}).click();console.log('total',await p.getByRole('status').innerText());await p.getByRole('button',{name:'Confirm',exact:true}).click();console.log('confirmed',await p.locator('body').ariaSnapshot());const logs=[];const net=[];p.on('console',m=>logs.push({type:m.type(),text:m.text()}));p.on('response',r=>net.push({url:r.url(),status:r.status()}));await p.goto('http://127.0.0.1:37233/#diagnosis');await p.waitForTimeout(500);console.log('diagnosis',await p.locator('body').ariaSnapshot());console.log('console',JSON.stringify(logs));console.log('network',JSON.stringify(net));await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "total 306\nconfirmed - main:\n  - status: \"306\"\n  - button \"Confirm\"\ndiagnosis - main:\n  - status: order-2-SAVE10\nconsole []\nnetwork [{\"url\":\"http://127.0.0.1:37233/api/order\",\"status\":200}]\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:46811');const c=await b.newContext();const p=await c.newPage();const logs=[],net=[];p.on('console',m=>logs.push({type:m.type(),text:m.text()}));p.on('response',r=>net.push({url:r.url(),status:r.status()}));await p.goto('http://127.0.0.1:37233/#diagnosis');await p.waitForTimeout(500);console.log(await p.locator('body').ariaSnapshot());console.log('console',JSON.stringify(logs));console.log('network',JSON.stringify(net));await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "- main:\n  - status: failure\nconsole [{\"type\":\"error\",\"text\":\"Failed to load resource: the server responded with a status of 503 (Service Unavailable)\"},{\"type\":\"error\",\"text\":\"E_CHECKOUT_RETRY 503\"}]\nnetwork [{\"url\":\"http://127.0.0.1:37233/\",\"status\":200},{\"url\":\"http://127.0.0.1:37233/api/failure\",\"status\":503},{\"url\":\"http://127.0.0.1:37233/api/diagnosis\",\"status\":200}]\n"
+        }
+      ],
+      "elapsed_seconds": 61.372,
+      "prompt_sha256": "626fe24a7b4710bae36a2b7ee84839b82d00c93e553e2cf648fe0f125c017080",
+      "checked_at": "2026-10-10T14:36:24.120800+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "a86a6dec7b5f3572bd3045fc5af675b894eba803b265cf2e21a5f7cf25b203c3",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    }
+  ]
+}

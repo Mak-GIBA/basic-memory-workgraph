@@ -1,0 +1,1197 @@
+{
+  "contract_sha256": "4acaac861c0d94463fbe0e70aa1c8427dfa1e3d74ff11cc8539369663c3e5965",
+  "rows": [
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 300939,
+        "cached_input_tokens": 271488,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1272,
+        "reasoning_output_tokens": 61
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:34771\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node -e 'const {chromium}=require(\\\"/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright\\\"); const readline=require(\\\"readline\\\"); (async()=>{const b=await chromium.connectOverCDP(\\\"http://127.0.0.1:34771\\\"); const c=await b.newContext(); const p=await c.newPage(); p.on(\\\"console\\\",m=>console.log(\\\"CONSOLE\\\",m.type(),m.text())); p.on(\\\"response\\\",r=>console.log(\\\"RESPONSE\\\",r.status(),r.url())); await p.goto(\\\"http://127.0.0.1:43565/\\\"); console.log(await p.locator(\\\"body\\\").ariaSnapshot()); const rl=readline.createInterface({input:process.stdin}); for await(const line of rl){try{console.log(await eval(line));}catch(e){console.log(e.message)}} await c.close(); process.exit(0);})()'\"",
+          "aggregated_output": "RESPONSE 200 http://127.0.0.1:43565/\r\n- main:\r\n  - button \"Start order\"\r\nawait p.getByRole('button', {name:'Start order'}).click(); console.log(await p.locator('body').ariaSnapshot());\r\nawait is only valid in async functions and the top level bodies of modules\r\n(async()=>{await p.getByRole('button', {name:'Start order'}).click(); return await p.locator('body').ariaSnapshot();})()\r\n- main:\r\n  - text: Quantity\r\n  - spinbutton \"Quantity\"\r\n  - text: Coupon\r\n  - textbox \"Coupon\"\r\n  - button \"Review\"\r\n(async()=>{await p.getByRole('spinbutton',{name:'Quantity'}).fill('2'); await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10'); await p.getByRole('button',{name:'Review'}).click(); return await p.locator('body').ariaSnapshot();})()\r\n- main:\r\n  - status: \"306\"\r\n  - button \"Confirm\"\r\n(async()=>{await p.getByRole('button',{name:'Confirm'}).click(); return await p.locator('body').ariaSnapshot();})()\r\n- main:\r\n  - status: \"306\"\r\n  - button \"Confirm\"\r\nRESPONSE 200 http://127.0.0.1:43565/api/order\r\np.locator('body').ariaSnapshot()\r\n- main:\r\n  - status: order-2-SAVE10\r\n(async()=>{await p.goto('http://127.0.0.1:43565/#diagnosis'); return await p.locator('body').ariaSnapshot();})()\r\n- main:\r\n  - status: order-2-SAVE10\r\n(async()=>{await p.reload(); return await p.locator('body').ariaSnapshot();})()\r\nRESPONSE 200 http://127.0.0.1:43565/\r\nRESPONSE 503 http://127.0.0.1:43565/api/failure\r\nCONSOLE error Failed to load resource: the server responded with a status of 503 (Service Unavailable)\r\nCONSOLE error E_CHECKOUT_RETRY 503\r\nRESPONSE 200 http://127.0.0.1:43565/api/diagnosis\r\n- main:\r\n  - status: failure\r\n(async()=>{await c.close(); process.exit(0);})()\r\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed",
+          "command": "/bin/bash -lc \"node -e 'const {chromium}=require(\\\"/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright\\\"); (async()=>{const b=await chromium.connectOverCDP(\\\"http://127.0.0.1:34771\\\"); const c=await b.newContext(); const p=await c.newPage(); await p.goto(\\\"http://127.0.0.1:43565/\\\"); console.log(await p.locator(\\\"body\\\").innerText()); await c.close(); await b.disconnect?.();})()'\"",
+          "aggregated_output": "Start order\n"
+        }
+      ],
+      "elapsed_seconds": 73.912,
+      "prompt_sha256": "9a659338f076aee9f8928d6c5136bbb799272cd0096ac9ffd4940824ff591c29",
+      "checked_at": "2026-10-10T14:33:24.666148+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "4acaac861c0d94463fbe0e70aa1c8427dfa1e3d74ff11cc8539369663c3e5965",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 253590,
+        "cached_input_tokens": 229120,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 719,
+        "reasoning_output_tokens": 39
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:34771\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:43565/"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/');\n```\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-33-590Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f3e2]:\n  - button \"Start order\" [ref=f3e3]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f3e3"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Start order' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-39-328Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f3e2]:\n  - generic [ref=f3e4]:\n    - text: Quantity\n    - spinbutton \"Quantity\" [ref=f3e5]\n  - generic [ref=f3e6]:\n    - text: Coupon\n    - textbox \"Coupon\" [ref=f3e7]\n  - button \"Review\" [ref=f3e8]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "fields": [
+              {
+                "name": "Quantity",
+                "target": "f3e5",
+                "type": "textbox",
+                "value": "2"
+              },
+              {
+                "name": "Coupon",
+                "target": "f3e7",
+                "type": "textbox",
+                "value": "SAVE10"
+              }
+            ]
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('spinbutton', { name: 'Quantity' }).fill('2');\nawait page.getByRole('textbox', { name: 'Coupon' }).fill('SAVE10');\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f3e8"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Review' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-44-126Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f3e2]:\n  - status [ref=f3e9]: \"306\"\n  - button \"Confirm\" [ref=f3e10]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f3e10"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Confirm' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-48-258Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f3e2]:\n  - status [ref=f3e11]: order-2-SAVE10\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:43565/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/#diagnosis');\n```\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-48-270Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f3e2]:\n  - status [ref=f3e11]: order-2-SAVE10\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "action": "new",
+            "url": "http://127.0.0.1:43565/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/#diagnosis');\n```\n### Open tabs\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n- Console: 2 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-33-51-785Z.yml)\n### Events\n- New console entries: .playwright-mcp/console-2026-10-10T14-33-51-753Z.log#L1-L2"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n- Console: 2 errors, 0 warnings\n### Snapshot\n```yaml\n- main [ref=e2]:\n  - status [ref=e3]: failure\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "static": false
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\n2. [GET] http://127.0.0.1:43565/api/failure => [503] Service Unavailable\n3. [POST] http://127.0.0.1:43565/api/diagnosis => [200] OK\n\nNote: 1 static request not shown, run with \"static\" option to see it."
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "level": "error"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\nTotal messages: 2 (Errors: 2, Warnings: 0)\n\n[ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:43565/api/failure:0\n[ERROR] E_CHECKOUT_RETRY 503 @ http://127.0.0.1:43565/:3"
+              }
+            ],
+            "structured_content": null
+          }
+        }
+      ],
+      "elapsed_seconds": 36.494,
+      "prompt_sha256": "9a659338f076aee9f8928d6c5136bbb799272cd0096ac9ffd4940824ff591c29",
+      "checked_at": "2026-10-10T14:34:01.160611+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "playwright",
+      "trial": 1,
+      "contract_sha256": "4acaac861c0d94463fbe0e70aa1c8427dfa1e3d74ff11cc8539369663c3e5965",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/input"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/network",
+          "https://playwright.dev/docs/api/class-consolemessage"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 256630,
+        "cached_input_tokens": 237312,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 790,
+        "reasoning_output_tokens": 74
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'pwd && rg --files -g native-browser.txt -g AGENTS.md'",
+          "aggregated_output": "/tmp/ecc-workflow-v4n5ldwi\nnative-browser.txt\n"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:43565/"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/');\n```\n### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-13-230Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f1e2]:\n  - button \"Start order\" [ref=f1e3]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f1e3"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Start order' }).click();\n```\n### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-18-243Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f1e2]:\n  - generic [ref=f1e4]:\n    - text: Quantity\n    - spinbutton \"Quantity\" [ref=f1e5]\n  - generic [ref=f1e6]:\n    - text: Coupon\n    - textbox \"Coupon\" [ref=f1e7]\n  - button \"Review\" [ref=f1e8]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "fields": [
+              {
+                "name": "Quantity",
+                "target": "f1e5",
+                "type": "textbox",
+                "value": "2"
+              },
+              {
+                "name": "Coupon",
+                "target": "f1e7",
+                "type": "textbox",
+                "value": "SAVE10"
+              }
+            ]
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('spinbutton', { name: 'Quantity' }).fill('2');\nawait page.getByRole('textbox', { name: 'Coupon' }).fill('SAVE10');\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f1e8"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Review' }).click();\n```\n### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-22-298Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f1e2]:\n  - status [ref=f1e9]: \"306\"\n  - button \"Confirm\" [ref=f1e10]\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "target": "f1e10"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Confirm' }).click();\n```\n### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-27-475Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f1e2]:\n  - status [ref=f1e11]: order-2-SAVE10\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "url": "http://127.0.0.1:43565/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/#diagnosis');\n```\n### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-27-490Z.yml)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=f1e2]:\n  - status [ref=f1e11]: order-2-SAVE10\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "action": "select",
+            "index": 1
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n### Snapshot\n```yaml\n- main [ref=e2]:\n  - status [ref=e3]: order-2-SAVE10\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "action": "new",
+            "url": "http://127.0.0.1:43565/#diagnosis"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 2: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:43565/#diagnosis');\n```\n### Open tabs\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 2: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n- Console: 2 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-10-10T14-34-33-833Z.yml)\n### Events\n- New console entries: .playwright-mcp/console-2026-10-10T14-34-33-790Z.log#L1-L2"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null,
+          "arguments": {},
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Open tabs\n- 0: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 1: [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n- 2: (current) [Workflow fixture](http://127.0.0.1:43565/#diagnosis)\n### Page\n- Page URL: http://127.0.0.1:43565/#diagnosis\n- Page Title: Workflow fixture\n- Console: 2 errors, 0 warnings\n### Snapshot\n```yaml\n- main [ref=e2]:\n  - status [ref=e3]: failure\n```"
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "static": false
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\n2. [GET] http://127.0.0.1:43565/api/failure => [503] Service Unavailable\n3. [POST] http://127.0.0.1:43565/api/diagnosis => [200] OK\n\nNote: 1 static request not shown, run with \"static\" option to see it."
+              }
+            ],
+            "structured_content": null
+          }
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null,
+          "arguments": {
+            "level": "error"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "### Result\nTotal messages: 2 (Errors: 2, Warnings: 0)\n\n[ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:43565/api/failure:0\n[ERROR] E_CHECKOUT_RETRY 503 @ http://127.0.0.1:43565/:3"
+              }
+            ],
+            "structured_content": null
+          }
+        }
+      ],
+      "elapsed_seconds": 48.15,
+      "prompt_sha256": "9a659338f076aee9f8928d6c5136bbb799272cd0096ac9ffd4940824ff591c29",
+      "checked_at": "2026-10-10T14:34:49.311772+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "playwright",
+      "trial": 2,
+      "contract_sha256": "4acaac861c0d94463fbe0e70aa1c8427dfa1e3d74ff11cc8539369663c3e5965",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 172219,
+        "cached_input_tokens": 143360,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1491,
+        "reasoning_output_tokens": 14
+      },
+      "browser_tool_records": [
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc 'cat native-browser.txt'",
+          "aggregated_output": "Use node with /tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright; connect chromium.connectOverCDP(\"http://127.0.0.1:34771\") to the already owned headless browser. Create a new context/page, use UI locators and console/request/response listeners. Close the page/context when done, do not close the shared browser. Do not read source code.\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:34771');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:43565/');console.log(await p.locator('body').ariaSnapshot());await p.getByRole('button',{name:'Start order'}).click();console.log(await p.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "- main:\n  - button \"Start order\"\n- main:\n  - text: Quantity\n  - spinbutton \"Quantity\"\n  - text: Coupon\n  - textbox \"Coupon\"\n  - button \"Review\"\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:34771');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:43565/');await p.getByRole('button',{name:'Start order'}).click();await p.getByRole('spinbutton',{name:'Quantity'}).fill('2');await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review'}).click();console.log(await p.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "- main:\n  - status: \"306\"\n  - button \"Confirm\"\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:34771');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:43565/');await p.getByRole('button',{name:'Start order'}).click();await p.getByRole('spinbutton',{name:'Quantity'}).fill('2');await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review'}).click();console.log('total',await p.getByRole('status').innerText());await p.getByRole('button',{name:'Confirm'}).click();console.log('checkout',await p.locator('body').ariaSnapshot());p.on('console',m=>console.log('CONSOLE',m.type(),m.text()));p.on('response',r=>console.log('RESPONSE',r.status(),r.url()));await p.goto('http://127.0.0.1:43565/#diagnosis');console.log('diagnosis',await p.locator('body').ariaSnapshot());await p.waitForTimeout(500);console.log('diagnosis',await p.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "total 306\ncheckout - main:\n  - status: \"306\"\n  - button \"Confirm\"\nRESPONSE 200 http://127.0.0.1:43565/api/order\ndiagnosis - main:\n  - status: order-2-SAVE10\ndiagnosis - main:\n  - status: order-2-SAVE10\n"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed",
+          "command": "/bin/bash -lc \"node - <<'JS'\nconst {chromium}=require('/tmp/mcp-adoption-eval-20261010/deps/node_modules/playwright');\n(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:34771');const c=await b.newContext();const p=await c.newPage();await p.goto('http://127.0.0.1:43565/');await p.getByRole('button',{name:'Start order'}).click();await p.getByRole('spinbutton',{name:'Quantity'}).fill('2');await p.getByRole('textbox',{name:'Coupon'}).fill('SAVE10');await p.getByRole('button',{name:'Review'}).click();console.log('total',await p.getByRole('status').innerText());const response=p.waitForResponse(r=>r.url().endsWith('/api/order'));await p.getByRole('button',{name:'Confirm'}).click();await response;await p.getByRole('status').filter({hasText:'order-'}).waitFor();console.log('confirmed',await p.locator('body').ariaSnapshot());const d=await c.newPage();d.on('console',m=>console.log('CONSOLE',m.type(),m.text()));d.on('response',r=>console.log('RESPONSE',r.status(),r.url()));await d.goto('http://127.0.0.1:43565/#diagnosis');await d.waitForTimeout(500);console.log('diagnosis',await d.locator('body').ariaSnapshot());await c.close();process.exit(0)})();\nJS\"",
+          "aggregated_output": "total 306\nconfirmed - main:\n  - status: order-2-SAVE10\nRESPONSE 200 http://127.0.0.1:43565/\nRESPONSE 503 http://127.0.0.1:43565/api/failure\nCONSOLE error Failed to load resource: the server responded with a status of 503 (Service Unavailable)\nCONSOLE error E_CHECKOUT_RETRY 503\nRESPONSE 200 http://127.0.0.1:43565/api/diagnosis\ndiagnosis - main:\n  - status: failure\n"
+        }
+      ],
+      "elapsed_seconds": 64.145,
+      "prompt_sha256": "9a659338f076aee9f8928d6c5136bbb799272cd0096ac9ffd4940824ff591c29",
+      "checked_at": "2026-10-10T14:35:53.457647+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "4acaac861c0d94463fbe0e70aa1c8427dfa1e3d74ff11cc8539369663c3e5965",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "server_observations": {
+        "orders": [
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          },
+          {
+            "total": "306",
+            "confirmation": "order-2-SAVE10"
+          }
+        ],
+        "diagnoses": [
+          {
+            "status": 503,
+            "code": "E_CHECKOUT_RETRY"
+          }
+        ]
+      },
+      "correct": 2,
+      "total": 2
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "scenario": "parallel",
+  "tasks": [
+    {
+      "id": "python-replace",
+      "input": "Pythonのos.replaceの原子的置換保証は成功時に条件付きか、常に別filesystemでも成功するか。公式文書を探し{atomic_on_success:bool,cross_filesystem_guaranteed:bool}で答える。",
+      "expected": {
+        "atomic_on_success": true,
+        "cross_filesystem_guaranteed": false
+      }
+    },
+    {
+      "id": "durable-object-alarm",
+      "input": "Cloudflare Durable Objectsのalarmは各Objectに同時に設定できる数と、失敗時配送がat-least-onceかexactly-onceか。公式文書を探し{alarms:int,delivery:str}で答える。",
+      "expected": {
+        "alarms": 1,
+        "delivery": "at-least-once"
+      }
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "repetitions": 2,
+  "controls": [
+    "same tasks/model/effort/permissions",
+    "isolated new model context each condition",
+    "balanced A/B then B/A order",
+    "same public network/local fixture and installed browser"
+  ],
+  "primary": "exact JSON final task outcome; errors retained",
+  "secondary": "end-to-end wall seconds incl model/tool startup, reported usage and successful actual tool use",
+  "adoption_rule": "At least one additional correct outcome without regression and no more than 10% mean wall-time increase supports default adoption. A tie supports only task-specific use when concrete additional capability is evidenced.",
+  "limitations": [
+    "small fixed task set, no statistical significance claim",
+    "source links inspected separately; exact matching alone does not establish citation entailment",
+    "no human work-time or billed cost measurement"
+  ],
+  "server_config": {
+    "url": "https://search.parallel.ai/mcp"
+  }
+}

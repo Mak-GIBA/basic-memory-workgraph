@@ -12,7 +12,7 @@ import sys
 import time
 from urllib.parse import urlparse
 
-from ecc_on_demand import (OWNER, PLUGIN, ENTRIES, MCP_SERVERS, MCP_PRESETS, RECOMMENDED_MCPS, Codex, Manager, ManagementError,
+from ecc_on_demand import (OWNER, PLUGIN, ENTRIES, MCP_SERVERS, MCP_PRESETS, RECOMMENDED_MCPS, MCP_SELECTION_BASIS, Codex, Manager, ManagementError,
                            atomic_write, config_value, digest, edit_enabled)
 
 SOURCE = "affaan-m/ECC"
@@ -142,6 +142,8 @@ class Installer:
                 "mcp_presets": {name: list(names) for name, names in MCP_PRESETS.items()},
                 "available_mcps": list(MCP_SERVERS),
                 "mcp_selection_scope": "add_missing_only; existing connections and opt-outs preserved",
+                "mcp_selection_basis": {name: MCP_SELECTION_BASIS[name] for name in self.manager.selected_mcps(self.mcps)},
+                "mcp_assessment": "docs/codex-ecc/mcp-workflow-evaluation.md; task-specific utility, not proven general accuracy improvement",
                 "managed_installation": state is not None}
 
     def install(self, *, update: bool = False) -> dict:

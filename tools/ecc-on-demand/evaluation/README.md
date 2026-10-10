@@ -1,5 +1,18 @@
 # ECC MCPの導入判断に使う測定
 
+**最新の再評価は[最終成果までの比較レポート](../../../docs/codex-ecc/mcp-workflow-evaluation.md)です。** 新規の8用途別試験を`workflows/`に保存しました。以下の従来測定は初回記録として保持しています。
+
+新しい`measure_workflows.py`は、未知URLの文書探索、全最短経路などの推論、公開検索、複数画面の注文とconsole/network診断を同じモデル・条件で比べます。ブラウザーは実状態の親記録と回答の一致を併用し、操作ログも保存します。`measure_implementation.py`は生成コードを親の読み取り専用sandboxで実行します。`measure_information.py`は実際の読取結果をモデルに渡し、5項目の最終回答を採点します。前の本文を明示入力した条件と、本文を持たない新しい文脈を分けています。
+
+新試験は`check_workflows.py`でモデル・ネットワークを使わず再採点できます。各contractは実行前に固定し、保存した採点値を信用せず最終出力から再計算します。`workflows/pilot/`は準備時の失敗・回答だけの先行試験です。コードの採点アダプタ修正では同じ保存コードを実行し、モデルは再呼び出していません。88出力の検証は8用途別に報告し、総合ランキングにはしません。
+
+```bash
+python3 -B tools/ecc-on-demand/evaluation/check_workflows.py
+# モデル再測定は明示したときだけ（通常のCodex利用量を消費）
+python3 -B tools/ecc-on-demand/evaluation/measure_workflows.py \
+  --scenario documentation --deps /absolute/node_modules --out /tmp/new-study
+```
+
 インストーラーからは実行しない明示的な比較実験です。入力と正解は各contractに固定し、実測した最終回答、実際のMCP呼び出しの有無、所要時間をresultsに保存しています。推論ログや認証情報は保存しません。
 
 同じ課題に対し、既存ツールを使う基準案と、その課題に対応するMCPを使う案を比較します。用途が違うMCPを全課題に使わせる順位付けは行いません。統合検証用のcandidate A/Bはこの二つの方針を指し、課題群ごとの内訳を判断に使います。Chrome DevToolsはブラウザー課題の追加比較です。

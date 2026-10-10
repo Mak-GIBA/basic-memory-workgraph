@@ -1,0 +1,381 @@
+{
+  "contract_sha256": "b876fa847ac621382f04dc1ec424fc47044016362bbd24c0cc48adcbdb60ed00",
+  "rows": [
+    {
+      "outputs": {
+        "interval-cooldown": {
+          "profit": 41,
+          "schedules": [
+            [
+              1,
+              3,
+              5,
+              7
+            ]
+          ]
+        },
+        "equal-shortest-paths": {
+          "cost": 12,
+          "paths": [
+            "S->A->C->E->T",
+            "S->A->D->E->T",
+            "S->A->D->F->T",
+            "S->B->C->E->T",
+            "S->B->D->E->T",
+            "S->B->D->F->T"
+          ]
+        },
+        "shared-budget": [
+          0,
+          280,
+          660
+        ],
+        "idempotency-race": {
+          "balance": 35,
+          "keys": [
+            "k1",
+            "k2",
+            "k3"
+          ]
+        }
+      },
+      "sources": {
+        "interval-cooldown": [
+          "https://docs.python.org/3/library/itertools.html#itertools.combinations"
+        ],
+        "equal-shortest-paths": [
+          "https://docs.python.org/3/library/functions.html#sorted"
+        ],
+        "shared-budget": [
+          "https://docs.python.org/3/library/stdtypes.html"
+        ],
+        "idempotency-race": [
+          "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 84792,
+        "cached_input_tokens": 49408,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1016,
+        "reasoning_output_tokens": 26
+      },
+      "elapsed_seconds": 31.44,
+      "prompt_sha256": "8aa3fa09af228b0b02689d9229614a57ec11f58217834eecd8bd914c77321e20",
+      "checked_at": "2026-10-10T14:12:34.470158+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "b876fa847ac621382f04dc1ec424fc47044016362bbd24c0cc48adcbdb60ed00",
+      "grades": {
+        "interval-cooldown": 1,
+        "equal-shortest-paths": 0,
+        "shared-budget": 1,
+        "idempotency-race": 1
+      },
+      "correct": 3,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "interval-cooldown": {
+          "profit": 41,
+          "schedules": [
+            [
+              1,
+              3,
+              5,
+              7
+            ]
+          ]
+        },
+        "equal-shortest-paths": {
+          "cost": 12,
+          "paths": [
+            "S->A->C->E->T",
+            "S->A->D->E->T",
+            "S->A->D->F->T",
+            "S->B->C->E->T",
+            "S->B->D->E->T",
+            "S->B->D->F->T"
+          ]
+        },
+        "shared-budget": [
+          0,
+          280,
+          660
+        ],
+        "idempotency-race": {
+          "balance": 35,
+          "keys": [
+            "k1",
+            "k2",
+            "k3"
+          ]
+        }
+      },
+      "sources": {
+        "interval-cooldown": [
+          "https://docs.python.org/3/library/itertools.html#itertools.combinations"
+        ],
+        "equal-shortest-paths": [
+          "https://docs.python.org/3/builtins/functions.html#sorted"
+        ],
+        "shared-budget": [
+          "https://docs.python.org/3/builtins/functions.html"
+        ],
+        "idempotency-race": [
+          "https://docs.python.org/3/builtins/functions.html#sorted"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 69385,
+        "cached_input_tokens": 43776,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1080,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 31.266,
+      "prompt_sha256": "8aa3fa09af228b0b02689d9229614a57ec11f58217834eecd8bd914c77321e20",
+      "checked_at": "2026-10-10T14:13:05.737131+00:00",
+      "candidate": "sequential-thinking",
+      "trial": 1,
+      "contract_sha256": "b876fa847ac621382f04dc1ec424fc47044016362bbd24c0cc48adcbdb60ed00",
+      "grades": {
+        "interval-cooldown": 1,
+        "equal-shortest-paths": 0,
+        "shared-budget": 1,
+        "idempotency-race": 1
+      },
+      "correct": 3,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "interval-cooldown": {
+          "profit": 41,
+          "schedules": [
+            [
+              1,
+              3,
+              5,
+              7
+            ]
+          ]
+        },
+        "equal-shortest-paths": {
+          "cost": 12,
+          "paths": [
+            "S->A->C->E->T",
+            "S->A->D->E->T",
+            "S->A->D->F->T",
+            "S->B->C->E->T",
+            "S->B->D->E->T",
+            "S->B->D->F->T"
+          ]
+        },
+        "shared-budget": [
+          0,
+          280,
+          660
+        ],
+        "idempotency-race": {
+          "balance": 35,
+          "keys": [
+            "k1",
+            "k2",
+            "k3"
+          ]
+        }
+      },
+      "sources": {
+        "interval-cooldown": [
+          "https://docs.python.org/3/library/itertools.html",
+          "https://docs.python.org/3/library/json.html"
+        ],
+        "equal-shortest-paths": [
+          "https://docs.python.org/3/library/json.html"
+        ],
+        "shared-budget": [
+          "https://docs.python.org/3/library/json.html"
+        ],
+        "idempotency-race": [
+          "https://docs.python.org/3/library/json.html"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 104946,
+        "cached_input_tokens": 74880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1120,
+        "reasoning_output_tokens": 12
+      },
+      "elapsed_seconds": 33.55,
+      "prompt_sha256": "8aa3fa09af228b0b02689d9229614a57ec11f58217834eecd8bd914c77321e20",
+      "checked_at": "2026-10-10T14:13:39.287226+00:00",
+      "candidate": "sequential-thinking",
+      "trial": 2,
+      "contract_sha256": "b876fa847ac621382f04dc1ec424fc47044016362bbd24c0cc48adcbdb60ed00",
+      "grades": {
+        "interval-cooldown": 1,
+        "equal-shortest-paths": 0,
+        "shared-budget": 1,
+        "idempotency-race": 1
+      },
+      "correct": 3,
+      "total": 4
+    },
+    {
+      "outputs": {
+        "interval-cooldown": {
+          "profit": 41,
+          "schedules": [
+            [
+              1,
+              3,
+              5,
+              7
+            ]
+          ]
+        },
+        "equal-shortest-paths": {
+          "cost": 12,
+          "paths": [
+            "S->A->C->E->T",
+            "S->A->D->E->T",
+            "S->A->D->F->T",
+            "S->B->C->E->T",
+            "S->B->D->E->T",
+            "S->B->D->F->T"
+          ]
+        },
+        "shared-budget": [
+          0,
+          280,
+          660
+        ],
+        "idempotency-race": {
+          "balance": 35,
+          "keys": [
+            "k1",
+            "k2",
+            "k3"
+          ]
+        }
+      },
+      "sources": {
+        "interval-cooldown": [
+          "https://docs.python.org/3/library/itertools.html"
+        ],
+        "equal-shortest-paths": [
+          "https://docs.python.org/3/library/stdtypes.html"
+        ],
+        "shared-budget": [
+          "https://docs.python.org/3/library/stdtypes.html"
+        ],
+        "idempotency-race": [
+          "https://docs.python.org/3/library/stdtypes.html"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 63562,
+        "cached_input_tokens": 39936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 889,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 27.577,
+      "prompt_sha256": "8aa3fa09af228b0b02689d9229614a57ec11f58217834eecd8bd914c77321e20",
+      "checked_at": "2026-10-10T14:14:06.864677+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "b876fa847ac621382f04dc1ec424fc47044016362bbd24c0cc48adcbdb60ed00",
+      "grades": {
+        "interval-cooldown": 1,
+        "equal-shortest-paths": 0,
+        "shared-budget": 1,
+        "idempotency-race": 1
+      },
+      "correct": 3,
+      "total": 4
+    }
+  ]
+}

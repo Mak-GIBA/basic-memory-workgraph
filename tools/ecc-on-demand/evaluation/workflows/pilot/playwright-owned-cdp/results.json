@@ -1,0 +1,453 @@
+{
+  "contract_sha256": "13c93fe94529cfc68139000a013013a3330da71627400e83cb37507bbdf40fec",
+  "rows": [
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 184443,
+        "cached_input_tokens": 154112,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1345,
+        "reasoning_output_tokens": 20
+      },
+      "elapsed_seconds": 52.94,
+      "prompt_sha256": "e16de622c5d775bf58d46bce3ebf468fd696b3e656035e9c0023beb3198b1255",
+      "checked_at": "2026-10-10T14:20:07.353175+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "13c93fe94529cfc68139000a013013a3330da71627400e83cb37507bbdf40fec",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/input"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-consolemessage",
+          "https://playwright.dev/docs/api/class-response"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 240551,
+        "cached_input_tokens": 216576,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 711,
+        "reasoning_output_tokens": 36
+      },
+      "elapsed_seconds": 47.444,
+      "prompt_sha256": "e16de622c5d775bf58d46bce3ebf468fd696b3e656035e9c0023beb3198b1255",
+      "checked_at": "2026-10-10T14:20:54.797188+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "playwright",
+      "trial": 1,
+      "contract_sha256": "13c93fe94529cfc68139000a013013a3330da71627400e83cb37507bbdf40fec",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-locator"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-consolemessage",
+          "https://playwright.dev/docs/api/class-response"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_navigate",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_tabs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "playwright",
+          "tool": "browser_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 202420,
+        "cached_input_tokens": 183936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 689,
+        "reasoning_output_tokens": 27
+      },
+      "elapsed_seconds": 35.65,
+      "prompt_sha256": "e16de622c5d775bf58d46bce3ebf468fd696b3e656035e9c0023beb3198b1255",
+      "checked_at": "2026-10-10T14:21:30.447664+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "playwright",
+      "trial": 2,
+      "contract_sha256": "13c93fe94529cfc68139000a013013a3330da71627400e83cb37507bbdf40fec",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page",
+          "https://playwright.dev/docs/api/class-response"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 254450,
+        "cached_input_tokens": 237184,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1257,
+        "reasoning_output_tokens": 84
+      },
+      "elapsed_seconds": 78.027,
+      "prompt_sha256": "e16de622c5d775bf58d46bce3ebf468fd696b3e656035e9c0023beb3198b1255",
+      "checked_at": "2026-10-10T14:22:48.474898+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "13c93fe94529cfc68139000a013013a3330da71627400e83cb37507bbdf40fec",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    }
+  ]
+}

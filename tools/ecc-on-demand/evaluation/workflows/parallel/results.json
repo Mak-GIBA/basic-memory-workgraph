@@ -1,0 +1,259 @@
+{
+  "contract_sha256": "9331067368c209025f7dbff405a26f14a402c8ba9bf6152efcae0d650862482b",
+  "rows": [
+    {
+      "outputs": {
+        "python-replace": {
+          "atomic_on_success": true,
+          "cross_filesystem_guaranteed": false
+        },
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "python-replace": [
+          "https://docs.python.org/3/library/os.html#os.replace"
+        ],
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 116044,
+        "cached_input_tokens": 89088,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 380,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 22.898,
+      "prompt_sha256": "df638a6099a549023e24e06fb7ce3fb08bdfc5317523e52edca06f79baae269a",
+      "checked_at": "2026-10-10T14:15:49.829508+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "9331067368c209025f7dbff405a26f14a402c8ba9bf6152efcae0d650862482b",
+      "grades": {
+        "python-replace": 1,
+        "durable-object-alarm": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "python-replace": {
+          "atomic_on_success": true,
+          "cross_filesystem_guaranteed": false
+        },
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "python-replace": [
+          "https://docs.python.org/3/library/os.html#os.replace"
+        ],
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/index.md"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_search",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_search",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_fetch",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 165110,
+        "cached_input_tokens": 127104,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 537,
+        "reasoning_output_tokens": 57
+      },
+      "elapsed_seconds": 27.734,
+      "prompt_sha256": "df638a6099a549023e24e06fb7ce3fb08bdfc5317523e52edca06f79baae269a",
+      "checked_at": "2026-10-10T14:16:17.564209+00:00",
+      "candidate": "parallel",
+      "trial": 1,
+      "contract_sha256": "9331067368c209025f7dbff405a26f14a402c8ba9bf6152efcae0d650862482b",
+      "grades": {
+        "python-replace": 1,
+        "durable-object-alarm": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "python-replace": {
+          "atomic_on_success": true,
+          "cross_filesystem_guaranteed": false
+        },
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "python-replace": [
+          "https://docs.python.org/3/library/os.html#os.replace"
+        ],
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_fetch",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_fetch",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "parallel",
+          "tool": "web_fetch",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 107007,
+        "cached_input_tokens": 96000,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 651,
+        "reasoning_output_tokens": 69
+      },
+      "elapsed_seconds": 32.362,
+      "prompt_sha256": "df638a6099a549023e24e06fb7ce3fb08bdfc5317523e52edca06f79baae269a",
+      "checked_at": "2026-10-10T14:16:49.926944+00:00",
+      "candidate": "parallel",
+      "trial": 2,
+      "contract_sha256": "9331067368c209025f7dbff405a26f14a402c8ba9bf6152efcae0d650862482b",
+      "grades": {
+        "python-replace": 1,
+        "durable-object-alarm": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "python-replace": {
+          "atomic_on_success": true,
+          "cross_filesystem_guaranteed": false
+        },
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "python-replace": [
+          "https://docs.python.org/3/library/os.html#os.replace"
+        ],
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 111645,
+        "cached_input_tokens": 88832,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 431,
+        "reasoning_output_tokens": 15
+      },
+      "elapsed_seconds": 19.895,
+      "prompt_sha256": "df638a6099a549023e24e06fb7ce3fb08bdfc5317523e52edca06f79baae269a",
+      "checked_at": "2026-10-10T14:17:09.822841+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "9331067368c209025f7dbff405a26f14a402c8ba9bf6152efcae0d650862482b",
+      "grades": {
+        "python-replace": 1,
+        "durable-object-alarm": 1
+      },
+      "correct": 2,
+      "total": 2
+    }
+  ]
+}

@@ -40,6 +40,16 @@ MCP_SERVERS = {
     "cloudflare-docs": {"url": "https://docs.mcp.cloudflare.com/mcp", "startup_timeout_sec": 60},
 }
 RECOMMENDED_MCPS = ("context7", "playwright")
+# Registration is a workflow choice. The paired trials did not establish a
+# general accuracy gain; explicit-only tools must stay explicit-only.
+MCP_SELECTION_BASIS = {
+    "context7": "conditional: unknown-library discovery and documentation access; tested answers/code tied, citation defect observed",
+    "playwright": "conditional: interactive browser work; tested final outcomes tied, lower observed model/tool time",
+    "chrome-devtools": "optional: console/network inspection; tested outcomes tied, select for diagnosis",
+    "parallel-search": "optional: alternative public search; no observed answer gain in the fixed tasks",
+    "cloudflare-docs": "optional: Cloudflare-specific documentation; no observed answer gain in the fixed tasks",
+    "sequential-thinking": "explicit-only: tested reasoning tied; default adoption rule not met",
+}
 MCP_PRESETS = {
     "recommended": RECOMMENDED_MCPS,
     "research": ("context7", "parallel-search"),

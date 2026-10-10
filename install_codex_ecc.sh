@@ -3,6 +3,8 @@
 # Requires this repository. Existing MCP settings are preserved.
 # Default: offline preview. --apply installs/configures; --update --apply updates.
 # --mcps recommended|research|browser|cloudflare|none or comma-separated names.
+# recommended is a task-specific registration choice, not a proven accuracy gain.
+# Assessment: docs/codex-ecc/mcp-workflow-evaluation.md (preview includes reasons).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

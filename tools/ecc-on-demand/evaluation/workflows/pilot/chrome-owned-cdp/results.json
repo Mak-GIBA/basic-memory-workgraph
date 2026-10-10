@@ -1,0 +1,432 @@
+{
+  "contract_sha256": "f62a8a44bbec6b330447a729ddad6b37b0d51df19aab1d15dfcfec316644ae65",
+  "rows": [
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 166847,
+        "cached_input_tokens": 126208,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1278,
+        "reasoning_output_tokens": 28
+      },
+      "elapsed_seconds": 54.39,
+      "prompt_sha256": "4c9d54db4bd621af7e37764486ab4cb21db0f52652bd91001b61ff6945196746",
+      "checked_at": "2026-10-10T14:20:09.962513+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "f62a8a44bbec6b330447a729ddad6b37b0d51df19aab1d15dfcfec316644ae65",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://developer.chrome.com/docs/devtools/console"
+        ],
+        "diagnosis": [
+          "https://developer.chrome.com/docs/devtools/network",
+          "https://developer.chrome.com/docs/devtools/console"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_pages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill_form",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "navigate_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 231913,
+        "cached_input_tokens": 202752,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 766,
+        "reasoning_output_tokens": 37
+      },
+      "elapsed_seconds": 42.463,
+      "prompt_sha256": "4c9d54db4bd621af7e37764486ab4cb21db0f52652bd91001b61ff6945196746",
+      "checked_at": "2026-10-10T14:20:52.425610+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "chrome",
+      "trial": 1,
+      "contract_sha256": "f62a8a44bbec6b330447a729ddad6b37b0d51df19aab1d15dfcfec316644ae65",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://developer.chrome.com/docs/devtools/network"
+        ],
+        "diagnosis": [
+          "https://developer.chrome.com/docs/devtools/network",
+          "https://developer.chrome.com/docs/devtools/console"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "fill",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "click",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "take_snapshot",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_console_messages",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "list_network_requests",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_console_message",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "get_network_request",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 252053,
+        "cached_input_tokens": 218880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 719,
+        "reasoning_output_tokens": 18
+      },
+      "elapsed_seconds": 43.93,
+      "prompt_sha256": "4c9d54db4bd621af7e37764486ab4cb21db0f52652bd91001b61ff6945196746",
+      "checked_at": "2026-10-10T14:21:36.356448+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "chrome",
+      "trial": 2,
+      "contract_sha256": "f62a8a44bbec6b330447a729ddad6b37b0d51df19aab1d15dfcfec316644ae65",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "total": "306",
+          "confirmation": "order-2-SAVE10"
+        },
+        "diagnosis": {
+          "status": 503,
+          "code": "E_CHECKOUT_RETRY"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-page"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-page"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 167926,
+        "cached_input_tokens": 152448,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1335,
+        "reasoning_output_tokens": 10
+      },
+      "elapsed_seconds": 57.287,
+      "prompt_sha256": "4c9d54db4bd621af7e37764486ab4cb21db0f52652bd91001b61ff6945196746",
+      "checked_at": "2026-10-10T14:22:33.643685+00:00",
+      "shared_browser_startup_seconds": 0.101,
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "f62a8a44bbec6b330447a729ddad6b37b0d51df19aab1d15dfcfec316644ae65",
+      "grades": {
+        "checkout": 1,
+        "diagnosis": 1
+      },
+      "correct": 2,
+      "total": 2
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "checked_date": "2026-10-10",
+  "scope": "Independent read-only URL and decisive passage review after model trials; not a frozen trial metric",
+  "records": [
+    {
+      "url": "https://pydantic.dev/docs/validation/2.11/concepts/fields/",
+      "status": "200",
+      "support": "validate_default; default not validated unless enabled"
+    },
+    {
+      "url": "https://pydantic.dev/docs/validation/2.11/concepts/validators/",
+      "status": "200",
+      "support": "URL checked; entailment not separately scored"
+    },
+    {
+      "url": "https://pydantic.dev/docs/validation/latest/concepts/fields",
+      "status": "redirect_then_200",
+      "support": "validate_default; default not validated unless enabled"
+    },
+    {
+      "url": "https://pydantic.dev/docs/validation/latest/concepts/validators",
+      "status": "redirect_then_200",
+      "support": "URL checked; entailment not separately scored"
+    },
+    {
+      "url": "https://www.python-httpx.org/advanced/timeouts",
+      "status": "200",
+      "support": "PoolTimeout: waiting to acquire connection from pool"
+    },
+    {
+      "url": "https://www.python-httpx.org/advanced/timeouts/",
+      "status": "200",
+      "support": "PoolTimeout: waiting to acquire connection from pool"
+    },
+    {
+      "url": "https://github.com/pydantic/pydantic/blob/main/docs/concepts/fields.md",
+      "status": "viewer_503_or_504_raw_200",
+      "raw_url": "https://raw.githubusercontent.com/pydantic/pydantic/main/docs/concepts/fields.md",
+      "support": "validate_default in primary source"
+    },
+    {
+      "url": "https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md",
+      "status": "viewer_503_or_504_raw_200",
+      "raw_url": "https://raw.githubusercontent.com/pydantic/pydantic/main/docs/concepts/validators.md",
+      "support": "URL path checked; entailment not separately scored"
+    },
+    {
+      "url": "https://github.com/jd/tenacity/blob/main/doc/source/index.rst",
+      "status": "viewer_503_raw_200",
+      "raw_url": "https://raw.githubusercontent.com/jd/tenacity/main/doc/source/index.rst",
+      "support": "stop_before_delay in primary source; native both trials"
+    },
+    {
+      "url": "https://github.com/jd/tenacity/blob/main/_autodocs/api-reference/stop-strategies.md",
+      "status": "viewer_503_raw_404",
+      "raw_url": "https://raw.githubusercontent.com/jd/tenacity/main/_autodocs/api-reference/stop-strategies.md",
+      "support": "Unavailable referenced path; Context7 both trials"
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "contract_sha256": "bf10e2ed72b194948cdfd15448ad88d7d997333db27aa8b03fb7b5d04878436e",
+  "rows": [
+    {
+      "outputs": {
+        "pydantic-default": {
+          "setting": "validate_default",
+          "default_validated": false
+        },
+        "httpx-pool": "pool_acquire",
+        "tenacity-stop": "stop_before_delay"
+      },
+      "sources": {
+        "pydantic-default": [
+          "https://github.com/pydantic/pydantic/blob/main/docs/concepts/fields.md",
+          "https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md"
+        ],
+        "httpx-pool": [
+          "https://www.python-httpx.org/advanced/timeouts/"
+        ],
+        "tenacity-stop": [
+          "https://github.com/jd/tenacity/blob/main/doc/source/index.rst"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 271191,
+        "cached_input_tokens": 217088,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 619,
+        "reasoning_output_tokens": 17
+      },
+      "elapsed_seconds": 32.779,
+      "prompt_sha256": "806eb2f01d0f8f1065694816c6d28693625cd227670f9bdcaefcf1e8cded1b7d",
+      "checked_at": "2026-10-10T14:12:36.945814+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "bf10e2ed72b194948cdfd15448ad88d7d997333db27aa8b03fb7b5d04878436e",
+      "grades": {
+        "pydantic-default": 1,
+        "httpx-pool": 1,
+        "tenacity-stop": 1
+      },
+      "correct": 3,
+      "total": 3
+    },
+    {
+      "outputs": {
+        "pydantic-default": {
+          "setting": "validate_default",
+          "default_validated": false
+        },
+        "httpx-pool": "pool_acquire",
+        "tenacity-stop": "stop_before_delay"
+      },
+      "sources": {
+        "pydantic-default": [
+          "https://github.com/pydantic/pydantic/blob/main/docs/concepts/fields.md"
+        ],
+        "httpx-pool": [
+          "https://www.python-httpx.org/advanced/timeouts"
+        ],
+        "tenacity-stop": [
+          "https://github.com/jd/tenacity/blob/main/_autodocs/api-reference/stop-strategies.md"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 133177,
+        "cached_input_tokens": 100992,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 560,
+        "reasoning_output_tokens": 11
+      },
+      "elapsed_seconds": 28.83,
+      "prompt_sha256": "806eb2f01d0f8f1065694816c6d28693625cd227670f9bdcaefcf1e8cded1b7d",
+      "checked_at": "2026-10-10T14:13:05.775809+00:00",
+      "candidate": "context7",
+      "trial": 1,
+      "contract_sha256": "bf10e2ed72b194948cdfd15448ad88d7d997333db27aa8b03fb7b5d04878436e",
+      "grades": {
+        "pydantic-default": 1,
+        "httpx-pool": 1,
+        "tenacity-stop": 1
+      },
+      "correct": 3,
+      "total": 3
+    },
+    {
+      "outputs": {
+        "pydantic-default": {
+          "setting": "validate_default",
+          "default_validated": false
+        },
+        "httpx-pool": "pool_acquire",
+        "tenacity-stop": "stop_before_delay"
+      },
+      "sources": {
+        "pydantic-default": [
+          "https://pydantic.dev/docs/validation/latest/concepts/fields",
+          "https://pydantic.dev/docs/validation/latest/concepts/validators"
+        ],
+        "httpx-pool": [
+          "https://www.python-httpx.org/advanced/timeouts"
+        ],
+        "tenacity-stop": [
+          "https://github.com/jd/tenacity/blob/main/_autodocs/api-reference/stop-strategies.md"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "resolve-library-id",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "context7",
+          "tool": "query-docs",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 129089,
+        "cached_input_tokens": 96896,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 542,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 28.4,
+      "prompt_sha256": "806eb2f01d0f8f1065694816c6d28693625cd227670f9bdcaefcf1e8cded1b7d",
+      "checked_at": "2026-10-10T14:13:34.175975+00:00",
+      "candidate": "context7",
+      "trial": 2,
+      "contract_sha256": "bf10e2ed72b194948cdfd15448ad88d7d997333db27aa8b03fb7b5d04878436e",
+      "grades": {
+        "pydantic-default": 1,
+        "httpx-pool": 1,
+        "tenacity-stop": 1
+      },
+      "correct": 3,
+      "total": 3
+    },
+    {
+      "outputs": {
+        "pydantic-default": {
+          "setting": "validate_default",
+          "default_validated": false
+        },
+        "httpx-pool": "pool_acquire",
+        "tenacity-stop": "stop_before_delay"
+      },
+      "sources": {
+        "pydantic-default": [
+          "https://pydantic.dev/docs/validation/2.11/concepts/fields/",
+          "https://pydantic.dev/docs/validation/2.11/concepts/validators/"
+        ],
+        "httpx-pool": [
+          "https://www.python-httpx.org/advanced/timeouts/"
+        ],
+        "tenacity-stop": [
+          "https://github.com/jd/tenacity/blob/main/doc/source/index.rst"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 300479,
+        "cached_input_tokens": 243200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 696,
+        "reasoning_output_tokens": 40
+      },
+      "elapsed_seconds": 35.132,
+      "prompt_sha256": "806eb2f01d0f8f1065694816c6d28693625cd227670f9bdcaefcf1e8cded1b7d",
+      "checked_at": "2026-10-10T14:14:09.308493+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "bf10e2ed72b194948cdfd15448ad88d7d997333db27aa8b03fb7b5d04878436e",
+      "grades": {
+        "pydantic-default": 1,
+        "httpx-pool": 1,
+        "tenacity-stop": 1
+      },
+      "correct": 3,
+      "total": 3
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "contract_sha256": "c3e8f1796971c44c0e1e600c22b17474da9e27b49265ccfe07ac3d429b6a6410",
+  "rows": [
+    {
+      "outputs": {
+        "checkout": {
+          "error": "ブラウザを起動できず、画面操作は未完了。実行環境の制限によりEROFSおよびsetsockopt: Operation not permittedが発生したため、totalとconfirmationは取得できませんでした。"
+        },
+        "diagnosis": {
+          "error": "ブラウザを起動できず、診断画面のconsole/network記録を取得できませんでした。HTTP statusとerror codeは未確認です。"
+        }
+      },
+      "sources": {
+        "checkout": [],
+        "diagnosis": []
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 103445,
+        "cached_input_tokens": 78336,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 804,
+        "reasoning_output_tokens": 46
+      },
+      "elapsed_seconds": 29.986,
+      "prompt_sha256": "31c33ebd4c3b77de667ef28892641185a46db305d43be06a163fd22368744e26",
+      "checked_at": "2026-10-10T14:14:31.320126+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "c3e8f1796971c44c0e1e600c22b17474da9e27b49265ccfe07ac3d429b6a6410",
+      "grades": {
+        "checkout": 0,
+        "diagnosis": 0
+      },
+      "correct": 0,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "error": "未完了。Chrome MCPは承認が必要として拒否され、代替Playwrightも環境制限でブラウザを起動できませんでした。total・confirmationは未取得です。"
+        },
+        "diagnosis": {
+          "error": "未完了。ブラウザを起動できず、実際のconsole・network記録を取得できませんでした。status・codeは未確認です。"
+        }
+      },
+      "sources": {
+        "checkout": [],
+        "diagnosis": []
+      },
+      "exit_code": 0,
+      "error": "treatment was not successfully used",
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "failed",
+          "error": {
+            "message": "MCP tool call requires approval, but approval policy is never"
+          }
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 154817,
+        "cached_input_tokens": 123904,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 894,
+        "reasoning_output_tokens": 73
+      },
+      "elapsed_seconds": 40.384,
+      "prompt_sha256": "31c33ebd4c3b77de667ef28892641185a46db305d43be06a163fd22368744e26",
+      "checked_at": "2026-10-10T14:15:11.704828+00:00",
+      "candidate": "chrome",
+      "trial": 1,
+      "contract_sha256": "c3e8f1796971c44c0e1e600c22b17474da9e27b49265ccfe07ac3d429b6a6410",
+      "grades": {
+        "checkout": 0,
+        "diagnosis": 0
+      },
+      "correct": 0,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "error": "未実施：ブラウザMCPは承認ポリシーで拒否され、代替ブラウザも環境制限で起動できませんでした。totalとconfirmationは未確認です。"
+        },
+        "diagnosis": {
+          "error": "未実施：ブラウザを起動できず、実際のconsole/network記録を取得できませんでした。statusとcodeは未確認です。"
+        }
+      },
+      "sources": {
+        "checkout": [],
+        "diagnosis": []
+      },
+      "exit_code": 0,
+      "error": "treatment was not successfully used",
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "chrome",
+          "tool": "new_page",
+          "status": "failed",
+          "error": {
+            "message": "MCP tool call requires approval, but approval policy is never"
+          }
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "completed"
+        }
+      ],
+      "usage": {
+        "input_tokens": 181764,
+        "cached_input_tokens": 144512,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 854,
+        "reasoning_output_tokens": 122
+      },
+      "elapsed_seconds": 32.643,
+      "prompt_sha256": "31c33ebd4c3b77de667ef28892641185a46db305d43be06a163fd22368744e26",
+      "checked_at": "2026-10-10T14:15:44.347787+00:00",
+      "candidate": "chrome",
+      "trial": 2,
+      "contract_sha256": "c3e8f1796971c44c0e1e600c22b17474da9e27b49265ccfe07ac3d429b6a6410",
+      "grades": {
+        "checkout": 0,
+        "diagnosis": 0
+      },
+      "correct": 0,
+      "total": 2
+    },
+    {
+      "outputs": {
+        "checkout": {
+          "error": "ブラウザ起動が環境制限（setsockopt: Operation not permitted）で失敗し、注文操作を完了できませんでした。totalとconfirmationは未取得です。"
+        },
+        "diagnosis": {
+          "error": "ブラウザを起動できず、診断画面のconsole/network記録を取得できませんでした。statusとcodeは未確認です。"
+        }
+      },
+      "sources": {
+        "checkout": [
+          "https://playwright.dev/docs/api/class-browsertype#browser-type-launch"
+        ],
+        "diagnosis": [
+          "https://playwright.dev/docs/api/class-browsertype#browser-type-launch"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "command_execution",
+          "status": "failed"
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 143360,
+        "cached_input_tokens": 123648,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 917,
+        "reasoning_output_tokens": 77
+      },
+      "elapsed_seconds": 36.972,
+      "prompt_sha256": "31c33ebd4c3b77de667ef28892641185a46db305d43be06a163fd22368744e26",
+      "checked_at": "2026-10-10T14:16:21.320231+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "c3e8f1796971c44c0e1e600c22b17474da9e27b49265ccfe07ac3d429b6a6410",
+      "grades": {
+        "checkout": 0,
+        "diagnosis": 0
+      },
+      "correct": 0,
+      "total": 2
+    }
+  ]
+}

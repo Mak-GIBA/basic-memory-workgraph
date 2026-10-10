@@ -1,0 +1,208 @@
+{
+  "contract_sha256": "1799b58f783a684b4aa9ccf9b8328b5317deb16d67cc316f173da621b6e66fc3",
+  "rows": [
+    {
+      "outputs": {
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "web_search"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 72724,
+        "cached_input_tokens": 42240,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 271,
+        "reasoning_output_tokens": 27
+      },
+      "elapsed_seconds": 16.663,
+      "prompt_sha256": "701a656adf789c4b717cc0d8279034b28d2a1d38915a6981828bab642513a5aa",
+      "checked_at": "2026-10-10T14:15:44.749258+00:00",
+      "candidate": "native",
+      "trial": 1,
+      "contract_sha256": "1799b58f783a684b4aa9ccf9b8328b5317deb16d67cc316f173da621b6e66fc3",
+      "grades": {
+        "durable-object-alarm": 1
+      },
+      "correct": 1,
+      "total": 1
+    },
+    {
+      "outputs": {
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "cloudflare",
+          "tool": "search_cloudflare_documentation",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "cloudflare",
+          "tool": "search_cloudflare_documentation",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 171003,
+        "cached_input_tokens": 131712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 359,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 35.38,
+      "prompt_sha256": "701a656adf789c4b717cc0d8279034b28d2a1d38915a6981828bab642513a5aa",
+      "checked_at": "2026-10-10T14:16:20.129638+00:00",
+      "candidate": "cloudflare",
+      "trial": 1,
+      "contract_sha256": "1799b58f783a684b4aa9ccf9b8328b5317deb16d67cc316f173da621b6e66fc3",
+      "grades": {
+        "durable-object-alarm": 1
+      },
+      "correct": 1,
+      "total": 1
+    },
+    {
+      "outputs": {
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "cloudflare",
+          "tool": "search_cloudflare_documentation",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "cloudflare",
+          "tool": "search_cloudflare_documentation",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "web_search"
+        }
+      ],
+      "usage": {
+        "input_tokens": 162548,
+        "cached_input_tokens": 139136,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 361,
+        "reasoning_output_tokens": 0
+      },
+      "elapsed_seconds": 34.449,
+      "prompt_sha256": "701a656adf789c4b717cc0d8279034b28d2a1d38915a6981828bab642513a5aa",
+      "checked_at": "2026-10-10T14:16:54.578558+00:00",
+      "candidate": "cloudflare",
+      "trial": 2,
+      "contract_sha256": "1799b58f783a684b4aa9ccf9b8328b5317deb16d67cc316f173da621b6e66fc3",
+      "grades": {
+        "durable-object-alarm": 1
+      },
+      "correct": 1,
+      "total": 1
+    },
+    {
+      "outputs": {
+        "durable-object-alarm": {
+          "alarms": 1,
+          "delivery": "at-least-once"
+        }
+      },
+      "sources": {
+        "durable-object-alarm": [
+          "https://developers.cloudflare.com/durable-objects/api/alarms/"
+        ]
+      },
+      "exit_code": 0,
+      "error": null,
+      "tool_calls": [
+        {
+          "type": "command_execution",
+          "status": "completed"
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "codex_apps",
+          "tool": "search_service.web_run",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "usage": {
+        "input_tokens": 72478,
+        "cached_input_tokens": 59008,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 304,
+        "reasoning_output_tokens": 14
+      },
+      "elapsed_seconds": 14.622,
+      "prompt_sha256": "701a656adf789c4b717cc0d8279034b28d2a1d38915a6981828bab642513a5aa",
+      "checked_at": "2026-10-10T14:17:09.200667+00:00",
+      "candidate": "native",
+      "trial": 2,
+      "contract_sha256": "1799b58f783a684b4aa9ccf9b8328b5317deb16d67cc316f173da621b6e66fc3",
+      "grades": {
+        "durable-object-alarm": 1
+      },
+      "correct": 1,
+      "total": 1
+    }
+  ]
+}

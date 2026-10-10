@@ -1,0 +1,44 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "question": "Pydantic v2の公式文書を探して、Product(BaseModel)というクラスのPythonコードを返す。countはint、1以上、default=0。省略時もdefaultを検証してrejectする。count=\"4\"は通常の型変換で4として受理する。モジュールはpydanticだけをimportし、クラス定義と必要なfield設定だけを書く。answerはコードそのものをJSON文字列にし、sourcesは参照した公式URL。id=\"implementation\"。コードを実行するのは親の独立grader。",
+  "expected": [
+    {
+      "accepted": false
+    },
+    {
+      "accepted": true,
+      "value": 4
+    },
+    {
+      "accepted": false
+    },
+    {
+      "accepted": false
+    }
+  ],
+  "test_inputs": [
+    {},
+    {
+      "count": "4"
+    },
+    {
+      "count": 0
+    },
+    {
+      "count": -1
+    }
+  ],
+  "controls": [
+    "same task/model/effort/sandbox",
+    "unknown official URL and library ID",
+    "balanced native/MCP then MCP/native order"
+  ],
+  "primary": "actual generated Python code behavior in an offline read-only sandbox",
+  "secondary": "end-to-end model/tool time and actual MCP use",
+  "adoption_rule": "additional correct behaviors without regression; ties support no code-accuracy improvement claim",
+  "limitations": [
+    "one library and four boundary cases, repeated twice",
+    "no production maintainability or human-time claim"
+  ]
+}
