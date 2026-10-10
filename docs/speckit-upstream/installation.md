@@ -5,23 +5,38 @@
 ## 前提条件
 
 - Linux / WSL2、Bash、Python 3.11以上。
+- 通常の組み立てには、GitHubの固定版スクリプトを取得できる通信環境。GitHubへのログインは不要。
 - SpecKit CLIも導入する場合は、そのPythonのvenv・pip機能とPyPIへの接続。
 - Skillを使うためのCodex環境。Codex自体はインストールしません。
 
 sudoは使わず通常ユーザーで実行します。必要なら`PYTHON_BIN`でPython実行ファイルを指定できます。
 リポジトリの取得方法は[トップREADME](../../README.md)を参照してください。
-このスクリプトは単体でも利用できます。以下はスクリプトのあるディレクトリで実行します。
+以下はスクリプトのあるディレクトリで実行します。
+
+配布版2.0.5は、固定版へ同梱の更新資材を適用する組み立て用スクリプトです。
+2026-10-10に組み立ての停止原因を修正し、オフライン組み立て・両ツールの自己テストと、このPCでの更新・診断を確認しました。
+[検証結果](../design-research/validation.md)に、同梱試験、組み立て、実環境への更新の範囲を分けて記載しています。
 
 ## ユーザー共通環境への導入
 
 ```bash
-# 導入予定の表示。引数なしでも同じ
+# 組み立て予定の表示。引数なしでも同じ
 bash install_speckit_upstream.sh --dry-run
 
-# 実際に導入する
+# 組み立て・検証が成功した後に導入する
 bash install_speckit_upstream.sh --apply
 
-# 現在のターミナルでCLIを見つけられるようにする
+# 配布物の8つのCodex入口を確認する
+bash install_speckit_upstream.sh --list-skills
+```
+
+`--dry-run`は通信・導入先の変更・既存配置の検査を行いません。
+予定表示の成功だけでは、実導入の可否や編集済み資材の有無は判断できません。
+`--version`は配布スクリプトの版、`--list-skills`は配布物の入口を表示し、導入済みの版や状態は調べません。
+
+導入できた後に、現在のターミナルでCLIを見つけられるようにします。
+
+```bash
 export PATH="$HOME/.local/bin:$PATH"
 speckit-workbench doctor
 ```
@@ -32,32 +47,67 @@ speckit-workbench doctor
 PYTHON_BIN=/absolute/path/python3.12 bash install_speckit_upstream.sh --dry-run
 ```
 
-独自資材はスクリプト内から一時領域に展開します。既存の`specify`がなければ、
-専用venvを作って`specify-cli==1.0.8`と依存パッケージを取得します。
+組み立て後の導入処理で既存の`specify`がなければ、専用venvを作り、`specify-cli==1.0.8`と依存パッケージを取得します。
 既存CLIがある場合は`version`と`init --help`で必要な機能を確認し、非対応なら停止します。
 この確認は完全な互換性や配布元の認証を保証するものではありません。
 
-オフラインで独自資材だけを準備する場合は次を使います。
+## 組み立てとオフライン利用
+
+コミット`d3f46e0d591b45cb2423317030a489b91566e891`の元インストーラー2本を取得・照合し、
+同梱の更新資材からDesign Research 2.4.0とUpstream 2.0.5を組み立てます。
+両ツールの検証が成功した場合に、指定した側の導入処理へ進みます。
+`--doctor`・`--self-test`・`--extract`も、配布スクリプトから呼ぶ場合は先に組み立てます。
+
+再配布用の通常インストーラーを生成する操作です。出力先は未使用または空のディレクトリにします。
 
 ```bash
-bash install_speckit_upstream.sh --apply --skip-specify
+bash install_speckit_upstream.sh --build-only ./offline-installers
 ```
 
-`--skip-specify`はCLIの取得・互換性確認を省略します。後で公式統合を初期化するには、
-対応する`specify`が必要です。文書だけのプロジェクト準備には`attach --docs-only`を使えます。
+成功した場合は両スクリプトとビルドログを出力します。この操作では導入しません。
+組み立てと導入の確認範囲は[検証結果](../design-research/validation.md)を参照してください。
+
+通信せず組み立てるには、固定コミットの元スクリプト2本を用意します。
+更新用ラッパーや編集済みの同名スクリプトは代用できません。
+
+```bash
+bash install_speckit_upstream.sh \
+  --base-dir /absolute/path/pinned-base --offline --build-only ./offline-installers
+
+# 生成に成功した後、SpecKit CLIの取得・互換性確認も省略して導入
+bash ./offline-installers/install_speckit_upstream.sh --apply --skip-specify
+```
+
+`--offline`だけでは組み立てできず、`--base-dir`が必要です。
+配布版に`--skip-specify`を付けるだけでは、ベース取得の通信は省略されません。
+生成済みの通常インストーラーでは、`--skip-specify`によりSpecKit CLIの取得・互換性確認を省けます。
+後で公式統合を初期化するには対応する`specify`が必要です。文書だけのプロジェクト準備には`attach --docs-only`を使えます。
+共通の組み立ての詳細は[Design Researchの導入手順](../design-research/installation.md#組み立てとオフライン利用)も参照してください。
 
 ## オプション
 
-| オプション | 動作 |
+| 組み立て用のオプション | 動作 |
 |---|---|
-| `--dry-run`、または指定なし | 導入予定を表示。永続的なインストール先は変更しない |
+| `--help` / `-h`、`--version` | ヘルプ / 配布版を表示 |
+| `--dry-run`、または指定なし | 組み立て予定を表示。通信・導入先変更・導入先検査なし |
+| `--list-skills` | 配布物の8つのCodex入口を列挙。導入状態は検査しない |
+| `--base-dir DIR` | 指定された固定版の元スクリプト2本を使用 |
+| `--offline` | ベース取得の通信を禁止。組み立てには`--base-dir`が必要 |
+| `--build-only DIR` | 両ツールの通常インストーラーとログを生成。導入なし |
+| `--extract-bundle DIR` | 更新資材とテストを展開。通信・導入なし |
+| `--bundle-self-test` | 同梱パッケージのオフライン契約テストを実行 |
+
+`--list-skills`・`--build-only`・`--extract-bundle`・`--bundle-self-test`は1つずつ使い、導入用の引数とは組み合わせません。
+`--dry-run --build-only DIR`は生成予定だけを表示します。
+
+| 組み立て後へ渡すオプション | 動作 |
+|---|---|
 | `--apply` | ユーザー共通環境へ導入 |
-| `--update` | 管理済みで未編集のWorkbench資材を更新対象にする。適用には`--apply`を併用 |
-| `--skip-specify` | SpecKit CLIを取得せず、独自資材だけを対象にする |
+| `--update` | 管理済みで未編集の資材を更新対象にする。適用には`--apply`を併用 |
+| `--skip-specify` | SpecKit CLIの取得・互換性確認を省略 |
 | `--doctor` | グローバル環境を読み取り専用で診断。単独使用 |
-| `--self-test` | 一時環境でオフラインのモックテスト。単独使用 |
-| `--extract DIRECTORY` | 読めるソースを指定先へ展開。インストールとは別の書き込み操作で、単独使用 |
-| `--help` / `-h` | ヘルプを表示 |
+| `--self-test` | 組み立て後のインストーラーの内蔵テストを実行。単独使用 |
+| `--extract DIR` | 組み立て後の読みやすいソースを展開。導入とは別の書き込み操作で、単独使用 |
 
 ## 配置先
 
@@ -67,7 +117,7 @@ bash install_speckit_upstream.sh --apply --skip-specify
 |---|---|
 | `~/.local/bin/speckit-workbench` | Workbenchの起動用スクリプト |
 | `~/.local/bin/specify` | このインストーラーでSpecKitを用意した場合の起動用スクリプト |
-| `~/.local/share/speckit-workbench/releases/2.0.1/` | Workbenchコード、テンプレート、参照資料、ガイド |
+| `~/.local/share/speckit-workbench/releases/2.0.5/` | Workbenchコード、テンプレート、参照資料、ガイド |
 | `~/.local/share/speckit-workbench/tooling/specify-1.0.8/` | 必要な場合に作成するSpecKit専用venv |
 | `~/.local/share/speckit-workbench/backups/` | 更新時のバックアップ |
 | `~/.config/speckit-workbench/install.json` | 管理対象とハッシュ等の導入記録 |
@@ -125,10 +175,10 @@ speckit-workbench commands
 
 更新対象は未編集の管理資材だけです。手動編集したSkill等は`--update`でも上書きせず停止します。
 同一内容の再実行はスキップし、SpecKit本体は自動更新しません。旧リリースとバックアップは残ります。
-導入後はCodexを再起動し、`$upstream-`の入力候補を確認してください。
+導入後はCodexを再起動し、`$upstream-`の入力候補と、`speckit-workbench doctor`の導入版・配置先を確認してください。
 
-既存要件・評価方法・実現方式を見直し、必要な場合にDesign Researchを明示して実行する手順も利用できます。
-2.0.1は新規プロジェクトの雛形を3文書へ変更します。既存資料・承認履歴は保持し、attach再実行やSkill更新だけでは移行しません。任意移行は[使い方](usage.md#既存資料を3文書へ移行する)を参照してください。
+2.0.5では、単一の`$design-research`入口への引き渡し、研究テーマの分割・統合、新規・変更設計のv2対応を使います。
+新規プロジェクトの雛形は3文書です。既存資料・承認履歴は保持し、attach再実行やSkill更新だけでは移行しません。任意移行は[使い方](usage.md#既存資料を3文書へ移行する)を参照してください。
 既存文書の本文・要件・根拠を変更した場合は、通常どおり再レビューします。
 Design Researchは別途[導入・更新](../design-research/installation.md)します。SpecKitの更新だけではDesign Researchは導入・更新されません。
 
@@ -154,6 +204,7 @@ speckit-workbench uninstall --apply
 
 | 状況 | 確認・対処 |
 |---|---|
+| 組み立ての自己テストで停止 | 導入は行われない。[現在の検証結果](../design-research/validation.md)とエラーを確認 |
 | Pythonの条件で停止 | Python 3.11以上を用意し、必要なら`PYTHON_BIN`を指定 |
 | `speckit-workbench`が見つからない | `~/.local/bin`または指定した`SWB_BIN_DIR`をPATHへ追加 |
 | 既存specifyが未対応 | CLIの版と`init --help`を確認。インストーラーは自動更新しない |
@@ -163,15 +214,18 @@ speckit-workbench uninstall --apply
 | gateで承認の古さを指摘された | 最新内容をレビューし、対象IDの明示承認を取り直す |
 
 ```bash
-# グローバル導入をせずに、保存済みスクリプトから診断
+# 通信せずに、組み立て用の更新元とテストを読む
+bash install_speckit_upstream.sh --extract-bundle /tmp/speckit-upstream-upgrade
+bash install_speckit_upstream.sh --bundle-self-test
+
+# 以下は先に組み立てるため、通信が発生し得る
 bash install_speckit_upstream.sh --doctor
-
-# 読めるソースを展開する。指定先は存在しないか空のディレクトリ
 bash install_speckit_upstream.sh --extract /tmp/speckit-upstream-source
-
-# SpecKitとの境界をモックにしたローカルテスト
 bash install_speckit_upstream.sh --self-test
 ```
 
+展開先は存在しないか空のディレクトリにします。
+`--extract-bundle`は更新元、`--extract`は組み立て後の資材を読む操作です。
+導入済みCLIの診断には`speckit-workbench doctor`を使い、配布スクリプトの組み立てを経由する診断と区別します。
 埋め込みSHA-256は資材の破損を検出しますが、配布者を認証するものではありません。
-自己テストは実Codexからの利用や外部CLIの取得・初期化を含む一連の動作確認とは異なります。
+同梱試験、組み立て後の内蔵試験、実Codexや外部CLIを含む動作確認は、それぞれ検証範囲が異なります。

@@ -1,0 +1,13 @@
+{
+  "executed": false,
+  "isolation": "isolated-projects",
+  "waves": [
+    [
+      "RP1",
+      "RP2"
+    ],
+    [
+      "RP3"
+    ]
+  ]
+}

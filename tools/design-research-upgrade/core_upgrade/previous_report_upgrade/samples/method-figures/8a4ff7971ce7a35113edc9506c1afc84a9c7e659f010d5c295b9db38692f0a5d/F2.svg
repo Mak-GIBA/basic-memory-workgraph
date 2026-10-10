@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="1003" viewBox="0 0 850 1003" role="img" aria-labelledby="title desc">
+<title id="title">提案部分の内部処理</title>
+<desc id="desc">近傍を取得して平均類似度を計算し、その値を補正係数で重み付けして元スコアから減算する処理の図。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7" fill="#333"/></marker></defs>
+<rect width="850" height="1003" fill="white"/>
+<g font-family="Noto Sans CJK JP, Meiryo, sans-serif" fill="#161616">
+<text x="425.0" y="35" text-anchor="middle" font-size="20" font-weight="bold">提案部分の内部処理</text>
+<text x="425.0" y="75" text-anchor="middle" font-size="13">概念図：実線は処理の流れ、破線はフィードバック。性能の実測図ではありません。</text>
+<path d="M425.0,194 V257.0 H425.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="387.5" y="227.0" width="75.0" height="20" fill="white"/>
+<text x="425.0" y="240.0" font-size="12" text-anchor="middle">近傍特徴量</text>
+<path d="M425.0,415 V478.0 H425.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="403.75" y="448.0" width="42.5" height="20" fill="white"/>
+<text x="425.0" y="461.0" font-size="12" text-anchor="middle">rho_i</text>
+<path d="M425.0,636 V699.0 H425.0 V758" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="374.5" y="669.0" width="101.0" height="20" fill="white"/>
+<text x="425.0" y="682.0" font-size="12" text-anchor="middle">lambda * rho_i</text>
+<rect x="270.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="121" font-size="12">提案法・追加　M2</text>
+<text x="284.0" y="146" font-size="17" font-weight="bold">自己を除くk近傍</text>
+<text x="284.0" y="170" font-size="13">参照集合内で求める</text>
+<rect x="270.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="342" font-size="12">提案法・追加　M2</text>
+<text x="284.0" y="367" font-size="17" font-weight="bold">近傍類似度を平均</text>
+<text x="284.0" y="391" font-size="13">rho_iとして保存する</text>
+<rect x="270.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="563" font-size="12">提案法・変更　M3</text>
+<text x="284.0" y="588" font-size="17" font-weight="bold">lambdaで重み付け</text>
+<text x="284.0" y="612" font-size="13">候補密度への補正量</text>
+<rect x="270.0" y="762" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="784" font-size="12">提案法・変更　M3</text>
+<text x="284.0" y="809" font-size="17" font-weight="bold">元スコアから減算</text>
+<text x="284.0" y="833" font-size="13">候補集合内で再並べ替え</text>
+</g>
+</svg>

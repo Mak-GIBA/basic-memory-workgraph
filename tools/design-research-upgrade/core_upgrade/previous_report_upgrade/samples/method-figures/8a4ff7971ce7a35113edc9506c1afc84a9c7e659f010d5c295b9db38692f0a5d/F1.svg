@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="1003" viewBox="0 0 860 1003" role="img" aria-labelledby="title desc">
+<title id="title">提案手法の全体構成</title>
+<desc id="desc">問い合わせから共通の候補取得を経てスコア補正へ進み、別途準備した候補密度も入力して結果を返す図。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7" fill="#333"/></marker></defs>
+<rect width="860" height="1003" fill="white"/>
+<g font-family="Noto Sans CJK JP, Meiryo, sans-serif" fill="#161616">
+<text x="430.0" y="35" text-anchor="middle" font-size="20" font-weight="bold">提案手法の全体構成</text>
+<text x="430.0" y="75" text-anchor="middle" font-size="13">概念図：実線は処理の流れ、破線はフィードバック。性能の実測図ではありません。</text>
+<path d="M240.0,194 V257.0 H240.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="179.75" y="227.0" width="120.5" height="20" fill="white"/>
+<text x="240.0" y="240.0" font-size="12" text-anchor="middle">問い合わせ特徴量q</text>
+<path d="M620.0,194 V257.0 H240.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="399.0" y="227.0" width="62.0" height="20" fill="white"/>
+<text x="430.0" y="240.0" font-size="12" text-anchor="middle">参照索引</text>
+<path d="M620.0,194 V257.0 H620.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="582.5" y="227.0" width="75.0" height="20" fill="white"/>
+<text x="620.0" y="240.0" font-size="12" text-anchor="middle">参照特徴量</text>
+<path d="M240.0,415 V478.0 H430.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="284.5" y="448.0" width="101.0" height="20" fill="white"/>
+<text x="335.0" y="461.0" font-size="12" text-anchor="middle">候補と元スコア</text>
+<path d="M620.0,415 V478.0 H430.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="464.75" y="448.0" width="120.5" height="20" fill="white"/>
+<text x="525.0" y="461.0" font-size="12" text-anchor="middle">事前計算したrho_i</text>
+<path d="M430.0,636 V699.0 H430.0 V758" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="412.0" y="669.0" width="36.0" height="20" fill="white"/>
+<text x="430.0" y="682.0" font-size="12" text-anchor="middle">順位</text>
+<rect x="85.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="99.0" y="121" font-size="12">共通・維持　Q</text>
+<text x="99.0" y="146" font-size="17" font-weight="bold">問い合わせ</text>
+<text x="99.0" y="170" font-size="13">正規化特徴量q</text>
+<rect x="465.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="479.0" y="121" font-size="12">共通・維持　R</text>
+<text x="479.0" y="146" font-size="17" font-weight="bold">参照集合</text>
+<text x="479.0" y="170" font-size="13">正規化特徴量x_i</text>
+<rect x="85.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="99.0" y="342" font-size="12">共通・維持　M1</text>
+<text x="99.0" y="367" font-size="17" font-weight="bold">候補の取得</text>
+<text x="99.0" y="391" font-size="13">同じ索引で上位L件</text>
+<rect x="465.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="479.0" y="342" font-size="12">提案法・追加　M2</text>
+<text x="479.0" y="367" font-size="17" font-weight="bold">密度の事前計算</text>
+<text x="479.0" y="391" font-size="13">k近傍の平均類似度</text>
+<rect x="275.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="289.0" y="563" font-size="12">提案法・変更　M3</text>
+<text x="289.0" y="588" font-size="17" font-weight="bold">スコア補正</text>
+<text x="289.0" y="612" font-size="13">内積から密度項を減算</text>
+<rect x="275.0" y="762" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="289.0" y="784" font-size="12">提案法・維持　O</text>
+<text x="289.0" y="809" font-size="17" font-weight="bold">検索結果</text>
+<text x="289.0" y="833" font-size="13">補正後の上位K件</text>
+</g>
+</svg>

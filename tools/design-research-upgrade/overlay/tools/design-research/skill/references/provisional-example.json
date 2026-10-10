@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "question": "Synthetic example: compare a deterministic pipeline and a single agent",
+  "scope": "Illustrative schema only; no external research or measurements performed",
+  "checked_as_of": "2026-09-30",
+  "constraints": [
+    {
+      "id": "K1",
+      "text": "Satisfy the agreed task-success requirement",
+      "kind": "hard"
+    }
+  ],
+  "sources": [],
+  "claims": [],
+  "candidates": [
+    {
+      "id": "A",
+      "name": "Deterministic pipeline",
+      "baseline": true,
+      "summary": "Fixed processing steps",
+      "hard_constraints": [
+        {
+          "constraint_id": "K1",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Representative task set has not been tested"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Single agent",
+      "baseline": false,
+      "summary": "Bounded tool-use loop",
+      "hard_constraints": [
+        {
+          "constraint_id": "K1",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Representative task set has not been tested"
+        }
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "criterion": "Task success on the same input set",
+      "candidate_id": "A",
+      "finding": "Unmeasured; no numerical claim",
+      "basis": "unknown",
+      "claim_ids": []
+    },
+    {
+      "criterion": "Task success on the same input set",
+      "candidate_id": "B",
+      "finding": "Unmeasured; no numerical claim",
+      "basis": "unknown",
+      "claim_ids": []
+    }
+  ],
+  "experiments": [
+    {
+      "id": "E1",
+      "hypothesis": "At least one candidate meets the task-success requirement",
+      "candidate_ids": [
+        "A",
+        "B"
+      ],
+      "controls": [
+        "Same representative task set and budget"
+      ],
+      "metrics": [
+        "Task success",
+        "Failure type",
+        "Total cost"
+      ],
+      "acceptance": "Agree numeric success and cost thresholds before running",
+      "status": "planned",
+      "artifacts": []
+    }
+  ],
+  "decision": {
+    "status": "provisional",
+    "candidate_id": null,
+    "rationale": "Insufficient evidence to prefer either option; first run the bounded comparison",
+    "claim_ids": [],
+    "unresolved": [
+      "Representative evaluation not executed"
+    ],
+    "revisit_when": [
+      "Comparable test results become available"
+    ],
+    "accepted_by": null,
+    "accepted_at": null
+  }
+}
