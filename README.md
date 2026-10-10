@@ -11,21 +11,33 @@ ECCのスキルを必要なときに読む構成や、作業ディレクトリ�
 |---|---|---|---|
 | 作業から得た知識や修正指示を次の仕事で使う | `install_basic_memory_workgraph.sh` | Basic Memory、Codex plugin、独自のWorkgraph・hooks・管理CLI | [概要と収録ツール](docs/basic-memory-workgraph/README.md) |
 | OOUIから画面と操作を設計し、実装・画像付き検証・改善を進める | `install_codex_ux_stack.sh` | ooui-design、認知負荷の参照資料、UI/UX GAN Harness、Product Design、Build Web Apps、UIレビューSkill、Playwright | [概要と収録ツール](docs/codex-ux-stack/README.md) |
-| 実装前の目的・要求・設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
+| ストーリーから要件・方式研究・全体設計・検証計画を整理する | `install_speckit_upstream.sh` | SpecKit CLI、独自Workbench、8つの上流工程Skill | [概要と収録ツール](docs/speckit-upstream/README.md) |
 | Issue・PRを読みやすく作成し、担当・期限・進捗をGitHubで管理する | `install_codex_github_pm.sh` | 独自のGitHub Project Director Skill、読み取り専用の調査補助スクリプト | [概要と収録ツール](docs/codex-github-pm/README.md) |
-| 目的に貢献するコアロジックの方式を比較・検証・改善する | `install_design_research.sh` | 独自のDesign Research Skill、BashのGANハーネス、文献調査CLI、証拠台帳 | [概要と収録ツール](docs/design-research/README.md) |
+| 目的に貢献するコアロジックの方式を比較・検証・改善する | `install_design_research.sh` | 単一入口のDesign Research Skill、テーマ別研究・再評価、Bashハーネス、文献調査CLI | [概要と収録ツール](docs/design-research/README.md) |
 | ECCの原本を保持し、必要なスキルだけ参照する | `install_codex_ecc.sh` | ECC標準プラグイン、入口4件、適用・更新・復元用の管理CLI | [概要と収録ツール](docs/codex-ecc/README.md) |
 | PDF・Word・PowerPointを読み、原本を保護して編集する | `install_codex_office.sh` | OfficeCLI、文書処理ライブラリ、Office Workbench Skill・CLI | [概要と収録ツール](docs/codex-office/README.md) |
-| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、paragraph-writing、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
+| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、paragraph-writing、japanese-direct-writing、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
 | 作業ディレクトリに対応するターミナルworkspaceを開く | `install_herdr.sh` | Herdr、`herdr-open`、Bashの呼び出し設定 | [概要と収録ツール](docs/herdr/README.md) |
 
-組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
-GitHub Project DirectorでIssueや進捗を整理し、Workgraphで他の仕事にも役立つ知識を残す、といった使い分けができます。
-これは利用例であり、インストーラー同士を自動連携する仕組みではありません。
-Design Researchはコアロジックの方式選定・小さな実験と、依頼された改善・再検証を行えます。関連するバックエンドも対象です。
-UX Stackとそれぞれ単独で利用でき、既存のUI/UXレビューは任意で引き継げます。
-SpecKit Upstream 2.0.1のSkillには、要件・評価方法・精度改善を見直す際、必要に応じてDesign Researchの利用を明示して実行する手順があります。
-研究結果を仕様へ戻す流れと成果物の確認先は、[ユースケース別の使い方](docs/speckit-upstream/reassessment.md)を参照してください。
+システム全体を整理する入口は`$upstream-new`・`$upstream-change`、特定の方式を研究する入口は`$design-research`です。
+Codexで対象プロジェクトを開き、目的を短く伝えます。
+
+```text
+$upstream-new 社内文書を検索し、根拠を確認して回答できるアプリを作りたい。
+```
+
+```text
+$design-research このプロジェクトの検索精度を改善する方法を調べて。
+```
+
+Upstream 2.0.5がストーリー・懸念・ユースケース・要件を整理し、Design Research 2.4.0がコアロジックの問いをテーマ別に比較・検証します。
+Upstreamは研究結果の組合せと全体制約を確認し、設計・検証計画へ反映します。その後、レビューと明示承認へ進みます。
+「計画だけ」の依頼は計画で止まり、研究の状況確認では実験を開始しません。研究完了と採用承認、アプリ実装は別の段階です。
+[一連の使い方](docs/speckit-upstream/usage.md)と[テーマ分割・既存判断の見直し](docs/speckit-upstream/reassessment.md)に具体例があります。
+
+UX Stackで画面を設計・確認し、GitHub Project DirectorでIssueや進捗を整理し、Workgraphへ後の仕事に役立つ知識を残すこともできます。
+各キットは別途導入し、利用時の依頼と許可の範囲で使います。
+Design ResearchとUX Stackはそれぞれ単独でも利用でき、既存のUI/UXレビューは任意で研究へ渡せます。
 
 ## はじめに
 
@@ -62,9 +74,9 @@ bash install_all.sh --only ux-stack,yomiyasu --apply
 |---|---|---|---|
 | Basic Memory Workgraph | 実際に導入する。Basic Memory本体の更新も試みる | [インストール・更新・解除](docs/basic-memory-workgraph/installation.md) | [使い方と設定](docs/basic-memory-workgraph/usage.md) |
 | Codex UX Stack | 不足するツールを実際に導入・登録する | [インストール・更新・解除](docs/codex-ux-stack/installation.md) | [使い方](docs/codex-ux-stack/usage.md) |
-| SpecKit Upstream | 導入予定を表示する。適用には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
+| SpecKit Upstream | 通信せず組み立て予定を表示する。組み立て・導入には`--apply`が必要 | [インストール・更新・解除](docs/speckit-upstream/installation.md) | [使い方](docs/speckit-upstream/usage.md) |
 | GitHub Project Director | ユーザー共通のSkillと共通AGENTSの適用ルールを導入する。既存の導入は保持する | [インストール・更新・解除](docs/codex-github-pm/installation.md) | [使い方](docs/codex-github-pm/usage.md) |
-| Design Research | ユーザー共通のSkillを実際に導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/design-research/installation.md) | [使い方](docs/design-research/usage.md) |
+| Design Research | 固定版から組み立て・検証後にSkillを導入する。既存の管理対象Skillは保持する | [インストール・更新・解除](docs/design-research/installation.md) | [使い方](docs/design-research/usage.md) |
 | Codex ECC | 通信せず予定を表示する。導入・設定には`--apply`が必要 | [インストール・更新・復元](docs/codex-ecc/installation.md) | [使い方](docs/codex-ecc/usage.md) |
 | Office Workbench | 導入予定を表示する。実行には`--apply`が必要 | [インストール・更新・解除](docs/codex-office/installation.md) | [使い方](docs/codex-office/usage.md) |
 | yomiyasu | 導入予定を表示する。実行には`--apply`が必要 | [インストール・更新・解除](docs/codex-yomiyasu/installation.md) | [使い方](docs/codex-yomiyasu/usage.md) |
@@ -74,7 +86,8 @@ bash install_all.sh --only ux-stack,yomiyasu --apply
 
 - 用途別のインストーラーと、それぞれの導入・利用ガイド。
 - Workgraphの保存方針、フック、ノートのスキーマ、更新・共有・点検用のPythonコード。
-- UX Stack、SpecKit Upstream、GitHub Project Director、Design Research、Office Workbench、yomiyasuの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
+- UX Stack、GitHub Project Director、Office Workbench、yomiyasuの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
+- Design Research 2.4.0とUpstream 2.0.5の組み立て用スクリプト。内蔵の更新資材を、取得・照合した固定版へ適用します。
 
 ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 
@@ -87,12 +100,12 @@ install_codex_github_pm.sh          GitHubのIssue・PR・Projects・進捗管�
 install_design_research.sh          コアロジックの方式比較・実測と改善
 install_codex_ecc.sh                ECC導入と必要なときに読む入口4件の設定
 install_codex_office.sh             PDF・Word・PowerPointの閲覧・編集
-install_codex_yomiyasu.sh           意味を保った日本語の段落構成・推敲
+install_codex_yomiyasu.sh           日本語の段落構成・推敲・不要な留意書きの点検
 install_herdr.sh                   作業ディレクトリに対応するHerdrの起動
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 tools/ecc-on-demand/               ECCの管理CLI・入口資材・導入処理
-tools/speckit-upstream/            3文書の上流整理・承認・任意移行・単体配布の正本
-tools/design-research/             調査・検証の1報告書・ハーネス・単体配布の正本
+tools/speckit-upstream/            固定版ベースの上流整理・承認・任意移行の実装
+tools/design-research/             固定版ベースの報告書・ハーネス・導入処理
 tools/codex-ux-stack/              OOUI設計・認知負荷の資料・画像付きレビュー・単体配布の正本
 docs/                              インストーラー別の説明
 tests/                             検証コードとテスト用データ
@@ -102,6 +115,9 @@ tests/                             検証コードとテスト用データ
 Workgraphは`tools/basic-memory-workgraph/`も含むリポジトリ一式で使用します。
 Codex ECCも`tools/ecc-on-demand/`を含むリポジトリ一式で使用します。
 UX Stack、SpecKit、GitHub Project Director、Design Research、Office Workbench、yomiyasu、Herdrはスクリプト単体で使用できます。
+Design ResearchとUpstreamは通常の組み立てで通信します。オフラインでは固定版の元スクリプト2本が必要です。
+`tools/design-research/`・`tools/speckit-upstream/`だけでは新版全体を再生成できません。[組み立て版の保守](docs/development.md#speckitの埋め込み資料)
+2026-10-10に組み立ての停止原因を修正し、両ツールの組み立て・自己テストと、このPCでの更新・診断を確認しました。[現在の検証範囲](docs/design-research/validation.md)
 個人のエディター設定（`.vscode/`）、Pythonキャッシュ、仮想環境はGit管理の対象外です。
 
 Basic Memory、OpenAIのplugin、VercelのSkill、Playwright、SpecKit、GitHub CLI等の外部ツールは、

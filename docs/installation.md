@@ -17,6 +17,7 @@ Node.js 20以降・npm、Git、curl、導入済みCodex CLI、外部配布元へ
 Codex CLIには、各ツールが使うplugin・MCP・app-server等のコマンドが必要です。
 選択したツールだけを入れる場合は、そのツールの前提条件を確認してください。
 たとえばUX Stackとyomiyasuの組み合わせにはPython 3.10以降を使えます。
+Design Research 2.4.0とUpstream 2.0.5の組み立てにはPython 3.11以上が必要です。
 導入後のGitHub接続、モデルの認証、文書描画など、実際の利用に必要な準備は各ガイドで説明しています。
 
 ## 導入する
@@ -38,12 +39,12 @@ bash install_all.sh --apply
 |---|---|---|
 | `workgraph` | Basic Memory、公式plugin、Workgraph・hooks・保存プロジェクト。導入済みなら設定を保持する`--update` | [導入・更新](basic-memory-workgraph/installation.md) |
 | `ux-stack` | ooui-design、認知負荷のガイド、画像付きUX検証、Product Design・Build Web Apps、UIレビュー、Playwright | [導入・更新](codex-ux-stack/installation.md) |
-| `speckit` | SpecKit CLIと上流工程のWorkbench・8 Skill。`--apply`で導入 | [導入・更新](speckit-upstream/installation.md) |
+| `speckit` | 固定版から両ツールを組み立て・検証し、SpecKit CLIとWorkbench・8 Skillを導入 | [導入・更新](speckit-upstream/installation.md) |
 | `github-pm` | GitHub Project DirectorとCodex共通指示。ghの導入は別途指定 | [導入・更新](codex-github-pm/installation.md) |
-| `design-research` | コアロジックの調査・比較・検証に使うSkillとハーネス | [導入・更新](design-research/installation.md) |
+| `design-research` | 固定版から両ツールを組み立て・検証し、単一入口の研究Skillとハーネスを導入 | [導入・更新](design-research/installation.md) |
 | `ecc` | Codex標準ECC pluginと必要時に参照する4つの入口。`--apply`で導入・設定 | [導入・更新・復元](codex-ecc/installation.md) |
 | `office` | OfficeCLI、文書処理ライブラリ、Office Workbench。`--apply`で導入 | [導入・更新](codex-office/installation.md) |
-| `yomiyasu` | 日本語の推敲用yomiyasuと段落構成用paragraph-writing、原本、検査ツール。`--apply`で両方を導入 | [導入・更新](codex-yomiyasu/installation.md) |
+| `yomiyasu` | 推敲用yomiyasu、段落構成用paragraph-writing、留意書き点検用japanese-direct-writing、原本、検査ツール。`--apply`で3スキルを導入 | [導入・更新](codex-yomiyasu/installation.md) |
 | `herdr` | Herdr、herdr-open、Bash設定 | [導入とBash設定](herdr/installation.md) |
 
 UX Stackは日本語のUI文言を仕上げる際にyomiyasuを推奨します。
@@ -57,6 +58,19 @@ bash install_all.sh --only ux-stack,yomiyasu --apply
 `--only`はカンマ区切りでも、複数回でも指定できます。同じIDの重複は1回にまとめ、上の表の順序で実行します。
 スクリプト自身の場所を基準に資材を参照するため、別の作業ディレクトリから絶対パスで呼び出すこともできます。
 
+UpstreamとDesign Researchを組み合わせる場合は、両方を選びます。片方の導入で、もう片方が自動導入されるわけではありません。
+
+```bash
+bash install_all.sh --only speckit,design-research,yomiyasu --dry-run
+bash install_all.sh --only speckit,design-research,yomiyasu --apply
+```
+
+両配布スクリプトは、固定コミットの元インストーラー2本を取得・照合して組み立てるため、通常は通信します。
+一括スクリプトは`--base-dir`・`--offline`・`--build-only`を転送しません。
+オフラインの組み立て・再配布は、[Design Research](design-research/installation.md#組み立てとオフライン利用)または[Upstream](speckit-upstream/installation.md#組み立てとオフライン利用)の個別手順を使います。
+2026-10-10に組み立ての停止原因を修正し、両ツールの組み立て・自己テストと、このPCでの更新・診断を確認しました。
+[検証結果](design-research/validation.md)を参照してください。
+
 ## 再実行・更新・解除
 
 既存の設定や編集済み資材の扱いは、各インストーラーの保護処理に従います。
@@ -68,6 +82,7 @@ bash install_all.sh --only ux-stack,yomiyasu --apply
 
 ほかのツールは通常の導入経路を使います。すでにある管理対象をそのまま保持するツールもあるため、
 一括導入の再実行がすべてのツールの最新版への更新になるわけではありません。
+Design Researchの更新には`--update`、Upstreamの更新には`--apply --update`を個別に指定します。
 特定の版への更新、任意機能、配置先変更は、表の導入ガイドに沿って個別インストーラーで指定します。
 解除も各ガイドに従って行います。Herdrは専用の解除オプションがなく、管理対象のBash設定等を手動で取り除きます。
 OfficeのMCP・Docling・OSパッケージ導入などの任意機能は、一括スクリプトからは指定しません。
