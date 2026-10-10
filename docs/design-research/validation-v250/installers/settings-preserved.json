@@ -1,0 +1,9 @@
+{
+  "checked_files": 3,
+  "hashes_preserved": true,
+  "scope": "Immediately before and after installer application, including final reapplication.",
+  "earlier_post_install_check_passed": true,
+  "later_config_change_observed": true,
+  "later_config_change_origin": "Not established; the later configuration was preserved without restoration.",
+  "final_reapplication_hashes_preserved": true
+}

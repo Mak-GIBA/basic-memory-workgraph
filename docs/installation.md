@@ -17,7 +17,7 @@ Node.js 20以降・npm、Git、curl、導入済みCodex CLI、外部配布元へ
 Codex CLIには、各ツールが使うplugin・MCP・app-server等のコマンドが必要です。
 選択したツールだけを入れる場合は、そのツールの前提条件を確認してください。
 たとえばUX Stackとyomiyasuの組み合わせにはPython 3.10以降を使えます。
-Design Research 2.4.0とUpstream 2.0.5の組み立てにはPython 3.11以上が必要です。
+Design Research 2.5.0とUpstream 2.0.6の組み立てにはPython 3.11以上が必要です。
 導入後のGitHub接続、モデルの認証、文書描画など、実際の利用に必要な準備は各ガイドで説明しています。
 
 ## 導入する

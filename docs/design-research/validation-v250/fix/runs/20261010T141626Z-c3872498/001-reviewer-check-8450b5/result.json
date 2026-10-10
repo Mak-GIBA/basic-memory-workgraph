@@ -1,0 +1,87 @@
+{
+  "status": "reviewed",
+  "reason": "The preserved baseline receipt reproduces the whitespace failure. Current parser.py still lacks whitespace removal, and no post-change successful receipt is present.",
+  "issues": [
+    {
+      "id": "whitespace-not-accepted",
+      "title": "Whitespace parsing remains broken",
+      "severity": "High",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Normalize surrounding whitespace before case comparison, then have the parent preserve a successful post-change unittest receipt.",
+      "expected": "\" True \" returns True and \"\\tFALSE\\n\" returns False, with baseline and post-change execution receipts preserved.",
+      "actual": "Current source uses text.lower(). The baseline test raises ValueError on \" True \"; the second whitespace assertion is not reached. No successful post-change receipt is available.",
+      "why": "The required whitespace behavior is not implemented or verified.",
+      "improvement": "Use text.strip().lower() while retaining the existing comparisons and fallback.",
+      "root_cause": "Case normalization leaves surrounding whitespace intact.",
+      "check_ids": [
+        "whitespace"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "CE-001",
+        "CE-002",
+        "SRC-003"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "whitespace",
+      "result": "fail",
+      "reason": "Baseline reproduction is confirmed by exit code 1 and the ValueError traceback. Current source still omits stripping. Post-change success is unverified because no successful receipt exists; the FALSE assertion was not reached.",
+      "evidence_ids": [
+        "EV-00001",
+        "CE-001",
+        "CE-002",
+        "SRC-003"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-001",
+      "path": "parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Normalization uses lower() only; whitespace-surrounded values reach the ValueError fallback."
+    },
+    {
+      "id": "CE-002",
+      "path": "test_parser.py",
+      "line_start": 4,
+      "line_end": 6,
+      "description": "Existing whitespace test asserts True for surrounding spaces and False for surrounding tab/newline."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Current parser source",
+      "url": "",
+      "path": "parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Baseline execution receipt",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Actual baseline unittest output",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Current source retains one normalization expression, two comparisons, and a ValueError fallback with no dependencies or additional branches. This structural simplicity does not establish correctness."
+}

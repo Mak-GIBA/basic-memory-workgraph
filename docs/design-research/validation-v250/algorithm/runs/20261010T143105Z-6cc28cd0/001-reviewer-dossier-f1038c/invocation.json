@@ -1,0 +1,8 @@
+{
+  "role": "reviewer-dossier",
+  "started_at": "2026-10-10T15:22:17.892869+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 7331,
+  "execution_contract_version": 2
+}

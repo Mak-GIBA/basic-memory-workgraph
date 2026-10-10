@@ -1,0 +1,29 @@
+{
+  "state": "installed",
+  "target": "/home/hirano/.agents/skills/design-research",
+  "version": "2.5.0",
+  "modified": false,
+  "files": 42,
+  "legacy_shortcuts": [
+    {
+      "name": "design-research-reassess",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-plan",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-workstream",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-resume",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-status",
+      "state": "absent"
+    }
+  ]
+}

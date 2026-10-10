@@ -1,0 +1,39 @@
+{
+  "state": "installed",
+  "target": "/home/hirano/.agents/skills/design-research",
+  "version": "2.5.0",
+  "modified": false,
+  "files": 42,
+  "action": "update",
+  "dry_run": false,
+  "backup": "/home/hirano/.agents/.design-research-backups/dc63bbd9edd3/20261010T160146Z-a648733918",
+  "network": false,
+  "config_changes": false,
+  "codex_entries": [
+    "$design-research"
+  ],
+  "legacy_shortcuts_to_retire": [],
+  "legacy_shortcuts_preserved": [],
+  "legacy_shortcuts": [
+    {
+      "name": "design-research-reassess",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-plan",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-workstream",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-resume",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-status",
+      "state": "absent"
+    }
+  ]
+}

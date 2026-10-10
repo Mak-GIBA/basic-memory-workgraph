@@ -1,0 +1,14 @@
+{
+  "source_id": "R5_1_R5-LINUX-ORIGINAL",
+  "title": "Linux rename(2) original manual source in the author repository",
+  "url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+  "locator": "2021-08-27 manual source; DESCRIPTION lines 66–105 and ERRORS EXDEV lines 426–432; independently read. Successful saved transport receipt: EV-00026.",
+  "checked_at": "2026-10-10T15:04:10.539669+00:00",
+  "status": "retrieved",
+  "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+  "read_level_claimed": "relevant_sections",
+  "final_url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+  "bytes": 14176,
+  "content_sha256": "3e8a2b6e24934ed1ce6379b803f263136cd68f6df395437e55dfa06e5f5cf90a",
+  "content_type": "text/plain; charset=utf-8"
+}

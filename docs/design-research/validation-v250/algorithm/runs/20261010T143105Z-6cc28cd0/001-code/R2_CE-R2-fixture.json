@@ -1,0 +1,9 @@
+{
+  "source_path": "tasks.json",
+  "source_sha256": "4c62b95258e78f78351a6941c1fd333bf5485b0fe21bebc27315ea793771c07a",
+  "line_start": 1,
+  "line_end": 1,
+  "checked_at": "2026-10-10T15:03:18.670593+00:00",
+  "excerpt": "[{\"id\": \"t0\", \"input\": \"true\", \"expected\": true}, {\"id\": \"t1\", \"input\": \"FALSE\", \"expected\": false}, {\"id\": \"t2\", \"input\": \" true \", \"expected\": true}, {\"id\": \"t3\", \"input\": \"\\tfalse\\n\", \"expected\": false}, {\"id\": \"t4\", \"input\": \"yes\", \"expected\": \"invalid\"}, {\"id\": \"t5\", \"input\": \"\", \"expected\": \"invalid\"}, {\"id\": \"t6\", \"input\": \"1\", \"expected\": \"invalid\"}]",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

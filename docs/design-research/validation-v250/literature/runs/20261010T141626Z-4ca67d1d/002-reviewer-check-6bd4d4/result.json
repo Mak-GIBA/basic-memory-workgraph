@@ -1,0 +1,41 @@
+{
+  "status": "reviewed",
+  "reason": "R4 independently verified against decisive original passages and the current saved proposal. No checks executed or files modified.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R4",
+      "result": "pass",
+      "reason": "[Python os.replace](https://docs.python.org/3/library/os.html#os.replace) warns that replacement may fail across filesystems. The [Linux rename(2) original](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2), EXDEV lines 426–432, requires the same mounted filesystem and excludes different mount points even when both mount the same filesystem. The current proposal requires destination-mount placement, preferably beside the checkpoint, conditions publication on successful replacement, and explicitly denies an atomic cross-filesystem copy fallback. Saved man7 timeouts remain failures; the successfully retrieved 2021 original does not verify the unavailable newer page. This is a design pass, not runtime validation.",
+      "evidence_ids": [
+        "EV-00023",
+        "EV-00047",
+        "EV-00048",
+        "EV-00045"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R4_1_R4-PYTHON",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read cross-filesystem warning",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "B-LINUX-RAW",
+      "title": "Linux rename(2) original manual source in the author repository",
+      "url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+      "path": "",
+      "locator": "2021-08-27 manual source: DESCRIPTION lines 66–105; ERRORS EXDEV lines 426–432",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Destination-directory placement satisfies the documented mount constraint within candidate B's existing temporary-file lifecycle. The proposal adds no copy fallback or additional mechanism. Structural costs remain qualitative; no performance or reliability measurements are claimed."
+}

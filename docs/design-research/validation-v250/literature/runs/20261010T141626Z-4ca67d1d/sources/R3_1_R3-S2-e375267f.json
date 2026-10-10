@@ -1,0 +1,10 @@
+{
+  "source_id": "R3_1_R3-S2",
+  "title": "Linux rename(2) manual page",
+  "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+  "locator": "DESCRIPTION opening paragraphs; independently read indexed original-page text. Direct open returned Internal Error; saved EV-00019 remains unavailable.",
+  "checked_at": "2026-10-10T15:33:58.935213+00:00",
+  "status": "unavailable",
+  "reason": "<urlopen error timed out>",
+  "read_level_claimed": "relevant_sections"
+}

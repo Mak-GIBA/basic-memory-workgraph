@@ -1,0 +1,103 @@
+{
+  "scope": "actual isolated installers; restored edited backup bytes; no global config changes",
+  "records": [
+    {
+      "command": [
+        "bash",
+        "/home/hirano/workspace/basic-memory-workgraph/install_design_research.sh",
+        "--extract-bundle",
+        "/tmp/dr-units-install-validation/old-package"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"extracted\": \"/tmp/dr-units-install-validation/old-package/codex_interface_upgrade\",\n  \"network\": false,\n  \"installed\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250d/install_design_research.sh",
+        "--skills-dir",
+        "/tmp/dr-units-install-validation/skills",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"state\": \"absent\",\n  \"target\": \"/tmp/dr-units-install-validation/skills/design-research\",\n  \"action\": \"install\",\n  \"dry_run\": false,\n  \"backup\": null,\n  \"network\": false,\n  \"config_changes\": false,\n  \"codex_entries\": [\n    \"$design-research\"\n  ],\n  \"legacy_shortcuts_to_retire\": [],\n  \"legacy_shortcuts_preserved\": [],\n  \"legacy_shortcuts\": [\n    {\n      \"name\": \"design-research-reassess\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-plan\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-workstream\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-resume\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-status\",\n      \"state\": \"absent\"\n    }\n  ],\n  \"version\": \"2.5.0\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_design_research.sh",
+        "--skills-dir",
+        "/tmp/dr-units-install-validation/skills",
+        "--update",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"state\": \"installed\",\n  \"target\": \"/tmp/dr-units-install-validation/skills/design-research\",\n  \"version\": \"2.5.0\",\n  \"modified\": false,\n  \"files\": 42,\n  \"action\": \"update\",\n  \"dry_run\": false,\n  \"backup\": \"/tmp/dr-units-install-validation/.design-research-backups/c2d6a1eaf5ee/20261010T143327Z-807a0257c2\",\n  \"network\": false,\n  \"config_changes\": false,\n  \"codex_entries\": [\n    \"$design-research\"\n  ],\n  \"legacy_shortcuts_to_retire\": [],\n  \"legacy_shortcuts_preserved\": [],\n  \"legacy_shortcuts\": [\n    {\n      \"name\": \"design-research-reassess\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-plan\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-workstream\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-resume\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-status\",\n      \"state\": \"absent\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_design_research.sh",
+        "--skills-dir",
+        "/tmp/dr-units-install-validation/skills",
+        "--update",
+        "--json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "ERROR: Installed files contain local edits. Review them; --force permits a backed-up replacement/removal of managed files only.\n"
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_design_research.sh",
+        "--skills-dir",
+        "/tmp/dr-units-install-validation/skills",
+        "--uninstall",
+        "--force",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"state\": \"installed\",\n  \"target\": \"/tmp/dr-units-install-validation/skills/design-research\",\n  \"version\": \"2.5.0\",\n  \"modified\": true,\n  \"files\": 42,\n  \"action\": \"uninstall\",\n  \"dry_run\": false,\n  \"backup\": \"/tmp/dr-units-install-validation/.design-research-backups/c2d6a1eaf5ee/20261010T143327Z-e01501e88b\",\n  \"network\": false,\n  \"config_changes\": false,\n  \"codex_entries\": [\n    \"$design-research\"\n  ],\n  \"legacy_shortcuts_to_retire\": [],\n  \"legacy_shortcuts_preserved\": [],\n  \"legacy_shortcuts\": [\n    {\n      \"name\": \"design-research-reassess\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-plan\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-workstream\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-resume\",\n      \"state\": \"absent\"\n    },\n    {\n      \"name\": \"design-research-status\",\n      \"state\": \"absent\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_speckit_upstream.sh",
+        "--apply",
+        "--skip-specify"
+      ],
+      "exit_code": 0,
+      "stdout": "nifest.json\n[WRITE] /tmp/dr-units-install-validation/xdg-data/speckit-workbench/releases/2.0.6/assets/templates/requirements.md\n[WRITE] /tmp/dr-units-install-validation/xdg-data/speckit-workbench/releases/2.0.6/assets/templates/verification.md\n[WRITE] /tmp/dr-units-install-validation/xdg-data/speckit-workbench/releases/2.0.6/swb.py\n[WRITE] /tmp/dr-units-install-validation/bin/speckit-workbench\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/speckit-workbench/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/speckit-workbench/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-new/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-new/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-existing/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-existing/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-change/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-change/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-bug/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-bug/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-refactor/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-refactor/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-check/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-check/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-review/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-review/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-approve/SKILL.md\n[WRITE] /tmp/dr-units-install-validation/upstream-skills/upstream-approve/agents/openai.yaml\n[WRITE] /tmp/dr-units-install-validation/xdg-data/speckit-workbench/releases/2.0.6/README_COMMANDS.md\n[WRITE] /tmp/dr-units-install-validation/xdg-data/speckit-workbench/releases/2.0.6/LICENSE\n\n導入完了。既存ECC・Basic Memory・Codex config・Hooks・AGENTS.mdは変更していません。\nコマンド: /tmp/dr-units-install-validation/bin/speckit-workbench\nCodex入力欄: $upstream-existing / $upstream-new / $upstream-change / $upstream-bug / $upstream-refactor / $upstream-check\n後続の長い初期プロンプトは不要。対象だけを続けて入力できます。\nPATHにない場合: export PATH=/tmp/dr-units-install-validation/bin:\"$PATH\"\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_speckit_upstream.sh",
+        "--apply",
+        "--update",
+        "--skip-specify"
+      ],
+      "exit_code": 0,
+      "stdout": "[DEPENDENCY] {\n  \"status\": \"skipped\",\n  \"path\": \"/home/hirano/.local/bin/specify\",\n  \"reason\": \"--skip-specify\"\n}\n\n[SKIP] グローバル資材は同一内容です\n\n導入完了。既存ECC・Basic Memory・Codex config・Hooks・AGENTS.mdは変更していません。\nコマンド: /tmp/dr-units-install-validation/bin/speckit-workbench\nCodex入力欄: $upstream-existing / $upstream-new / $upstream-change / $upstream-bug / $upstream-refactor / $upstream-check\n後続の長い初期プロンプトは不要。対象だけを続けて入力できます。\nPATHにない場合: export PATH=/tmp/dr-units-install-validation/bin:\"$PATH\"\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "/tmp/dr-units-build-v250h/install_speckit_upstream.sh",
+        "--apply",
+        "--update",
+        "--skip-specify"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "ERROR: 既存・編集済みファイルは上書きしません: /tmp/dr-units-install-validation/upstream-skills/speckit-workbench/SKILL.md\n未編集の管理ファイルの更新だけ --update で許可できます。\n"
+    }
+  ]
+}

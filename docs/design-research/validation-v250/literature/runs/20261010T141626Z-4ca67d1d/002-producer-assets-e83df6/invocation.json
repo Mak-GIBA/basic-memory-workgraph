@@ -1,0 +1,8 @@
+{
+  "role": "producer-assets",
+  "started_at": "2026-10-10T15:56:41.332906+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 6134,
+  "execution_contract_version": 2
+}

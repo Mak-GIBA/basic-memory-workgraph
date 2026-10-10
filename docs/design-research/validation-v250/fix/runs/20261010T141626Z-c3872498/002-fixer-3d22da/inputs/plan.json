@@ -1,0 +1,56 @@
+{
+  "status": "ready",
+  "reason": "The source and existing tests define a narrow backend fix. No checks were executed. One baseline and one minimal fix suffice; five candidates and literature comparison would not help evaluate this defect.",
+  "goal": "Accept surrounding whitespace when parsing true/false, preserve ValueError for other strings, change only parser.py, and verify through existing unittest and independent review.",
+  "domain": "backend",
+  "baseline": "parser.py uses text.lower() without stripping whitespace. Source inspection predicts test_whitespace fails on \" True \"; test_invalid covers \"yes\", \"\", and \"1\". These predictions require execution receipts.",
+  "constraints": [
+    "Use only the small fixture; do not access private files.",
+    "Only parser.py may change; preserve existing tests.",
+    "The parent executes checks in isolation and preserves baseline and post-change receipts, including failures.",
+    "Do not invoke another harness, install packages, access the network, write memory, commit, deploy, or modify reports/settings.",
+    "Independent review must inspect the actual final source and execution receipts; summaries are not measurements."
+  ],
+  "criteria": [
+    {
+      "id": "whitespace",
+      "title": "Parse whitespace-surrounded boolean strings",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "Before modification, the existing suite reproduces the whitespace failure. After modification, ParseTests.test_whitespace passes: \" True \" returns True and \"\\tFALSE\\n\" returns False. Preserve both execution receipts."
+    },
+    {
+      "id": "invalid",
+      "title": "Reject strings outside normalized true/false",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "ParseTests.test_invalid passes before and after modification. Independent source inspection confirms that only values equal to true or false after surrounding-whitespace removal and case normalization return booleans; all other strings raise ValueError."
+    },
+    {
+      "id": "scope",
+      "title": "Keep the implementation change minimal",
+      "kind": "static",
+      "required": true,
+      "acceptance": "The final diff changes only parser.py, adds surrounding-whitespace normalization, and preserves the function signature, case-insensitive comparisons, boolean results, and ValueError behavior."
+    },
+    {
+      "id": "review",
+      "title": "Independently verify the final fix",
+      "kind": "static",
+      "required": true,
+      "acceptance": "An independent reviewer inspects the final parser.py, unchanged tests, actual diff, and baseline/post-change unittest receipts, recording unresolved defects or evidence gaps explicitly."
+    }
+  ],
+  "test_commands": [
+    {
+      "command": "python3 -m unittest -v",
+      "check_ids": [
+        "whitespace",
+        "invalid"
+      ],
+      "artifact_paths": []
+    }
+  ],
+  "complexity_baseline": "One normalization expression, two comparisons, and a ValueError fallback. Retain this structure without dependencies or additional parsing branches.",
+  "queries": []
+}

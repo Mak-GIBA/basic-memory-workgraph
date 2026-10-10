@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="1003" viewBox="0 0 860 1003" role="img" aria-labelledby="title desc">
+<title id="title">AとBの共通工程と追加工程</title>
+<desc id="desc">同じ入力がAのlowerとBのstripへ分岐する。Bのstripの後にもlowerがあり、各経路は同じvalidateで最終値を返す。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7" fill="#333"/></marker></defs>
+<rect width="860" height="1003" fill="white"/>
+<g font-family="Noto Sans CJK JP, Meiryo, sans-serif" fill="#161616">
+<text x="430.0" y="35" text-anchor="middle" font-size="20" font-weight="bold">AとBの共通工程と追加工程</text>
+<text x="430.0" y="75" text-anchor="middle" font-size="13">概念図：実線は処理の流れ、破線はフィードバック。性能の実測図ではありません。</text>
+<path d="M430.0,194 V257.0 H240.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="297.5" y="227.0" width="75.0" height="20" fill="white"/>
+<text x="335.0" y="240.0" font-size="12" text-anchor="middle">同じx: str</text>
+<path d="M240.0,415 V478.0 H240.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="192.75" y="448.0" width="94.5" height="20" fill="white"/>
+<text x="240.0" y="461.0" font-size="12" text-anchor="middle">lower(x): str</text>
+<path d="M430.0,194 V257.0 H620.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="487.5" y="227.0" width="75.0" height="20" fill="white"/>
+<text x="525.0" y="240.0" font-size="12" text-anchor="middle">同じx: str</text>
+<path d="M620.0,415 V478.0 H620.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="556.5" y="448.0" width="127.0" height="20" fill="white"/>
+<text x="620.0" y="461.0" font-size="12" text-anchor="middle">s: str（入力変更）</text>
+<path d="M620.0,636 V699.0 H430.0 V758" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="477.75" y="669.0" width="94.5" height="20" fill="white"/>
+<text x="525.0" y="682.0" font-size="12" text-anchor="middle">lower(s): str</text>
+<rect x="275.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="289.0" y="121" font-size="12">共通・維持　N1</text>
+<text x="289.0" y="146" font-size="17" font-weight="bold">共通入力 x</text>
+<text x="289.0" y="170" font-size="13">t0〜t6を候補別に変更しない</text>
+<rect x="85.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="99.0" y="342" font-size="12">既存法・維持　M2</text>
+<text x="99.0" y="367" font-size="17" font-weight="bold">A: lower</text>
+<text x="99.0" y="391" font-size="13">x.lower()、空白は残る</text>
+<rect x="465.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="479.0" y="342" font-size="12">提案法・追加　M1</text>
+<text x="479.0" y="367" font-size="17" font-weight="bold">B: ASCII strip</text>
+<text x="479.0" y="391" font-size="13">両端の指定6文字だけを除去</text>
+<rect x="85.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="99.0" y="563" font-size="12">既存法・維持　M3</text>
+<text x="99.0" y="588" font-size="17" font-weight="bold">A: validate</text>
+<text x="99.0" y="612" font-size="13">同じ規則。t2・t3はinvalid</text>
+<rect x="465.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="479.0" y="563" font-size="12">提案法・変更　M2</text>
+<text x="479.0" y="588" font-size="17" font-weight="bold">B: lower</text>
+<text x="479.0" y="612" font-size="13">操作は共通。入力はstrip後のs</text>
+<rect x="275.0" y="762" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="289.0" y="784" font-size="12">提案法・維持　M3</text>
+<text x="289.0" y="809" font-size="17" font-weight="bold">B: validate</text>
+<text x="289.0" y="833" font-size="13">同じ規則。t2=true、t3=false</text>
+</g>
+</svg>

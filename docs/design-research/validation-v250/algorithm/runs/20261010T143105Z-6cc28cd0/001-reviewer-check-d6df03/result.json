@@ -1,0 +1,75 @@
+{
+  "status": "reviewed",
+  "reason": "R1 is supported by the current parent execution receipt, actual paired outputs, frozen labels, and executed implementation. No checks were rerun.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The successful E1 receipt records exit_code=0, no timeout or truncation, and the paired-results artifact. All fourteen actual returns are retained. In t0–t6 order, A returns [true,false,\"invalid\",\"invalid\",\"invalid\",\"invalid\",\"invalid\"] and B returns [true,false,true,false,\"invalid\",\"invalid\",\"invalid\"]. Type-preserving whole-value grading against the seven frozen labels gives A=5/7 (0.7142857142857143), B=7/7 (1.0), and paired B−A=2/7 (0.2857142857142857). A's incorrect t2 and t3 outputs remain recorded. The implementation invokes each function and records its actual return before grading; it refuses fixture changes. The proposal recommends B because 2/7 exceeds the 1/7 threshold. Results establish correctness only for these seven fixtures. Stderr contains a PATH-alias warning; stdout is empty, and neither is used as a measurement.",
+      "evidence_ids": [
+        "EV-00002",
+        "EV-00004",
+        "EV-00005",
+        "EV-00006",
+        "EV-00007",
+        "EV-00012"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R1-contract",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/evaluation_contract.json",
+      "locator": "tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "All fourteen trials, accuracy, paired_difference, failures",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "exit_code, timed_out, truncated, outputs, artifacts",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S7",
+      "title": "Executed comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "FROZEN_TASKS, parse_a, parse_b, actual function invocation, type-preserving grading",
+      "read_level": "full_text"
+    },
+    {
+      "id": "B_S7",
+      "title": "Original E1 stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH-alias warning",
+      "read_level": "full_text"
+    },
+    {
+      "id": "R1-decision",
+      "title": "Proposal recommendation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/proposal_design.json",
+      "locator": "dossier_json.decision",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Both parsers use O(n) string scans and O(n) temporary-string space; B adds ASCII whitespace stripping before the shared lowercase-and-validate procedure. This matches the narrow two-method comparison. Runtime and memory performance were not measured."
+}

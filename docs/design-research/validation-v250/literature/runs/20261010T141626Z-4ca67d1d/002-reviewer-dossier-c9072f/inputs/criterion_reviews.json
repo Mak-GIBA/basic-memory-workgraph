@@ -1,0 +1,98 @@
+[
+  {
+    "checks": [
+      {
+        "check_id": "R1",
+        "result": "pass",
+        "reason": "The saved proposal explains A's truncation followed by direct writing and B's complete, distinct temporary-file preparation followed by replacement. It prefers B when preserving complete checkpoint publication during interrupted updates matters, conditional on completed preparation and successful replacement on the destination mount. It permits A when interrupted-update checkpoint loss is acceptable and fewer lifecycle steps are preferred. Independently read Python os.replace and original Linux rename(2) passages support successful replacement atomicity. A's partial-write risk and B's checkpoint preservation are explicitly mechanism reasoning; examples and figures are unmeasured. Crash durability remains unknown. Actual receipts EV-00001 and EV-00026 record source retrieval, while EV-00042 remains a timeout failure. No experiments or runtime receipts exist. No previous R1 issues were supplied.",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00026",
+          "EV-00042"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The authorized two-candidate exception fits the narrow question. B adds temporary-file lifecycle and replacement to A's direct write sequence; the proposal explains these structural costs qualitatively without claiming measured latency or reliability. No additional mechanism or experiment is required for R1."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R2",
+        "result": "pass",
+        "reason": "[Python os.replace](https://docs.python.org/3/library/os.html#os.replace) documents atomic renaming upon success. The [2021 Linux rename(2) original](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2) documents atomic replacement of an existing destination without a missing-path interval and unaffected oldpath descriptors. Current claims C5 and B-C3 and the reader guide correctly separate completed temporary-file preparation from successful atomic publication. Existing destination readers retaining old file references is explicitly labeled inference, rather than attributed to the source-descriptor sentence. Successful Linux transport receipts support source availability; saved man7 timeouts remain failures. This qualitative pass establishes no runtime, interruption, or durability result.",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00047",
+          "EV-00048",
+          "EV-00043"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The review stays within R2 and the two specified mechanisms. Separating preparation, pathname publication, and retained reader references adds necessary explanatory detail without adding experiments or implementation scope. Lifecycle costs remain qualitative and unmeasured."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R3",
+        "result": "pass",
+        "reason": "Claims C4, A-C4 and B-C5, the durability comparison, decision and reader-guide limitations explicitly distinguish atomic pathname visibility from persistence after power loss or system crash. They retain durability as unknown and unmeasured and state that closing the temporary file and replacing the destination establish no complete synchronization protocol. Independently read [Python os.replace](https://docs.python.org/3/library/os.html#os.replace) and [Linux rename(2) original DESCRIPTION](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2): these passages describe successful rename atomicity and pathname access, without establishing crash persistence. Actual iteration 2 Linux receipts EV-00046 and EV-00047 record successful source retrieval; EV-00044 remains a failed man7 retrieval. The saved results contain no experiments, metrics or experiment receipts; illustrations are explicitly unmeasured. This is a qualitative design pass, not runtime or durability verification. No previous R3 issues were supplied.",
+        "evidence_ids": [
+          "EV-00048",
+          "EV-00020",
+          "EV-00046",
+          "EV-00047",
+          "EV-00044"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The durability explanation stays within the two requested mechanisms. It identifies B's additional temporary-file lifecycle and replacement steps qualitatively, without introducing an unsupported synchronization protocol or measured performance claim. The explicit two-candidate exception is appropriate for this narrow design question."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R4",
+        "result": "pass",
+        "reason": "[Python os.replace](https://docs.python.org/3/library/os.html#os.replace) warns that replacement may fail across filesystems. The [Linux rename(2) original](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2), EXDEV lines 426–432, requires the same mounted filesystem and excludes different mount points even when both mount the same filesystem. The current proposal requires destination-mount placement, preferably beside the checkpoint, conditions publication on successful replacement, and explicitly denies an atomic cross-filesystem copy fallback. Saved man7 timeouts remain failures; the successfully retrieved 2021 original does not verify the unavailable newer page. This is a design pass, not runtime validation.",
+        "evidence_ids": [
+          "EV-00023",
+          "EV-00047",
+          "EV-00048",
+          "EV-00045"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Destination-directory placement satisfies the documented mount constraint within candidate B's existing temporary-file lifecycle. The proposal adds no copy fallback or additional mechanism. Structural costs remain qualitative; no performance or reliability measurements are claimed."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R5",
+        "result": "pass",
+        "reason": "Independently reviewed the current proposal against R1–R4. It compares both requested mechanisms and conditions preference for B on complete preparation and successful replacement. [Python os.replace](https://docs.python.org/3/library/os.html#os.replace) supports successful-rename atomicity and possible cross-filesystem failure. The [2021 Linux original](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2), DESCRIPTION lines 66–105 and EXDEV lines 426–432, supports atomic destination replacement, unaffected source descriptors, and the mount boundary. Actual receipts EV-00046 and EV-00047 record successful original-source retrieval, closing the decisive-passage gap within that dated scope. EV-00040–EV-00045 remain failed man7 retrievals; the unavailable newer version is not verified. The proposal labels truncation interruption behavior and destination-reader behavior as reasoning, leaves crash durability unknown, and treats earlier review grades as applying only to the earlier proposal. No previous R5 issues were supplied. No experiments or runtime passes are asserted; parent provenance assessment remains pending.",
+        "evidence_ids": [
+          "EV-00030",
+          "EV-00046",
+          "EV-00047",
+          "EV-00048",
+          "EV-00040",
+          "EV-00041",
+          "EV-00042",
+          "EV-00043",
+          "EV-00044",
+          "EV-00045"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The permitted two-candidate comparison fits the narrow design question. B adds temporary-file preparation, lifecycle handling and replacement; these costs remain qualitative. No additional mechanism, implementation or experiment is required."
+  }
+]

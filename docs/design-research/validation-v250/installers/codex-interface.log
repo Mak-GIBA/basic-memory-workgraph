@@ -1,0 +1,187 @@
+$ /usr/bin/python3 -m unittest discover -s /home/hirano/workspace/basic-memory-workgraph/tools/design-research-upgrade/tests -v
+test_absolute_source_is_snapshotted_and_malformed_nested_json_is_repairable (test_bounded_pipeline.BoundedPipelineTests.test_absolute_source_is_snapshotted_and_malformed_nested_json_is_repairable) ... ok
+test_bad_candidate_is_incomplete_and_resume_reuses_valid_predecessors (test_bounded_pipeline.BoundedPipelineTests.test_bad_candidate_is_incomplete_and_resume_reuses_valid_predecessors) ... ok
+test_compact_dossier_review_reconstructs_and_rejects_wrong_base_or_identity (test_bounded_pipeline.BoundedPipelineTests.test_compact_dossier_review_reconstructs_and_rejects_wrong_base_or_identity) ... ok
+test_design_only_completes_without_artificial_execution (test_bounded_pipeline.BoundedPipelineTests.test_design_only_completes_without_artificial_execution) ... ok
+test_effectiveness_runs_real_algorithms_and_parent_grades_outputs (test_bounded_pipeline.BoundedPipelineTests.test_effectiveness_runs_real_algorithms_and_parent_grades_outputs) ... [DR-GAN] E1: exit 0
+ok
+test_final_dossier_cannot_reidentify_a_saved_source_and_can_resume (test_bounded_pipeline.BoundedPipelineTests.test_final_dossier_cannot_reidentify_a_saved_source_and_can_resume) ... ok
+test_invalid_final_dossier_can_be_corrected_without_repeating_prior_units (test_bounded_pipeline.BoundedPipelineTests.test_invalid_final_dossier_can_be_corrected_without_repeating_prior_units) ... ok
+test_local_source_can_omit_an_empty_url (test_bounded_pipeline.BoundedPipelineTests.test_local_source_can_omit_an_empty_url) ... ok
+test_minimal_design_cannot_replace_frozen_candidate_identities (test_bounded_pipeline.BoundedPipelineTests.test_minimal_design_cannot_replace_frozen_candidate_identities) ... ok
+test_new_source_format_errors_never_poison_a_completed_checkpoint (test_bounded_pipeline.BoundedPipelineTests.test_new_source_format_errors_never_poison_a_completed_checkpoint) ... ok
+test_producer_source_collision_is_rejected_before_checkpointing (test_bounded_pipeline.BoundedPipelineTests.test_producer_source_collision_is_rejected_before_checkpointing) ... ok
+test_repeated_command_declarations_execute_twice_and_resume_reuses_both (test_bounded_pipeline.BoundedPipelineTests.test_repeated_command_declarations_execute_twice_and_resume_reuses_both) ... [DR-GAN] check: exit 0
+[DR-GAN] check: exit 0
+[DR-GAN] reuse verified execution: python3 counter.py
+[DR-GAN] reuse verified execution: python3 counter.py
+ok
+test_run_fixes_source_then_requires_fresh_success_and_resolution (test_bounded_pipeline.BoundedPipelineTests.test_run_fixes_source_then_requires_fresh_success_and_resolution) ... [DR-GAN] check: exit 1
+[DR-GAN] check: exit 0
+ok
+test_scoped_code_ids_are_distinct_across_criteria (test_bounded_pipeline.BoundedPipelineTests.test_scoped_code_ids_are_distinct_across_criteria) ... ok
+test_scoped_source_locators_do_not_overwrite_existing_identity (test_bounded_pipeline.BoundedPipelineTests.test_scoped_source_locators_do_not_overwrite_existing_identity) ... ok
+test_unavailable_final_support_does_not_restart_the_whole_comparison (test_bounded_pipeline.BoundedPipelineTests.test_unavailable_final_support_does_not_restart_the_whole_comparison) ... ok
+test_unknown_evidence_never_becomes_a_completed_review_checkpoint (test_bounded_pipeline.BoundedPipelineTests.test_unknown_evidence_never_becomes_a_completed_review_checkpoint) ... ok
+test_workspace_source_path_does_not_select_a_same_named_project_file (test_bounded_pipeline.BoundedPipelineTests.test_workspace_source_path_does_not_select_a_same_named_project_file) ... ok
+test_actual_format_retry_uses_remaining_time (test_effectiveness.EffectivenessTests.test_actual_format_retry_uses_remaining_time) ... [DR-GAN] iteration 1: producer-assets
+[DR-GAN] iteration 1: producer-assets
+ok
+test_bookkeeping_primary_metric_rejected (test_effectiveness.EffectivenessTests.test_bookkeeping_primary_metric_rejected) ... ok
+test_design_can_finish_unmeasured_and_cannot_propose_measured_benefit (test_effectiveness.EffectivenessTests.test_design_can_finish_unmeasured_and_cannot_propose_measured_benefit) ... ok
+test_explicit_purpose_cannot_be_downgraded (test_effectiveness.EffectivenessTests.test_explicit_purpose_cannot_be_downgraded) ... ok
+test_format_repair_is_once_with_remaining_budget (test_effectiveness.EffectivenessTests.test_format_repair_is_once_with_remaining_budget) ... ok
+test_grades_are_recomputed_and_repeats_are_not_distinct_tasks (test_effectiveness.EffectivenessTests.test_grades_are_recomputed_and_repeats_are_not_distinct_tasks) ... ok
+test_later_repetition_failure_is_shown_in_report (test_effectiveness.EffectivenessTests.test_later_repetition_failure_is_shown_in_report) ... ok
+test_legacy_contract_unchanged (test_effectiveness.EffectivenessTests.test_legacy_contract_unchanged) ... ok
+test_locator_and_history_checked_before_any_evidence_capture (test_effectiveness.EffectivenessTests.test_locator_and_history_checked_before_any_evidence_capture) ... ok
+test_missing_pair_fails (test_effectiveness.EffectivenessTests.test_missing_pair_fails) ... ok
+test_negative_or_equal_measurement_is_valid_research (test_effectiveness.EffectivenessTests.test_negative_or_equal_measurement_is_valid_research) ... ok
+test_old_iteration_receipt_rejected (test_effectiveness.EffectivenessTests.test_old_iteration_receipt_rejected) ... ok
+test_old_summary_is_not_current_measurement (test_effectiveness.EffectivenessTests.test_old_summary_is_not_current_measurement) ... ok
+test_output_must_be_final_not_only_claimed_score (test_effectiveness.EffectivenessTests.test_output_must_be_final_not_only_claimed_score) ... ok
+test_parent_checkpoint_rejects_modified_contract_and_stale_results (test_effectiveness.EffectivenessTests.test_parent_checkpoint_rejects_modified_contract_and_stale_results) ... ok
+test_parent_grades_before_review_and_missing_binding_cannot_hide_results (test_effectiveness.EffectivenessTests.test_parent_grades_before_review_and_missing_binding_cannot_hide_results) ... ok
+test_preflight_handles_builtins_and_multiline_shell_without_execution (test_effectiveness.EffectivenessTests.test_preflight_handles_builtins_and_multiline_shell_without_execution) ... ok
+test_preflight_missing_runtime_and_symlink_dependency (test_effectiveness.EffectivenessTests.test_preflight_missing_runtime_and_symlink_dependency) ... ok
+test_real_local_execution_exports_final_outputs_and_receipt (test_effectiveness.EffectivenessTests.test_real_local_execution_exports_final_outputs_and_receipt) ... [DR-GAN] E1: exit 0
+ok
+test_result_cannot_change_frozen_inputs_or_labels (test_effectiveness.EffectivenessTests.test_result_cannot_change_frozen_inputs_or_labels) ... ok
+test_result_without_exporting_receipt_rejected (test_effectiveness.EffectivenessTests.test_result_without_exporting_receipt_rejected) ... ok
+test_role_timeout_has_diagnostic_receipt_without_test_success (test_effectiveness.EffectivenessTests.test_role_timeout_has_diagnostic_receipt_without_test_success) ... [DR-GAN] iteration 1: producer-assets
+ok
+test_scalar_and_numeric_error_grade_actual_values (test_effectiveness.EffectivenessTests.test_scalar_and_numeric_error_grade_actual_values) ... ok
+test_tampered_result_rejected (test_effectiveness.EffectivenessTests.test_tampered_result_rejected) ... ok
+test_threshold_cannot_change_after_execution (test_effectiveness.EffectivenessTests.test_threshold_cannot_change_after_execution) ... ok
+test_timeout_and_false_runtime_pass_are_not_format_repairs (test_effectiveness.EffectivenessTests.test_timeout_and_false_runtime_pass_are_not_format_repairs) ... ok
+test_unmeasured_effectiveness_cannot_complete (test_effectiveness.EffectivenessTests.test_unmeasured_effectiveness_cannot_complete) ... ok
+test_capture_delivers_large_utf8_stdin_to_real_child (test_stages.StageTests.test_capture_delivers_large_utf8_stdin_to_real_child) ... ok
+test_completed_assets_are_reused_after_execution_interruption (test_stages.StageTests.test_completed_assets_are_reused_after_execution_interruption) ... ok
+test_completed_design_is_reused_after_asset_timeout (test_stages.StageTests.test_completed_design_is_reused_after_asset_timeout) ... ok
+test_invalid_assets_are_not_saved_as_valid_checkpoint (test_stages.StageTests.test_invalid_assets_are_not_saved_as_valid_checkpoint) ... ok
+test_invalid_planner_json_is_repaired_before_checkpoint (test_stages.StageTests.test_invalid_planner_json_is_repaired_before_checkpoint) ... ok
+test_large_role_prompt_uses_stdin_and_avoids_duplicate_design (test_stages.StageTests.test_large_role_prompt_uses_stdin_and_avoids_duplicate_design) ... [DR-GAN] iteration 1: reviewer
+ok
+test_nested_design_and_review_json_get_one_format_repair (test_stages.StageTests.test_nested_design_and_review_json_get_one_format_repair) ... ok
+test_pending_review_does_not_execute_again (test_stages.StageTests.test_pending_review_does_not_execute_again) ... ok
+test_assets_context_has_contract_once_and_no_full_report (test_execution_units.UnitTests.test_assets_context_has_contract_once_and_no_full_report) ... ok
+test_candidate_unit_cannot_mutate_other_candidate (test_execution_units.UnitTests.test_candidate_unit_cannot_mutate_other_candidate) ... ok
+test_correction_design_can_read_existing_original_access_history (test_execution_units.UnitTests.test_correction_design_can_read_existing_original_access_history) ... ok
+test_dependency_cannot_be_skipped (test_execution_units.UnitTests.test_dependency_cannot_be_skipped) ... ok
+test_execution_receipt_is_reused_and_output_mutation_is_rejected (test_execution_units.UnitTests.test_execution_receipt_is_reused_and_output_mutation_is_rejected) ... [DR-GAN] check: exit 0
+[DR-GAN] reuse verified execution: python3 -c "print(42)"
+ok
+test_failed_unit_stays_incomplete_and_preserves_completed_predecessor (test_execution_units.UnitTests.test_failed_unit_stays_incomplete_and_preserves_completed_predecessor) ... ok
+test_input_overflow_is_complete_hashed_reference_not_truncation (test_execution_units.UnitTests.test_input_overflow_is_complete_hashed_reference_not_truncation) ... ok
+test_minimal_design_defers_full_presentation_gate (test_execution_units.UnitTests.test_minimal_design_defers_full_presentation_gate) ... ok
+test_presentation_can_repeat_reference_but_cannot_replace_core_evidence (test_execution_units.UnitTests.test_presentation_can_repeat_reference_but_cannot_replace_core_evidence) ... ok
+test_presentation_repair_receives_error_and_previous_output_in_same_deadline (test_execution_units.UnitTests.test_presentation_repair_receives_error_and_previous_output_in_same_deadline) ... ok
+test_scoped_review_cannot_claim_other_criterion (test_execution_units.UnitTests.test_scoped_review_cannot_claim_other_criterion) ... ok
+test_unavailable_source_reference_repair_keeps_the_original_deadline (test_execution_units.UnitTests.test_unavailable_source_reference_repair_keeps_the_original_deadline) ... ok
+test_unconfirmed_execution_is_not_replayed (test_execution_units.UnitTests.test_unconfirmed_execution_is_not_replayed) ... ok
+test_unit_reuses_validated_output_and_detects_tampering (test_execution_units.UnitTests.test_unit_reuses_validated_output_and_detects_tampering) ... ok
+test_offline_requires_original_bases (test_installer.PinnedSourceTests.test_offline_requires_original_bases) ... ok
+test_unsafe_archive_paths_rejected (test_installer.PinnedSourceTests.test_unsafe_archive_paths_rejected) ... ok
+test_wrong_design_research_blob_refused (test_installer.PinnedSourceTests.test_wrong_design_research_blob_refused) ... ok
+test_wrong_upstream_blob_refused (test_installer.PinnedSourceTests.test_wrong_upstream_blob_refused) ... ok
+test_dry_run_has_no_destination (test_installer.SingleEntryInstallerTests.test_dry_run_has_no_destination) ... ok
+test_edited_core_refuses_update_preserving_shortcut (test_installer.SingleEntryInstallerTests.test_edited_core_refuses_update_preserving_shortcut) ... ok
+test_failed_core_update_rolls_back_shortcut (test_installer.SingleEntryInstallerTests.test_failed_core_update_rolls_back_shortcut) ... ok
+test_install_publishes_only_the_main_skill (test_installer.SingleEntryInstallerTests.test_install_publishes_only_the_main_skill) ... ok
+test_legacy_not_removed_if_no_core_version_upgrade (test_installer.SingleEntryInstallerTests.test_legacy_not_removed_if_no_core_version_upgrade) ... ok
+test_legacy_symlink_refused (test_installer.SingleEntryInstallerTests.test_legacy_symlink_refused) ... ok
+test_modified_alias_preserved_without_force (test_installer.SingleEntryInstallerTests.test_modified_alias_preserved_without_force) ... ok
+test_no_global_config_mutation (test_installer.SingleEntryInstallerTests.test_no_global_config_mutation) ... ok
+test_reinstall_is_idempotent (test_installer.SingleEntryInstallerTests.test_reinstall_is_idempotent) ... ok
+test_uninstall_removes_only_owned_core_and_shortcuts (test_installer.SingleEntryInstallerTests.test_uninstall_removes_only_owned_core_and_shortcuts) ... ok
+test_unmanaged_alias_preserved (test_installer.SingleEntryInstallerTests.test_unmanaged_alias_preserved) ... ok
+test_unmodified_owned_alias_retired_with_backup (test_installer.SingleEntryInstallerTests.test_unmodified_owned_alias_retired_with_backup) ... ok
+test_allowed_network_passed_explicitly (test_interface.InterfaceTests.test_allowed_network_passed_explicitly) ... ok
+test_ambiguous_dependency_requires_selection (test_interface.InterfaceTests.test_ambiguous_dependency_requires_selection) ... ok
+test_changed_requirements_invalidates_lease (test_interface.InterfaceTests.test_changed_requirements_invalidates_lease) ... ok
+test_child_does_not_dispatch (test_interface.InterfaceTests.test_child_does_not_dispatch) ... ok
+test_completed_run_cannot_resume (test_interface.InterfaceTests.test_completed_run_cannot_resume) ... ok
+test_default_network_is_offline (test_interface.InterfaceTests.test_default_network_is_offline) ... ok
+test_empty_run_list_creates_nothing (test_interface.InterfaceTests.test_empty_run_list_creates_nothing) ... ok
+test_explicit_noncomplete_prior_refused (test_interface.InterfaceTests.test_explicit_noncomplete_prior_refused) ... ok
+test_interrupted_check_at_iteration_limit_not_resumable (test_interface.InterfaceTests.test_interrupted_check_at_iteration_limit_not_resumable) ... ok
+test_interrupted_fixer_not_resumed (test_interface.InterfaceTests.test_interrupted_fixer_not_resumed) ... ok
+test_legacy_archive_supported (test_interface.InterfaceTests.test_legacy_archive_supported) ... ok
+test_malformed_state_reported_not_hidden (test_interface.InterfaceTests.test_malformed_state_reported_not_hidden) ... ok
+test_missing_archive_not_completed (test_interface.InterfaceTests.test_missing_archive_not_completed) ... ok
+test_missing_change_reason_refused (test_interface.InterfaceTests.test_missing_change_reason_refused) ... ok
+test_new_slug_avoids_previous_and_existing (test_interface.InterfaceTests.test_new_slug_avoids_previous_and_existing) ... ok
+test_one_user_facing_skill_and_internal_modes (test_interface.InterfaceTests.test_one_user_facing_skill_and_internal_modes) ... ok
+test_outside_requirements_refused (test_interface.InterfaceTests.test_outside_requirements_refused) ... ok
+test_plan_inspection_does_not_run_experiments (test_interface.InterfaceTests.test_plan_inspection_does_not_run_experiments) ... ok
+test_prepare_reassess_auto_resolves_unique_input (test_interface.InterfaceTests.test_prepare_reassess_auto_resolves_unique_input) ... ok
+test_profile_and_purpose_are_frozen_in_dispatch (test_interface.InterfaceTests.test_profile_and_purpose_are_frozen_in_dispatch) ... ok
+test_real_subprocess_dispatch_propagates_exit_status (test_interface.InterfaceTests.test_real_subprocess_dispatch_propagates_exit_status) ... ok
+test_reassess_never_silently_picks_latest (test_interface.InterfaceTests.test_reassess_never_silently_picks_latest) ... ok
+test_resume_network_cannot_be_changed (test_interface.InterfaceTests.test_resume_network_cannot_be_changed) ... ok
+test_resume_profile_or_purpose_override_refused (test_interface.InterfaceTests.test_resume_profile_or_purpose_override_refused) ... ok
+test_resume_same_run_and_no_new_conditions (test_interface.InterfaceTests.test_resume_same_run_and_no_new_conditions) ... ok
+test_run_requires_unchanged_prepare_lease (test_interface.InterfaceTests.test_run_requires_unchanged_prepare_lease) ... ok
+test_sensitive_requirements_refused (test_interface.InterfaceTests.test_sensitive_requirements_refused) ... ok
+test_shell_metacharacters_remain_one_argument (test_interface.InterfaceTests.test_shell_metacharacters_remain_one_argument) ... ok
+test_single_workstream_uses_frozen_plan (test_interface.InterfaceTests.test_single_workstream_uses_frozen_plan) ... ok
+test_state_path_identity_mismatch_rejected (test_interface.InterfaceTests.test_state_path_identity_mismatch_rejected) ... ok
+test_symlink_prior_rejected (test_interface.InterfaceTests.test_symlink_prior_rejected) ... ok
+test_topic_selects_real_unique_prior (test_interface.InterfaceTests.test_topic_selects_real_unique_prior) ... ok
+test_two_canonical_candidates_need_selection (test_interface.InterfaceTests.test_two_canonical_candidates_need_selection) ... ok
+test_unsafe_slug_rejected (test_interface.InterfaceTests.test_unsafe_slug_rejected) ... ok
+test_workstream_dependencies_not_assumed_complete (test_interface.InterfaceTests.test_workstream_dependencies_not_assumed_complete) ... ok
+test_workstream_override_refused (test_interface.InterfaceTests.test_workstream_override_refused) ... ok
+test_workstream_uses_same_plan_completed_dependencies (test_interface.InterfaceTests.test_workstream_uses_same_plan_completed_dependencies) ... ok
+test_wrong_plan_dependency_refused (test_interface.InterfaceTests.test_wrong_plan_dependency_refused) ... ok
+test_scope_exception_does_not_remove_evidence_or_mechanism_gates (test_narrow_method_scope.NarrowMethodScopeTests.test_scope_exception_does_not_remove_evidence_or_mechanism_gates) ... ok
+test_scoped_two_method_report_keeps_legacy_breadth_requirement (test_narrow_method_scope.NarrowMethodScopeTests.test_scoped_two_method_report_keeps_legacy_breadth_requirement) ... ok
+test_v2_preview_uses_completed_presentation_before_review (test_narrow_method_scope.NarrowMethodScopeTests.test_v2_preview_uses_completed_presentation_before_review) ... ok
+test_archive_traversal_rejected_without_output (test_packaging.PackagingTests.test_archive_traversal_rejected_without_output) ... ok
+test_bundle_and_install_flags_do_not_mix (test_packaging.PackagingTests.test_bundle_and_install_flags_do_not_mix) ... usage: python3 -m unittest [-h] [--base-dir BASE_DIR] [--offline]
+                           [--build-only DIRECTORY] [--bundle-self-test]
+                           [--extract-bundle DIRECTORY] [--list-skills]
+                           [--dry-run] [--version]
+python3 -m unittest: error: Bundle operations cannot be combined with installation options
+ok
+test_design_installer_flags_preserved (test_packaging.PackagingTests.test_design_installer_flags_preserved) ... ok
+test_duplicate_archive_rejected (test_packaging.PackagingTests.test_duplicate_archive_rejected) ... ok
+test_embedded_bundle_digest_is_checked (test_packaging.PackagingTests.test_embedded_bundle_digest_is_checked) ... ok
+test_exact_anchor_patch_refuses_unrecognized_installer (test_packaging.PackagingTests.test_exact_anchor_patch_refuses_unrecognized_installer) ... ok
+test_incomplete_archive_rejected (test_packaging.PackagingTests.test_incomplete_archive_rejected) ... ok
+test_missing_option_value_rejected (test_packaging.PackagingTests.test_missing_option_value_rejected) ... usage: python3 -m unittest [-h] [--base-dir BASE_DIR] [--offline]
+                           [--build-only DIRECTORY] [--bundle-self-test]
+                           [--extract-bundle DIRECTORY] [--list-skills]
+                           [--dry-run] [--version]
+python3 -m unittest: error: Missing value for --project
+ok
+test_output_symlink_refused (test_packaging.PackagingTests.test_output_symlink_refused) ... ok
+test_symlink_archive_rejected (test_packaging.PackagingTests.test_symlink_archive_rejected) ... ok
+test_unknown_flag_rejected_before_download (test_packaging.PackagingTests.test_unknown_flag_rejected_before_download) ... usage: python3 -m unittest [-h] [--base-dir BASE_DIR] [--offline]
+                           [--build-only DIRECTORY] [--bundle-self-test]
+                           [--extract-bundle DIRECTORY] [--list-skills]
+                           [--dry-run] [--version]
+python3 -m unittest: error: Unknown installer option: --updtae
+ok
+test_upstream_apply_update_skip_preserved (test_packaging.PackagingTests.test_upstream_apply_update_skip_preserved) ... ok
+test_capture_delivers_large_utf8_stdin_to_real_child (test_stages.StageTests.test_capture_delivers_large_utf8_stdin_to_real_child) ... ok
+test_completed_assets_are_reused_after_execution_interruption (test_stages.StageTests.test_completed_assets_are_reused_after_execution_interruption) ... ok
+test_completed_design_is_reused_after_asset_timeout (test_stages.StageTests.test_completed_design_is_reused_after_asset_timeout) ... ok
+test_invalid_assets_are_not_saved_as_valid_checkpoint (test_stages.StageTests.test_invalid_assets_are_not_saved_as_valid_checkpoint) ... ok
+test_invalid_planner_json_is_repaired_before_checkpoint (test_stages.StageTests.test_invalid_planner_json_is_repaired_before_checkpoint) ... ok
+test_large_role_prompt_uses_stdin_and_avoids_duplicate_design (test_stages.StageTests.test_large_role_prompt_uses_stdin_and_avoids_duplicate_design) ... [DR-GAN] iteration 1: reviewer
+ok
+test_nested_design_and_review_json_get_one_format_repair (test_stages.StageTests.test_nested_design_and_review_json_get_one_format_repair) ... ok
+test_pending_review_does_not_execute_again (test_stages.StageTests.test_pending_review_does_not_execute_again) ... ok
+test_dependency_completed_and_integration_pending (test_workflow_overview.WorkflowOverviewTests.test_dependency_completed_and_integration_pending) ... ok
+test_duplicate_completed_runs_are_not_silently_chosen (test_workflow_overview.WorkflowOverviewTests.test_duplicate_completed_runs_are_not_silently_chosen) ... ok
+test_empty_repo_not_running (test_workflow_overview.WorkflowOverviewTests.test_empty_repo_not_running) ... ok
+test_initial_plan_waves_are_not_execution (test_workflow_overview.WorkflowOverviewTests.test_initial_plan_waves_are_not_execution) ... ok
+test_requirements_without_plan (test_workflow_overview.WorkflowOverviewTests.test_requirements_without_plan) ... ok
+test_stale_requirement_blocks (test_workflow_overview.WorkflowOverviewTests.test_stale_requirement_blocks) ... ok
+test_wrong_plan_run_not_counted (test_workflow_overview.WorkflowOverviewTests.test_wrong_plan_run_not_counted) ... ok
+
+----------------------------------------------------------------------
+Ran 151 tests in 18.395s
+
+OK

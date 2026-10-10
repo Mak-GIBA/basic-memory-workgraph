@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="1003" viewBox="0 0 850 1003" role="img" aria-labelledby="title desc">
+<title id="title">M1が除去する範囲</title>
+<desc id="desc">元文字列の先頭側を指定集合で処理し、末尾側も同じ集合で処理すると、内部文字を保持したsが得られる。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7" fill="#333"/></marker></defs>
+<rect width="850" height="1003" fill="white"/>
+<g font-family="Noto Sans CJK JP, Meiryo, sans-serif" fill="#161616">
+<text x="425.0" y="35" text-anchor="middle" font-size="20" font-weight="bold">M1が除去する範囲</text>
+<text x="425.0" y="75" text-anchor="middle" font-size="13">概念図：実線は処理の流れ、破線はフィードバック。性能の実測図ではありません。</text>
+<path d="M425.0,194 V257.0 H425.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="381.0" y="227.0" width="88.0" height="20" fill="white"/>
+<text x="425.0" y="240.0" font-size="12" text-anchor="middle">xと固定集合W</text>
+<path d="M425.0,415 V478.0 H425.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="361.5" y="448.0" width="127.0" height="20" fill="white"/>
+<text x="425.0" y="461.0" font-size="12" text-anchor="middle">先頭処理後の文字列</text>
+<path d="M425.0,636 V699.0 H425.0 V758" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="371.25" y="669.0" width="107.5" height="20" fill="white"/>
+<text x="425.0" y="682.0" font-size="12" text-anchor="middle">両端処理後のstr</text>
+<rect x="270.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="284.0" y="121" font-size="12">共通・維持　N1</text>
+<text x="284.0" y="146" font-size="17" font-weight="bold">元文字列 x</text>
+<text x="284.0" y="170" font-size="13">空文字を含むstr</text>
+<rect x="270.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="342" font-size="12">提案法・追加　M1</text>
+<text x="284.0" y="367" font-size="17" font-weight="bold">先頭のW連続部分を除去</text>
+<text x="284.0" y="391" font-size="13">スペース・TAB・LF・CR・VT・FFのみ</text>
+<rect x="270.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="563" font-size="12">提案法・追加　M1</text>
+<text x="284.0" y="588" font-size="17" font-weight="bold">末尾のW連続部分を除去</text>
+<text x="284.0" y="612" font-size="13">同じ集合を使用し、内部文字を保持</text>
+<rect x="270.0" y="762" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="784" font-size="12">提案法・変更　N4</text>
+<text x="284.0" y="809" font-size="17" font-weight="bold">結果 s</text>
+<text x="284.0" y="833" font-size="13">空文字でも後段lowerへ渡す</text>
+</g>
+</svg>

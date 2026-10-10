@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "command": "python3 compare_parsers.py --input tasks.json --output paired-results.json",
+  "check_ids": [
+    "R1",
+    "R2"
+  ],
+  "environment_keys": [
+    "CI",
+    "DR_GAN_CHILD",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "NODE_ENV",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME"
+  ],
+  "experiment_id": "E1",
+  "source_fingerprint": {
+    "head": "",
+    "files": {
+      "tasks.json": "4c62b95258e78f78351a6941c1fd333bf5485b0fe21bebc27315ea793771c07a:436",
+      "requirements.md": "9e00461c11f8068ecbb1b51f576742660b8a5b28b0cec92d9c100cc647b36f2e:436"
+    }
+  },
+  "started_at": "2026-10-10T14:34:16.163126+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T14:34:16.243982+00:00",
+  "duration_seconds": 0.081,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "sha256": "ac013ef49a235c83497a3cc4a45a8d13a57f748dad0dc3a24c36ac0a5db0500b"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "EV-00006",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "sha256": "30b9542a560a69daf64e37e994a2f27ba1622bb5d1595b48cb93f14bc2b297f2"
+    }
+  ],
+  "isolation": "Disposable workspace under Codex workspace-write sandbox"
+}

@@ -1,0 +1,8 @@
+{
+  "role": "reviewer-check",
+  "started_at": "2026-10-10T14:38:31.969622+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 6495,
+  "execution_contract_version": 2
+}

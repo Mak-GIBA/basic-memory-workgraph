@@ -1,0 +1,247 @@
+{
+  "EV-00001": {
+    "id": "EV-00001",
+    "kind": "source",
+    "description": "Bound boolean-parser requirements",
+    "path": "runs/20261010T143105Z-6cc28cd0/inputs/bound-requirements.md",
+    "sha256": "9e00461c11f8068ecbb1b51f576742660b8a5b28b0cec92d9c100cc647b36f2e",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:33:25.612518+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00002": {
+    "id": "EV-00002",
+    "kind": "source",
+    "description": "Frozen evaluation contract",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/evaluation_contract.json",
+    "sha256": "d31f7fa2a75facd54207f025cdcb8317cfd6da9d660f809f1498f843a6f85a0f",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:33:25.612667+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00003": {
+    "id": "EV-00003",
+    "kind": "source",
+    "description": "Saved comparison plan",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/plan.json",
+    "sha256": "9b6b69281cdaf2d9b11eede344d11405eab46b668557c267df6b70876ed55f06",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:33:25.612794+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00004": {
+    "id": "EV-00004",
+    "kind": "source",
+    "description": "Original input fixture",
+    "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+    "sha256": "4c62b95258e78f78351a6941c1fd333bf5485b0fe21bebc27315ea793771c07a",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:33:25.612921+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00005": {
+    "id": "EV-00005",
+    "kind": "experiment_code",
+    "description": "PoC source: compare_parsers.py",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+    "sha256": "e43bd41875d53bb833c782b95d6d45c5d2b8904dff5d690e30c1dce689fcaab5",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:34:16.070496+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00006": {
+    "id": "EV-00006",
+    "kind": "artifact",
+    "description": "Actual generated result: paired-results.json",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+    "sha256": "30b9542a560a69daf64e37e994a2f27ba1622bb5d1595b48cb93f14bc2b297f2",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:34:16.244398+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "experiment_id": "E1"
+  },
+  "EV-00007": {
+    "id": "EV-00007",
+    "kind": "experiment",
+    "description": "Actual execution: python3 compare_parsers.py --input tasks.json --output paired-results.json",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+    "sha256": "c9bb7e5bb49409b42799175afba440e96c393a5dc0e4c0a4d1211d29cd139ade",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:34:16.245952+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "command": "python3 compare_parsers.py --input tasks.json --output paired-results.json",
+    "check_ids": [
+      "R1",
+      "R2"
+    ],
+    "experiment_id": "E1",
+    "exit_code": 0,
+    "timed_out": false,
+    "truncated": false
+  },
+  "EV-00008": {
+    "id": "EV-00008",
+    "kind": "source",
+    "description": "Frozen evaluation contract",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-47824e/inputs/evaluation_contract.json",
+    "sha256": "d31f7fa2a75facd54207f025cdcb8317cfd6da9d660f809f1498f843a6f85a0f",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:39:43.177076+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00009": {
+    "id": "EV-00009",
+    "kind": "source",
+    "description": "Saved comparison plan",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-47824e/inputs/plan.json",
+    "sha256": "9b6b69281cdaf2d9b11eede344d11405eab46b668557c267df6b70876ed55f06",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:39:43.177215+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00010": {
+    "id": "EV-00010",
+    "kind": "source",
+    "description": "Frozen evaluation contract",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-901692/inputs/evaluation_contract.json",
+    "sha256": "d31f7fa2a75facd54207f025cdcb8317cfd6da9d660f809f1498f843a6f85a0f",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:41:34.926294+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00011": {
+    "id": "EV-00011",
+    "kind": "source",
+    "description": "Saved comparison plan",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-901692/inputs/plan.json",
+    "sha256": "9b6b69281cdaf2d9b11eede344d11405eab46b668557c267df6b70876ed55f06",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:41:34.926429+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00012": {
+    "id": "EV-00012",
+    "kind": "source",
+    "description": "E1 original stderr",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+    "sha256": "ac013ef49a235c83497a3cc4a45a8d13a57f748dad0dc3a24c36ac0a5db0500b",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:41:34.926713+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00013": {
+    "id": "EV-00013",
+    "kind": "source",
+    "description": "Frozen evaluation contract",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/evaluation_contract.json",
+    "sha256": "d31f7fa2a75facd54207f025cdcb8317cfd6da9d660f809f1498f843a6f85a0f",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:00:25.762568+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00014": {
+    "id": "EV-00014",
+    "kind": "source",
+    "description": "Proposal recommendation",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/proposal_design.json",
+    "sha256": "95f76268aa91bc878abf854f0ad431c7e9b071e97a16a2ccc45585e19e61ff6a",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:00:25.762896+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00015": {
+    "id": "EV-00015",
+    "kind": "code",
+    "description": "Original seven task IDs, inputs and typed expected labels; bytes match the frozen input and receipt fingerprint.",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-code/R2_CE-R2-fixture.json",
+    "sha256": "34085d56d0dc5d0770489e51f8596f7e964d73b48e2c7f307a04d98381fb3172",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:03:18.671126+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "source_path": "tasks.json"
+  },
+  "EV-00016": {
+    "id": "EV-00016",
+    "kind": "code",
+    "description": "Specifies baseline lowercasing, candidate stripping then lowercasing, actual parsed-value measurement and reuse of the source fixture.",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-code/R2_CE-R2-requirements.json",
+    "sha256": "9168094e98840af68c6840dc21522cafc49a548acda07de7f7ad1632f2138df1",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:03:18.671685+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "source_path": "requirements.md"
+  },
+  "EV-00017": {
+    "id": "EV-00017",
+    "kind": "code",
+    "description": "2方式の処理、実際の最終値の測定、固定fixtureの再利用を指定する原要件。",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-code/R3_CE-R3-requirements.json",
+    "sha256": "d5330bbdc8322a4d6989c36307636dbe8e9dc48306fdfd65b80870e0093dcb0c",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:04:46.008727+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "source_path": "requirements.md"
+  },
+  "EV-00018": {
+    "id": "EV-00018",
+    "kind": "source",
+    "description": "保存済み手法説明",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-92c6cc/inputs/proposal_design.json",
+    "sha256": "95f76268aa91bc878abf854f0ad431c7e9b071e97a16a2ccc45585e19e61ff6a",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:04:46.008919+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00019": {
+    "id": "EV-00019",
+    "kind": "source",
+    "description": "説明作成前の保存済み測定",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-producer-method-9f4fbf/inputs/proposal_design.json",
+    "sha256": "d863a664fe388c080082229488fe3040e56fcab83c9c2a05e6f8db21389ef743",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:04:46.009064+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00020": {
+    "id": "EV-00020",
+    "kind": "code",
+    "description": "2方式の処理、実際の最終値による評価、固定fixtureの再利用を指定する原要件。",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-code/R4_CE-R4-requirements.json",
+    "sha256": "ac6ad1fb55be4178e1deb2d108e6c9d7d44c69e63ba6ad52d608d5a89070d268",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:07:20.814487+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "source_path": "requirements.md"
+  },
+  "EV-00021": {
+    "id": "EV-00021",
+    "kind": "code",
+    "description": "全7入力と型付き期待値。固定契約、実装の固定値、最終結果の入力集合と一致する。",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-code/R4_CE-R4-fixture.json",
+    "sha256": "f5abd9c01c6f244511307ef7890acaf9d5d9ed58b897073da1f2bf91c310c3a3",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:07:20.815043+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100",
+    "source_path": "tasks.json"
+  },
+  "EV-00022": {
+    "id": "EV-00022",
+    "kind": "source",
+    "description": "Frozen evaluation contract",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-54d2dd/inputs/evaluation_contract.json",
+    "sha256": "d31f7fa2a75facd54207f025cdcb8317cfd6da9d660f809f1498f843a6f85a0f",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:07:20.815185+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  },
+  "EV-00023": {
+    "id": "EV-00023",
+    "kind": "source",
+    "description": "Final saved proposal interpretation",
+    "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-54d2dd/inputs/proposal_design.json",
+    "sha256": "95f76268aa91bc878abf854f0ad431c7e9b071e97a16a2ccc45585e19e61ff6a",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T15:07:20.815499+00:00",
+    "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+  }
+}

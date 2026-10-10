@@ -1,0 +1,9 @@
+{
+  "source_path": "test_parser.py",
+  "source_sha256": "2fcf1f4acd632aefe1a510648702ffbf516d2b1303d71195441f2b5940f9c806",
+  "line_start": 4,
+  "line_end": 9,
+  "checked_at": "2026-10-10T14:24:10.060863+00:00",
+  "excerpt": "    def test_whitespace(self):\n        self.assertIs(parse_bool(\" True \"), True)\n        self.assertIs(parse_bool(\"\\tFALSE\\n\"), False)\n    def test_invalid(self):\n        for text in [\"yes\", \"\", \"1\"]:\n            with self.assertRaises(ValueError): parse_bool(text)",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

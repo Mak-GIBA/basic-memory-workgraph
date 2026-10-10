@@ -1,0 +1,29 @@
+{
+  "status": "ready",
+  "reason": "Design plan frozen. Requirements and evaluation contract read; Python os.replace passage verified. Linux rename(2) retrieval failed through web access and curl DNS resolution; its decisive passages remain a required evidence gap before completion.",
+  "goal": "Compare two mechanisms for a single-process JSON checkpoint and produce a conditional, source-grounded recommendation with independent review.",
+  "domain": "research",
+  "baseline": "A: directly truncate and rewrite the checkpoint file. B: write complete JSON to a temporary file on the destination filesystem, close it, then publish with os.replace.",
+  "constraints": [
+    "Purpose is design; no efficacy experiment or performance claim.",
+    "Two-candidate exception: the requirements explicitly limit the decision to these two real mechanisms; additional methods would expand the question.",
+    "Use only the fixture requirements and decisive Python os.replace and Linux rename(2) primary passages.",
+    "Python evidence: https://docs.python.org/3/library/os.html#os.replace, decisive passage at lines 1833–1836 confirms atomic rename on success and possible cross-filesystem failure.",
+    "Linux evidence pending: https://man7.org/linux/man-pages/man2/rename.2.html, DESCRIPTION replacement semantics and ERRORS EXDEV.",
+    "Do not treat atomic visibility as a power-loss durability guarantee; the named sources cannot establish a complete durability protocol.",
+    "No checks executed, files modified, packages installed, memory written, commits or deployments.",
+    "Examples are illustrative reasoning, not measured outcomes; retain retrieval failures and unknowns."
+  ],
+  "criteria": [
+    {
+      "id": "R2",
+      "title": "Atomic publication scope",
+      "kind": "research",
+      "required": true,
+      "acceptance": "Ground successful replacement semantics in the decisive Python and Linux passages. Distinguish publication of a completed temporary file from atomicity of its preceding writes; explain that existing open descriptors can retain the old file."
+    }
+  ],
+  "test_commands": [],
+  "complexity_baseline": "A uses one destination write sequence. B adds temporary-file lifecycle and a replacement operation. Compare these structural costs qualitatively; no timing or reliability measurement.",
+  "queries": []
+}

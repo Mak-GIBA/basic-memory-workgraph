@@ -1,0 +1,31 @@
+{
+  "status": "ready",
+  "reason": "Requirements explicitly limit comparison to two methods and provide seven labeled inputs. No backend tests exist; execution and grading belong to the parent.",
+  "goal": "Compare actual final Python boolean-parser outputs on the frozen fixture, save measured conclusions, then complete method explanation and independent review.",
+  "domain": "research",
+  "baseline": "A: lowercase the input without stripping; return JSON true or false for recognized tokens, otherwise \"invalid\".",
+  "constraints": [
+    "Compare exactly A and B. The requirements explicitly justify two candidates instead of five.",
+    "B strips surrounding ASCII whitespace using strip(\" \\t\\n\\r\\v\\f\"), then lowercases and validates.",
+    "Reuse PROJECT-relative tasks.json without changing inputs, expected outputs or task coverage.",
+    "Use Python standard-library functions under identical runtime and execution conditions.",
+    "Declare the comparison script only in producer-assets assets.experiments; input_files must contain PROJECT-relative tasks.json.",
+    "Keep test_commands empty because there are no existing backend tests.",
+    "This planner executes no checks and modifies no files.",
+    "No network, package installation, memory writes, commits, deployment or unrelated file additions.",
+    "Grade actual function return values from parent-executed artifacts and receipts; preserve failures and uncertainty.",
+    "Save measured conclusions before detailed method explanation; completion requires independent review."
+  ],
+  "criteria": [
+    {
+      "id": "R1",
+      "title": "Exact final-output accuracy",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "Parent execution records both methods' actual final outputs for all seven tasks and grades whole JSON values against frozen labels. Report each mean exact-match score and paired difference, including incorrect outputs. Recommend B when its improvement is at least 1/7; equal or worse measured results remain valid research findings."
+    }
+  ],
+  "test_commands": [],
+  "complexity_baseline": "Both methods scan strings in O(n) time with O(n) temporary-string space. Complexity is descriptive; latency and memory consumption are not measured in this evaluation.",
+  "queries": []
+}

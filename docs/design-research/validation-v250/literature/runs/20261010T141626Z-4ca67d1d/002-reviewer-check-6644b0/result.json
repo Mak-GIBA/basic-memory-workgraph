@@ -1,0 +1,55 @@
+{
+  "status": "reviewed",
+  "reason": "R5 passes for the revised explanation. The decisive originals support the conditional comparison; Linux evidence is available from the explicitly dated 2021 original source. Failed man7 retrievals and unmeasured outcomes remain preserved.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R5",
+      "result": "pass",
+      "reason": "Independently reviewed the current proposal against R1–R4. It compares both requested mechanisms and conditions preference for B on complete preparation and successful replacement. [Python os.replace](https://docs.python.org/3/library/os.html#os.replace) supports successful-rename atomicity and possible cross-filesystem failure. The [2021 Linux original](https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2), DESCRIPTION lines 66–105 and EXDEV lines 426–432, supports atomic destination replacement, unaffected source descriptors, and the mount boundary. Actual receipts EV-00046 and EV-00047 record successful original-source retrieval, closing the decisive-passage gap within that dated scope. EV-00040–EV-00045 remain failed man7 retrievals; the unavailable newer version is not verified. The proposal labels truncation interruption behavior and destination-reader behavior as reasoning, leaves crash durability unknown, and treats earlier review grades as applying only to the earlier proposal. No previous R5 issues were supplied. No experiments or runtime passes are asserted; parent provenance assessment remains pending.",
+      "evidence_ids": [
+        "EV-00030",
+        "EV-00046",
+        "EV-00047",
+        "EV-00048",
+        "EV-00040",
+        "EV-00041",
+        "EV-00042",
+        "EV-00043",
+        "EV-00044",
+        "EV-00045"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "SUPP_LINUX_RAW",
+      "title": "Linux rename(2) original manual source in the author repository",
+      "url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+      "path": "",
+      "locator": "DESCRIPTION lines 66-105 (open descriptors, atomic destination replacement); ERRORS EXDEV (same filesystem). Original 2021-08-27 source mirror, not a new runtime measurement.",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R5_2_CURRENT_PROPOSAL",
+      "title": "Current iteration 2 explanation reviewed for R5",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/002-reviewer-check-6644b0/inputs/proposal_design.json",
+      "locator": "dossier_json: claims, candidates, comparison, results_summary, decision and reader_guide; supplied SHA-256 7d6f6c6f5d8641e23457581378d184eb14632b00575c7f02ab35ad4498bfefac",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The permitted two-candidate comparison fits the narrow design question. B adds temporary-file preparation, lifecycle handling and replacement; these costs remain qualitative. No additional mechanism, implementation or experiment is required."
+}

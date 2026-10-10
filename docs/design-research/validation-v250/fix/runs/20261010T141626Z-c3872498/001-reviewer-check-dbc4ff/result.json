@@ -1,0 +1,94 @@
+{
+  "status": "reviewed",
+  "reason": "Reviewed only invalid. Baseline rejection passes; post-modification verification is unavailable.",
+  "issues": [
+    {
+      "id": "invalid-post-change-unverified",
+      "title": "Post-modification rejection behavior lacks execution evidence",
+      "severity": "Medium",
+      "status": "unverified",
+      "target": "parser.py and post-change unittest receipt",
+      "action": "Parent must provide the modified source and its successful unittest receipt for independent review.",
+      "expected": "test_invalid passes before and after modification; normalized values outside true/false raise ValueError.",
+      "actual": "Recorded stderr reports test_invalid ... ok, but the suite exits 1. Current parser still uses text.lower(), and no post-modification receipt is available.",
+      "why": "Baseline success cannot establish behavior after the requested modification.",
+      "improvement": "Preserve the baseline failure and supply current post-change results.",
+      "root_cause": "Only baseline execution evidence is available.",
+      "check_ids": [
+        "invalid"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "CE-invalid-001"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "invalid",
+      "result": "unknown",
+      "reason": "Baseline test_invalid passes for yes, empty string, and 1. Source comparisons and ValueError fallback reject other nonmatching strings. Current source lacks whitespace stripping, and no modified implementation or successful post-change receipt establishes the full before-and-after acceptance criterion.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "CE-invalid-001",
+        "CE-invalid-002"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-invalid-001",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Lowercases input, returns booleans only for exact true/false comparisons, otherwise raises ValueError. Surrounding whitespace is not removed."
+    },
+    {
+      "id": "CE-invalid-002",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "line_start": 7,
+      "line_end": 9,
+      "description": "Existing invalid test requires ValueError for yes, empty string, and 1."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "exit_code=1; timed_out=false; truncated=false; outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original unittest stderr",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_invalid ... ok; test_whitespace ... ERROR; FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-invalid-parser",
+      "title": "Actual current parser",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-invalid-test",
+      "title": "Existing invalid-input test",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "locator": "lines 7–9",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Current source retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or additional branches. Complexity of a future modification remains unverified."
+}

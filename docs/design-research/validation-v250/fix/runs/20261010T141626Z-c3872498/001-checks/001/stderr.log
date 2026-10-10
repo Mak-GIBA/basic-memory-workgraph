@@ -1,0 +1,19 @@
+WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir "/tmp" (codex_home: AbsolutePathBuf("/tmp/design-research-check-rsl0r6gw/.test-home/.codex"))
+test_invalid (test_parser.ParseTests.test_invalid) ... ok
+test_whitespace (test_parser.ParseTests.test_whitespace) ... ERROR
+
+======================================================================
+ERROR: test_whitespace (test_parser.ParseTests.test_whitespace)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/design-research-check-rsl0r6gw/project/test_parser.py", line 5, in test_whitespace
+    self.assertIs(parse_bool(" True "), True)
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/design-research-check-rsl0r6gw/project/parser.py", line 5, in parse_bool
+    raise ValueError("invalid boolean")
+ValueError: invalid boolean
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=1)

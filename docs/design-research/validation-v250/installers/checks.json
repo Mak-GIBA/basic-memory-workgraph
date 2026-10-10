@@ -1,0 +1,7 @@
+{
+  "bootstrap_matches": true,
+  "skill_structure_valid": true,
+  "checks_from_build_summary": true,
+  "global_settings_hashes_preserved": true,
+  "global_settings_hashes_preserved_scope": "Immediately before and after installation and final reapplication"
+}

@@ -3,7 +3,7 @@
 [docs一覧](../README.md) · [導入手順](installation.md) · [使い方](usage.md) · [既存要件・設計の見直し](reassessment.md)
 
 実装前に、利用者の目的・懸念・ユースケースから要件を整理し、方式研究を根拠に全体設計と検証計画を作る環境です。
-このガイドは[install_speckit_upstream.sh](../../install_speckit_upstream.sh)のWorkbench 2.0.5を対象にしています。
+このガイドは[install_speckit_upstream.sh](../../install_speckit_upstream.sh)のWorkbench 2.0.6を対象にしています。
 配布スクリプトは更新資材を内蔵し、固定版ベースを取得・照合して新版を組み立てます。
 
 ## まず読む資料
@@ -90,7 +90,7 @@ SkillはCodexへの指示であり、アクセス制御や全操作の強制停�
 
 ## 詳細資料の確認方法
 
-導入後の`releases/2.0.5/README_COMMANDS.md`と`assets/references/`に操作ガイドと参照資料が配置されます。
+導入後の`releases/2.0.6/README_COMMANDS.md`と`assets/references/`に操作ガイドと参照資料が配置されます。
 研究連携は`RESEARCH_FIRST.md`・`RESEARCH_WORKSTREAMS.md`にまとまっています。
 `--extract-bundle`は通信せず更新元を展開し、`--extract`は組み立て後の資材を展開します。
 保存先・組み立てと展開の条件は[導入手順](installation.md)、作業で作る文書は[成果物一覧](reassessment.md#成果物の保存先と確認先)を参照してください。

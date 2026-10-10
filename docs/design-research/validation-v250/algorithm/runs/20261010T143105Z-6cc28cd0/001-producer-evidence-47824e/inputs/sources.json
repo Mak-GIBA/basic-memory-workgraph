@@ -1,0 +1,93 @@
+{
+  "S1": {
+    "source": {
+      "id": "S1",
+      "title": "Bound boolean-parser requirements",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/inputs/bound-requirements.md",
+      "locator": "Entire requirements paragraph",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00001"
+  },
+  "S2": {
+    "source": {
+      "id": "S2",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/evaluation_contract.json",
+      "locator": "candidate_ids, tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00002"
+  },
+  "S3": {
+    "source": {
+      "id": "S3",
+      "title": "Saved comparison plan",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/plan.json",
+      "locator": "constraints, criteria R2-R4, test_commands",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00003"
+  },
+  "S4": {
+    "source": {
+      "id": "S4",
+      "title": "Original input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records t0-t6",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "S5": {
+    "source": {
+      "id": "S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "contract_sha256, tasks, trials, complete, failures, accuracy, paired_difference",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "S6": {
+    "source": {
+      "id": "S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, experiment_id, source_fingerprint, exit_code, timed_out, truncated, outputs, artifacts",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "S7": {
+    "source": {
+      "id": "S7",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "CONTRACT_SHA256, FROZEN_TASKS, validate, parse_a, parse_b, main",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  }
+}

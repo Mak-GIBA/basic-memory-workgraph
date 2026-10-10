@@ -1,0 +1,2 @@
+Compare two parsers for case-insensitive boolean configuration with surrounding ASCII whitespace. Inputs true, FALSE, " true ", "	false
+", yes, empty, 1. Return true/false for true/false case-insensitive with whitespace; invalid otherwise. Baseline lowercases without stripping. Candidate strips then lowercases and validates. Measure exact final parsed values. This intentionally narrow two-option comparison has no need for five variants. Source input fixture must be reused.

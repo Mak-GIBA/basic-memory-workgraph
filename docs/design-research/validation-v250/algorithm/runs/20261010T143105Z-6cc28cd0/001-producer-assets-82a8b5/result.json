@@ -1,0 +1,27 @@
+{
+  "status": "proposed",
+  "reason": "Frozen design and contract specify exactly A and B on seven unchanged tasks. The script exports actual function returns and the supplied contract hash; the parent must execute and grade it. No checks were executed.",
+  "files": [
+    {
+      "path": "compare_parsers.py",
+      "content": "import argparse\nimport json\nfrom pathlib import Path\n\nCONTRACT_SHA256 = '22d3d5e226cfe37254cf287b0b7eb306c5a5245261d35d4e5c315fb918c89622'\nFROZEN_TASKS = [\n    {'id': 't0', 'input': 'true', 'expected': True},\n    {'id': 't1', 'input': 'FALSE', 'expected': False},\n    {'id': 't2', 'input': ' true ', 'expected': True},\n    {'id': 't3', 'input': '\\tfalse\\n', 'expected': False},\n    {'id': 't4', 'input': 'yes', 'expected': 'invalid'},\n    {'id': 't5', 'input': '', 'expected': 'invalid'},\n    {'id': 't6', 'input': '1', 'expected': 'invalid'},\n]\n\n\ndef validate(token):\n    if token == 'true':\n        return True\n    if token == 'false':\n        return False\n    return 'invalid'\n\n\ndef parse_a(value):\n    return validate(value.lower())\n\n\ndef parse_b(value):\n    return validate(value.strip(' \\t\\n\\r\\v\\f').lower())\n\n\ndef main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--input', required=True)\n    parser.add_argument('--output', required=True)\n    args = parser.parse_args()\n    tasks = json.loads(Path(args.input).read_text(encoding='utf-8'))\n    canonical = lambda value: json.dumps(value, sort_keys=True, ensure_ascii=True, allow_nan=False)\n    if canonical(tasks) != canonical(FROZEN_TASKS):\n        raise ValueError('Input fixture differs from frozen tasks; execution refused')\n\n    trials = []\n    failures = []\n    correct = {'A': 0, 'B': 0}\n    for task in tasks:\n        for candidate_id, function in [('A', parse_a), ('B', parse_b)]:\n            record = {'task_id': task['id'], 'trial_id': '1', 'candidate_id': candidate_id}\n            try:\n                actual = function(task['input'])\n                record['output'] = actual\n                matched = type(actual) is type(task['expected']) and actual == task['expected']\n                record['exact_match'] = matched\n                correct[candidate_id] += int(matched)\n            except Exception as exc:\n                error = {'type': type(exc).__name__, 'message': str(exc)}\n                record['execution_error'] = error\n                failures.append({'task_id': task['id'], 'candidate_id': candidate_id, 'error': error})\n            trials.append(record)\n\n    complete = not failures\n    scores = {candidate: count / len(tasks) for candidate, count in correct.items()} if complete else None\n    result = {\n        'contract_sha256': CONTRACT_SHA256,\n        'tasks': tasks,\n        'trials': trials,\n        'complete': complete,\n        'failures': failures,\n        'accuracy': scores,\n        'paired_difference': scores['B'] - scores['A'] if complete else None,\n        'limitations': 'Seven deterministic fixture tasks only; latency, memory and non-ASCII whitespace are unmeasured.',\n    }\n    Path(args.output).write_text(json.dumps(result, indent=2, ensure_ascii=True, allow_nan=False) + '\\n', encoding='utf-8')\n    return 0 if complete else 1\n\n\nif __name__ == '__main__':\n    raise SystemExit(main())\n"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "E1",
+      "command": "python3 compare_parsers.py --input tasks.json --output paired-results.json",
+      "check_ids": [
+        "R1",
+        "R2"
+      ],
+      "input_files": [
+        "tasks.json"
+      ],
+      "artifact_paths": [
+        "paired-results.json"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}

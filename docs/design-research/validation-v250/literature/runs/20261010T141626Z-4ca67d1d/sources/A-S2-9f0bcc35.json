@@ -1,0 +1,10 @@
+{
+  "source_id": "A-S2",
+  "title": "Linux rename(2) manual page",
+  "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+  "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text (direct open failed)",
+  "checked_at": "2026-10-10T14:36:58.061870+00:00",
+  "status": "unavailable",
+  "reason": "<urlopen error timed out>",
+  "read_level_claimed": "relevant_sections"
+}

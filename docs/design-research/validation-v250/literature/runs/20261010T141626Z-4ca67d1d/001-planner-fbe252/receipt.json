@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T14:16:26.980809+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T14:17:49.536617+00:00",
+  "duration_seconds": 82.556,
+  "role": "planner",
+  "iteration": 1,
+  "configured_timeout_seconds": 600,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-4ca67d1d/001-planner-fbe252/stdout.log",
+      "sha256": "72c6c5e3394d11ac809060b490ab7afa815745351b2a6c85d9f32ec76c927cff"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-4ca67d1d/001-planner-fbe252/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Model role execution only; not a task-effect measurement"
+}

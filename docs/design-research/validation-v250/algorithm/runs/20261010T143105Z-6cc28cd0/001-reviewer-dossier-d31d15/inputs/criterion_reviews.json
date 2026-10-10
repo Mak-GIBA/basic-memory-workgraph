@@ -1,0 +1,83 @@
+[
+  {
+    "checks": [
+      {
+        "check_id": "R1",
+        "result": "pass",
+        "reason": "The successful E1 receipt records exit_code=0, no timeout or truncation, and the paired-results artifact. All fourteen actual returns are retained. In t0–t6 order, A returns [true,false,\"invalid\",\"invalid\",\"invalid\",\"invalid\",\"invalid\"] and B returns [true,false,true,false,\"invalid\",\"invalid\",\"invalid\"]. Type-preserving whole-value grading against the seven frozen labels gives A=5/7 (0.7142857142857143), B=7/7 (1.0), and paired B−A=2/7 (0.2857142857142857). A's incorrect t2 and t3 outputs remain recorded. The implementation invokes each function and records its actual return before grading; it refuses fixture changes. The proposal recommends B because 2/7 exceeds the 1/7 threshold. Results establish correctness only for these seven fixtures. Stderr contains a PATH-alias warning; stdout is empty, and neither is used as a measurement.",
+        "evidence_ids": [
+          "EV-00002",
+          "EV-00004",
+          "EV-00005",
+          "EV-00006",
+          "EV-00007",
+          "EV-00012"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Both parsers use O(n) string scans and O(n) temporary-string space; B adds ASCII whitespace stripping before the shared lowercase-and-validate procedure. This matches the narrow two-method comparison. Runtime and memory performance were not measured."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R2",
+        "result": "pass",
+        "reason": "PROJECT tasks.json and its frozen execution input have identical SHA-256 4c62b95258e78f78351a6941c1fd333bf5485b0fe21bebc27315ea793771c07a, matching the receipt. The script reads that fixture, validates it against frozen records, invokes parse_a and parse_b for each input, and exports each actual return value. Both use the same validation; B adds only strip(' \\t\\n\\r\\v\\f') before lowercasing. The result retains all seven task IDs and labels and fourteen paired outputs, including A's incorrect 'invalid' outputs for t2 and t3. The current receipt records exit_code=0, timed_out=false and truncated=false. Stdout is empty; stderr preserves a PATH-alias warning, which does not contradict successful execution.",
+        "evidence_ids": [
+          "EV-00004",
+          "EV-00005",
+          "EV-00006",
+          "EV-00007",
+          "EV-00012"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Both parser implementations take O(n) time and O(n) temporary-string space. B adds the required ASCII-whitespace scan without changing asymptotic complexity. These are code-derived bounds; runtime and memory performance were not measured."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R3",
+        "result": "pass",
+        "reason": "説明工程の保存入力には既にevaluation_result.status=measuredがあり、method_ideasは未追加だった。現在の説明はlower、指定ASCII6文字の両端strip、共有validateを正確に説明している。t2・t3のA=\"invalid\"、B=true/false、および残る5件の一致は実際の最終出力と一致する。親receiptはexit_code=0、timeout・truncationなし。Aの誤答とstderr警告を保持し、結論を固定7入力に限定している。中間状態と図を測定扱いせず、速度・メモリ・未試験入力への推論も限定している。全体の独立レビュー完了は本判定の対象外。",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00005",
+          "EV-00006",
+          "EV-00007",
+          "EV-00012",
+          "EV-00014"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Bは共通の小文字化・検証にstripを1工程追加する。両方式のO(n)時間・O(n)一時文字列空間という上界説明は実装と整合する。定数係数、実行時間、実メモリ使用量は未測定として明記されている。"
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R4",
+        "result": "pass",
+        "reason": "Aはlowerのみ、BはASCII空白をstripしてからlowerを適用し、共通validatorを使う。原fixtureと固定契約の7入力・型付き期待値は実装および最終結果と一致する。実際の関数戻り値を型と値の完全一致で採点し、全7組・14件を保持している。A=5/7、B=7/7、差=2/7で固定閾値1/7を満たす。Aのt2・t3の不正解も保存されている。親receiptはexit_code=0、timed_out=false、truncated=falseで、結果はcomplete=true、failures=[]。stdoutは空で、stderrのPATH-alias警告は保持されている。例外処理は実装から確認できるが、実際の例外・timeout時の挙動は未測定。提案はfixture限定の条件付き推奨で、性能・統計・未試験入力へ一般化していない。保存済み提案は独立レビューを未完了と明記している。この結果はR4のレビュー完了を示し、範囲外のK4を解決済みとは認定しない。既存のR4 issueは提示されていない。",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00002",
+          "EV-00004",
+          "EV-00005",
+          "EV-00006",
+          "EV-00007",
+          "EV-00012",
+          "EV-00014"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "両方式は共通validatorを使い、Bの追加処理はASCII空白のstripのみ。文字列長nに対して両方式ともO(n)時間・O(n)一時文字列領域であり、比較目的に対して過剰な構成はない。速度・メモリの優位は実測されていない。"
+  }
+]

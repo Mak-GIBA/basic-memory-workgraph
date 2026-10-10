@@ -1,0 +1,10 @@
+{
+  "source_id": "R4_1_R4-LINUX",
+  "title": "Linux rename(2) manual page",
+  "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+  "locator": "ERRORS EXDEV; independently read indexed original-page passage, including separate mounts of the same filesystem. Direct open failed.",
+  "checked_at": "2026-10-10T15:34:13.976592+00:00",
+  "status": "unavailable",
+  "reason": "<urlopen error timed out>",
+  "read_level_claimed": "relevant_sections"
+}

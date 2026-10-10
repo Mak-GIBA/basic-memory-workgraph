@@ -1,0 +1,115 @@
+{
+  "status": "reviewed",
+  "reason": "Independently verified only invalid using original receipts, test output, and current source. No checks were executed or files modified.",
+  "issues": [
+    {
+      "id": "invalid_INVALID-001",
+      "title": "Post-modification invalid-string preservation is unverified",
+      "severity": "Medium",
+      "status": "resolved",
+      "target": "parser.py:2–5 and post-modification execution receipt",
+      "action": "Independently inspect the final source and parent-captured receipt.",
+      "expected": "test_invalid passes before and after modification; only normalized true/false return booleans.",
+      "actual": "Both original outputs report test_invalid ... ok. The post-change receipt exits 0 and matches the current parser and unchanged tests by SHA-256. Source strips whitespace, lowercases, compares exactly against true/false, and otherwise raises ValueError.",
+      "why": "The previously missing post-change evidence is now available and independently verified.",
+      "improvement": "No further action required for this issue.",
+      "root_cause": "The earlier review had only baseline artifacts.",
+      "check_ids": [
+        "invalid"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00012",
+        "EV-00015",
+        "EV-00016",
+        "EV-00017"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "invalid",
+      "result": "pass",
+      "reason": "Original baseline and post-change stderr both report test_invalid ... ok for yes, empty string, and 1. The baseline suite exited 1 because test_whitespace errored; that failure remains preserved. The current post-change receipt exits 0 without timeout or truncation. Its parser hash e9793630d019d5e862a5980349a1a2c05c9c6f1c661417d5efc362ed1ae7dfc1 matches current parser.py, and the test hash matches both receipts. Lines 2–5 normalize with strip().lower(), return booleans only for exact true/false, and raise ValueError for every other normalized string.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00012",
+        "EV-00015",
+        "EV-00016",
+        "EV-00017"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-invalid-parser",
+      "path": "parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Current source uses text.strip().lower(), two exact true/false comparisons, and an unconditional ValueError fallback. Its SHA-256 matches the successful receipt."
+    },
+    {
+      "id": "CE-invalid-tests",
+      "path": "test_parser.py",
+      "line_start": 7,
+      "line_end": 9,
+      "description": "Existing test_invalid requires ValueError for yes, empty string, and 1. Current test SHA-256 matches baseline and post-change receipts."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Baseline execution receipt",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "exit_code, source_fingerprint.files, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Baseline test output",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_invalid ... ok; test_whitespace ERROR; FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-006",
+      "title": "Post-change execution receipt",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+      "locator": "exit_code 0, source_fingerprint.files, timed_out false, truncated false",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-007",
+      "title": "Post-change test output",
+      "url": "",
+      "path": "docs/design-research/boolean-fix/runs/20261010T141626Z-c3872498/002-checks/001/stderr.log",
+      "locator": "test_invalid ... ok; Ran 2 tests; OK",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-invalid-current-parser",
+      "title": "Actual current parser",
+      "url": "",
+      "path": "parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-invalid-current-tests",
+      "title": "Existing invalid-string test",
+      "url": "",
+      "path": "test_parser.py",
+      "locator": "ParseTests.test_invalid, lines 7–9",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The fix retains one normalization expression, two comparisons, and a ValueError fallback, with no dependencies or additional parsing branches."
+}

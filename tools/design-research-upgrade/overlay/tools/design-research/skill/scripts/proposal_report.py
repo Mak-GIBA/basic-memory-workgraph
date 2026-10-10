@@ -178,7 +178,7 @@ def graph_issues(fig, components):
     return errors
 
 
-def _validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL):
+def _validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL, allow_single_proposal=False):
     """Validate the design contract, cross-links and graph; not research truth."""
     if not isinstance(dossier, dict):
         return ["dossier: expected object"]
@@ -186,7 +186,7 @@ def _validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL):
     if not isinstance(ideas, dict):
         return ["method_ideas: required for a proposed-method report"]
     try:
-        errors = ["method_ideas." + x for x in quality_issues(ideas, strict=True)]
+        errors = ["method_ideas." + x for x in quality_issues(ideas, strict=True, allow_single_proposal=allow_single_proposal)]
     except (TypeError, KeyError, AttributeError, ValueError):
         return ["method_ideas: malformed nested design record"]
     comparison = ideas.get("comparison_plan")
@@ -266,14 +266,14 @@ def _validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL):
 
 
 
-def validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL):
+def validation_issues(dossier, *, target_methods=DEFAULT_COMPARISON_TOTAL, allow_single_proposal=False):
     try:
         if not isinstance(dossier, dict):
             return ["dossier: expected object"]
         ideas = dossier.get("method_ideas")
         if isinstance(ideas, dict) and type(ideas.get("schema_version")) is not int:
             return ["method_ideas.schema_version: integer required"]
-        return _validation_issues(dossier, target_methods=target_methods)
+        return _validation_issues(dossier, target_methods=target_methods, allow_single_proposal=allow_single_proposal)
     except (TypeError, KeyError, AttributeError, ValueError, RecursionError):
         return ["method_ideas: malformed nested report/graph record; use the documented types"]
 
@@ -402,10 +402,10 @@ def code_block(value, language="text"):
     return [fence + language, value, fence, ""]
 
 
-def render_chapter(dossier, workspace, figure_root, *, required=True, target_methods=5):
+def render_chapter(dossier, workspace, figure_root, *, required=True, target_methods=5, allow_single_proposal=False):
     if not required and not (isinstance(dossier, dict) and "method_ideas" in dossier):
         return []
-    errors = validation_issues(dossier, target_methods=target_methods)
+    errors = validation_issues(dossier, target_methods=target_methods, allow_single_proposal=allow_single_proposal)
     out = ["", "## 提案手法", ""]
     if errors:
         out += ["**未完成：提案手法章の必須項目に不足があります。** 架空の手法・文献・図・結果では補いません。", ""]
@@ -499,13 +499,13 @@ def render_chapter(dossier, workspace, figure_root, *, required=True, target_met
 
 def chapter_for_state(state, workspace, run_dir):
     config = state.get("config", {})
-    return render_chapter(state.get("dossier"), workspace, Path(run_dir) / "method-figures", required=method_required(state), target_methods=config.get("target_methods", 5))
+    return render_chapter(state.get("dossier"), workspace, Path(run_dir) / "method-figures", required=method_required(state), target_methods=config.get("target_methods", 5), allow_single_proposal=state.get("execution_contract_version") == 2)
 
 
 def require_method_report(dossier, state):
     from runtime import Blocked
     if method_required(state) or (isinstance(dossier, dict) and "method_ideas" in dossier):
-        errors = validation_issues(dossier, target_methods=state.get("config", {}).get("target_methods", 5))
+        errors = validation_issues(dossier, target_methods=state.get("config", {}).get("target_methods", 5), allow_single_proposal=state.get("execution_contract_version") == 2)
         state["method_report_validation"] = {"valid": not errors, "errors": errors, "scope": "structural_only"}
         if errors:
             raise Blocked("Proposed-method chapter is incomplete: " + "; ".join(errors[:8]))
@@ -516,17 +516,18 @@ def prepare_preview(state, workspace, run_dir):
     if not method_required(state):
         return
     try:
-        dossier = json.loads(state.get("proposal", {}).get("dossier_json", ""))
+        proposal = state.get("proposal_design") if state.get("execution_contract_version") == 2 else state.get("proposal")
+        dossier = json.loads((proposal or {}).get("dossier_json", ""))
     except (ValueError, TypeError):
         state["method_report_preview"] = {"status": "incomplete", "reason": "Producer dossier is not JSON"}
         return
-    errors = validation_issues(dossier, target_methods=state["config"].get("target_methods", 5))
+    errors = validation_issues(dossier, target_methods=state["config"].get("target_methods", 5), allow_single_proposal=state.get("execution_contract_version") == 2)
     if errors:
         state["method_report_preview"] = {"status": "incomplete", "errors": errors}
         return
     digest = design_digest(dossier["method_ideas"])
     root = Path(run_dir) / "method-preview" / digest
-    lines = render_chapter(dossier, workspace, root / "figures", target_methods=state["config"].get("target_methods", 5))
+    lines = render_chapter(dossier, workspace, root / "figures", target_methods=state["config"].get("target_methods", 5), allow_single_proposal=state.get("execution_contract_version") == 2)
     # Rendered chapter uses workspace-relative links. Rebase its preview copy only.
     rel = lambda m: "](" + os.path.relpath(Path(workspace) / m[1], root) + ")"
     body = re.sub(r"\]\(([^)]+)\)", rel, "\n".join(lines))

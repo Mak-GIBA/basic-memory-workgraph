@@ -1,0 +1,58 @@
+{
+  "status": "ready",
+  "reason": "Design plan frozen. Requirements and evaluation contract read; Python os.replace passage verified. Linux rename(2) retrieval failed through web access and curl DNS resolution; its decisive passages remain a required evidence gap before completion.",
+  "goal": "Compare two mechanisms for a single-process JSON checkpoint and produce a conditional, source-grounded recommendation with independent review.",
+  "domain": "research",
+  "baseline": "A: directly truncate and rewrite the checkpoint file. B: write complete JSON to a temporary file on the destination filesystem, close it, then publish with os.replace.",
+  "constraints": [
+    "Purpose is design; no efficacy experiment or performance claim.",
+    "Two-candidate exception: the requirements explicitly limit the decision to these two real mechanisms; additional methods would expand the question.",
+    "Use only the fixture requirements and decisive Python os.replace and Linux rename(2) primary passages.",
+    "Python evidence: https://docs.python.org/3/library/os.html#os.replace, decisive passage at lines 1833–1836 confirms atomic rename on success and possible cross-filesystem failure.",
+    "Linux evidence pending: https://man7.org/linux/man-pages/man2/rename.2.html, DESCRIPTION replacement semantics and ERRORS EXDEV.",
+    "Do not treat atomic visibility as a power-loss durability guarantee; the named sources cannot establish a complete durability protocol.",
+    "No checks executed, files modified, packages installed, memory written, commits or deployments.",
+    "Examples are illustrative reasoning, not measured outcomes; retain retrieval failures and unknowns."
+  ],
+  "criteria": [
+    {
+      "id": "R1",
+      "title": "Conditional mechanism choice",
+      "kind": "research",
+      "required": true,
+      "acceptance": "Compare A and B and condition the recommendation on preserving a complete checkpoint during interrupted updates versus accepting checkpoint loss for simpler writes. Explain both mechanisms without claiming measured effectiveness."
+    },
+    {
+      "id": "R2",
+      "title": "Atomic publication scope",
+      "kind": "research",
+      "required": true,
+      "acceptance": "Ground successful replacement semantics in the decisive Python and Linux passages. Distinguish publication of a completed temporary file from atomicity of its preceding writes; explain that existing open descriptors can retain the old file."
+    },
+    {
+      "id": "R3",
+      "title": "Durability boundary",
+      "kind": "research",
+      "required": true,
+      "acceptance": "Separate atomic pathname visibility from persistence after power loss or system crash. State that durability is unmeasured and a complete synchronization protocol is not established by these passages."
+    },
+    {
+      "id": "R4",
+      "title": "Filesystem constraint",
+      "kind": "research",
+      "required": true,
+      "acceptance": "Verify Linux EXDEV and Python's cross-filesystem warning; require the temporary file on the destination filesystem, preferably in its directory. Do not present a cross-filesystem copy fallback as atomic replacement."
+    },
+    {
+      "id": "R5",
+      "title": "Independent evidence review",
+      "kind": "research",
+      "required": true,
+      "acceptance": "An independent reviewer checks the final explanation against the original decisive passages and R1–R4, retaining unsupported claims and source gaps as unresolved. Completion requires the Linux source gap to be closed."
+    }
+  ],
+  "test_commands": [],
+  "complexity_baseline": "A uses one destination write sequence. B adds temporary-file lifecycle and a replacement operation. Compare these structural costs qualitatively; no timing or reliability measurement.",
+  "queries": [],
+  "evaluation_json": "{\"purpose\":\"design\",\"baseline_id\":\"A\",\"candidate_ids\":[\"A\",\"B\"],\"candidate_exception\":\"Two mechanisms expressly requested for a narrow checkpoint decision; five candidates would expand scope.\",\"tasks\":[{\"id\":\"checkpoint-choice\",\"input\":{\"scope\":\"single-process JSON checkpoint\",\"mechanisms\":[\"direct truncating rewrite\",\"complete same-filesystem temporary file followed by os.replace\"],\"sources\":[\"Python os.replace documentation\",\"Linux rename(2) DESCRIPTION and EXDEV\"]},\"expected\":{\"deliverable\":\"Conditional source-grounded comparison covering atomic publication, durability limits and filesystem constraints, followed by independent review\",\"measurements\":\"none\"}}],\"dataset\":\"One design question from the bound requirements; no empirical dataset.\",\"controls\":[\"Same checkpoint scope and JSON-completeness goal for both candidates\",\"Separate documented guarantees from mechanism-based inference\",\"Use only the two named primary sources\",\"Label illustrations as unmeasured\",\"Preserve failed retrieval and unsupported conclusions\"],\"budget\":\"One narrow explanation and independent review; zero experiments.\",\"limitations\":\"No efficacy, latency, power-loss or filesystem-specific durability measurements. Linux rename(2) retrieval currently failed; completion requires its decisive passages. No complete durability protocol can be established from the named passages alone.\",\"metrics\":[],\"primary_graders\":[{\"criterion_id\":\"R1\",\"primary\":true,\"grading\":\"Independent qualitative review of the conditional choice and faithful comparison\"},{\"criterion_id\":\"R2\",\"grading\":\"Verify atomic publication claims against original decisive passages\"},{\"criterion_id\":\"R3\",\"grading\":\"Reject equivalence between atomic visibility and durability\"},{\"criterion_id\":\"R4\",\"grading\":\"Verify same-filesystem condition and EXDEV\"},{\"criterion_id\":\"R5\",\"grading\":\"Require independent review evidence and preserve unresolved findings\"}]}"
+}

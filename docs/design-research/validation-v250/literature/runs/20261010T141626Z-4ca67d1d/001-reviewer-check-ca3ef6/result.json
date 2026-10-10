@@ -1,0 +1,39 @@
+{
+  "status": "reviewed",
+  "reason": "R1 independently reviewed against the saved proposal and decisive original passages. Existing source identities and failed retrieval receipts are preserved.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The proposal explains A's direct truncating rewrite and B's complete temporary-file preparation followed by replacement. It conditionally prefers B when preserving a complete checkpoint during interrupted updates matters, and A when checkpoint loss is acceptable and fewer lifecycle steps are preferred. Python os.replace documents atomic renaming on success; indexed original Linux DESCRIPTION supports atomic destination replacement. Complete-checkpoint preservation is explicitly mechanism reasoning, not measured effectiveness. Durability and actual interruption outcomes remain unknown. EV-00011 remains a failed Linux retrieval receipt; indexed original reading does not convert it into successful transport or runtime evidence. No runtime checks were executed.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00011"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The two-candidate exception matches the narrow contract. A has one destination write sequence; B adds temporary-file lifecycle and replacement. These structural differences are explained qualitatively without timing, reliability, or durability measurements."
+}

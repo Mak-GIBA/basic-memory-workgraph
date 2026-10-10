@@ -1,0 +1,147 @@
+{
+  "EV-00001": {
+    "id": "EV-00001",
+    "kind": "test",
+    "description": "Actual execution: python3 -m unittest -v",
+    "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+    "sha256": "8c0ec3e02dd37be60d13df7ff5152d3e76bfd787b587e567c916c57f2d7fa7a3",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:17:24.544832+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "command": "python3 -m unittest -v",
+    "check_ids": [
+      "whitespace",
+      "invalid"
+    ],
+    "experiment_id": null,
+    "exit_code": 1,
+    "timed_out": false,
+    "truncated": false
+  },
+  "EV-00002": {
+    "id": "EV-00002",
+    "kind": "code",
+    "description": "Current implementation lowercases without stripping whitespace, then compares against true/false and raises ValueError.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/whitespace_CE-001.json",
+    "sha256": "0a1be0322be384021dc6074001175eda2be7efc3cceac888c6dd2d0269f410e9",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:18:52.235079+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "parser.py"
+  },
+  "EV-00003": {
+    "id": "EV-00003",
+    "kind": "code",
+    "description": "Existing whitespace test requires True for surrounding spaces and False for surrounding tab/newline characters.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/whitespace_CE-002.json",
+    "sha256": "911c7ea03fe80639cf94d789c6272725650c1fe5d334f30ae21cd06d4e357818",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:18:52.235649+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "test_parser.py"
+  },
+  "EV-00004": {
+    "id": "EV-00004",
+    "kind": "source",
+    "description": "Original unittest failure output",
+    "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+    "sha256": "d0c576bc8be3b8580e3aaa0d66c25dc8fd19f7e1d06cf0d4a937fb65190e968b",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:18:52.235835+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78"
+  },
+  "EV-00005": {
+    "id": "EV-00005",
+    "kind": "code",
+    "description": "Current original source lowercases without stripping whitespace, returns booleans only for exact true/false comparisons, and otherwise raises ValueError.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/invalid_CE-invalid-001.json",
+    "sha256": "4d1008d9472c281c74a15b0cac6f208157381e5b269d33b05e3eff401c107971",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:20:18.682728+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "parser.py"
+  },
+  "EV-00006": {
+    "id": "EV-00006",
+    "kind": "code",
+    "description": "Existing test_invalid requires ValueError for yes, empty string, and 1.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/invalid_CE-invalid-002.json",
+    "sha256": "05fbd42da475cab9181ec93e2f393a4b0dfddeb724baf5d6ececc09feccf4bbb",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:20:18.683311+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "test_parser.py"
+  },
+  "EV-00007": {
+    "id": "EV-00007",
+    "kind": "source",
+    "description": "Current parser source",
+    "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+    "sha256": "9f0515992baeabd91dda466c3277d539dc8c992b7cbf0722928b259d75782f32",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:20:18.683451+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78"
+  },
+  "EV-00008": {
+    "id": "EV-00008",
+    "kind": "source",
+    "description": "Existing invalid-string test",
+    "path": "runs/20261010T141626Z-c3872498/source-inputs/test_parser.py",
+    "sha256": "2fcf1f4acd632aefe1a510648702ffbf516d2b1303d71195441f2b5940f9c806",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:20:18.683582+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78"
+  },
+  "EV-00009": {
+    "id": "EV-00009",
+    "kind": "code",
+    "description": "Actual fixture source retains text.lower() on line 2, two true/false comparisons, and a ValueError fallback; surrounding whitespace is not normalized.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/scope_CE-scope-001.json",
+    "sha256": "d77d995e2573aa337f9163f1d7fe93d33c95bfa38e9f976afa6775c3e37b4b7e",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:21:58.798216+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "parser.py"
+  },
+  "EV-00010": {
+    "id": "EV-00010",
+    "kind": "code",
+    "description": "Current source matches the saved original: lowercasing without stripping, two exact comparisons, and ValueError fallback.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/review_CE-review-parser.json",
+    "sha256": "95be833007c1b6d364640a481e985a42046a831e88d45c393c951fbca8ca65c2",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:24:10.060758+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "parser.py"
+  },
+  "EV-00011": {
+    "id": "EV-00011",
+    "kind": "code",
+    "description": "Unchanged tests require surrounding spaces and tab/newline acceptance, plus ValueError for yes, empty string, and 1.",
+    "path": "runs/20261010T141626Z-c3872498/001-code/review_CE-review-tests.json",
+    "sha256": "72df76ffc770b18935a8b3dfcc873f2efc449e007e5c5e3fd63b298d5d5a25e2",
+    "iteration": 1,
+    "recorded_at": "2026-10-10T14:24:10.061325+00:00",
+    "source_fingerprint": "afedde64620692dfb8fb4265ea5b773acc07e0296bd1ab5f44d21134157f5c78",
+    "source_path": "test_parser.py"
+  },
+  "EV-00012": {
+    "id": "EV-00012",
+    "kind": "test",
+    "description": "Actual execution: python3 -m unittest -v",
+    "path": "runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+    "sha256": "10c4fef7dfb29dfa2706065f3c1b5b06f518d1572857ac9c4da35c5e9dc8a53d",
+    "iteration": 2,
+    "recorded_at": "2026-10-10T14:24:49.666431+00:00",
+    "source_fingerprint": "7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5",
+    "command": "python3 -m unittest -v",
+    "check_ids": [
+      "whitespace",
+      "invalid"
+    ],
+    "experiment_id": null,
+    "exit_code": 0,
+    "timed_out": false,
+    "truncated": false
+  }
+}

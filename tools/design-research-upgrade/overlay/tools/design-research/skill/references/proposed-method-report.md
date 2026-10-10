@@ -13,7 +13,7 @@ separate symptoms from causal hypotheses, develop distinct candidate mechanisms,
 principles to target conditions, check closest prior art, formalize a minimal implementation,
 challenge it with simpler explanations and revise it. Reason about five comparable methods
 (baseline plus four alternatives) across different mechanism families. A documented smaller
-shortlist is allowed by the existing ideation contract; do not change search/experiment limits.
+shortlist is allowed by the existing ideation contract. In execution contract v2, an explicitly scoped baseline-versus-one-proposal comparison can use one substantive proposal with an exception reason of at least 30 characters; all source, mechanism, objection, experiment and figure requirements still apply. Legacy ledgers retain their existing minimum; do not change search/experiment limits.
 
 The main report's **提案手法** chapter must read as a Methods section, not an internal agent
 log. Begin with plain-language purpose and intuition, give a concrete input-to-output example,

@@ -1,0 +1,81 @@
+{
+  "status": "reviewed",
+  "reason": "R2 is supported by the original fixture, executed implementation, successful receipt and actual final outputs. No checks were rerun or files changed.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R2",
+      "result": "pass",
+      "reason": "PROJECT tasks.json and its frozen execution input have identical SHA-256 4c62b95258e78f78351a6941c1fd333bf5485b0fe21bebc27315ea793771c07a, matching the receipt. The script reads that fixture, validates it against frozen records, invokes parse_a and parse_b for each input, and exports each actual return value. Both use the same validation; B adds only strip(' \\t\\n\\r\\v\\f') before lowercasing. The result retains all seven task IDs and labels and fourteen paired outputs, including A's incorrect 'invalid' outputs for t2 and t3. The current receipt records exit_code=0, timed_out=false and truncated=false. Stdout is empty; stderr preserves a PATH-alias warning, which does not contradict successful execution.",
+      "evidence_ids": [
+        "EV-00004",
+        "EV-00005",
+        "EV-00006",
+        "EV-00007",
+        "EV-00012"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-R2-fixture",
+      "path": "tasks.json",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "Original seven task IDs, inputs and typed expected labels; bytes match the frozen input and receipt fingerprint."
+    },
+    {
+      "id": "CE-R2-requirements",
+      "path": "requirements.md",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "Specifies baseline lowercasing, candidate stripping then lowercasing, actual parsed-value measurement and reuse of the source fixture."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S4",
+      "title": "Original frozen input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S7",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "validate, parse_a, parse_b and main",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S5",
+      "title": "Actual paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "tasks, all fourteen trials, complete and failures",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S6",
+      "title": "Parent execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, source_fingerprint, execution status and artifacts",
+      "read_level": "full_text"
+    },
+    {
+      "id": "B_S7",
+      "title": "Original execution stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH-alias warning",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Both parser implementations take O(n) time and O(n) temporary-string space. B adds the required ASCII-whitespace scan without changing asymptotic complexity. These are code-derived bounds; runtime and memory performance were not measured."
+}

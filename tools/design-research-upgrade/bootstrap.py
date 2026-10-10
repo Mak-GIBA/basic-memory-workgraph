@@ -22,7 +22,7 @@ import zipfile
 COMPONENT = '@COMPONENT@'
 BUNDLE_SHA256 = '@BUNDLE_SHA256@'
 MARKER = b'\n__CODEX_RESEARCH_BUNDLE__\n'
-VERSIONS = {'design-research':'2.4.0', 'upstream':'2.0.5'}
+VERSIONS = {'design-research':'2.5.0', 'upstream':'2.0.6'}
 ENTRIES = ['design-research']
 
 

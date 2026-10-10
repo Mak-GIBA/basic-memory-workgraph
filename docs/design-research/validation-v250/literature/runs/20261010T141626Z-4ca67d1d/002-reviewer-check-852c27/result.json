@@ -1,0 +1,48 @@
+{
+  "status": "reviewed",
+  "reason": "R1 passes independent qualitative review of the saved proposal and decisive originals. No runtime or effectiveness result is established.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The saved proposal explains A's truncation followed by direct writing and B's complete, distinct temporary-file preparation followed by replacement. It prefers B when preserving complete checkpoint publication during interrupted updates matters, conditional on completed preparation and successful replacement on the destination mount. It permits A when interrupted-update checkpoint loss is acceptable and fewer lifecycle steps are preferred. Independently read Python os.replace and original Linux rename(2) passages support successful replacement atomicity. A's partial-write risk and B's checkpoint preservation are explicitly mechanism reasoning; examples and figures are unmeasured. Crash durability remains unknown. Actual receipts EV-00001 and EV-00026 record source retrieval, while EV-00042 remains a timeout failure. No experiments or runtime receipts exist. No previous R1 issues were supplied.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00026",
+        "EV-00042"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "SUPP_LINUX_RAW",
+      "title": "Linux rename(2) original manual source in the author repository",
+      "url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+      "path": "",
+      "locator": "DESCRIPTION lines 66-105 (open descriptors, atomic destination replacement); ERRORS EXDEV (same filesystem). Original 2021-08-27 source mirror, not a new runtime measurement.",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R1_2_PROPOSAL",
+      "title": "Saved iteration 2 proposal reviewed for R1",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/002-reviewer-check-852c27/inputs/proposal_design.json",
+      "locator": "dossier_json: candidates, comparison, decision.rationale, reader_guide purpose/walkthrough/limitations, experiments and results_summary",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The authorized two-candidate exception fits the narrow question. B adds temporary-file lifecycle and replacement to A's direct write sequence; the proposal explains these structural costs qualitatively without claiming measured latency or reliability. No additional mechanism or experiment is required for R1."
+}

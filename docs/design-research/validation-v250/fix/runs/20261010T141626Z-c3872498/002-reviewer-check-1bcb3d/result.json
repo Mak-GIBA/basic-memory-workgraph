@@ -1,0 +1,98 @@
+{
+  "status": "reviewed",
+  "reason": "Independently inspected the scope criterion against original source, current source, and execution artifacts. No tests were rerun or files modified.",
+  "issues": [
+    {
+      "id": "scope_scope-001",
+      "title": "Required whitespace normalization is absent",
+      "severity": "Medium",
+      "status": "resolved",
+      "target": "parser.py:2",
+      "action": "Independently compare the repaired parser with the saved original and receipt fingerprints.",
+      "expected": "Normalize surrounding whitespace while preserving the signature, comparisons, boolean returns, and ValueError fallback.",
+      "actual": "The only source difference is text.lower() becoming text.strip().lower(). Current fixture hashes match the successful post-change receipt; test_parser.py and AGENTS.md retain their baseline hashes.",
+      "why": "Direct inspection establishes that the previously missing normalization is now present.",
+      "improvement": "No further implementation change is required for scope.",
+      "root_cause": "The original normalization lowercased input without stripping surrounding whitespace.",
+      "check_ids": [
+        "scope"
+      ],
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00016",
+        "EV-00001",
+        "EV-00012",
+        "EV-00015"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "scope",
+      "result": "pass",
+      "reason": "Snapshot-to-current comparison shows one changed expression in parser.py: text.strip().lower(). The signature, exact case-insensitive comparisons, boolean returns, and ValueError fallback remain unchanged. Baseline and post-change receipt fingerprints differ only for parser.py among the three fixture files, and current hashes match the post-change receipt. That receipt records exit 0 with both existing tests passing. The baseline failure remains preserved. Git repository history was unavailable; scope is established from the saved originals and fixture fingerprints.",
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00016",
+        "EV-00001",
+        "EV-00012",
+        "EV-00015"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-scope-current-002",
+      "path": "parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Current source differs from the saved original only at line 2, adding strip() before lower(). All comparisons, returns, the function signature, and the ValueError fallback are preserved."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "command, exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Current parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-006",
+      "title": "Post-change unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+      "locator": "exit_code, source_fingerprint.files, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-007",
+      "title": "Post-change unittest output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/stderr.log",
+      "locator": "test_whitespace ... ok; Ran 2 tests; OK",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-SCOPE-current-002",
+      "title": "Current fixture parser inspected independently",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "locator": "lines 1–5; SHA-256 e9793630d019d5e862a5980349a1a2c05c9c6f1c661417d5efc362ed1ae7dfc1",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The repair adds strip() to the existing normalization expression. It retains two comparisons and a ValueError fallback, without dependencies or additional branches."
+}

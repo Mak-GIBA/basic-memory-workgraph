@@ -1,0 +1,48 @@
+{
+  "status": "reviewed",
+  "reason": "R4 independently verified as a design criterion against decisive original passages. Saved Linux retrieval failures remain failures; no runtime verification is claimed.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R4",
+      "result": "pass",
+      "reason": "Python os.replace documents possible failure across filesystems. Linux rename(2) EXDEV specifies different mounted filesystems, including separate mounts of the same filesystem. The proposal requires destination-mount placement, preferably the destination directory, makes success conditional, and does not claim an atomic cross-filesystem copy fallback. Linux EXDEV was independently read through indexed original-page text; direct access returned Internal Error. Saved timeout receipts remain unchanged.",
+      "evidence_ids": [
+        "EV-00020",
+        "EV-00021",
+        "EV-00022"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R4-PYTHON",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read cross-filesystem warning",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R4-LINUX",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "ERRORS EXDEV; independently read indexed original-page passage, including separate mounts of the same filesystem. Direct open failed.",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R4-PROPOSAL",
+      "title": "Saved proposal under review",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/001-reviewer-check-8df4cc/inputs/proposal_design.json",
+      "locator": "dossier_json: B-C3, B-C4, filesystem comparison, reader_guide.walkthrough and F2",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Destination-mount temporary-file placement directly supports the specified replacement mechanism. Preferring the destination directory adds no alternative mechanism, and rejecting an unsupported atomic copy fallback keeps the two-candidate question narrow. No experiments were required or executed."
+}

@@ -1,0 +1,47 @@
+{
+  "status": "reviewed",
+  "reason": "R1 independently reviewed against the saved proposal and decisive original passages. This is a qualitative design pass, not a runtime or effectiveness result. Saved Linux retrieval failures remain failures.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The proposal explains A's truncate-then-write sequence and B's complete temporary-file preparation followed by successful replacement. It prefers B when preserving a complete checkpoint during interrupted process updates matters, conditional on complete preparation and successful same-mount replacement, and permits A when checkpoint loss is acceptable for fewer lifecycle steps. Python os.replace and indexed original Linux DESCRIPTION passages support the publication distinction. Interruption examples are explicitly hypothetical; no measured effectiveness is claimed. Power-loss persistence remains unknown. Linux direct access failed during this review, but decisive indexed original passages were readable; this does not supersede failed saved receipts.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00011"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R1-proposal",
+      "title": "Saved proposal reviewed for conditional mechanism choice",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/001-reviewer-check-3382b4/inputs/proposal_design.json",
+      "locator": "dossier_json: candidates, decision, reader_guide purpose/walkthrough/limitations, results_summary",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "Indexed original DESCRIPTION opening replacement paragraphs and ERRORS EXDEV; direct open returned Internal Error; saved EV-00011 records timeout",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The two-candidate exception matches the narrow requested decision. B's additional temporary-file lifecycle and replacement operation are compared qualitatively with A's single destination write sequence; no latency or quantified reliability advantage is asserted. No experiments are required or executed."
+}

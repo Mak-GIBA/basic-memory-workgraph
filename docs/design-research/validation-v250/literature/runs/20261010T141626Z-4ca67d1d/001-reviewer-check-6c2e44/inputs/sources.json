@@ -1,0 +1,170 @@
+{
+  "S1": {
+    "source": {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "S1",
+    "title": "Python documentation: os.replace",
+    "url": "https://docs.python.org/3/library/os.html#os.replace",
+    "locator": "os.replace, lines 1833–1836",
+    "checked_at": "2026-10-10T14:19:13.121623+00:00",
+    "status": "retrieved",
+    "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+    "read_level_claimed": "relevant_sections",
+    "final_url": "https://docs.python.org/3/library/os.html#os.replace",
+    "bytes": 790312,
+    "content_sha256": "2ab4f4ca1e2afe387af92dffb9ce46fe00e120f6aa1ea94b37750aabdf2f90c2",
+    "content_type": "text/html",
+    "evidence_id": "EV-00001"
+  },
+  "S2": {
+    "source": {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "S2",
+    "title": "Linux rename(2) manual page",
+    "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+    "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text",
+    "checked_at": "2026-10-10T14:53:52.009841+00:00",
+    "status": "unavailable",
+    "reason": "<urlopen error timed out>",
+    "read_level_claimed": "relevant_sections",
+    "evidence_id": "EV-00015"
+  },
+  "A-S1": {
+    "source": {
+      "id": "A-S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "A-S1",
+    "title": "Python documentation: os.replace",
+    "url": "https://docs.python.org/3/library/os.html#os.replace",
+    "locator": "os.replace, lines 1833–1836",
+    "checked_at": "2026-10-10T14:22:48.399781+00:00",
+    "status": "retrieved",
+    "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+    "read_level_claimed": "relevant_sections",
+    "final_url": "https://docs.python.org/3/library/os.html#os.replace",
+    "bytes": 790312,
+    "content_sha256": "2ab4f4ca1e2afe387af92dffb9ce46fe00e120f6aa1ea94b37750aabdf2f90c2",
+    "content_type": "text/html",
+    "evidence_id": "EV-00004"
+  },
+  "A-S2": {
+    "source": {
+      "id": "A-S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text (direct open failed)",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "A-S2",
+    "title": "Linux rename(2) manual page",
+    "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+    "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text (direct open failed)",
+    "checked_at": "2026-10-10T14:54:07.535670+00:00",
+    "status": "unavailable",
+    "reason": "<urlopen error timed out>",
+    "read_level_claimed": "relevant_sections",
+    "evidence_id": "EV-00016"
+  },
+  "B-S1": {
+    "source": {
+      "id": "B-S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "B-S1",
+    "title": "Python documentation: os.replace",
+    "url": "https://docs.python.org/3/library/os.html#os.replace",
+    "locator": "os.replace, lines 1833–1836",
+    "checked_at": "2026-10-10T14:25:26.766277+00:00",
+    "status": "retrieved",
+    "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+    "read_level_claimed": "relevant_sections",
+    "final_url": "https://docs.python.org/3/library/os.html#os.replace",
+    "bytes": 790312,
+    "content_sha256": "2ab4f4ca1e2afe387af92dffb9ce46fe00e120f6aa1ea94b37750aabdf2f90c2",
+    "content_type": "text/html",
+    "evidence_id": "EV-00006"
+  },
+  "B-S2": {
+    "source": {
+      "id": "B-S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text (direct open returned Internal Error)",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "B-S2",
+    "title": "Linux rename(2) manual page",
+    "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+    "locator": "DESCRIPTION opening paragraphs and ERRORS EXDEV; original-page indexed text (direct open returned Internal Error)",
+    "checked_at": "2026-10-10T14:54:22.822444+00:00",
+    "status": "unavailable",
+    "reason": "<urlopen error timed out>",
+    "read_level_claimed": "relevant_sections",
+    "evidence_id": "EV-00017"
+  },
+  "R2_1_S1": {
+    "source": {
+      "id": "R2_1_S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read original documentation",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "R2_1_S1",
+    "title": "Python documentation: os.replace",
+    "url": "https://docs.python.org/3/library/os.html#os.replace",
+    "locator": "os.replace, lines 1833–1836; independently read original documentation",
+    "checked_at": "2026-10-10T14:55:38.030735+00:00",
+    "status": "retrieved",
+    "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+    "read_level_claimed": "relevant_sections",
+    "final_url": "https://docs.python.org/3/library/os.html#os.replace",
+    "bytes": 790312,
+    "content_sha256": "2ab4f4ca1e2afe387af92dffb9ce46fe00e120f6aa1ea94b37750aabdf2f90c2",
+    "content_type": "text/html",
+    "evidence_id": "EV-00018"
+  },
+  "R2_1_S2": {
+    "source": {
+      "id": "R2_1_S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs: open descriptors and atomic destination replacement; independently read indexed original-page text; direct open failed",
+      "read_level": "relevant_sections"
+    },
+    "source_id": "R2_1_S2",
+    "title": "Linux rename(2) manual page",
+    "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+    "locator": "DESCRIPTION opening paragraphs: open descriptors and atomic destination replacement; independently read indexed original-page text; direct open failed",
+    "checked_at": "2026-10-10T14:55:38.458298+00:00",
+    "status": "unavailable",
+    "reason": "<urlopen error timed out>",
+    "read_level_claimed": "relevant_sections",
+    "evidence_id": "EV-00019"
+  }
+}

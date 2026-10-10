@@ -1,0 +1,14 @@
+{
+  "source_id": "R5_1_R5-PYTHON",
+  "title": "Python documentation: os.replace",
+  "url": "https://docs.python.org/3/library/os.html#os.replace",
+  "locator": "os.replace, lines 1833–1836; independently read decisive original passage",
+  "checked_at": "2026-10-10T15:04:10.379892+00:00",
+  "status": "retrieved",
+  "reason": "Transport access verified; claim interpretation remains the reviewer's responsibility",
+  "read_level_claimed": "relevant_sections",
+  "final_url": "https://docs.python.org/3/library/os.html#os.replace",
+  "bytes": 790312,
+  "content_sha256": "2ab4f4ca1e2afe387af92dffb9ce46fe00e120f6aa1ea94b37750aabdf2f90c2",
+  "content_type": "text/html"
+}

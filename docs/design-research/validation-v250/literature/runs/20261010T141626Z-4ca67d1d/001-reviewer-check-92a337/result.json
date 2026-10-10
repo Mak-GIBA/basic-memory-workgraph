@@ -1,0 +1,39 @@
+{
+  "status": "reviewed",
+  "reason": "R2 independently verified against decisive original passages. This is a qualitative design review; no runtime checks were executed or certified.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R2",
+      "result": "pass",
+      "reason": "Python os.replace documents atomic renaming upon success. Linux rename(2) DESCRIPTION documents atomic replacement of an existing destination without a missing-path interval and unaffected source-file descriptors. Proposal claims C5 and B-C4 and the reader guide correctly condition complete-JSON publication on completed preparation and successful replacement, keep preceding writes separate, and label existing destination readers retaining the old file as inference. Linux passages were independently read through indexed original-page text after direct access failed. Saved Linux timeout receipts remain failures; this source-based pass establishes no runtime or durability result.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00015"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read original documentation",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs: open descriptors and atomic destination replacement; independently read indexed original-page text; direct open failed",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Two candidates fit the narrow contract. Temporary-file preparation and replacement add lifecycle steps justified by separating preparation from publication. No measured cost or reliability benefit is claimed."
+}

@@ -1,0 +1,13 @@
+[DEPENDENCY] {
+  "status": "skipped",
+  "path": "/home/hirano/.local/bin/specify",
+  "reason": "--skip-specify"
+}
+
+[SKIP] グローバル資材は同一内容です
+
+導入完了。既存ECC・Basic Memory・Codex config・Hooks・AGENTS.mdは変更していません。
+コマンド: /tmp/dr-units-install-validation/bin/speckit-workbench
+Codex入力欄: $upstream-existing / $upstream-new / $upstream-change / $upstream-bug / $upstream-refactor / $upstream-check
+後続の長い初期プロンプトは不要。対象だけを続けて入力できます。
+PATHにない場合: export PATH=/tmp/dr-units-install-validation/bin:"$PATH"

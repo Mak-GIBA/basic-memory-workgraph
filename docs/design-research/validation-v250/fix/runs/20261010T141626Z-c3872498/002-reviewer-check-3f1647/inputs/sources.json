@@ -1,0 +1,158 @@
+{
+  "SRC-001": {
+    "source": {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "command, exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00001"
+  },
+  "SRC-002": {
+    "source": {
+      "id": "SRC-002",
+      "title": "Original unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "SRC-003": {
+    "source": {
+      "id": "SRC-003",
+      "title": "Current parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "SRC-004": {
+    "source": {
+      "id": "SRC-004",
+      "title": "Existing invalid-string test",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/test_parser.py",
+      "locator": "ParseTests.test_invalid, lines 7–9",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00008"
+  },
+  "SRC-005": {
+    "source": {
+      "id": "SRC-005",
+      "title": "Actual fixture parser inspected during scope review",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "SRC-W-006": {
+    "source": {
+      "id": "SRC-W-006",
+      "title": "Post-change unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+      "locator": "exit_code, source_fingerprint.files, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00012"
+  },
+  "SRC-W-007": {
+    "source": {
+      "id": "SRC-W-007",
+      "title": "Post-change unittest output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/stderr.log",
+      "locator": "test_whitespace ... ok; Ran 2 tests; OK",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00015"
+  },
+  "SRC-W-008": {
+    "source": {
+      "id": "SRC-W-008",
+      "title": "Actual repaired parser",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00016"
+  },
+  "SRC-W-009": {
+    "source": {
+      "id": "SRC-W-009",
+      "title": "Existing whitespace assertions",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/test_parser.py",
+      "locator": "ParseTests.test_whitespace, lines 4–6",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00017"
+  },
+  "SRC-I-current-parser": {
+    "source": {
+      "id": "SRC-I-current-parser",
+      "title": "Current fixture parser",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00016"
+  },
+  "SRC-I-current-invalid-test": {
+    "source": {
+      "id": "SRC-I-current-invalid-test",
+      "title": "Current fixture invalid-string test",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/test_parser.py",
+      "locator": "ParseTests.test_invalid, lines 7–9",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00017"
+  },
+  "SRC-SCOPE-current-002": {
+    "source": {
+      "id": "SRC-SCOPE-current-002",
+      "title": "Current fixture parser inspected independently",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/parser.py",
+      "locator": "lines 1–5; SHA-256 e9793630d019d5e862a5980349a1a2c05c9c6f1c661417d5efc362ed1ae7dfc1",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00016"
+  }
+}

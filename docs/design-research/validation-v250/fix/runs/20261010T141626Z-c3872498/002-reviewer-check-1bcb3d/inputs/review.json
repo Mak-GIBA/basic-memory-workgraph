@@ -1,0 +1,116 @@
+{
+  "status": "reviewed",
+  "reason": "Scoped independent checks complete",
+  "checks": [
+    {
+      "check_id": "whitespace",
+      "result": "fail",
+      "reason": "EV-00001 preserves the baseline reproduction: test_whitespace errors on \" True \" with ValueError, exit code 1. Current parser.py still uses text.lower(). No post-change successful receipt exists among the supplied evidence; the runtime outcome for the second assertion remains unknown.",
+      "evidence_ids": [
+        "EV-00001"
+      ]
+    },
+    {
+      "check_id": "invalid",
+      "result": "unknown",
+      "reason": "Baseline test_invalid passed for yes, empty string, and 1. Source inspection confirms exact true/false comparisons and a ValueError fallback, but surrounding whitespace is not removed. No post-modification successful receipt exists in the available artifacts, so the full before-and-after criterion cannot pass. The baseline suite exited 1 because test_whitespace errored.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00005",
+        "EV-00006"
+      ]
+    },
+    {
+      "check_id": "scope",
+      "result": "fail",
+      "reason": "Direct source inspection confirms missing whitespace normalization. The signature, case-insensitive comparisons, boolean returns, and ValueError fallback remain present. No Git diff was available to establish changed-file scope; the missing required normalization independently establishes failure.",
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00001",
+        "EV-00004"
+      ]
+    },
+    {
+      "check_id": "review",
+      "result": "fail",
+      "reason": "Inspected current parser.py, unchanged tests, empty snapshot-to-current diffs, and the original receipt/stdout/stderr. The implementation remains unfixed and the receipt records FAILED (errors=1). A post-change receipt is absent from the supplied evidence, so successful final verification is unknown.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00007",
+        "EV-00008"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "scope_scope-001",
+      "title": "Required whitespace normalization is absent",
+      "severity": "Medium",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Inspect the final parser against the scope criterion.",
+      "expected": "Normalize surrounding whitespace while preserving the signature, comparisons, boolean returns, and ValueError fallback.",
+      "actual": "The parser still assigns value = text.lower(). The saved execution failed on parse_bool(\" True \").",
+      "why": "The required implementation change has not been made.",
+      "improvement": "Change the normalization expression to text.strip().lower(), leaving the remaining implementation unchanged.",
+      "root_cause": "The normalization expression lowercases input but does not strip surrounding whitespace.",
+      "check_ids": [
+        "scope"
+      ],
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00001",
+        "EV-00004"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "command, exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Current parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-004",
+      "title": "Existing invalid-string test",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/test_parser.py",
+      "locator": "ParseTests.test_invalid, lines 7–9",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "SRC-005",
+      "title": "Actual fixture parser inspected during scope review",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "dossier_json": "",
+  "complexity_ok": true,
+  "complexity_reason": "See scoped independent reviews; Current code retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or additional branches. This establishes simplicity, not correctness.; Current source retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or added branches. This establishes baseline simplicity; no completed fix is evidenced.; The existing implementation retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or additional branches. Complexity is acceptable, but the required whitespace normalization is missing.; The inspected parser retains one normalization expression, two comparisons, and a ValueError fallback with no dependencies or additional branches. This satisfies the complexity baseline but does not establish correctness or completion."
+}

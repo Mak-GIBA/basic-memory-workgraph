@@ -1,0 +1,263 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "reviewed",
+        "blocked"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Critical",
+              "High",
+              "Medium",
+              "Low"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "unverified",
+              "resolved"
+            ]
+          },
+          "target": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "expected": {
+            "type": "string"
+          },
+          "actual": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          },
+          "improvement": {
+            "type": "string"
+          },
+          "root_cause": {
+            "type": "string"
+          },
+          "check_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "severity",
+          "status",
+          "target",
+          "action",
+          "expected",
+          "actual",
+          "why",
+          "improvement",
+          "root_cause",
+          "check_ids",
+          "evidence_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check_id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "check_id",
+          "result",
+          "reason",
+          "evidence_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "code_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "line_start": {
+            "type": "integer"
+          },
+          "line_end": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "line_start",
+          "line_end",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dossier_json": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          },
+          "read_level": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "abstract",
+              "relevant_sections",
+              "full_text"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "url",
+          "path",
+          "locator",
+          "read_level"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reference_implementations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "strength": {
+            "type": "string"
+          },
+          "application": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "string"
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "url",
+          "strength",
+          "application",
+          "limitations",
+          "source_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "complexity_ok": {
+      "type": "boolean"
+    },
+    "complexity_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "reason",
+    "issues",
+    "checks",
+    "code_evidence",
+    "dossier_json",
+    "sources",
+    "reference_implementations",
+    "complexity_ok",
+    "complexity_reason"
+  ],
+  "additionalProperties": false
+}

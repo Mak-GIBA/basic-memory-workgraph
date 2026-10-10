@@ -1,0 +1,39 @@
+{
+  "state": "installed",
+  "target": "/tmp/dr-units-install-validation/skills-v24/design-research",
+  "version": "2.5.0",
+  "modified": false,
+  "files": 42,
+  "action": "update",
+  "dry_run": false,
+  "backup": "/tmp/dr-units-install-validation/.design-research-backups/27f4aaa068de/20261010T160203Z-254576568c",
+  "network": false,
+  "config_changes": false,
+  "codex_entries": [
+    "$design-research"
+  ],
+  "legacy_shortcuts_to_retire": [],
+  "legacy_shortcuts_preserved": [],
+  "legacy_shortcuts": [
+    {
+      "name": "design-research-reassess",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-plan",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-workstream",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-resume",
+      "state": "absent"
+    },
+    {
+      "name": "design-research-status",
+      "state": "absent"
+    }
+  ]
+}

@@ -41,7 +41,7 @@ $upstream-existing このリポジトリの予約管理機能を整理して。
 
 ## ストーリーから研究を経て設計する
 
-Workbench 2.0.5では、次の順序で新規設計や実現方式を変えるTo-Be設計を進めます。
+Workbench 2.0.6では、次の順序で新規設計や実現方式を変えるTo-Be設計を進めます。
 
 ```mermaid
 flowchart LR

@@ -1,0 +1,48 @@
+{
+  "status": "reviewed",
+  "reason": "R1 passes as a qualitative design comparison. This does not establish runtime effectiveness or complete review of R2–R5. Saved Linux retrieval failures remain unchanged; this review's direct Linux access also failed.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The proposal explains A's truncate-then-write sequence and B's complete temporary-file preparation followed by replacement. It prefers B when preserving a complete checkpoint during interrupted updates matters, conditional on complete preparation and successful replacement, and permits A when checkpoint loss is acceptable for fewer lifecycle steps. Python's decisive os.replace passage supports atomic renaming on success. Interruption examples and complexity differences are expressly unmeasured mechanism reasoning; durability remains unknown. No experiment or runtime success is claimed or required for R1.",
+      "evidence_ids": [
+        "CE-R1-01",
+        "EV-00001",
+        "S1"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-R1-01",
+      "path": "/tmp/dr-generic-trials-v250d/literature/docs/design-research/checkpoint-design/runs/20261010T141626Z-4ca67d1d/001-reviewer-check-5b8035/inputs/proposal_design.json",
+      "line_start": 4,
+      "line_end": 4,
+      "description": "Serialized dossier: candidates, decision.rationale, and reader_guide explain both mechanisms and the conditional choice. Claims C3/A-C3 and the walkthrough label interruption outcomes as unmeasured; experiments and metrics are empty. This is proposal evidence, not implementation or measurement evidence."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read decisive original passage",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2-access",
+      "title": "Linux rename(2) failed retrieval receipt",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "/tmp/dr-generic-trials-v250d/literature/docs/design-research/checkpoint-design/runs/20261010T141626Z-4ca67d1d/sources/S2-b238f21c.json",
+      "locator": "Saved receipt records unavailable after timeout; independent direct open returned Internal Error. Decisive Linux text was not independently verified here.",
+      "read_level": "metadata"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Two candidates match the narrow contract. A has one destination write sequence; B adds temporary-file lifecycle and replacement. The proposal treats these as structural differences without asserting measured cost or reliability. No experiment is required for this design criterion."
+}

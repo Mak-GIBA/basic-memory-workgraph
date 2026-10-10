@@ -1,0 +1,11 @@
+{
+  "status": "changed",
+  "reason": "Changed normalization to text.strip().lower(), preserving comparisons and ValueError fallback. Baseline receipt records the whitespace failure. Checks were not executed; post-change verification and independent review remain pending.",
+  "fixed_issue_ids": [
+    "whitespace_whitespace-001"
+  ],
+  "changed_files": [
+    "parser.py"
+  ],
+  "complexity_changes": []
+}

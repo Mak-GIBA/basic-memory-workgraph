@@ -1,0 +1,90 @@
+{
+  "error": "Scoped review format: A source ID cannot silently change identity",
+  "attempt": 1,
+  "instruction": "Correct only this format/locator/history error; do not invent evidence, change frozen criteria or self-certify results.",
+  "previous_issues": [
+    {
+      "id": "whitespace_whitespace-001",
+      "title": "Whitespace parsing remains broken",
+      "severity": "High",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Normalize surrounding whitespace before comparing boolean strings.",
+      "expected": "\" True \" returns True and \"\\tFALSE\\n\" returns False, with preserved baseline and successful post-change receipts.",
+      "actual": "The parser uses text.lower(). The recorded unittest exits 1 because \" True \" raises ValueError; the second whitespace assertion is not reached.",
+      "why": "The required whitespace behavior is not implemented or verified.",
+      "improvement": "Change the normalization to text.strip().lower() and have the parent preserve a successful execution receipt.",
+      "root_cause": "Lowercasing preserves surrounding whitespace, preventing equality with \"true\" or \"false\".",
+      "check_ids": [
+        "whitespace"
+      ],
+      "evidence_ids": [
+        "EV-00001"
+      ]
+    },
+    {
+      "id": "invalid_INVALID-001",
+      "title": "Post-modification invalid-string preservation is unverified",
+      "severity": "Medium",
+      "status": "unverified",
+      "target": "parser.py:2 and post-modification execution receipt",
+      "action": "Complete the authorized normalization change and have the parent capture the post-modification unittest receipt.",
+      "expected": "test_invalid passes before and after modification; source normalizes surrounding whitespace and case before comparing true/false.",
+      "actual": "The baseline output reports test_invalid ... ok. Current source still uses text.lower(), and the available execution receipt records the baseline suite failure. No post-modification result is available.",
+      "why": "A baseline subtest pass cannot establish preservation after a modification that has not been evidenced.",
+      "improvement": "Provide the final parser source and a current successful execution receipt for independent review.",
+      "root_cause": "The available artifacts establish only baseline behavior.",
+      "check_ids": [
+        "invalid"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00005"
+      ]
+    },
+    {
+      "id": "scope_scope-001",
+      "title": "Required whitespace normalization is absent",
+      "severity": "Medium",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Inspect the final parser against the scope criterion.",
+      "expected": "Normalize surrounding whitespace while preserving the signature, comparisons, boolean returns, and ValueError fallback.",
+      "actual": "The parser still assigns value = text.lower(). The saved execution failed on parse_bool(\" True \").",
+      "why": "The required implementation change has not been made.",
+      "improvement": "Change the normalization expression to text.strip().lower(), leaving the remaining implementation unchanged.",
+      "root_cause": "The normalization expression lowercases input but does not strip surrounding whitespace.",
+      "check_ids": [
+        "scope"
+      ],
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00001",
+        "EV-00004"
+      ]
+    },
+    {
+      "id": "review_review-001",
+      "title": "Final fix and successful verification are absent",
+      "severity": "High",
+      "status": "open",
+      "target": "parser.py:2 and post-change unittest evidence",
+      "action": "Normalize surrounding whitespace in parser.py, then have the parent execute unittest in isolation and provide the resulting receipt and outputs for independent review.",
+      "expected": "A parser-only fix, unchanged tests, an actual change diff, and baseline/post-change unittest receipts.",
+      "actual": "Current parser and tests equal their saved originals. Line 2 still uses text.lower(). The supplied receipt exits 1; stderr reports test_invalid passing and test_whitespace raising ValueError for \" True \". No post-change receipt is supplied.",
+      "why": "The requested fix cannot be accepted while the implementation remains unchanged and successful post-change execution is unverified.",
+      "improvement": "Use text.strip().lower() while retaining the comparisons and ValueError fallback; preserve the baseline failure and supply current post-change execution evidence.",
+      "root_cause": "Whitespace normalization is missing. The reason no repair or post-change receipt was supplied is unknown.",
+      "check_ids": [
+        "review"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00007",
+        "EV-00008"
+      ]
+    }
+  ]
+}

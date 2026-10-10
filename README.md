@@ -30,7 +30,7 @@ $upstream-new 社内文書を検索し、根拠を確認して回答できるア
 $design-research このプロジェクトの検索精度を改善する方法を調べて。
 ```
 
-Upstream 2.0.5がストーリー・懸念・ユースケース・要件を整理し、Design Research 2.4.0がコアロジックの問いをテーマ別に比較・検証します。
+Upstream 2.0.6がストーリー・懸念・ユースケース・要件を整理し、Design Research 2.5.0がコアロジックの問いをテーマ別に比較・検証します。
 Upstreamは研究結果の組合せと全体制約を確認し、設計・検証計画へ反映します。その後、レビューと明示承認へ進みます。
 「計画だけ」の依頼は計画で止まり、研究の状況確認では実験を開始しません。研究完了と採用承認、アプリ実装は別の段階です。
 [一連の使い方](docs/speckit-upstream/usage.md)と[テーマ分割・既存判断の見直し](docs/speckit-upstream/reassessment.md)に具体例があります。
@@ -87,7 +87,7 @@ bash install_all.sh --only ux-stack,yomiyasu --apply
 - 用途別のインストーラーと、それぞれの導入・利用ガイド。
 - Workgraphの保存方針、フック、ノートのスキーマ、更新・共有・点検用のPythonコード。
 - UX Stack、GitHub Project Director、Office Workbench、yomiyasuの単一ファイル配布物。独自資材はスクリプト内に埋め込まれています。
-- Design Research 2.4.0とUpstream 2.0.5の組み立て用スクリプト。内蔵の更新資材を、取得・照合した固定版へ適用します。
+- Design Research 2.5.0とUpstream 2.0.6の組み立て用スクリプト。内蔵の更新資材を、取得・照合した固定版へ適用します。
 
 ルートには実行するインストーラーを置き、補助コードと資材は用途別のディレクトリにまとめています。
 

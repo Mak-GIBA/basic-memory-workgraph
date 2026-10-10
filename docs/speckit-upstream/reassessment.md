@@ -3,7 +3,7 @@
 [概要](README.md) · [使い方](usage.md) · [導入手順](installation.md) · [Design Research](../design-research/README.md)
 
 既存の要件が今も必要か、評価方法が適切か、より精度を出せる実現方式があるかを、目的と根拠から見直します。
-Workbench 2.0.5は、新規設計や実現方式を変えるTo-Be設計で、該当テーマのDesign Researchを実行してから設計を確定します。
+Workbench 2.0.6は、新規設計や実現方式を変えるTo-Be設計で、該当テーマのDesign Researchを実行してから設計を確定します。
 標準的な実装は根拠付きで`standard`に分類します。As-Isの整理や単純な文書修正に全体の再研究を一律に要求するものではありません。
 Codexには目的を短く伝えれば、Skillが研究の範囲と実行方法を選びます。
 

@@ -1,0 +1,70 @@
+{
+  "purpose": "effectiveness",
+  "baseline_id": "A",
+  "candidate_ids": [
+    "A",
+    "B"
+  ],
+  "tasks": [
+    {
+      "id": "t0",
+      "input": "true",
+      "expected": true
+    },
+    {
+      "id": "t1",
+      "input": "FALSE",
+      "expected": false
+    },
+    {
+      "id": "t2",
+      "input": " true ",
+      "expected": true
+    },
+    {
+      "id": "t3",
+      "input": "\tfalse\n",
+      "expected": false
+    },
+    {
+      "id": "t4",
+      "input": "yes",
+      "expected": "invalid"
+    },
+    {
+      "id": "t5",
+      "input": "",
+      "expected": "invalid"
+    },
+    {
+      "id": "t6",
+      "input": "1",
+      "expected": "invalid"
+    }
+  ],
+  "dataset": "Reuse PROJECT-relative tasks.json: seven deterministic labeled boolean-configuration inputs. This explicitly narrow two-method comparison does not require additional candidates.",
+  "controls": [
+    "Identical fixture inputs and expected outputs for A and B",
+    "Same Python runtime, permissions and budgets",
+    "One paired trial per task and candidate; all seven tasks retained",
+    "A lowercases and validates without stripping; B strips ASCII whitespace, lowercases and applies identical validation",
+    "Export actual Python return values as JSON booleans or the string invalid; never substitute expected labels for execution outputs",
+    "Preserve incorrect final outputs; execution errors and timeouts remain failures rather than successful measurements"
+  ],
+  "budget": "One parent-executed local standard-library experiment containing fourteen function invocations. No backend test invocation, network or installation. Authoring time, latency and memory are outside metric scope.",
+  "limitations": "Seven fixed deterministic tasks establish fixture-specific correctness only; no statistical, population-wide or performance inference. Inputs do not test non-ASCII whitespace.",
+  "metrics": [
+    {
+      "id": "accuracy",
+      "criterion_id": "R1",
+      "primary": true,
+      "kind": "exact_match",
+      "unit": "fraction",
+      "direction": "higher",
+      "aggregation": "mean",
+      "acceptance_delta": 0.14285714285714285,
+      "grading": "Compare each actual whole JSON final return value with the independently frozen expected value, retaining boolean types and the invalid string. Compute matched tasks divided by seven for each candidate and B minus A. Require at least one additional correct task to recommend B; preserve equal and negative results.",
+      "outcome_scope": "final_outcome"
+    }
+  ]
+}

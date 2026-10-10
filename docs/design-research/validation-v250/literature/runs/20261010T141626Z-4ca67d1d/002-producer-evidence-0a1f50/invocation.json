@@ -1,0 +1,8 @@
+{
+  "role": "producer-evidence",
+  "started_at": "2026-10-10T15:58:32.598588+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 6952,
+  "execution_contract_version": 2
+}

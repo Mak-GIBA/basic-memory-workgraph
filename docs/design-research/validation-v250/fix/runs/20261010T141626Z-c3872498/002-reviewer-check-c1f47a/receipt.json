@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T14:29:51.334408+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T14:30:56.298742+00:00",
+  "duration_seconds": 64.964,
+  "role": "reviewer-check",
+  "iteration": 2,
+  "configured_timeout_seconds": 600,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-c3872498/002-reviewer-check-c1f47a/stdout.log",
+      "sha256": "ceab627d72c2ce83b84ca2c9252011dcdf330216385fd89926ff7bd78613a7b7"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-c3872498/002-reviewer-check-c1f47a/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Model role execution only; not a task-effect measurement"
+}

@@ -1,0 +1,92 @@
+{
+  "status": "reviewed",
+  "reason": "R4のみを独立に検証した。最終実装・固定契約・実出力・親receipt・提案の解釈が整合する。空のstdoutは独立SOURCEにせず、receiptのoutputs.stdoutを参照した。再実行や変更は行っていない。",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R4",
+      "result": "pass",
+      "reason": "Aはlowerのみ、BはASCII空白をstripしてからlowerを適用し、共通validatorを使う。原fixtureと固定契約の7入力・型付き期待値は実装および最終結果と一致する。実際の関数戻り値を型と値の完全一致で採点し、全7組・14件を保持している。A=5/7、B=7/7、差=2/7で固定閾値1/7を満たす。Aのt2・t3の不正解も保存されている。親receiptはexit_code=0、timed_out=false、truncated=falseで、結果はcomplete=true、failures=[]。stdoutは空で、stderrのPATH-alias警告は保持されている。例外処理は実装から確認できるが、実際の例外・timeout時の挙動は未測定。提案はfixture限定の条件付き推奨で、性能・統計・未試験入力へ一般化していない。保存済み提案は独立レビューを未完了と明記している。この結果はR4のレビュー完了を示し、範囲外のK4を解決済みとは認定しない。既存のR4 issueは提示されていない。",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00002",
+        "EV-00004",
+        "EV-00005",
+        "EV-00006",
+        "EV-00007",
+        "EV-00012",
+        "EV-00014"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-R4-requirements",
+      "path": "requirements.md",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "2方式の処理、実際の最終値による評価、固定fixtureの再利用を指定する原要件。"
+    },
+    {
+      "id": "CE-R4-fixture",
+      "path": "tasks.json",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "全7入力と型付き期待値。固定契約、実装の固定値、最終結果の入力集合と一致する。"
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R4-contract",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-54d2dd/inputs/evaluation_contract.json",
+      "locator": "tasks, controls, metrics[0].grading, acceptance_delta, limitations",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S7",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "FROZEN_TASKS, validate, parse_a, parse_b, main",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "tasks, all fourteen trials, complete, failures, accuracy, paired_difference",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, source_fingerprint, exit_code, timed_out, truncated, outputs.stdout, outputs.stderr, artifacts",
+      "read_level": "full_text"
+    },
+    {
+      "id": "B_S7",
+      "title": "E1 original stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "Entire PATH-alias helper warning",
+      "read_level": "full_text"
+    },
+    {
+      "id": "R4-proposal",
+      "title": "Final saved proposal interpretation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-54d2dd/inputs/proposal_design.json",
+      "locator": "dossier_json.scope, claims, evaluation_result, decision",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "両方式は共通validatorを使い、Bの追加処理はASCII空白のstripのみ。文字列長nに対して両方式ともO(n)時間・O(n)一時文字列領域であり、比較目的に対して過剰な構成はない。速度・メモリの優位は実測されていない。"
+}

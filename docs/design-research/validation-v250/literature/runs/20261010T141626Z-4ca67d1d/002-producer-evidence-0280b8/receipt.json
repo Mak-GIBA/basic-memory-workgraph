@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T16:00:03.554212+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T16:01:09.652070+00:00",
+  "duration_seconds": 66.098,
+  "role": "producer-evidence",
+  "iteration": 2,
+  "configured_timeout_seconds": 600,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-4ca67d1d/002-producer-evidence-0280b8/stdout.log",
+      "sha256": "8085cf585780a66dc4231437790befc9a9312c5d7ab9b044f860b0a71cf1b00c"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-4ca67d1d/002-producer-evidence-0280b8/stderr.log",
+      "sha256": "b65e5e1ba7049fdf3f7e6d04c4543abf37c9d4947ae220765c783d3309926f01"
+    }
+  },
+  "scope": "Model role execution only; not a task-effect measurement"
+}

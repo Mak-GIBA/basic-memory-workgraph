@@ -1,0 +1,94 @@
+{
+  "status": "reviewed",
+  "reason": "Reviewed only invalid. The baseline test passed, but the parser remains unchanged and no post-modification receipt is available.",
+  "issues": [
+    {
+      "id": "INVALID-001",
+      "title": "Post-modification invalid-string preservation is unverified",
+      "severity": "Medium",
+      "status": "unverified",
+      "target": "parser.py:2 and post-modification execution receipt",
+      "action": "Complete the authorized normalization change and have the parent capture the post-modification unittest receipt.",
+      "expected": "test_invalid passes before and after modification; source normalizes surrounding whitespace and case before comparing true/false.",
+      "actual": "The baseline output reports test_invalid ... ok. Current source still uses text.lower(), and the available execution receipt records the baseline suite failure. No post-modification result is available.",
+      "why": "A baseline subtest pass cannot establish preservation after a modification that has not been evidenced.",
+      "improvement": "Provide the final parser source and a current successful execution receipt for independent review.",
+      "root_cause": "The available artifacts establish only baseline behavior.",
+      "check_ids": [
+        "invalid"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "CE-invalid-001"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "invalid",
+      "result": "unknown",
+      "reason": "Baseline test_invalid passed for yes, empty string, and 1. Source inspection confirms exact true/false comparisons and a ValueError fallback, but surrounding whitespace is not removed. No post-modification successful receipt exists in the available artifacts, so the full before-and-after criterion cannot pass. The baseline suite exited 1 because test_whitespace errored.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "CE-invalid-001",
+        "CE-invalid-002"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-invalid-001",
+      "path": "parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Current original source lowercases without stripping whitespace, returns booleans only for exact true/false comparisons, and otherwise raises ValueError."
+    },
+    {
+      "id": "CE-invalid-002",
+      "path": "test_parser.py",
+      "line_start": 7,
+      "line_end": 9,
+      "description": "Existing test_invalid requires ValueError for yes, empty string, and 1."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "command, exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Current parser source",
+      "url": "",
+      "path": "parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-004",
+      "title": "Existing invalid-string test",
+      "url": "",
+      "path": "test_parser.py",
+      "locator": "ParseTests.test_invalid, lines 7–9",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Current source retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or added branches. This establishes baseline simplicity; no completed fix is evidenced."
+}

@@ -1,0 +1,105 @@
+{
+  "status": "reviewed",
+  "reason": "Independently inspected original and final parser source and both execution receipts. Only the scope criterion was evaluated; no checks were rerun.",
+  "issues": [
+    {
+      "id": "scope_scope-001",
+      "title": "Required whitespace normalization is absent",
+      "severity": "Medium",
+      "status": "resolved",
+      "target": "parser.py:2",
+      "action": "Independently compare the repaired source with the original and execution receipts.",
+      "expected": "Add surrounding-whitespace normalization while preserving the remaining implementation.",
+      "actual": "The final source uses text.strip().lower(); the signature, comparisons, boolean returns, and ValueError fallback are unchanged.",
+      "why": "The previously reported defect is corrected in the inspected final source.",
+      "improvement": "No further implementation change is required for this issue.",
+      "root_cause": "The original normalization lowercased input without stripping surrounding whitespace.",
+      "check_ids": [
+        "scope"
+      ],
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00016",
+        "EV-00012"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "scope",
+      "result": "pass",
+      "reason": "Original-to-final source comparison shows only line 2 changes from text.lower() to text.strip().lower(). Both receipts list the same fixture files; only parser.py's fingerprint changes, while test_parser.py and AGENTS.md remain identical. The function signature, case-insensitive comparisons, boolean returns, and ValueError fallback are preserved. The original receipt records exit 1 and a whitespace error; the final receipt records exit 0 with both existing tests passing.",
+      "evidence_ids": [
+        "EV-00007",
+        "EV-00016",
+        "EV-00001",
+        "EV-00004",
+        "EV-00012",
+        "EV-00015"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-scope-final",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Final implementation adds strip() before lower(); signature, two exact comparisons, boolean returns, and ValueError fallback match the original."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-003",
+      "title": "Original parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-008",
+      "title": "Repaired parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/7d52d30ee267bc6c9164992d284fc8210c1e997b9800b58f5de9f1894f2dbef5/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-001",
+      "title": "Original execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "source_fingerprint.files and exit_code",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-006",
+      "title": "Post-change execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+      "locator": "source_fingerprint.files, exit_code, timed_out, truncated",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-007",
+      "title": "Post-change execution output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/stderr.log",
+      "locator": "Both tests report ok; Ran 2 tests; OK",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The repair adds one strip() call to the existing normalization expression and retains two comparisons and the ValueError fallback without dependencies or additional branches."
+}

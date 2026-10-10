@@ -1,0 +1,12 @@
+{
+  "version": "2.5.0",
+  "project": "/home/hirano/workspace/basic-memory-workgraph",
+  "ready": true,
+  "checks": {
+    "python": true,
+    "codex": true,
+    "structured_exec": true,
+    "sandbox": true
+  },
+  "errors": []
+}

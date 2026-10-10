@@ -67,6 +67,12 @@ def publish(state, workspace, run_dir):
              state.get('reason') or '実行中です。結論はまだ確定していません。', '',
              '課題: '+state['config']['brief'],
              '対象版: '+(state['expected_source']['head'] or 'Git管理なし'), '']
+    from execution_units import sections as unit_sections
+    lines += unit_sections(state)
+    if not dossier and state.get('draft_conclusion'):
+        lines += ['主要結果に基づく暫定結論（独立レビュー・必須工程は未完了）：', '',
+                  state['draft_conclusion']['rationale'], '',
+                  '未確認：' + '; '.join(state['draft_conclusion']['unresolved']), '']
     if dossier:
         decision = dossier['decision']
         if (state.get('evaluation_contract_version') and state.get('evaluation_summary', {}).get('iteration')

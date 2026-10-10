@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "command": "python3 -m unittest -v",
+  "check_ids": [
+    "whitespace",
+    "invalid"
+  ],
+  "environment_keys": [
+    "CI",
+    "DR_GAN_CHILD",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "NODE_ENV",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME"
+  ],
+  "experiment_id": null,
+  "source_fingerprint": {
+    "head": "",
+    "files": {
+      "test_parser.py": "2fcf1f4acd632aefe1a510648702ffbf516d2b1303d71195441f2b5940f9c806:436",
+      "parser.py": "9f0515992baeabd91dda466c3277d539dc8c992b7cbf0722928b259d75782f32:436",
+      "AGENTS.md": "8db554e71ae85e82ee93f40a5d8c162a6d306bf21c5a2559a56b6f5d7b4f34d6:436"
+    }
+  },
+  "started_at": "2026-10-10T14:17:24.463076+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 1,
+  "finished_at": "2026-10-10T14:17:24.543379+00:00",
+  "duration_seconds": 0.08,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "sha256": "d0c576bc8be3b8580e3aaa0d66c25dc8fd19f7e1d06cf0d4a937fb65190e968b"
+    }
+  },
+  "artifacts": [],
+  "isolation": "Disposable workspace under Codex workspace-write sandbox"
+}

@@ -37,7 +37,7 @@ def _quality_issues(dossier, state):
         if state.get("config", {}).get("report_profile") != "proposed-method":
             errors.append("Proposed-method figures require that report profile")
         from proposal_report import validation_issues
-        errors.extend(validation_issues(dossier, target_methods=state.get("config", {}).get("target_methods", 5)))
+        errors.extend(validation_issues(dossier, target_methods=state.get("config", {}).get("target_methods", 5), allow_single_proposal=state.get("execution_contract_version") == 2))
         return errors
     figures = guide.get("figures")
     if not isinstance(figures, list) or not 2 <= len(figures) <= 6:

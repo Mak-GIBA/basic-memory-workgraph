@@ -8,7 +8,7 @@ import re
 from command_assets import assets, COMMANDS
 
 ROOT = Path(__file__).resolve().parent
-VERSION_D, VERSION_U = '2.4.0', '2.0.5'
+VERSION_D, VERSION_U = '2.5.0', '2.0.6'
 
 
 def module(path, name):
@@ -37,7 +37,8 @@ def patch_installer(text):
                '"scripts/reassessment.py", "scripts/readable_report.py", "scripts/research_workstreams.py",\n'
                '    "scripts/codex_interface.py", "scripts/workflow_overview.py", "references/codex-interface.md",\n'
                '    "references/workflow-guide.md", "scripts/evaluation_contract.py",\n'
-               '    "references/effectiveness-evaluation.md"')
+               '    "references/effectiveness-evaluation.md", "scripts/execution_units.py",\n'
+               '    "references/execution-units.md"')
     text = re.sub(r'(?m)^VERSION = "[0-9.]+"$', 'VERSION = "' + VERSION_D + '"', text)
     compile(text, 'install_design_research.py', 'exec')
     return text
@@ -64,6 +65,9 @@ def apply_to_stage(repo):
     p = skill/'SKILL.md'; s = p.read_text('utf-8')
     main_flow = '''
 ## 最初に判断する: 1つの入口からワークフロー全体を扱う
+`DR_GAN_CHILD=1` の子工程は、渡された役割と参照先だけを扱う。
+以下の入口・全体フローや全参照資料を読み直さず、別ハーネス・Memory書込を開始しない。
+親工程は[保存単位と完了条件](references/execution-units.md)に従う。
 `$design-research` が唯一の推奨ユーザー入口。Skill名を使い分けさせず、
 [ワークフローと停止境界](references/workflow-guide.md)を**必ず読む**。
 短い指示例: `$design-research 検索精度を改善して`。
@@ -85,7 +89,12 @@ def apply_to_stage(repo):
 同じ入力を使った基準案・候補案の具体例を報告する。ツールの応答を主要効果の代理にしない。
 設計・文献調査は効果未測定を明記して条件付きで完了できる。改善なしも有効な測定結果。
 汎用比較ではcomparison、提案手法の詳細章が必要な場合はproposed-methodを選ぶ。
-比較設計と実験コードの作成は別工程。保存済み工程を再開時に再利用し、タイムアウトの
+最小の比較設計→実行資材→実測・採点→候補ごとの原典確認→結論・詳細説明→独立レビューを
+それぞれ保存する。図や完成版のMethodsを実験前の設計に詰め込まない。
+用途はMCPに限定せず、精度・方式改善、設計・文献調査、監査、修正に応じた完了条件を使う。
+主要な問いを先に判断し、要求された追加単位まで実施する。必須工程が残る間は全体を完了としない。
+子への入力は役割ごとに絞り、通常16 KiB以内。超過部分は全文・ハッシュ付きファイル参照か工程分割にする。
+保存済み工程を再開時に再利用し、タイムアウトの
 原因と実行済み検証をrole receiptで区別する。既存の時間・安全・証拠の制限を守る。
 並列は依存関係に応じた計画のみ、同一projectでは既存ロックに従い直列で実行する。
 計画のみがユーザー目的なら、研究を自動開始せず計画で停止する。

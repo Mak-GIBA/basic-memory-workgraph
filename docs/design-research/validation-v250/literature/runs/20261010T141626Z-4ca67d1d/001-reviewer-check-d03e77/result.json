@@ -1,0 +1,58 @@
+{
+  "status": "reviewed",
+  "reason": "R1 passes as a qualitative design comparison. Current file locators replace the invalid previous locator. Saved Linux retrieval failures remain failures; indexed original passages were independently read. No runtime effectiveness is certified.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R1",
+      "result": "pass",
+      "reason": "The saved proposal explains direct truncation and rewriting (A) and complete temporary-file preparation followed by replacement (B). It recommends B when preserving a complete checkpoint during interrupted updates matters, conditional on complete preparation and successful same-mount replacement, and allows A when checkpoint loss is acceptable for simpler writes. The original Python and Linux passages support successful atomic publication. Interruption examples are explicitly hypothetical and unmeasured; durability remains unknown. No experiment is required for this criterion.",
+      "evidence_ids": [
+        "CE-R1-01",
+        "CE-R1-02",
+        "EV-00001",
+        "EV-00008",
+        "S1",
+        "S2"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-R1-01",
+      "path": "/tmp/dr-generic-trials-v250d/literature/docs/design-research/checkpoint-design/runs/20261010T141626Z-4ca67d1d/001-reviewer-check-d03e77/inputs/proposal_design.json",
+      "line_start": 4,
+      "line_end": 4,
+      "description": "Current saved proposal: dossier candidates, decision.rationale and reader_guide.walkthrough explain both mechanisms and the conditional recommendation. Examples are unmeasured; experiments and metrics are empty. Design artifact evidence only."
+    },
+    {
+      "id": "CE-R1-02",
+      "path": "/tmp/dr-generic-trials-v250d/literature/requirements.md",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "Current non-secret requirements source limits the question to two checkpoint mechanisms, permits a conditional recommendation and requests no efficacy experiment or performance claim."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read successful atomic renaming and cross-filesystem failure conditions",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "Original-page indexed DESCRIPTION opening replacement paragraphs and ERRORS EXDEV; direct open failed with Internal Error, saved timeout receipts unchanged",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The two-candidate exception matches the narrow requirements. A uses one destination write sequence; B adds temporary-file lifecycle and replacement. These structural costs are described qualitatively without measured latency or reliability claims."
+}

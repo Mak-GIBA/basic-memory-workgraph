@@ -1,0 +1,25 @@
+{
+  "design_research_version": "2.5.0",
+  "upstream_version": "2.0.6",
+  "skills": [
+    "design-research"
+  ],
+  "base_commit": "d3f46e0d591b45cb2423317030a489b91566e891",
+  "migration": "unmodified owned 2.3.0 shortcuts retired, edited/unmanaged preserved",
+  "network_required_for_built_design_research": false,
+  "checks": [
+    "codex-interface",
+    "core-upgrade",
+    "build-design-research",
+    "check-design-research",
+    "build-upstream",
+    "check-upstream",
+    "bash-design-research",
+    "bash-upstream",
+    "selftest-design-research",
+    "selftest-upstream"
+  ],
+  "limitations": [
+    "No live Codex/model run in this build. Original Design Research repository tests are not embedded in its base installer; upstream self-test includes its bundled suite."
+  ]
+}

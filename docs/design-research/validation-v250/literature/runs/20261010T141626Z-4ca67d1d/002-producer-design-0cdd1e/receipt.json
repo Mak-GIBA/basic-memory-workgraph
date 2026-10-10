@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T15:54:59.536855+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T15:56:38.191985+00:00",
+  "duration_seconds": 98.655,
+  "role": "producer-design",
+  "iteration": 2,
+  "configured_timeout_seconds": 600,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-4ca67d1d/002-producer-design-0cdd1e/stdout.log",
+      "sha256": "2341832f7ceefd20a4fb5cfaf3615729ef5995fefa4dbf26889d2570cb1743e8"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-4ca67d1d/002-producer-design-0cdd1e/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Model role execution only; not a task-effect measurement"
+}

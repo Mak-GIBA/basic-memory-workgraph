@@ -9,7 +9,7 @@
 単一ファイルで動くインストーラーに、空の補助ディレクトリを作る必要はありません。
 全ツールの共通入口は`install_all.sh`、導入ガイドは`docs/installation.md`です。
 
-Design Research 2.4.0とUpstream 2.0.5は組み立て用の配布物です。
+Design Research 2.5.0とUpstream 2.0.6は組み立て用の配布物です。
 固定版ベースの`tools/`と、配布スクリプトが内蔵する更新資材を分けて確認します。
 現在の`tools/design-research/`・`tools/speckit-upstream/`だけを新版全体の正本として扱わないでください。
 
@@ -79,7 +79,7 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | UX Stack | Pythonテスト、Skill・配布物の検査、任意の実Chromiumチェック | OOUI資料の標準導入・更新・共有、編集保護、反復・停止、関連移動と状態保持、画像管理を一時環境で確認。実モデル反復の完了とGUI呼び出しは未確認。[検証範囲](codex-ux-stack/validation.md) |
 | SpecKit Upstream | `bash install_speckit_upstream.sh --bundle-self-test`、固定版からの組み立てと内蔵試験 | 同梱契約試験と組み立て後の本体試験を区別する。組み立て・内蔵166件と、このPCでの更新・診断を確認。[検証結果](design-research/validation.md) |
 | GitHub Project Director | `bash install_codex_github_pm.sh --self-test` | 一時環境での導入・更新・解除、読み取り補助、Skillの静的な指示内容を検証。実GitHubへの書き込みやモデルの出力品質を保証しない |
-| Design Research | `bash install_design_research.sh --bundle-self-test`、固定版からの組み立てと内蔵試験 | 両配布物に同じ更新資材を内蔵。2.4.0の同梱287件と組み立て・更新・診断を確認。実モデルの検証範囲は[検証結果](design-research/validation.md)を参照 |
+| Design Research | `bash install_design_research.sh --bundle-self-test`、固定版からの組み立てと内蔵試験 | 両配布物に同じ更新資材を内蔵。2.5.0の同梱330件と両ツールの組み立て・自己テストを確認。実モデルの検証範囲は[検証結果](design-research/validation.md)を参照 |
 | Codex ECC | `python3 -m unittest discover -s tests -p 'test*ecc*.py' -v`、Bash構文確認 | 模擬Codexによる新規導入、既存再利用、更新失敗・再実行、復元、設定維持と原本取得。新規環境への実ダウンロードは別途確認が必要 |
 | Office Workbench | `bash install_codex_office.sh --self-test` | 一時環境で導入・編集保護・文書処理を検証。通信・Codexは模擬し、実PDFライブラリがない対象はSKIP。実OfficeCLIや描画のE2E確認は別途必要 |
 | yomiyasuと補助Skill | `bash install_codex_yomiyasu.sh --self-test` | 一時HOME・作業ディレクトリと模擬上流で3スキルの導入・更新・解除・検査を確認。配布元への実通信やモデルの文章品質は検証しない |
@@ -176,7 +176,7 @@ bash install_speckit_upstream.sh \
 
 `--bundle-self-test`と、組み立て後の`--self-test`は異なります。
 2026-10-10の初回確認では同梱249件は成功し、組み立て後のUpstream試験166件は2 failure・6 errorで停止しました。
-停止原因の修正後は組み立て・自己テスト・このPCの更新が成功し、2.4.0では同梱287件も成功しています。
+停止原因の修正後は組み立て・自己テスト・このPCの更新が成功し、2.4.0では同梱287件も成功しています。2.5.0では保存単位と完了条件の試験を加え、同梱330件と組み立て後のUpstream 166件が成功しています。
 [再現条件と検証結果](design-research/validation.md)
 
 Upstreamの連携方針は、更新元の`RESEARCH_FIRST.md`・`RESEARCH_WORKSTREAMS.md`と利用ガイドを照合します。

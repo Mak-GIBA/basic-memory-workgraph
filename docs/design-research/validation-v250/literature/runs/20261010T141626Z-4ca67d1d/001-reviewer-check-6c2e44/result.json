@@ -1,0 +1,47 @@
+{
+  "status": "reviewed",
+  "reason": "R3 is satisfied as a qualitative design criterion. Durability remains unknown; no runtime or persistence result is certified.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R3",
+      "result": "pass",
+      "reason": "Claims C4, A-C4 and B-C5, the comparison and reader-guide limitations explicitly separate atomic pathname visibility from power-loss or system-crash persistence. They state that durability is unmeasured and closure plus replacement establishes no complete synchronization protocol. Independently read [Python os.replace](https://docs.python.org/3/library/os.html#os.replace) and indexed original [Linux rename(2) DESCRIPTION](https://man7.org/linux/man-pages/man2/rename.2.html): these passages describe successful rename atomicity and pathname access, without establishing crash persistence. The supplied results contain no experiments, metrics or experiment receipts. Actual source receipts EV-00018 and EV-00019 record Python retrieval success and Linux timeout respectively; the Linux failure remains preserved. No previous R3 issues were supplied.",
+      "evidence_ids": [
+        "EV-00018",
+        "EV-00019"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R3-S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read decisive original passage",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R3-S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs; independently read indexed original-page text. Direct open returned Internal Error; saved EV-00019 remains unavailable.",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R3-PROPOSAL",
+      "title": "Saved proposal under review",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/001-reviewer-check-6c2e44/inputs/proposal_design.json",
+      "locator": "dossier_json: claims C4, A-C4, B-C5; durability comparison; results_summary; reader_guide.takeaway, glossary and limitations",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The review stays within R3 and the two specified mechanisms. Explicitly retaining unknown durability is sufficient; no experiment, additional candidate or synchronization implementation is required."
+}

@@ -67,7 +67,7 @@ def unique_entries(data, field, issues):
     return entries, found
 
 
-def quality_issues(data: dict, *, strict: bool = False) -> list[str]:
+def quality_issues(data: dict, *, strict: bool = False, allow_single_proposal: bool = False) -> list[str]:
     issues = []
     if not isinstance(data, dict) or data.get("schema_version") != 1:
         return ["schema_version: expected integer 1"]
@@ -135,11 +135,12 @@ def quality_issues(data: dict, *, strict: bool = False) -> list[str]:
     if strict and (deep_sources < 2 or len(studies) < 2):
         issues.append("sources: read decisive sections in at least two independent primary studies; otherwise keep draft")
     if strict and len(candidates) + 1 < target_total:
-        if len(candidates) < 2 or not is_text(exception_reason, 30):
+        minimum = 1 if allow_single_proposal else 2
+        if len(candidates) < minimum or not is_text(exception_reason, 30):
             issues.append(
                 f"candidates: target approximately {target_total} total methods (1 baseline + "
                 f"{target_total - 1} proposals); fewer require an explicit substantive "
-                "comparison_plan.exception_reason and at least two distinct proposals"
+                f"comparison_plan.exception_reason and at least {minimum} distinct proposal(s)"
             )
     families = set()
     mechanism_fingerprints = {}
@@ -205,7 +206,8 @@ def quality_issues(data: dict, *, strict: bool = False) -> list[str]:
                         issues.append(f"candidates[{cid}]: unknown closest prior art {sid}")
             if not c.get("prior_art_queries"):
                 issues.append(f"candidates[{cid}]: prior-art search incomplete; novelty unverified")
-    if strict and len(families) < (3 if len(candidates) >= 4 else 2):
+    family_minimum = 1 if allow_single_proposal and len(candidates) == 1 else (3 if len(candidates) >= 4 else 2)
+    if strict and len(families) < family_minimum:
         issues.append("candidates: vary the underlying mechanism (three families for four+ proposals; otherwise at least two)")
     sel = data.get("selection")
     if not isinstance(sel, dict):

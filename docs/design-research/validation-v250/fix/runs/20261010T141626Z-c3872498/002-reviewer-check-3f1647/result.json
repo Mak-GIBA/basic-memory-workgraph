@@ -1,0 +1,123 @@
+{
+  "status": "reviewed",
+  "reason": "Independently inspected final source, unchanged tests, baseline-to-current diff, and original execution receipts and outputs. No checks were rerun.",
+  "issues": [
+    {
+      "id": "review_review-001",
+      "title": "Final fix and successful verification are absent",
+      "severity": "High",
+      "status": "resolved",
+      "target": "parser.py:2 and post-change unittest evidence",
+      "action": "Retain baseline failure and post-change receipts.",
+      "expected": "Parser-only fix, unchanged tests, actual diff, and baseline/post-change unittest receipts.",
+      "actual": "The inspected diff adds only strip() before lower(). Tests match the baseline byte-for-byte. The post-change receipt matches current source hashes, exits 0, and records both tests passing.",
+      "why": "Independent inspection of new original evidence resolves this previously reported issue.",
+      "improvement": "The requested normalization and successful verification are now evidenced.",
+      "root_cause": "Baseline normalization omitted stripping surrounding whitespace.",
+      "check_ids": [
+        "review"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00012",
+        "EV-00015",
+        "EV-00016",
+        "EV-00017"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "review",
+      "result": "pass",
+      "reason": "Current parser.py matches the successful receipt's SHA-256. Direct comparison with the baseline shows only text.lower() becoming text.strip().lower(); comparisons and ValueError remain intact. Current tests match both receipts and saved originals. Baseline exit 1 and whitespace ValueError are preserved; post-change exit 0 and both tests passing are confirmed in original outputs. Both receipts report no timeout or truncation; stdout is empty and matches recorded hashes. Runtime evidence covers the existing assertions; preservation of the general ValueError fallback follows from source inspection.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00012",
+        "EV-00015",
+        "EV-00016",
+        "EV-00017"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-review-final-parser",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Only line 2 differs from the baseline: text.strip().lower(). Exact true/false comparisons and ValueError fallback remain unchanged. Current hash matches the post-change receipt."
+    },
+    {
+      "id": "CE-review-unchanged-tests",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "line_start": 4,
+      "line_end": 9,
+      "description": "Existing assertions cover surrounding spaces, tab/newline, and ValueError for yes, empty string, and 1. File bytes match baseline and post-change receipt hashes."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Baseline unittest receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "source_fingerprint, exit_code, outputs, timed_out, truncated",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Baseline unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace ValueError; FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-006",
+      "title": "Post-change unittest receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/receipt.json",
+      "locator": "source_fingerprint, exit_code 0, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-W-007",
+      "title": "Post-change unittest output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/002-checks/001/stderr.log",
+      "locator": "Both tests ok; Ran 2 tests; OK",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-review-current",
+      "title": "Actual final parser",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-review-tests",
+      "title": "Actual unchanged tests",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "locator": "lines 1–10",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Baseline parser used for direct diff",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The fix adds strip() to the existing normalization expression, retaining two comparisons and the ValueError fallback without dependencies or additional branches."
+}

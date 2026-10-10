@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="1022" viewBox="0 0 850 1022" role="img" aria-labelledby="title desc">
+<title id="title">Bの入力から最終値まで</title>
+<desc id="desc">入力xからM1の空白除去、M2の小文字化、M3の検証へ順に進み、booleanまたはinvalidを返す。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7" fill="#333"/></marker></defs>
+<rect width="850" height="1022" fill="white"/>
+<g font-family="Noto Sans CJK JP, Meiryo, sans-serif" fill="#161616">
+<text x="425.0" y="35" text-anchor="middle" font-size="20" font-weight="bold">Bの入力から最終値まで</text>
+<text x="425.0" y="75" text-anchor="middle" font-size="13">概念図：実線は処理の流れ、破線はフィードバック。性能の実測図ではありません。</text>
+<path d="M425.0,194 V257.0 H425.0 V316" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="400.5" y="227.0" width="49.0" height="20" fill="white"/>
+<text x="425.0" y="240.0" font-size="12" text-anchor="middle">x: str</text>
+<path d="M425.0,415 V478.0 H425.0 V537" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="400.5" y="448.0" width="49.0" height="20" fill="white"/>
+<text x="425.0" y="461.0" font-size="12" text-anchor="middle">s: str</text>
+<path d="M425.0,636 V699.0 H425.0 V758" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="400.5" y="669.0" width="49.0" height="20" fill="white"/>
+<text x="425.0" y="682.0" font-size="12" text-anchor="middle">t: str</text>
+<rect x="270.0" y="99" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="284.0" y="121" font-size="12">共通・維持　N1</text>
+<text x="284.0" y="146" font-size="17" font-weight="bold">入力 x</text>
+<text x="284.0" y="170" font-size="13">Python str</text>
+<rect x="270.0" y="320" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="2.4"/>
+<text x="284.0" y="342" font-size="12">提案法・追加　M1</text>
+<text x="284.0" y="367" font-size="17" font-weight="bold">ASCII周辺空白除去</text>
+<text x="284.0" y="391" font-size="13">strip(&#x27; \t\n\r\v\f&#x27;) → s</text>
+<rect x="270.0" y="541" width="310" height="95" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="284.0" y="563" font-size="12">共通・維持　M2</text>
+<text x="284.0" y="588" font-size="17" font-weight="bold">小文字化</text>
+<text x="284.0" y="612" font-size="13">s.lower() → t</text>
+<rect x="270.0" y="762" width="310" height="114" rx="7" fill="#f6f6f6" stroke="#333" stroke-width="1.1"/>
+<text x="284.0" y="784" font-size="12">共通・維持　M3</text>
+<text x="284.0" y="809" font-size="17" font-weight="bold">共有validate</text>
+<text x="284.0" y="833" font-size="13">true / false / その他 → boolまたはinvali</text>
+<text x="284.0" y="852" font-size="13">d</text>
+</g>
+</svg>

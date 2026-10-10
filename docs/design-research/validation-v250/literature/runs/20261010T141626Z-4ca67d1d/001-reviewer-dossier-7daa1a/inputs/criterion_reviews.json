@@ -1,0 +1,87 @@
+[
+  {
+    "checks": [
+      {
+        "check_id": "R1",
+        "result": "pass",
+        "reason": "The proposal explains A's direct truncating rewrite and B's complete temporary-file preparation followed by replacement. It conditionally prefers B when preserving a complete checkpoint during interrupted updates matters, and A when checkpoint loss is acceptable and fewer lifecycle steps are preferred. Python os.replace documents atomic renaming on success; indexed original Linux DESCRIPTION supports atomic destination replacement. Complete-checkpoint preservation is explicitly mechanism reasoning, not measured effectiveness. Durability and actual interruption outcomes remain unknown. EV-00011 remains a failed Linux retrieval receipt; indexed original reading does not convert it into successful transport or runtime evidence. No runtime checks were executed.",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00011"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The two-candidate exception matches the narrow contract. A has one destination write sequence; B adds temporary-file lifecycle and replacement. These structural differences are explained qualitatively without timing, reliability, or durability measurements."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R2",
+        "result": "pass",
+        "reason": "Python os.replace documents atomic renaming upon success. Linux rename(2) DESCRIPTION documents atomic replacement of an existing destination without a missing-path interval and unaffected source-file descriptors. Proposal claims C5 and B-C4 and the reader guide correctly condition complete-JSON publication on completed preparation and successful replacement, keep preceding writes separate, and label existing destination readers retaining the old file as inference. Linux passages were independently read through indexed original-page text after direct access failed. Saved Linux timeout receipts remain failures; this source-based pass establishes no runtime or durability result.",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00015"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Two candidates fit the narrow contract. Temporary-file preparation and replacement add lifecycle steps justified by separating preparation from publication. No measured cost or reliability benefit is claimed."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R3",
+        "result": "pass",
+        "reason": "Claims C4, A-C4 and B-C5, the comparison and reader-guide limitations explicitly separate atomic pathname visibility from power-loss or system-crash persistence. They state that durability is unmeasured and closure plus replacement establishes no complete synchronization protocol. Independently read [Python os.replace](https://docs.python.org/3/library/os.html#os.replace) and indexed original [Linux rename(2) DESCRIPTION](https://man7.org/linux/man-pages/man2/rename.2.html): these passages describe successful rename atomicity and pathname access, without establishing crash persistence. The supplied results contain no experiments, metrics or experiment receipts. Actual source receipts EV-00018 and EV-00019 record Python retrieval success and Linux timeout respectively; the Linux failure remains preserved. No previous R3 issues were supplied.",
+        "evidence_ids": [
+          "EV-00018",
+          "EV-00019"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The review stays within R3 and the two specified mechanisms. Explicitly retaining unknown durability is sufficient; no experiment, additional candidate or synchronization implementation is required."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R4",
+        "result": "pass",
+        "reason": "Python os.replace documents possible failure across filesystems. Linux rename(2) EXDEV specifies different mounted filesystems, including separate mounts of the same filesystem. The proposal requires destination-mount placement, preferably the destination directory, makes success conditional, and does not claim an atomic cross-filesystem copy fallback. Linux EXDEV was independently read through indexed original-page text; direct access returned Internal Error. Saved timeout receipts remain unchanged.",
+        "evidence_ids": [
+          "EV-00020",
+          "EV-00021",
+          "EV-00022"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "Destination-mount temporary-file placement directly supports the specified replacement mechanism. Preferring the destination directory adds no alternative mechanism, and rejecting an unsupported atomic copy fallback keeps the two-candidate question narrow. No experiments were required or executed."
+  },
+  {
+    "checks": [
+      {
+        "check_id": "R5",
+        "result": "pass",
+        "reason": "Reviewed R1–R4 within R5's independent-review scope. The conditional recommendation compares both requested mechanisms and labels interruption examples as unmeasured reasoning. Python os.replace documents atomic renaming on success and possible cross-filesystem failure. The original Linux manual independently confirms atomic destination replacement, unaffected source descriptors and EXDEV across different mount points, including mounts of the same filesystem. The explanation correctly leaves power-loss durability unknown. EV-00026 records successful retrieval of that original Linux source, whose decisive passages were independently read here; EV-00027–EV-00029 remain unavailable and are not recast as successes. No runtime outcomes, measurements or empirical acceptance are asserted. No previous issue records were supplied in the named inputs.",
+        "evidence_ids": [
+          "EV-00001",
+          "EV-00025",
+          "EV-00026",
+          "EV-00027",
+          "EV-00028",
+          "EV-00029"
+        ]
+      }
+    ],
+    "issues": [],
+    "complexity_ok": true,
+    "complexity_reason": "The two-candidate exception matches the narrow requirements. B adds temporary-file lifecycle and replacement steps; the explanation treats this as structural reasoning without claiming measured cost. No experiment or additional mechanism is needed for this design review."
+  }
+]

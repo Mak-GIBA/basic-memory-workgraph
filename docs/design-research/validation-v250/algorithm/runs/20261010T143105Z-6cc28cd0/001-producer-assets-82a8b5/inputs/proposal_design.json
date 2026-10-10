@@ -1,0 +1,99 @@
+{
+  "question": "Does ASCII whitespace stripping improve exact final-output accuracy over lowercasing alone on the seven frozen boolean-parser tasks?",
+  "candidates": [
+    {
+      "id": "A",
+      "name": "Lowercase-only parser",
+      "baseline": true,
+      "summary": "For each string, compute lower(); return Python True for token true, False for token false, otherwise the string invalid. Do not strip whitespace.",
+      "hard_constraints": [
+        {
+          "constraint_id": "K1",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Implementation not inspected or executed."
+        },
+        {
+          "constraint_id": "K2",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Execution fidelity not verified."
+        },
+        {
+          "constraint_id": "K3",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "No final outputs or parent receipt."
+        },
+        {
+          "constraint_id": "K4",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Asset declaration and execution pending."
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "ASCII-strip then lowercase parser",
+      "baseline": false,
+      "summary": "For each string, compute strip(\" \\t\\n\\r\\v\\f\").lower(); use exactly A's true/false/invalid validation and return types.",
+      "hard_constraints": [
+        {
+          "constraint_id": "K1",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Implementation not inspected or executed."
+        },
+        {
+          "constraint_id": "K2",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Execution fidelity not verified."
+        },
+        {
+          "constraint_id": "K3",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "No final outputs or parent receipt."
+        },
+        {
+          "constraint_id": "K4",
+          "result": "unknown",
+          "claim_ids": [],
+          "reason": "Asset declaration and execution pending."
+        }
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "id": "E1",
+      "hypothesis": "B improves exact-match accuracy by at least one of seven tasks through ASCII whitespace normalization.",
+      "candidate_ids": [
+        "A",
+        "B"
+      ],
+      "controls": [
+        "Read PROJECT-relative tasks.json unchanged; retain t0-t6 and frozen labels.",
+        "Use identical Python runtime, permissions and budgets.",
+        "Invoke each actual function once per input: fourteen invocations total.",
+        "Differ only by B's specified ASCII strip step.",
+        "Export actual returns separately from labels; preserve wrong outputs and failure details."
+      ],
+      "metrics": [
+        "A typed whole-JSON exact matches divided by seven",
+        "B typed whole-JSON exact matches divided by seven",
+        "Paired difference: B accuracy minus A accuracy"
+      ],
+      "acceptance": "A complete measurement requires fourteen actual return records, seven per candidate, frozen grading and a successful parent-owned E1 receipt without timeout or truncation. Recommend B only if all hard constraints pass and its measured gain is at least one additional correct task (1/7). Equal or worse results remain valid findings. Missing returns, errors or timeouts remain failures, never imputed successes; incomplete execution leaves the decision deferred.",
+      "status": "planned",
+      "artifacts": [],
+      "input_files": [
+        "tasks.json"
+      ],
+      "input_files_base": "PROJECT",
+      "planned_output": "JSON containing task ID, input, frozen expected value, candidate ID, actual typed return value or execution failure, exact-match result, both mean scores and paired difference. The later asset unit declares the comparison script and generated artifact paths; this unit creates neither."
+    }
+  ]
+}

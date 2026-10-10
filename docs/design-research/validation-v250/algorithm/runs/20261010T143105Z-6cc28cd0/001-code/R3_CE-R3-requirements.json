@@ -1,0 +1,9 @@
+{
+  "source_path": "requirements.md",
+  "source_sha256": "9e00461c11f8068ecbb1b51f576742660b8a5b28b0cec92d9c100cc647b36f2e",
+  "line_start": 1,
+  "line_end": 1,
+  "checked_at": "2026-10-10T15:04:46.008205+00:00",
+  "excerpt": "Compare two parsers for case-insensitive boolean configuration with surrounding ASCII whitespace. Inputs true, FALSE, \" true \", \"\tfalse",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

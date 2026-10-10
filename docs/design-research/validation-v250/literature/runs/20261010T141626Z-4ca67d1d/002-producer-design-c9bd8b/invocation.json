@@ -1,0 +1,8 @@
+{
+  "role": "producer-design",
+  "started_at": "2026-10-10T15:48:41.556195+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 5863,
+  "execution_contract_version": 2
+}

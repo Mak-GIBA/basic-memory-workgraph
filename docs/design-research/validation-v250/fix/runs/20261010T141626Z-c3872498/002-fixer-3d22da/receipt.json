@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-10T14:24:10.468736+00:00",
+  "timed_out": false,
+  "truncated": false,
+  "exit_code": 0,
+  "finished_at": "2026-10-10T14:24:49.096734+00:00",
+  "duration_seconds": 38.628,
+  "role": "fixer",
+  "iteration": 2,
+  "configured_timeout_seconds": 600,
+  "outputs": {
+    "stdout": {
+      "path": "runs/20261010T141626Z-c3872498/002-fixer-3d22da/stdout.log",
+      "sha256": "30dab6754bc423586a18118a47de2e5455be4a1d426b18e8e69be04127ac8182"
+    },
+    "stderr": {
+      "path": "runs/20261010T141626Z-c3872498/002-fixer-3d22da/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "scope": "Model role execution only; not a task-effect measurement"
+}

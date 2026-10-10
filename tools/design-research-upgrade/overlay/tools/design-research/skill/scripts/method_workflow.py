@@ -43,4 +43,5 @@ def additional_gate_reasons(state):
     if not method_required(state):
         return []
     return ["Proposed-method report: " + item for item in validation_issues(
-        state.get("dossier"), target_methods=state["config"].get("target_methods", 5))]
+        state.get("dossier"), target_methods=state["config"].get("target_methods", 5),
+        allow_single_proposal=state.get("execution_contract_version") == 2)]

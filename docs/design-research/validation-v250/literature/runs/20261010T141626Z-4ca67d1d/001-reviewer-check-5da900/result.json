@@ -1,0 +1,67 @@
+{
+  "status": "reviewed",
+  "reason": "Independent R5 review completed against the saved explanation, decisive original passages and actual source-access receipts. The retrieved author-repository Linux manual closes the decisive-passage gap; failed man7 retrievals remain failures.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R5",
+      "result": "pass",
+      "reason": "Reviewed R1–R4 within R5's independent-review scope. The conditional recommendation compares both requested mechanisms and labels interruption examples as unmeasured reasoning. Python os.replace documents atomic renaming on success and possible cross-filesystem failure. The original Linux manual independently confirms atomic destination replacement, unaffected source descriptors and EXDEV across different mount points, including mounts of the same filesystem. The explanation correctly leaves power-loss durability unknown. EV-00026 records successful retrieval of that original Linux source, whose decisive passages were independently read here; EV-00027–EV-00029 remain unavailable and are not recast as successes. No runtime outcomes, measurements or empirical acceptance are asserted. No previous issue records were supplied in the named inputs.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00025",
+        "EV-00026",
+        "EV-00027",
+        "EV-00028",
+        "EV-00029"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R5-PYTHON",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; independently read decisive original passage",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R5-LINUX-ORIGINAL",
+      "title": "Linux rename(2) original manual source in the author repository",
+      "url": "https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/rename.2",
+      "path": "",
+      "locator": "2021-08-27 manual source; DESCRIPTION lines 66–105 and ERRORS EXDEV lines 426–432; independently read. Successful saved transport receipt: EV-00026.",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R5-PROPOSAL",
+      "title": "Saved final explanation under review",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/001-reviewer-check-5da900/inputs/proposal_design.json",
+      "locator": "dossier_json: claims, comparison, decision, results_summary and reader_guide; identical proposal hash recorded in EV-00025",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R5-LINUX-RECEIPT",
+      "title": "Successful original Linux manual retrieval receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/sources/SUPP_LINUX_RAW-6c3ef390.json",
+      "locator": "status retrieved; original-source URL, content hash and byte count; EV-00026",
+      "read_level": "full_text"
+    },
+    {
+      "id": "R5-MAN7-FAILURE",
+      "title": "Preserved Linux man7 retrieval failure",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "runs/20261010T141626Z-4ca67d1d/sources/S2-c55911c4.json",
+      "locator": "status unavailable; timeout; EV-00027. Direct web access during this review also returned Internal Error.",
+      "read_level": "metadata"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The two-candidate exception matches the narrow requirements. B adds temporary-file lifecycle and replacement steps; the explanation treats this as structural reasoning without claiming measured cost. No experiment or additional mechanism is needed for this design review."
+}

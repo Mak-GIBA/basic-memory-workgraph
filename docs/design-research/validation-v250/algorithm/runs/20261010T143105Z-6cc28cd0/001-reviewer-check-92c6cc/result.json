@@ -1,0 +1,83 @@
+{
+  "status": "reviewed",
+  "reason": "R3の説明を原要件、実装、最終出力、親実行receipt、説明工程の保存入力に照合した。",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R3",
+      "result": "pass",
+      "reason": "説明工程の保存入力には既にevaluation_result.status=measuredがあり、method_ideasは未追加だった。現在の説明はlower、指定ASCII6文字の両端strip、共有validateを正確に説明している。t2・t3のA=\"invalid\"、B=true/false、および残る5件の一致は実際の最終出力と一致する。親receiptはexit_code=0、timeout・truncationなし。Aの誤答とstderr警告を保持し、結論を固定7入力に限定している。中間状態と図を測定扱いせず、速度・メモリ・未試験入力への推論も限定している。全体の独立レビュー完了は本判定の対象外。",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00005",
+        "EV-00006",
+        "EV-00007",
+        "EV-00012",
+        "EV-00014"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-R3-requirements",
+      "path": "requirements.md",
+      "line_start": 1,
+      "line_end": 1,
+      "description": "2方式の処理、実際の最終値の測定、固定fixtureの再利用を指定する原要件。"
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "R3-explanation",
+      "title": "保存済み手法説明",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-92c6cc/inputs/proposal_design.json",
+      "locator": "dossier_json.method_ideas.candidates、reader_guide.walkthrough・glossary・limitations",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "R3-order",
+      "title": "説明作成前の保存済み測定",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-method-9f4fbf/inputs/proposal_design.json",
+      "locator": "dossier_json.evaluation_result.status=measured、method_ideas未追加",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S7",
+      "title": "実行されたPython実装",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "validate、parse_a、parse_b、実際の関数呼び出しと型付き採点",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S5",
+      "title": "実際の対応最終出力",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "全14 trials、complete、failures、accuracy、paired_difference",
+      "read_level": "full_text"
+    },
+    {
+      "id": "S6",
+      "title": "親実行receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "実行日時、終了状態、outputs、最終artifact",
+      "read_level": "full_text"
+    },
+    {
+      "id": "B_S7",
+      "title": "実行時stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH aliases作成に関する警告",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "Bは共通の小文字化・検証にstripを1工程追加する。両方式のO(n)時間・O(n)一時文字列空間という上界説明は実装と整合する。定数係数、実行時間、実メモリ使用量は未測定として明記されている。"
+}

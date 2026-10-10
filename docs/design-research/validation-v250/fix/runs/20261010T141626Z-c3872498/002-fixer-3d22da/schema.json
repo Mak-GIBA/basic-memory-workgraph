@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "changed",
+        "blocked"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "fixed_issue_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "changed_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "complexity_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "change": {
+            "type": "string"
+          },
+          "simpler_alternative": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "change",
+          "simpler_alternative",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "status",
+    "reason",
+    "fixed_issue_ids",
+    "changed_files",
+    "complexity_changes"
+  ],
+  "additionalProperties": false
+}

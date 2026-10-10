@@ -1,0 +1,483 @@
+{
+  "S1": {
+    "source": {
+      "id": "S1",
+      "title": "Bound boolean-parser requirements",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/inputs/bound-requirements.md",
+      "locator": "Entire requirements paragraph",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00001"
+  },
+  "S2": {
+    "source": {
+      "id": "S2",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/evaluation_contract.json",
+      "locator": "candidate_ids, tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00002"
+  },
+  "S3": {
+    "source": {
+      "id": "S3",
+      "title": "Saved comparison plan",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-design-b7bc1b/inputs/plan.json",
+      "locator": "constraints, criteria R2-R4, test_commands",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00003"
+  },
+  "S4": {
+    "source": {
+      "id": "S4",
+      "title": "Original input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records t0-t6",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "S5": {
+    "source": {
+      "id": "S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "contract_sha256, tasks, trials, complete, failures, accuracy, paired_difference",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "S6": {
+    "source": {
+      "id": "S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, experiment_id, source_fingerprint, exit_code, timed_out, truncated, outputs, artifacts",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "S7": {
+    "source": {
+      "id": "S7",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "CONTRACT_SHA256, FROZEN_TASKS, validate, parse_a, parse_b, main",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "A_S1": {
+    "source": {
+      "id": "A_S1",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-47824e/inputs/evaluation_contract.json",
+      "locator": "baseline_id, tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00008"
+  },
+  "A_S2": {
+    "source": {
+      "id": "A_S2",
+      "title": "Saved comparison plan",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-47824e/inputs/plan.json",
+      "locator": "constraints, criteria R1-R2, test_commands",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00009"
+  },
+  "A_S3": {
+    "source": {
+      "id": "A_S3",
+      "title": "Original frozen input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records t0-t6",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "A_S4": {
+    "source": {
+      "id": "A_S4",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "CONTRACT_SHA256, FROZEN_TASKS, validate, parse_a, parse_b, main",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "A_S5": {
+    "source": {
+      "id": "A_S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "contract_sha256, tasks, trials, complete, failures, accuracy, paired_difference, limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "A_S6": {
+    "source": {
+      "id": "A_S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, experiment_id, source_fingerprint, exit_code, timed_out, truncated, artifacts, isolation",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "B_S1": {
+    "source": {
+      "id": "B_S1",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-901692/inputs/evaluation_contract.json",
+      "locator": "baseline_id, candidate_ids, tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00010"
+  },
+  "B_S2": {
+    "source": {
+      "id": "B_S2",
+      "title": "Saved comparison plan",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-evidence-901692/inputs/plan.json",
+      "locator": "constraints, criteria R1-R2, test_commands",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00011"
+  },
+  "B_S3": {
+    "source": {
+      "id": "B_S3",
+      "title": "Original frozen input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records t0-t6",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "B_S4": {
+    "source": {
+      "id": "B_S4",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "CONTRACT_SHA256, FROZEN_TASKS, validate, parse_a, parse_b, main",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "B_S5": {
+    "source": {
+      "id": "B_S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "contract_sha256, tasks, trials, complete, failures, accuracy, paired_difference, limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "B_S6": {
+    "source": {
+      "id": "B_S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, experiment_id, source_fingerprint, exit_code, timed_out, truncated, outputs, artifacts, isolation",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "B_S7": {
+    "source": {
+      "id": "B_S7",
+      "title": "E1 original stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "Entire warning line beginning WARNING: proceeding",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00012"
+  },
+  "R1_1_R1-contract": {
+    "source": {
+      "id": "R1_1_R1-contract",
+      "title": "Frozen evaluation contract",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/evaluation_contract.json",
+      "locator": "tasks, controls, metrics[0], limitations",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00013"
+  },
+  "R1_1_S5": {
+    "source": {
+      "id": "R1_1_S5",
+      "title": "Actual E1 paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "All fourteen trials, accuracy, paired_difference, failures",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "R1_1_S6": {
+    "source": {
+      "id": "R1_1_S6",
+      "title": "Parent-owned E1 execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "exit_code, timed_out, truncated, outputs, artifacts",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "R1_1_S7": {
+    "source": {
+      "id": "R1_1_S7",
+      "title": "Executed comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "FROZEN_TASKS, parse_a, parse_b, actual function invocation, type-preserving grading",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "R1_1_B_S7": {
+    "source": {
+      "id": "R1_1_B_S7",
+      "title": "Original E1 stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH-alias warning",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00012"
+  },
+  "R1_1_R1-decision": {
+    "source": {
+      "id": "R1_1_R1-decision",
+      "title": "Proposal recommendation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-d6df03/inputs/proposal_design.json",
+      "locator": "dossier_json.decision",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00014"
+  },
+  "R2_1_S4": {
+    "source": {
+      "id": "R2_1_S4",
+      "title": "Original frozen input fixture",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/source-inputs/d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100/tasks.json",
+      "locator": "All seven records",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00004"
+  },
+  "R2_1_S7": {
+    "source": {
+      "id": "R2_1_S7",
+      "title": "Executed Python comparison implementation",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "validate, parse_a, parse_b and main",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "R2_1_S5": {
+    "source": {
+      "id": "R2_1_S5",
+      "title": "Actual paired final outputs",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "tasks, all fourteen trials, complete and failures",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "R2_1_S6": {
+    "source": {
+      "id": "R2_1_S6",
+      "title": "Parent execution receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "command, source_fingerprint, execution status and artifacts",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "R2_1_B_S7": {
+    "source": {
+      "id": "R2_1_B_S7",
+      "title": "Original execution stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH-alias warning",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00012"
+  },
+  "R3_1_R3-explanation": {
+    "source": {
+      "id": "R3_1_R3-explanation",
+      "title": "保存済み手法説明",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-reviewer-check-92c6cc/inputs/proposal_design.json",
+      "locator": "dossier_json.method_ideas.candidates、reader_guide.walkthrough・glossary・limitations",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00018"
+  },
+  "R3_1_R3-order": {
+    "source": {
+      "id": "R3_1_R3-order",
+      "title": "説明作成前の保存済み測定",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-producer-method-9f4fbf/inputs/proposal_design.json",
+      "locator": "dossier_json.evaluation_result.status=measured、method_ideas未追加",
+      "read_level": "relevant_sections"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00019"
+  },
+  "R3_1_S7": {
+    "source": {
+      "id": "R3_1_S7",
+      "title": "実行されたPython実装",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/code/compare_parsers.py",
+      "locator": "validate、parse_a、parse_b、実際の関数呼び出しと型付き採点",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00005"
+  },
+  "R3_1_S5": {
+    "source": {
+      "id": "R3_1_S5",
+      "title": "実際の対応最終出力",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "locator": "全14 trials、complete、failures、accuracy、paired_difference",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00006"
+  },
+  "R3_1_S6": {
+    "source": {
+      "id": "R3_1_S6",
+      "title": "親実行receipt",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/receipt.json",
+      "locator": "実行日時、終了状態、outputs、最終artifact",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00007"
+  },
+  "R3_1_B_S7": {
+    "source": {
+      "id": "R3_1_B_S7",
+      "title": "実行時stderr",
+      "url": "",
+      "path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/stderr.log",
+      "locator": "PATH aliases作成に関する警告",
+      "read_level": "full_text"
+    },
+    "status": "local",
+    "reason": "Actual local artifact with hash",
+    "evidence_id": "EV-00012"
+  }
+}

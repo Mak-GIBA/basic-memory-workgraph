@@ -1,0 +1,8 @@
+{
+  "role": "producer-reader",
+  "started_at": "2026-10-10T14:25:42.231272+00:00",
+  "sandbox": "read-only",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 5329,
+  "execution_contract_version": 2
+}

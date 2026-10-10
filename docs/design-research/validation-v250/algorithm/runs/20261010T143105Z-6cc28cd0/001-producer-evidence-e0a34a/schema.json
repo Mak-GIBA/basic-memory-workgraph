@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "blocked"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "patch_json": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          },
+          "read_level": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "abstract",
+              "relevant_sections",
+              "full_text"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "url",
+          "path",
+          "locator",
+          "read_level"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "status",
+    "reason",
+    "patch_json",
+    "sources"
+  ],
+  "additionalProperties": false
+}

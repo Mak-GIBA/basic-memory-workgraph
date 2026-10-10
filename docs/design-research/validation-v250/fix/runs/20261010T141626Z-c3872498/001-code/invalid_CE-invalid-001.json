@@ -1,0 +1,9 @@
+{
+  "source_path": "parser.py",
+  "source_sha256": "9f0515992baeabd91dda466c3277d539dc8c992b7cbf0722928b259d75782f32",
+  "line_start": 1,
+  "line_end": 5,
+  "checked_at": "2026-10-10T14:20:18.682199+00:00",
+  "excerpt": "def parse_bool(text):\n    value = text.lower()\n    if value == \"true\": return True\n    if value == \"false\": return False\n    raise ValueError(\"invalid boolean\")",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

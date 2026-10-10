@@ -1,0 +1,231 @@
+{
+  "status": "measured",
+  "distinct_tasks": 7,
+  "paired_trials": 7,
+  "metrics": [
+    {
+      "id": "accuracy",
+      "criterion_id": "R1",
+      "primary": true,
+      "kind": "exact_match",
+      "unit": "fraction",
+      "direction": "higher",
+      "aggregation": "mean",
+      "acceptance_delta": 0.14285714285714285,
+      "grading": "Compare each actual whole JSON final return value with the independently frozen expected value, retaining boolean types and the invalid string. Compute matched tasks divided by seven for each candidate and B minus A. Require at least one additional correct task to recommend B; preserve equal and negative results.",
+      "outcome_scope": "final_outcome",
+      "comparisons": [
+        {
+          "candidate_id": "B",
+          "baseline": 0.7142857142857143,
+          "candidate": 1.0,
+          "delta": 0.2857142857142857,
+          "meets_threshold": true
+        }
+      ]
+    }
+  ],
+  "tasks": {
+    "t0": {
+      "id": "t0",
+      "input": "true",
+      "expected": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t1": {
+      "id": "t1",
+      "input": "FALSE",
+      "expected": false,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t2": {
+      "id": "t2",
+      "input": " true ",
+      "expected": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t3": {
+      "id": "t3",
+      "input": "\tfalse\n",
+      "expected": false,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t4": {
+      "id": "t4",
+      "input": "yes",
+      "expected": "invalid",
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t5": {
+      "id": "t5",
+      "input": "",
+      "expected": "invalid",
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    },
+    "t6": {
+      "id": "t6",
+      "input": "1",
+      "expected": "invalid",
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json"
+    }
+  },
+  "trials": [
+    {
+      "task_id": "t0",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": true,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t0",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": true,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t1",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": false,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t1",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": false,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t2",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": "invalid",
+      "exact_match": false,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 0.0
+      }
+    },
+    {
+      "task_id": "t2",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": true,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t3",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": "invalid",
+      "exact_match": false,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 0.0
+      }
+    },
+    {
+      "task_id": "t3",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": false,
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t4",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t4",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t5",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t5",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t6",
+      "trial_id": "1",
+      "candidate_id": "A",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    },
+    {
+      "task_id": "t6",
+      "trial_id": "1",
+      "candidate_id": "B",
+      "output": "invalid",
+      "exact_match": true,
+      "artifact_path": "runs/20261010T143105Z-6cc28cd0/001-experiments/E1/artifacts/paired-results.json",
+      "grades": {
+        "accuracy": 1.0
+      }
+    }
+  ],
+  "scope": "この入力集合と宣言した採点規則に限る結果です。統計的有意性や方式の普遍的な優位は示しません。",
+  "iteration": 1,
+  "source_fingerprint": "d53daa9dda637faffb26a16493ce332ef4e82d51f0f684eec4a00752a9407100"
+}

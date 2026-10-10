@@ -1,0 +1,8 @@
+{
+  "role": "fixer",
+  "started_at": "2026-10-10T14:24:10.383054+00:00",
+  "sandbox": "workspace-write",
+  "model": "gpt-6.1-sol",
+  "prompt_bytes": 2589,
+  "execution_contract_version": 2
+}

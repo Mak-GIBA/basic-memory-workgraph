@@ -1,0 +1,88 @@
+{
+  "status": "reviewed",
+  "reason": "The scope criterion fails: the actual parser still uses text.lower() without surrounding-whitespace normalization. No final implementation diff was supplied, and the fixture has no Git repository.",
+  "issues": [
+    {
+      "id": "scope-001",
+      "title": "Required whitespace normalization is absent",
+      "severity": "Medium",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Inspect the current parser and original execution artifacts.",
+      "expected": "Only parser.py changes, adding surrounding-whitespace normalization while preserving the signature, comparisons, boolean returns, and ValueError fallback.",
+      "actual": "The current parser matches the saved original and still assigns text.lower(). The recorded unittest execution exits 1 with ValueError for \" True \".",
+      "why": "The required implementation change has not been made.",
+      "improvement": "Change the normalization expression to text.strip().lower(); have the parent verify the resulting diff and execute the existing tests.",
+      "root_cause": "Normalization handles case but omits surrounding whitespace.",
+      "check_ids": [
+        "scope"
+      ],
+      "evidence_ids": [
+        "CE-scope-001",
+        "EV-00007",
+        "EV-00001",
+        "EV-00004"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "scope",
+      "result": "fail",
+      "reason": "Direct inspection confirms that whitespace normalization is absent. The function signature, case-insensitive comparisons, boolean results, and ValueError fallback remain intact. A parser-only final diff cannot be established from the supplied artifacts; Git status reports no repository. The missing normalization independently fails this criterion.",
+      "evidence_ids": [
+        "CE-scope-001",
+        "EV-00007",
+        "EV-00001",
+        "EV-00004"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-scope-001",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Actual current source retains text.lower(), exact true/false comparisons, boolean returns, and the ValueError fallback; it contains no strip operation."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-current",
+      "title": "Actual current parser",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Saved original parser source",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "exit_code=1; timed_out=false; truncated=false; source fingerprint and output references",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_whitespace traceback and FAILED (errors=1)",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The current implementation retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or additional branches. Its complexity is appropriate, but the required normalization is incomplete."
+}

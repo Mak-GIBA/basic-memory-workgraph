@@ -1,0 +1,115 @@
+{
+  "status": "reviewed",
+  "reason": "The current parser and tests match the saved baseline. The required fix is absent, and only a failing baseline execution receipt is available.",
+  "issues": [
+    {
+      "id": "review-001",
+      "title": "Final fix and post-change verification are missing",
+      "severity": "High",
+      "status": "open",
+      "target": "parser.py:2",
+      "action": "Inspect current source, baseline-to-current diff, unchanged tests, and supplied execution receipts.",
+      "expected": "Whitespace normalization in parser.py, unchanged tests, and preserved baseline plus successful post-change unittest receipts.",
+      "actual": "Both source diffs are empty. parser.py still uses text.lower(). The sole unittest receipt records exit_code 1; test_whitespace raises ValueError for \" True \". No post-change receipt or successful final execution is supplied.",
+      "why": "The requested final fix cannot be verified because the implementation remains at baseline and successful post-change evidence is missing.",
+      "improvement": "Have the parent apply text.strip().lower() in parser.py only, preserve the existing tests and baseline failure, and provide the actual final diff and isolated post-change receipt for independent review.",
+      "root_cause": "Whitespace normalization has not been implemented; the evidence contains only the baseline execution.",
+      "check_ids": [
+        "review"
+      ],
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00007",
+        "EV-00008",
+        "CE-review-001",
+        "CE-review-002"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "review",
+      "result": "fail",
+      "reason": "Independently inspected current and saved parser/tests, empty baseline-to-current diffs, and the actual baseline receipt/output. Tests remain unchanged, but the fix is absent. The baseline ran two tests: invalid passed and whitespace errored; the second whitespace assertion was not reached. No successful post-change receipt exists in the supplied run artifacts, so final runtime success remains unknown.",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00004",
+        "EV-00007",
+        "EV-00008",
+        "CE-review-001",
+        "CE-review-002"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE-review-001",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "line_start": 1,
+      "line_end": 5,
+      "description": "Current source matches the saved baseline; line 2 lowercases without stripping whitespace. Boolean comparisons and ValueError fallback remain intact."
+    },
+    {
+      "id": "CE-review-002",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "line_start": 4,
+      "line_end": 9,
+      "description": "Current tests match the saved baseline. Whitespace assertions cover spaces and tab/newline; invalid assertions cover yes, empty string, and 1."
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Original unittest execution receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/receipt.json",
+      "locator": "command, source_fingerprint, exit_code, timed_out, truncated, outputs",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-002",
+      "title": "Original unittest failure output",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/001-checks/001/stderr.log",
+      "locator": "test_invalid ok; test_whitespace traceback; FAILED (errors=1)",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-003",
+      "title": "Saved baseline parser",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/parser.py",
+      "locator": "lines 1–5",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-004",
+      "title": "Saved existing tests",
+      "url": "",
+      "path": "runs/20261010T141626Z-c3872498/source-inputs/test_parser.py",
+      "locator": "lines 1–10",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-review-current-parser",
+      "title": "Actual current parser",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/parser.py",
+      "locator": "lines 1–5; empty diff against saved baseline",
+      "read_level": "full_text"
+    },
+    {
+      "id": "SRC-review-current-tests",
+      "title": "Actual current tests",
+      "url": "",
+      "path": "/tmp/dr-generic-trials-v250d/fix/test_parser.py",
+      "locator": "lines 1–10; empty diff against saved baseline",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The current implementation retains one normalization expression, two comparisons, and a ValueError fallback without dependencies or additional branches. Its complexity is acceptable, but the required fix remains absent."
+}

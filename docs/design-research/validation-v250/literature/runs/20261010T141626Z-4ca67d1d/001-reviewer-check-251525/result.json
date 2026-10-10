@@ -1,0 +1,47 @@
+{
+  "status": "reviewed",
+  "reason": "R2 independently reviewed against decisive original passages and saved source receipts. This is a qualitative design review, not a runtime pass. Saved Linux retrieval failures remain failures.",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R2",
+      "result": "pass",
+      "reason": "The proposal correctly limits atomicity to successful replacement and makes complete-JSON publication conditional on completed temporary-file preparation; preceding writes remain separate. Python os.replace documents atomic renaming on success. Linux rename(2) DESCRIPTION documents atomic destination replacement without a missing-path interval and unaffected descriptors for oldpath. The proposal labels existing destination readers retaining the old file as an inference from pathname replacement, rather than conflating those readers with oldpath descriptors. Independently read the original Linux page's indexed DESCRIPTION text after direct access failed. Saved EV-00014 remains unavailable; no successful replacement receipt or empirical outcome is asserted. Sources: [Python os.replace](https://docs.python.org/3/library/os.html#os.replace), [Linux rename(2)](https://man7.org/linux/man-pages/man2/rename.2.html).",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00014"
+      ]
+    }
+  ],
+  "code_evidence": [],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Python documentation: os.replace",
+      "url": "https://docs.python.org/3/library/os.html#os.replace",
+      "path": "",
+      "locator": "os.replace, lines 1833–1836; decisive successful-renaming passage independently read",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2",
+      "title": "Linux rename(2) manual page",
+      "url": "https://man7.org/linux/man-pages/man2/rename.2.html",
+      "path": "",
+      "locator": "DESCRIPTION opening paragraphs: oldpath descriptors and atomic existing-newpath replacement; original-page indexed text independently read; direct access failed",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S2-receipt",
+      "title": "Saved Linux source-access failure receipt",
+      "url": "",
+      "path": "runs/20261010T141626Z-4ca67d1d/sources/S2-01c9d9fa.json",
+      "locator": "status=unavailable; reason=<urlopen error timed out>; EV-00014",
+      "read_level": "full_text"
+    }
+  ],
+  "reference_implementations": [],
+  "complexity_ok": true,
+  "complexity_reason": "The two-candidate exception fits the narrow question. Temporary-file preparation and replacement add lifecycle steps; the proposal makes no measured cost claim. No checks, experiments, edits or additional mechanisms were introduced."
+}

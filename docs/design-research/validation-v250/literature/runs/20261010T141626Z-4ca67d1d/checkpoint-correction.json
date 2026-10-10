@@ -1,0 +1,12 @@
+{
+  "unit": "002-producer-design",
+  "reason": "Registered descriptor locator mismatch rejected by actual parent collection after old checkpoint",
+  "source_ids": [
+    "SUPP_LINUX_RAW"
+  ],
+  "original_input_sha256": "71bd4a527bf1d7dff9768fef747e2ab17c804be9231deae42cda01e3ed0b0a42",
+  "original_result_sha256": "b9191a0c37ea2147701e2d7b7ba4e31901d157eb410a6487409e10f715639667",
+  "source_and_config_unchanged": true,
+  "frozen_evaluation_unchanged": true,
+  "change": "status only: complete -> incomplete; original state and output retained"
+}

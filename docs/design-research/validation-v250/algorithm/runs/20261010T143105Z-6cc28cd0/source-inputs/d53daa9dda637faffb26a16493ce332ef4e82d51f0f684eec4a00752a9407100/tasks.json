@@ -1,0 +1,1 @@
+[{"id": "t0", "input": "true", "expected": true}, {"id": "t1", "input": "FALSE", "expected": false}, {"id": "t2", "input": " true ", "expected": true}, {"id": "t3", "input": "\tfalse\n", "expected": false}, {"id": "t4", "input": "yes", "expected": "invalid"}, {"id": "t5", "input": "", "expected": "invalid"}, {"id": "t6", "input": "1", "expected": "invalid"}]

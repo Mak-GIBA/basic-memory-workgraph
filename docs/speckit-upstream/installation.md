@@ -13,8 +13,8 @@ sudoは使わず通常ユーザーで実行します。必要なら`PYTHON_BIN`�
 リポジトリの取得方法は[トップREADME](../../README.md)を参照してください。
 以下はスクリプトのあるディレクトリで実行します。
 
-配布版2.0.5は、固定版へ同梱の更新資材を適用する組み立て用スクリプトです。
-2026-10-10に組み立ての停止原因を修正し、オフライン組み立て・両ツールの自己テストと、このPCでの更新・診断を確認しました。
+配布版2.0.6は、固定版へ同梱の更新資材を適用する組み立て用スクリプトです。
+旧版2.0.5では2026-10-10に組み立ての停止原因を修正し、自己テストと、このPCでの更新・診断を確認しました。2.0.6ではDesign Research 2.5.0と同じ更新資材を内蔵し、両ツールのオフライン組み立てと自己テストを確認しています。
 [検証結果](../design-research/validation.md)に、同梱試験、組み立て、実環境への更新の範囲を分けて記載しています。
 
 ## ユーザー共通環境への導入
@@ -54,7 +54,7 @@ PYTHON_BIN=/absolute/path/python3.12 bash install_speckit_upstream.sh --dry-run
 ## 組み立てとオフライン利用
 
 コミット`d3f46e0d591b45cb2423317030a489b91566e891`の元インストーラー2本を取得・照合し、
-同梱の更新資材からDesign Research 2.4.0とUpstream 2.0.5を組み立てます。
+同梱の更新資材からDesign Research 2.5.0とUpstream 2.0.6を組み立てます。
 両ツールの検証が成功した場合に、指定した側の導入処理へ進みます。
 `--doctor`・`--self-test`・`--extract`も、配布スクリプトから呼ぶ場合は先に組み立てます。
 
@@ -117,7 +117,7 @@ bash ./offline-installers/install_speckit_upstream.sh --apply --skip-specify
 |---|---|
 | `~/.local/bin/speckit-workbench` | Workbenchの起動用スクリプト |
 | `~/.local/bin/specify` | このインストーラーでSpecKitを用意した場合の起動用スクリプト |
-| `~/.local/share/speckit-workbench/releases/2.0.5/` | Workbenchコード、テンプレート、参照資料、ガイド |
+| `~/.local/share/speckit-workbench/releases/2.0.6/` | Workbenchコード、テンプレート、参照資料、ガイド |
 | `~/.local/share/speckit-workbench/tooling/specify-1.0.8/` | 必要な場合に作成するSpecKit専用venv |
 | `~/.local/share/speckit-workbench/backups/` | 更新時のバックアップ |
 | `~/.config/speckit-workbench/install.json` | 管理対象とハッシュ等の導入記録 |
@@ -177,7 +177,7 @@ speckit-workbench commands
 同一内容の再実行はスキップし、SpecKit本体は自動更新しません。旧リリースとバックアップは残ります。
 導入後はCodexを再起動し、`$upstream-`の入力候補と、`speckit-workbench doctor`の導入版・配置先を確認してください。
 
-2.0.5では、単一の`$design-research`入口への引き渡し、研究テーマの分割・統合、新規・変更設計のv2対応を使います。
+2.0.6では、単一の`$design-research`入口への引き渡し、研究テーマの分割・統合、新規・変更設計のv2対応を使います。
 新規プロジェクトの雛形は3文書です。既存資料・承認履歴は保持し、attach再実行やSkill更新だけでは移行しません。任意移行は[使い方](usage.md#既存資料を3文書へ移行する)を参照してください。
 既存文書の本文・要件・根拠を変更した場合は、通常どおり再レビューします。
 Design Researchは別途[導入・更新](../design-research/installation.md)します。SpecKitの更新だけではDesign Researchは導入・更新されません。
