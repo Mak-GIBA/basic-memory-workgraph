@@ -43,7 +43,7 @@ bash install_all.sh --apply
 | `design-research` | コアロジックの調査・比較・検証に使うSkillとハーネス | [導入・更新](design-research/installation.md) |
 | `ecc` | Codex標準ECC pluginと必要時に参照する4つの入口。`--apply`で導入・設定 | [導入・更新・復元](codex-ecc/installation.md) |
 | `office` | OfficeCLI、文書処理ライブラリ、Office Workbench。`--apply`で導入 | [導入・更新](codex-office/installation.md) |
-| `yomiyasu` | 日本語の推敲用Skill、原本、検査ツール。`--apply`で導入 | [導入・更新](codex-yomiyasu/installation.md) |
+| `yomiyasu` | 日本語の推敲用yomiyasuと段落構成用paragraph-writing、原本、検査ツール。`--apply`で両方を導入 | [導入・更新](codex-yomiyasu/installation.md) |
 | `herdr` | Herdr、herdr-open、Bash設定 | [導入とBash設定](herdr/installation.md) |
 
 UX Stackは日本語のUI文言を仕上げる際にyomiyasuを推奨します。

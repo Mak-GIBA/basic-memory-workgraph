@@ -65,7 +65,7 @@ policy変更はリポジトリの `tools/basic-memory-workgraph/memory-policy.md
 | Design Research | `bash install_design_research.sh --self-test --json`、`python3 -B -m unittest discover -s tests -p 'test*design_research*.py' -v` | 単体配布・編集保護・バックアップ・切り替え復旧、実ローカルHTTP／PoC、根拠・中断復旧を検証。モデルとOSサンドボックス起動は模擬。[検証範囲](design-research/validation.md)参照 |
 | Codex ECC | `python3 -m unittest discover -s tests -p 'test*ecc*.py' -v`、Bash構文確認 | 模擬Codexによる新規導入、既存再利用、更新失敗・再実行、復元、設定維持と原本取得。新規環境への実ダウンロードは別途確認が必要 |
 | Office Workbench | `bash install_codex_office.sh --self-test` | 一時環境で導入・編集保護・文書処理を検証。通信・Codexは模擬し、実PDFライブラリがない対象はSKIP。実OfficeCLIや描画のE2E確認は別途必要 |
-| yomiyasu | `bash install_codex_yomiyasu.sh --self-test` | 一時HOME・作業ディレクトリと模擬上流で導入・更新・解除・検査を確認。配布元への実通信やモデルの文章品質は検証しない |
+| yomiyasu・paragraph-writing | `bash install_codex_yomiyasu.sh --self-test` | 一時HOME・作業ディレクトリと模擬上流で導入・更新・解除・検査を確認。配布元への実通信やモデルの文章品質は検証しない |
 | Herdr | `python3 -m unittest discover -s tests -p 'test_install_herdr.py' -v` | 一時HOMEで取得・Bash設定・workspace照合・再実行を検証。実ダウンロードや実セッションの起動は含まない |
 
 構文確認や文書レビューのためにインストーラーの通常実行を行わないでください。
@@ -162,8 +162,16 @@ Memory保存は外側のSkillが担当し、ハーネスの子役は書き込み
 ### Office Workbenchとyomiyasuの埋め込み資料
 
 どちらもスクリプト単体に独自資材とテストを含み、`--extract DIRECTORY`で展開できます。
-Office Workbenchは`README_JA.md`と`install.py`、yomiyasuは`installer.py`、`SKILL.md`、`references/`、`scripts/`を確認します。
+Office Workbenchは`README_JA.md`と`install.py`を確認します。yomiyasuは`tools/codex-yomiyasu/`の編集用ソースを確認し、`python3 tools/codex-yomiyasu/build_installer.py`で単一ファイルを再生成します。`--check`では配布物と編集用ソースの一致を検査します。展開時は`installer.py`、`SKILL.md`、`references/`、`scripts/`、`paragraph-writing/`に両方の資材を配置します。
 展開物はレビュー用の一時ディレクトリに置き、利用者向けの説明は専用ガイドで保守します。
+
+yomiyasuとparagraph-writingの文章比較は、`tools/codex-yomiyasu/evaluate_writing.py`を明示実行します。Python 3.11以降、ログイン済みのCodex CLI、yomiyasuの原本が必要です。設定済みのモデルと推論設定で実際のモデル利用が発生するため、インストールや`--self-test`からは呼びません。
+
+```bash
+python3 tools/codex-yomiyasu/evaluate_writing.py --out /tmp/paragraph-writing-comparison
+```
+
+入力4件と構成条件は`tests/evaluation_cases.json`、既存入口の比較用原本は`tests/baseline-yomiyasu.md`で固定しています。結果には実行条件、入力hash、出力全文、条件名を伏せた評価を残します。数値やコードの機械差分に加え、原文の各事実・条件・断定の強さを本文で照合してから結論を記載します。[比較検証](codex-yomiyasu/validation.md)には実際の修正前後と限界を載せます。
 
 ### 日本語の説明を推敲する
 

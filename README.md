@@ -1,7 +1,7 @@
 # Codex環境の導入・運用ツール集
 
 このリポジトリ（`basic-memory-workgraph`）は、Codexでの知識の蓄積、UI/UXの設計・実装支援、
-要件・設計文書の整理、GitHubでのタスク管理、技術選定、文書編集、日本語の推敲に使うインストーラーと運用ツールをまとめています。
+要件・設計文書の整理、GitHubでのタスク管理、技術選定、文書編集、日本語の段落構成・推敲に使うインストーラーと運用ツールをまとめています。
 ECCのスキルを必要なときに読む構成や、作業ディレクトリからHerdrを開く設定も用意しています。
 全ツールを一括導入するか、必要なものを選んで導入できます。すべてを入れる必要はありません。
 
@@ -16,7 +16,7 @@ ECCのスキルを必要なときに読む構成や、作業ディレクトリ�
 | 目的に貢献するコアロジックの方式を比較・検証・改善する | `install_design_research.sh` | 独自のDesign Research Skill、BashのGANハーネス、文献調査CLI、証拠台帳 | [概要と収録ツール](docs/design-research/README.md) |
 | ECCの原本を保持し、必要なスキルだけ参照する | `install_codex_ecc.sh` | ECC標準プラグイン、入口4件、適用・更新・復元用の管理CLI | [概要と収録ツール](docs/codex-ecc/README.md) |
 | PDF・Word・PowerPointを読み、原本を保護して編集する | `install_codex_office.sh` | OfficeCLI、文書処理ライブラリ、Office Workbench Skill・CLI | [概要と収録ツール](docs/codex-office/README.md) |
-| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
+| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、paragraph-writing、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
 | 作業ディレクトリに対応するターミナルworkspaceを開く | `install_herdr.sh` | Herdr、`herdr-open`、Bashの呼び出し設定 | [概要と収録ツール](docs/herdr/README.md) |
 
 組み合わせる場合は、SpecKit Upstreamで要件と設計を整理し、UX Stackで画面を検討・実装・確認し、
@@ -87,7 +87,7 @@ install_codex_github_pm.sh          GitHubのIssue・PR・Projects・進捗管�
 install_design_research.sh          コアロジックの方式比較・実測と改善
 install_codex_ecc.sh                ECC導入と必要なときに読む入口4件の設定
 install_codex_office.sh             PDF・Word・PowerPointの閲覧・編集
-install_codex_yomiyasu.sh           意味を保った日本語の推敲
+install_codex_yomiyasu.sh           意味を保った日本語の段落構成・推敲
 install_herdr.sh                   作業ディレクトリに対応するHerdrの起動
 tools/basic-memory-workgraph/       Workgraphの補助コード・配布資材・解除スクリプト
 tools/ecc-on-demand/               ECCの管理CLI・入口資材・導入処理

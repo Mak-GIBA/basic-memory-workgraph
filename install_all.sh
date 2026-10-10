@@ -10,7 +10,7 @@ BULK_SCRIPTS=(install_basic_memory_workgraph.sh install_codex_ux_stack.sh
   install_codex_ecc.sh install_codex_office.sh install_codex_yomiyasu.sh install_herdr.sh)
 BULK_DESCRIPTIONS=("Basic Memory・Workgraph" "OOUI・UI/UX設計と画像付き検証"
   "SpecKit上流工程" "GitHubのIssue・PR・Projects管理" "コアロジックの調査・改善"
-  "ECCと必要時に読む入口" "PDF・Word・PowerPointの編集" "日本語の推敲" "HerdrとBash設定")
+  "ECCと必要時に読む入口" "PDF・Word・PowerPointの編集" "日本語の段落構成・推敲" "HerdrとBash設定")
 BULK_MODE=preview
 BULK_EXPLICIT_MODE=
 BULK_ONLY=
