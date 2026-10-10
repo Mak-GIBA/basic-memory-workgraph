@@ -1,0 +1,105 @@
+{
+  "sha": "373356eb874af5184962c88e925ea7eb58450318",
+  "tree": [
+    {
+      "path": "skills/yomiyasu/LICENSE",
+      "sha": "f0d06f87f9b209d47c7f7963321ff71bab68c1e8",
+      "size": 1064,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/SKILL.md",
+      "sha": "ad38af2140d4e102cad69737f2ca035cc1e87677",
+      "size": 73212,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/UNICODE-LICENSE.txt",
+      "sha": "56da58912807030b451a4700687d5bd02c72d6ed",
+      "size": 1995,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/assets/algo-artis.png",
+      "sha": "21f28805968be9191621b00d64efe6b5f70c1ec6",
+      "size": 29045,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/references/domains/business.md",
+      "sha": "33457ae1602c989aa743856092a534dea8218cc2",
+      "size": 8900,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/references/domains/essay.md",
+      "sha": "e7e2bc36045542545ef25398526fa9f7b469ab64",
+      "size": 4441,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/references/domains/tech.md",
+      "sha": "49f36b1a5916e56f8e2b973bee21656207ccf916",
+      "size": 6130,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/references/gemini-syntax.md",
+      "sha": "f0380a8f6303c5d69d96da54f9e55559b41baf2e",
+      "size": 51604,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/references/slop-catalog.md",
+      "sha": "0132b7918363f6c6357910bfa20f1183d707c195",
+      "size": 28086,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/scripts/markdown_visibility.py",
+      "sha": "6f7319376a6499e305b26ad0f4b466b66ed4b05d",
+      "size": 29930,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/scripts/yomiyasu_diff.py",
+      "sha": "616932a8b3279a0ea9c4024667be633a72fd1c77",
+      "size": 44292,
+      "mode": "100755",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/scripts/yomiyasu_lint.py",
+      "sha": "65fae51060f8f4c4f2c80183a7b1a342d8fdf9ef",
+      "size": 97843,
+      "mode": "100755",
+      "type": "blob"
+    },
+    {
+      "path": "README.md",
+      "sha": "13789fb6e3b6277485e6e7fe5a22ceafeae0248b",
+      "size": 29614,
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "skills/yomiyasu/.claude-plugin/plugin.json",
+      "sha": "fb18fe868ff726484528cbab49e1de7303a36143",
+      "size": 347,
+      "mode": "100644",
+      "type": "blob"
+    }
+  ],
+  "truncated": false,
+  "origin": "GitHub connector read of v1.1.1 tree; relevant observed entries only; not a full repository tree"
+}

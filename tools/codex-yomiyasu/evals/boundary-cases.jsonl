@@ -1,0 +1,60 @@
+{"id": "D01", "split": "development", "expected": true, "genre": "report", "text": "ご依頼に沿って、比較結果を整理しました。"}
+{"id": "D02", "split": "development", "expected": true, "genre": "report", "text": "初心者にも分かるように、背景から説明します。"}
+{"id": "D03", "split": "development", "expected": true, "genre": "research", "text": "ご希望があれば、追加実験もできます。"}
+{"id": "D04", "split": "development", "expected": true, "genre": "report", "text": "ここに図を入れてください。"}
+{"id": "D05", "split": "development", "expected": true, "genre": "report", "text": "| 注記 | ご依頼のとおり整理しました。 |"}
+{"id": "D06", "split": "development", "expected": true, "genre": "research", "text": "[^note]: 読みやすくまとめました。"}
+{"id": "D07", "split": "development", "expected": true, "genre": "report", "text": "図1：初見の方にも理解できるように構成しました。"}
+{"id": "D08", "split": "development", "expected": true, "genre": "report", "text": "<!-- TODO: ここに図を入れる -->"}
+{"id": "D09", "split": "development", "expected": true, "genre": "report", "text": "この回答では、三つの論点を説明します。"}
+{"id": "D10", "split": "development", "expected": true, "genre": "article", "text": "先ほどの回答の続きです。"}
+{"id": "D11", "split": "development", "expected": true, "genre": "report", "text": "読みやすく整理しました。"}
+{"id": "D12", "split": "development", "expected": true, "genre": "research", "text": "本文の後でご希望に応じて補足できます。"}
+{"id": "D13", "split": "development", "expected": true, "genre": "report", "text": "ご指定に従い、箇条書きを減らしています。"}
+{"id": "D14", "split": "development", "expected": true, "genre": "report", "text": "修正版を以下に示します。"}
+{"id": "D15", "split": "development", "expected": true, "genre": "report", "text": "プロンプトで求められた形式に合わせました。"}
+{"id": "D16", "split": "development", "expected": true, "genre": "report", "text": "TODO: 実験結果を追記する。"}
+{"id": "D17", "split": "development", "expected": true, "genre": "email", "text": "メールの文面を読みやすく構成しました。"}
+{"id": "D18", "split": "development", "expected": true, "genre": "manual", "text": "ユーザーのご要望に合わせて書き直しました。"}
+{"id": "D19", "split": "development", "expected": true, "genre": "report", "text": "![ご依頼に沿って作成しました](figure.svg)"}
+{"id": "D20", "split": "development", "expected": true, "genre": "report", "text": "## ご指示を反映した説明"}
+{"id": "D21", "split": "development", "expected": false, "genre": "research", "text": "プロンプトの長さは入力トークン数で測定した。"}
+{"id": "D22", "split": "development", "expected": false, "genre": "research", "text": "この出力は正規化されていない。"}
+{"id": "D23", "split": "development", "expected": false, "genre": "email", "text": "ご依頼の資料を添付いたします。内容をご確認ください。"}
+{"id": "D24", "split": "development", "expected": false, "genre": "email", "text": "ご希望があれば、オンラインでご説明します。"}
+{"id": "D25", "split": "development", "expected": false, "genre": "manual", "text": "設定画面で接続先をご確認ください。"}
+{"id": "D26", "split": "development", "expected": false, "genre": "research", "text": "本研究では、検索精度を評価する。"}
+{"id": "D27", "split": "development", "expected": false, "genre": "research", "text": "以下に実験方法を示す。"}
+{"id": "D28", "split": "development", "expected": false, "genre": "article", "text": "> ご依頼に沿って整理しました。"}
+{"id": "D29", "split": "development", "expected": false, "genre": "article", "text": "「ご依頼に沿って整理しました」という定型文を検出する。"}
+{"id": "D30", "split": "development", "expected": false, "genre": "report", "text": "```python\nprint(\"ご依頼に沿って整理しました\")\n```"}
+{"id": "D31", "split": "development", "expected": false, "genre": "report", "text": "入力は `ご依頼に沿って` という文字列である。"}
+{"id": "D32", "split": "development", "expected": false, "genre": "research", "text": "差は統計的に有意ではなかった。"}
+{"id": "D33", "split": "development", "expected": false, "genre": "template", "text": "担当：[担当者名]\nTODO: 背景を入力する。"}
+{"id": "D34", "split": "development", "expected": false, "genre": "manual", "text": "画面上の「要確認」を選択する。"}
+{"id": "D35", "split": "development", "expected": false, "genre": "research", "text": "プロンプトでは、対象と出力形式を指定する。"}
+{"id": "D36", "split": "development", "expected": false, "genre": "research", "text": "| 手法 | 正解率 |\n|---|---|\n| A | 82% |"}
+{"id": "D37", "split": "development", "expected": false, "genre": "article", "text": "ご指摘に基づき図3を修正しました。"}
+{"id": "D38", "split": "development", "expected": false, "genre": "report", "text": "方式Aを採用する。方式Bはメモリ上限を超える。"}
+{"id": "D39", "split": "development", "expected": false, "genre": "report", "text": "---\ntitle: ご依頼に沿って\n---\n方式Aを評価した。"}
+{"id": "D40", "split": "development", "expected": false, "genre": "manual", "text": "    print(\"ご依頼に沿って整理しました\")"}
+{"id": "H01", "split": "holdout", "expected": true, "genre": "report", "text": "ご要望に合わせ、各節の長さを調整しました。"}
+{"id": "H02", "split": "holdout", "expected": true, "genre": "article", "text": "初見の読者にも伝わるよう、図を用いて説明します。"}
+{"id": "H03", "split": "holdout", "expected": true, "genre": "report", "text": "| 補足 | 必要でしたら、詳しい説明もできます。 |"}
+{"id": "H04", "split": "holdout", "expected": true, "genre": "research", "text": "[^a]: この回答は、ご質問に答えるためのものです。"}
+{"id": "H05", "split": "holdout", "expected": true, "genre": "report", "text": "<!-- この箇所に図を挿入する -->"}
+{"id": "H06", "split": "holdout", "expected": true, "genre": "report", "text": "先ほどお伝えした内容を再整理します。"}
+{"id": "H07", "split": "holdout", "expected": true, "genre": "report", "text": "この文章はそのままコピペして利用できます。"}
+{"id": "H08", "split": "holdout", "expected": true, "genre": "article", "text": "読者が理解できるように構成しました。"}
+{"id": "H09", "split": "holdout", "expected": true, "genre": "report", "text": "図2：ご指定の観点をまとめた図。"}
+{"id": "H10", "split": "holdout", "expected": true, "genre": "report", "text": "あとは数値がそろったらここを埋めてください。"}
+{"id": "H11", "split": "holdout", "expected": false, "genre": "research", "text": "指示文の変更によって生成結果が変わった。"}
+{"id": "H12", "split": "holdout", "expected": false, "genre": "article", "text": "「必要でしたら説明します」と担当者は答えた。"}
+{"id": "H13", "split": "holdout", "expected": false, "genre": "email", "text": "ご質問に回答いたします。納期は10月20日です。"}
+{"id": "H14", "split": "holdout", "expected": false, "genre": "manual", "text": "以下では、設定画面の各項目を説明します。"}
+{"id": "H15", "split": "holdout", "expected": false, "genre": "research", "text": "この結果は改善の可能性を示すが、別データでは未検証である。"}
+{"id": "H16", "split": "holdout", "expected": false, "genre": "report", "text": "~~~~text\n```\nご依頼に沿って整理しました。\n~~~~"}
+{"id": "H17", "split": "holdout", "expected": false, "genre": "article", "text": "仕様の用語は「この『回答』では」である。"}
+{"id": "H18", "split": "holdout", "expected": false, "genre": "research", "text": "表1の信頼区間は[-0.2, 0.5]である。"}
+{"id": "H19", "split": "holdout", "expected": false, "genre": "template", "text": "## 編集手順\nここに図を入れる。"}
+{"id": "H20", "split": "holdout", "expected": false, "genre": "research", "text": "この出力の差分は、入力文に依存する。"}

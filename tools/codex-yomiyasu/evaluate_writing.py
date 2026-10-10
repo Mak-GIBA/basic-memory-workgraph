@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Explicit, paid-model paired writing evaluation. Never run by install or --self-test."""
+"""Historical 1.1.0/1.2.0 paired writing evaluation; explicit paid-model use.
+Fixtures are preserved separately from current install assets. Never run by install or --self-test.
+"""
 import argparse
 import hashlib
 import json
@@ -10,6 +12,7 @@ import time
 import tomllib
 
 ROOT = Path(__file__).resolve().parent
+BASELINE = ROOT/'evaluation-v130'
 
 
 def run(prompt, schema, output, workspace, model, effort):
@@ -52,13 +55,13 @@ def main():
     model=args.model or config.get('model')
     effort=args.effort or config.get('model_reasoning_effort','medium')
     if not model:parser.error('Specify --model or configure the default Codex model')
-    cases=json.loads((ROOT/'tests/evaluation_cases.json').read_text())
+    cases=json.loads((BASELINE/'tests/evaluation_cases.json').read_text())
     args.out.mkdir(parents=True,exist_ok=True)
     schema={'type':'object','properties':{'cases':{'type':'array','items':{'type':'object',
             'properties':{'id':{'type':'string'},'text':{'type':'string'}},'required':['id','text'],'additionalProperties':False}}},
             'required':['cases'],'additionalProperties':False}
     shared='ローカルファイル・ツールを使わず、この入力内のガイドだけを使ってください。参照資料はこの入力に展開済みです。\n'
-    guides=[ROOT/'assets/references/usage-policy.md',args.upstream_dir/'SKILL.upstream.md',
+    guides=[BASELINE/'assets/references/usage-policy.md',args.upstream_dir/'SKILL.upstream.md',
             args.upstream_dir/'references/domains/tech.md',args.upstream_dir/'references/domains/business.md']
     guide_text='\n'.join('【'+p.name+'】\n'+p.read_text() for p in guides)
     request='\n次の架空の原稿4件を指定読者向けに編集してください。事実・結論・数値・条件・断定の強さ・コード・表を保持し、新しい事実を加えないでください。各idと修正本文だけをJSONで返してください。\n'
@@ -67,16 +70,16 @@ def main():
         workspace=Path(temp)
         results={}
         metadata={'model':model,'effort':effort,'runs_per_condition':1,
-                  'cases_sha256':hashlib.sha256((ROOT/'tests/evaluation_cases.json').read_bytes()).hexdigest(),
+                  'cases_sha256':hashlib.sha256((BASELINE/'tests/evaluation_cases.json').read_bytes()).hexdigest(),
                   'guide_sha256':{str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else 'upstream/'+str(p.relative_to(args.upstream_dir)):
                                   hashlib.sha256(p.read_bytes()).hexdigest() for p in guides},
                   'invocation':'provided guide text, explicit application; not implicit selection',
                   'cli_version':subprocess.check_output(['codex','--version'],text=True).strip()}
         if not args.judge_only:
-            baseline=(ROOT/'tests/baseline-yomiyasu.md').read_text()
-            additions=(ROOT/'assets/paragraph-writing/SKILL.md').read_text()+'\n'+(ROOT/'assets/paragraph-writing/references/examples.md').read_text()
+            baseline=(BASELINE/'tests/baseline-yomiyasu.md').read_text()
+            additions=(BASELINE/'assets/paragraph-writing/SKILL.md').read_text()+'\n'+(BASELINE/'assets/paragraph-writing/references/examples.md').read_text()
             for name,entry,extra in [('yomiyasu',baseline,''),
-                                     ('combined',(ROOT/'assets/SKILL.md').read_text(),additions)]:
+                                     ('combined',(BASELINE/'assets/SKILL.md').read_text(),additions)]:
                 print('Generating '+name,flush=True)
                 prompt=shared+'【入口Skill】\n'+entry+'\n'+guide_text+'\n'+extra+request+inputs
                 data,measurement=run(prompt,schema,workspace/(name+'.json'),workspace,model,effort)

@@ -20,8 +20,8 @@ $yomiyasu このPR説明を、開発者と非開発者が追える文章にし�
 既存ファイルでは対象と範囲を指定し、原文と差分を確認します。
 法令や引用など逐語保持が必要な本文は書き換えません。
 
-`auto`では各スキルの説明に合う依頼が自動選択の対象です。yomiyasuとparagraph-writingは、日本語の文章そのものが成果物になる依頼を対象とし、一般の事実回答、コード実装だけ、ログ解析だけの依頼には暗黙適用しません。
-japanese-direct-writingは、ZIP原本の説明に従い、日本語の回答・解説・提案・報告の執筆や推敲も対象とします。
+`auto`では各スキルの説明に合う依頼が自動選択の対象です。通常の日本語文書の執筆・推敲はyomiyasuから始めます。コードだけの作業、単純な事実照会、逐語引用は対象外です。
+paragraph-writingは段落構成だけ、japanese-direct-writingは過剰な留意書きだけを直す依頼、または各スキル名の明示指定で使います。
 
 ## 段落と論旨を整理する
 
@@ -31,11 +31,10 @@ $paragraph-writing この報告を、導入を判断する人向けに組み替�
 ```
 
 段落ごとの要点、説明・根拠の位置、段落間のつながりを整理します。報告・Issue/PRでは判断に必要な結論や状態を早めに示し、技術解説では理解に必要な前提を順に置きます。
-構成を変える必要がある場合は、yomiyasuからも同じ親フォルダのparagraph-writingを参照します。構成の整理から表現の仕上げまでを一続きの推敲として行い、同じ段階を繰り返しません。
+通常の執筆・推敲ではyomiyasuに段落設計を含め、構成の整理から表現の仕上げまでを一続きで行います。部分作業用のparagraph-writingを別工程として重ねる必要はありません。
 
 短い語句の訂正や既存の順序を維持する依頼には、段落の並べ替えを加えません。コード・表・手順・IDの対応関係、比較条件、否定や推量も保持します。
-paragraph-writingだけでも使えます。Gistの原本全体を毎回読む必要はなく、必要な例だけを参照します。
-具体的な違いと検証条件は[比較検証](validation.md)を参照してください。
+paragraph-writingだけでも使えます。過去の併用比較と、現在の導入・検査の確認範囲は[検証結果](validation.md)を参照してください。
 
 ## 不要な留意書きを点検する
 
@@ -46,7 +45,7 @@ $japanese-direct-writing この説明から不要な留意書き・予防線・�
 
 主張の意味や確信度を変えず、判断に役立たない但し書きを削ります。必要な条件や不確実性は、その条件が掛かる主張の近くに具体的に記します。引用、数値、保持指定の注記、具体的な安全条件は残します。
 
-yomiyasuで仕上げる場合も、同じ親フォルダにjapanese-direct-writingがあれば、その手順を参照して留意書きを点検します。構成の整理、表現の修正、留意書きの点検を一続きで行い、点検済みの箇所を二重に校正しません。補助スキルが未導入でも、yomiyasuは単独で使えます。
+yomiyasuにも留意書きの点検を含めています。複数のスキルを指定しても同じ下書きを別々に書き直さず、構成、留保、表現を一続きで扱います。補助スキルが未導入でも、yomiyasuは単独で使えます。
 
 ## 保存する文章を検査する
 
@@ -54,11 +53,12 @@ yomiyasuで仕上げる場合も、同じ親フォルダにjapanese-direct-writi
 以下の`before.md`と`after.md`は、用意した原文と修正文に置き換えてください。
 
 ```bash
-python3 ~/.agents/skills/yomiyasu/scripts/check.py lint after.md
+python3 ~/.agents/skills/yomiyasu/scripts/check.py lint after.md --genre manual
+python3 ~/.agents/skills/yomiyasu/scripts/check.py outline after.md
 python3 ~/.agents/skills/yomiyasu/scripts/check.py compare before.md after.md --protect=--apply --stance 説明
 ```
 
-`--protect`は複数指定できます。数値・ID・コード・リンクの変化と、lintの見直し候補を確認します。
+`--genre`は`report / research / email / manual / article / template`です。`--protect`は複数指定できます。数値・ID・コード・リンクの変化と、lintの見直し候補を確認します。`outline`は段落の冒頭を抽出する補助であり、論旨の正しさを判定しません。
 検査はファイルを変更せず、外部へ文章を送信しません。
 検出が0件でも意味の一致は証明できません。否定、条件、因果、断定の強さは本文を読んで確認します。
 

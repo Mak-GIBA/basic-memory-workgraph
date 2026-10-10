@@ -1,0 +1,7 @@
+{
+  "origin": "synthetic cases authored in this session, not production samples",
+  "created_before_detector_implementation": true,
+  "n": 60,
+  "sha256": "3cdd76bbba66f26afe732c9af5c28fe8267fcf6a11c0832ff4741f8933eed374",
+  "holdout_policy": "Do not tune on holdout after first execution. No random sampling or human-independent labels."
+}

@@ -17,9 +17,7 @@ bash install_codex_yomiyasu.sh --doctor
 取得したファイルのGit blob IDとサイズを検査してから配置します。
 同じ構成での再実行は既存の導入を保持し、上流を自動更新しません。
 
-paragraph-writingは固定版の原本・ライセンスとともにスクリプトに同梱しているため、取得用の通信はありません。
-japanese-direct-writingも、提供されたZIPの本文と発動設定を同梱しています。導入時に元のZIPや取得用の通信は不要です。
-ZIP名とSHA256、各原本ファイルのSHA256は、同スキルの`SOURCE.json`に記録します。
+paragraph-writingとjapanese-direct-writingは、役割を限定した現在の本文と由来の記録を同梱しています。導入時に元のGistやZIPへアクセスする必要はありません。各スキルの発動設定は、選んだモードに合わせて生成します。
 
 既定の配置先は`~/.agents/skills/`の下にある各スキル名のディレクトリです。
 `--skills-dir PATH`で親ディレクトリを変えた場合は、診断・更新・解除でも同じ指定を使います。
@@ -38,10 +36,10 @@ bash install_all.sh --only yomiyasu --apply
 ```
 
 paragraph-writingまたはjapanese-direct-writing単独の導入には通信が不要です。一括導入スクリプトの`yomiyasu` IDは3スキルを導入します。
-1.1.0または1.2.0から3スキルを導入する場合は、次の入口更新を使います。既存yomiyasuの上流原本と、各スキルの発動モードを保持します。
+1.3.0から2.0.0-proposal.1へ移行する場合は、次の更新を使います。入口と補助スキルを更新し、yomiyasuの上流原本を最新安定版から取得します。既存の発動モードは保持します。
 
 ```bash
-bash install_codex_yomiyasu.sh --force --apply
+bash install_codex_yomiyasu.sh --update --apply
 ```
 
 ## 更新と発動モード
@@ -53,12 +51,12 @@ bash install_codex_yomiyasu.sh --update --apply
 ```
 
 `--check-update`はyomiyasuの最新安定版と、補助スキルの同梱版を、それぞれ導入版と比較します。
-`--update`もyomiyasuを選択した場合は通信して更新予定を調べますが、`--apply`がなければ配置は変更しません。
+`--update`は`--apply`がなければ通信せず予定を表示します。適用時にyomiyasuの上流版を確定し、検査してから配置します。
 paragraph-writingまたはjapanese-direct-writing単独の更新確認・更新は通信せず、実行しているスクリプトの同梱版を使います。
 既存の管理ファイルに編集や欠落がある場合は、`--force`を付けても停止します。
 更新前の資材はバックアップに残します。
 
-上流を更新せず、このリポジトリの入口・運用設定と補助スキルを更新する場合は`--force --apply`を使います。
+上流を更新せず、このリポジトリの入口・運用設定と補助スキルを更新する場合は`--force --apply`を使います。ただし上流の必須ファイルが欠ける旧導入は、まず`--update --apply`で整えてください。2.0.0-proposal.1では`upstream/UNICODE-LICENSE.txt`も必須です。
 既存の各Skillの発動モードは保持します。新規の補助スキルは管理済みyomiyasuのモードを継承し、全て新規なら`auto`にします。
 `--mode`を指定すると選択したSkillへ適用します。既存設定を変更するときは、次のように明示します。
 
@@ -68,7 +66,18 @@ bash install_codex_yomiyasu.sh --mode auto --force --apply
 ```
 
 新規導入の既定は`auto`で、文章を仕上げる依頼でSkillの自動選択を許可します。
-`explicit`は各スキル名を指定して使う設定です。japanese-direct-writingの本文は原本のまま配置し、`explicit`では発動設定の`allow_implicit_invocation`だけを`false`に変更します。毎回答を校正するHookは登録しません。
+`explicit`は各スキル名を指定して使う設定です。`agents/openai.yaml`の`allow_implicit_invocation`を`false`にします。毎回答を校正するHookは登録しません。
+
+## 上流だけを更新する・取得版を固定する
+
+```bash
+bash install_codex_yomiyasu.sh --update --upstream-only
+bash install_codex_yomiyasu.sh --update --upstream-only --apply
+bash install_codex_yomiyasu.sh --check-update --upstream-ref v1.1.1
+bash install_codex_yomiyasu.sh --update --upstream-ref v1.1.1 --apply
+```
+
+`--upstream-only`は`--update`と併用し、yomiyasuの上流原本だけを更新します。独自ルールとその版、補助2スキルは保持します。`--upstream-ref`は更新または更新確認で、取得対象を安定版Releaseのtagに固定します。独自ルールの版を指定するオプションではありません。
 
 ## 解除と検査
 
@@ -90,6 +99,5 @@ bash install_codex_yomiyasu.sh --extract /tmp/yomiyasu-review
 
 自己テストは一時環境と模擬の上流応答を使います。実際の配布元への通信やモデルの文章品質は検証しません。
 `--extract`は3スキルの資材を未使用または空のディレクトリへ展開します。インストールは行いません。`--self-test`と`--extract`は`--only`と併用できません。
-yomiyasuの原本を通信なしで配置するには`--source-dir PATH --apply`を使えますが、
-ローカルチェックアウトはスクリプトに記録された固定commitのファイルと一致する必要があります。
-`--source-dir`は補助スキル単独の導入や`--update`と併用できません。
+yomiyasuの原本を通信なしで配置するには`--source-dir PATH --apply`を使います。ローカルGit checkout、管理済み導入のsnapshot、旧v1.0.4固定版のフラット原本を受け付け、形式に応じてファイルを検査します。
+`--source-dir`は補助スキル単独の導入、`--update`、`--upstream-ref`と併用できません。

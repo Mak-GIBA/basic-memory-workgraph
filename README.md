@@ -16,7 +16,7 @@ ECCのスキルを必要なときに読む構成や、作業ディレクトリ�
 | 目的に貢献するコアロジックの方式を比較・検証・改善する | `install_design_research.sh` | 単一入口のDesign Research Skill、テーマ別研究・再評価、Bashハーネス、文献調査CLI | [概要と収録ツール](docs/design-research/README.md) |
 | ECCの原本を保持し、必要なスキルだけ参照する | `install_codex_ecc.sh` | ECC標準プラグイン、入口4件、適用・更新・復元用の管理CLI | [概要と収録ツール](docs/codex-ecc/README.md) |
 | PDF・Word・PowerPointを読み、原本を保護して編集する | `install_codex_office.sh` | OfficeCLI、文書処理ライブラリ、Office Workbench Skill・CLI | [概要と収録ツール](docs/codex-office/README.md) |
-| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | yomiyasu原本、paragraph-writing、japanese-direct-writing、Codex用の入口、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
+| 日本語の説明・仕様・報告を意味を保って整える | `install_codex_yomiyasu.sh` | 執筆工程をまとめたyomiyasu、部分作業用の補助2スキル、上流原本、ローカル検査ツール | [概要と収録ツール](docs/codex-yomiyasu/README.md) |
 | 作業ディレクトリに対応するターミナルworkspaceを開く | `install_herdr.sh` | Herdr、`herdr-open`、Bashの呼び出し設定 | [概要と収録ツール](docs/herdr/README.md) |
 
 システム全体を整理する入口は`$upstream-new`・`$upstream-change`、特定の方式を研究する入口は`$design-research`です。

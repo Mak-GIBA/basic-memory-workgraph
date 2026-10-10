@@ -1,794 +1,462 @@
-"""Offline tests. The upstream fixtures are NOT nanaism's real implementation."""
+"""Offline conformance and regression tests. Upstream execution uses marked stubs."""
 import contextlib
+import copy
 import importlib.util
 import io
 import json
 import os
 from pathlib import Path
-import subprocess
+import shutil
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
-import urllib.error
 import zipfile
 
 if 'I' not in globals():
-    spec = importlib.util.spec_from_file_location('yomi_installer', Path(__file__).resolve().parents[1]/'installer.py')
-    I = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = I
-    spec.loader.exec_module(I)
+    spec = importlib.util.spec_from_file_location('proposal_installer', Path(__file__).resolve().parents[1]/'installer.py')
+    I = importlib.util.module_from_spec(spec); sys.modules[spec.name] = I; spec.loader.exec_module(I)
+    A = I.assets()
+L = types.ModuleType('proposal_check')
+L.__file__ = str(Path(tempfile.gettempdir())/'proposal-local/scripts/check.py')
+sys.modules[L.__name__] = L
+exec(compile(A['scripts/check.py'].decode('utf-8'), 'check.py', 'exec'), L.__dict__)
 
 
-class InstallerTests(unittest.TestCase):
+def fixture(version=1):
+    """Synthetic upstream, deliberately not the actual yomiyasu implementation."""
+    values = {
+        'SKILL.md': f'---\nname: yomiyasu\ndescription: synthetic fixture\n---\n# Stub {version}\n'.encode(),
+        'LICENSE': b'TEST LICENSE - synthetic only\n',
+        'UNICODE-LICENSE.txt': b'TEST Unicode license placeholder - synthetic only\n',
+        'references/domains/tech.md': b'Synthetic reference\n',
+        'scripts/markdown_visibility.py': b'READY = True\n',
+        'scripts/yomiyasu_lint.py': b'# Unicode License; --json\nimport json\nimport markdown_visibility\nprint(json.dumps({"fixture": True, "findings": []}))\n',
+        'scripts/yomiyasu_diff.py': b'# --json\nimport json\nprint(json.dumps({"fixture": True, "changes": []}))\n',
+    }
+    rows = [{'path': 'skills/yomiyasu/'+k, 'type': 'blob', 'mode': '100644',
+             'sha': I.blob_sha(v), 'size': len(v)} for k, v in values.items()]
+    rows += [{'path': 'LICENSE', 'type': 'blob', 'mode': '100644',
+              'sha': I.blob_sha(values['LICENSE']), 'size': len(values['LICENSE'])}]
+    meta = {'repository': I.REPO, 'tag': f'v0.0.{version}', 'commit': str(version)*40,
+            'files': I.release_file_manifest({'tree': rows, 'truncated': False})}
+    mapped = {I.map_upstream(k): v for k, v in values.items()}
+    return meta, mapped, rows
+
+
+class Isolated(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
-        self.home = Path(self.tmp.name)/"日本語 home ' $()"; self.home.mkdir()
-        self.env = mock.patch.dict(os.environ, {'HOME': str(self.home), 'CODEX_HOME': str(self.home/'custom-codex')})
-        self.env.start(); self.addCleanup(self.env.stop)
-        self.target = self.home/'.agents/skills/yomiyasu'
-        self.source = self.home/'source'; self.source.mkdir()
-        self.fake = {name: ('fixture ' + name + '\n').encode() for name in I.PINS}
-        self.fake['SKILL.md'] = b'---\nname: yomiyasu\n---\nfixture only\n'
-        self.fake['LICENSE'] = b'MIT License\nTest fixture only\n'
-        self.fake['scripts/yomiyasu_lint.py'] = b'import json, sys\nprint(json.dumps({"score":80,"findings":[]}))\nsys.exit(1 if "--strict" in sys.argv else 0)\n'
-        self.fake['scripts/yomiyasu_diff.py'] = b'import json, sys\nprint(json.dumps({"markers":[], "received":sys.argv[1:]}))\n'
-        for name, data in self.fake.items():
-            p = self.source/name; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(data)
-        self.pin_patch = mock.patch.object(I, 'PINS', {k: (I.blob_sha(v), len(v)) for k,v in self.fake.items()})
-        self.pin_patch.start(); self.addCleanup(self.pin_patch.stop)
+        self.tmp = tempfile.TemporaryDirectory(prefix='yomiyasu-unit-')
+        self.home = Path(self.tmp.name)
+        self.root = self.home/'skills'
+        self.project = self.home/'project'; self.project.mkdir()
+        self.env = mock.patch.dict(os.environ, {'HOME': str(self.home), 'CODEX_HOME': str(self.home/'.codex')})
+        self.env.start()
+        self.old_cwd = Path.cwd(); os.chdir(self.project)
+        self.meta, self.up, self.rows = fixture()
+        self.resolve = mock.patch.object(I, 'resolve_release', return_value=self.meta)
+        self.fetch = mock.patch.object(I, 'fetch_release', return_value=self.up)
+        self.resolve_mock = self.resolve.start(); self.fetch_mock = self.fetch.start()
+    def tearDown(self):
+        self.fetch.stop(); self.resolve.stop(); self.env.stop(); os.chdir(self.old_cwd); self.tmp.cleanup()
+    def install(self, names=I.COMPONENTS, **kwargs):
+        return I.install_selected(self.root, names, apply=True, project=self.project, **kwargs)
+    def snapshot(self, name='yomiyasu'):
+        return I.inventory(self.root/name)
+    def legacy(self, names=I.COMPONENTS):
+        self.install(names)
+        for name in names:
+            target = self.root/name
+            marker = json.loads((target/I.MANIFEST).read_text())
+            marker['version'] = '1.3.0'
+            (target/I.MANIFEST).write_text(json.dumps(marker))
 
-    def put(self, **kw):
-        return I.install(self.target, apply=True, source=self.source, **kw)
 
-    def files(self):
-        return I.inventory(self.target)
-
-    def check_module(self):
-        s = importlib.util.spec_from_file_location('yomi_check_test', self.target/'scripts/check.py')
-        m = importlib.util.module_from_spec(s); s.loader.exec_module(m); return m
-
-    def test_dry_run_no_directories_or_download(self):
-        with mock.patch.object(I, 'download', side_effect=AssertionError('network')):
-            r = I.install(self.target)
-        self.assertFalse(r['applied']); self.assertFalse(self.target.parent.exists())
-
-    def test_install_offline_source(self):
-        r = self.put(); self.assertTrue(r['applied']); self.assertEqual(r['mode'], 'auto')
-        self.assertEqual((self.target/'upstream/SKILL.upstream.md').read_bytes(), self.fake['SKILL.md'])
-        self.assertFalse((self.target/'upstream/SKILL.md').exists())
-
-    def test_just_one_discoverable_skill(self):
-        self.put(); self.assertEqual(len(list(self.target.rglob('SKILL.md'))), 1)
-
-    def test_no_pip_npm_or_other_settings(self):
-        protected = [self.home/'custom-codex/config.toml', self.home/'custom-codex/hooks.json',
-                     self.home/'custom-codex/AGENTS.md', self.home/'knowledge/note.md', self.home/'.bashrc',
-                     self.home/'.agents/skills/github-project-director/SKILL.md',
-                     self.home/'.agents/skills/office-workbench/SKILL.md']
-        for p in protected:
-            p.parent.mkdir(parents=True, exist_ok=True); p.write_text('keep\n')
-        before = {p:(p.read_bytes(), p.stat().st_mtime_ns) for p in protected}
-        self.put()
-        self.assertEqual(before, {p:(p.read_bytes(), p.stat().st_mtime_ns) for p in protected})
-
-    def test_idempotent_skips_without_source_or_network(self):
-        self.put(); before = self.files(); mtimes = {p: p.stat().st_mtime_ns for p in self.target.rglob('*') if p.is_file()}
-        with mock.patch.object(I, 'download', side_effect=AssertionError('network')):
-            r = I.install(self.target, apply=True)
-        self.assertEqual(r['action'], 'skip'); self.assertEqual(before, self.files())
-        self.assertEqual(mtimes, {p:p.stat().st_mtime_ns for p in mtimes})
-
-    def test_mode_explicit(self):
-        self.put(mode='explicit'); self.assertIn('allow_implicit_invocation: false', (self.target/'agents/openai.yaml').read_text())
-
-    def test_auto_mode_enables_natural_invocation_and_scoped_description(self):
-        self.put()
-        skill=(self.target/'SKILL.md').read_text()
-        agent=(self.target/'agents/openai.yaml').read_text()
-        self.assertIn('日本語の文章そのものが成果物', skill)
-        self.assertIn('Issue/PR', skill)
-        self.assertIn('事実回答だけ', skill)
-        self.assertIn('allow_implicit_invocation: true', agent)
-        self.assertIn('CODEX', agent)
-
+class InstallerTests(Isolated):
+    def test_install_all(self):
+        result = self.install()
+        self.assertTrue(result['applied'])
+        self.assertEqual(set(result['components']), set(I.COMPONENTS))
+        for name in I.COMPONENTS:
+            self.assertTrue((self.root/name/'SKILL.md').is_file())
+    def test_no_args_dry_run(self):
+        I.install_selected(self.root, I.COMPONENTS, project=self.project)
+        self.assertFalse(self.root.exists()); self.resolve_mock.assert_not_called()
+    def test_update_preview_no_network(self):
+        I.install_selected(self.root, I.COMPONENTS, update=True, project=self.project)
+        self.assertFalse(self.root.exists()); self.resolve_mock.assert_not_called()
+    def test_idempotent_skip(self):
+        self.install(); before = self.snapshot(); self.resolve_mock.reset_mock()
+        self.assertFalse(self.install()['applied']); self.assertEqual(before, self.snapshot()); self.resolve_mock.assert_not_called()
+    def test_explicit_mode_all(self):
+        self.install(mode='explicit')
+        for n in I.COMPONENTS:
+            self.assertIn(b'allow_implicit_invocation: false', self.snapshot(n)['agents/openai.yaml'])
+    def test_mode_is_preserved(self):
+        self.install(mode='explicit'); self.install(force=True)
+        self.assertEqual(json.loads(self.snapshot()[I.MANIFEST])['mode'], 'explicit')
+    def test_mode_change_requires_force(self):
+        self.install()
+        with self.assertRaises(I.InstallError): self.install(mode='explicit')
+    def test_force_does_not_fetch_new_upstream(self):
+        self.install(); before = self.snapshot(); self.resolve_mock.reset_mock()
+        self.install(force=True); self.resolve_mock.assert_not_called()
+        self.assertEqual(before['upstream/SKILL.upstream.md'], self.snapshot()['upstream/SKILL.upstream.md'])
+    def test_old_version_requires_update(self):
+        self.legacy()
+        with self.assertRaises(I.InstallError): self.install()
+    def test_v1_3_owner_schema_migration(self):
+        self.legacy(); result = self.install(update=True)
+        for n in I.COMPONENTS:
+            self.assertEqual(json.loads(self.snapshot(n)[I.MANIFEST])['version'], I.VERSION)
+            self.assertTrue(Path(result['components'][n]['backup']).is_file())
+    def test_upstream_only_preserves_wrapper_bytes(self):
+        self.legacy(); before = self.snapshot(); meta, up, _ = fixture(2)
+        self.resolve_mock.return_value = meta; self.fetch_mock.return_value = up
+        self.install(('yomiyasu',), update=True, upstream_only=True)
+        after = self.snapshot()
+        for k, v in before.items():
+            if k != I.MANIFEST and k != 'UPSTREAM.json' and not k.startswith('upstream/'):
+                self.assertEqual(v, after[k], k)
+        self.assertEqual(json.loads(after[I.MANIFEST])['version'], '1.3.0')
+        self.assertEqual(json.loads(after[I.MANIFEST])['upstream_commit'], '2'*40)
+    def test_upstream_only_does_not_touch_companions(self):
+        self.install(); before = self.snapshot('paragraph-writing')
+        self.install(('yomiyasu',), update=True, upstream_only=True)
+        self.assertEqual(before, self.snapshot('paragraph-writing'))
+    def test_upstream_only_requires_existing(self):
+        with self.assertRaises(I.InstallError): self.install(('yomiyasu',), update=True, upstream_only=True)
+    def test_upstream_only_rejects_mode(self):
+        self.install()
+        with self.assertRaises(I.InstallError): self.install(('yomiyasu',), update=True, upstream_only=True, mode='auto')
+    def test_update_ref_is_forwarded(self):
+        self.install(('yomiyasu',), update=True, upstream_ref='v1.1.1')
+        self.resolve_mock.assert_called_with('v1.1.1')
+    def test_edited_file_never_overwritten(self):
+        self.install(); p = self.root/'yomiyasu/SKILL.md'; p.write_text('my edits')
+        with self.assertRaises(I.InstallError): self.install(update=True, force=True)
+        self.assertEqual(p.read_text(), 'my edits')
+    def test_missing_managed_file_blocks(self):
+        self.install(); (self.root/'yomiyasu/SKILL.md').unlink()
+        with self.assertRaises(I.InstallError): self.install(update=True)
+    def test_user_extra_is_preserved(self):
+        self.install(); p = self.root/'yomiyasu/my-style.md'; p.write_text('custom')
+        self.install(update=True); self.assertEqual(p.read_text(), 'custom')
+    def test_extra_collision_blocks_all(self):
+        self.install(); name = 'references/future.md'; (self.root/'yomiyasu'/name).write_text('mine')
+        original = I.assets
+        def expanded(): return {**original(), name: b'new managed'}
+        before = self.snapshot('paragraph-writing')
+        with mock.patch.object(I, 'assets', side_effect=expanded):
+            with self.assertRaises(I.InstallError): self.install(update=True)
+        self.assertEqual(before, self.snapshot('paragraph-writing'))
+    def test_path_prefix_extra_collision_blocks(self):
+        self.install(); (self.root/'yomiyasu/newdir').write_text('user file')
+        original = I.assets
+        with mock.patch.object(I, 'assets', side_effect=lambda: {**original(), 'references/new.md': b'x', 'scripts/newdir/x.py': b'pass'}):
+            # An existing user file at scripts/newdir collides with a new directory.
+            (self.root/'yomiyasu/scripts/newdir').write_text('user')
+            with self.assertRaises(I.InstallError): self.install(update=True)
+    def test_untracked_upstream_file_blocks(self):
+        self.install(); (self.root/'yomiyasu/upstream/scripts/evil.py').write_text('pass')
+        with self.assertRaises(I.InstallError): self.install(update=True)
+    def test_other_owner_not_overwritten(self):
+        self.root.mkdir(); target = self.root/'yomiyasu'; target.mkdir(); (target/'SKILL.md').write_text('third party')
+        with self.assertRaises(I.InstallError): self.install(force=True)
+        self.assertEqual((target/'SKILL.md').read_text(), 'third party')
+    def test_symlink_target_rejected(self):
+        self.root.mkdir(); (self.root/'yomiyasu').symlink_to(self.project, target_is_directory=True)
+        with self.assertRaises(I.InstallError): self.install()
+    def test_broken_symlink_target_rejected(self):
+        self.root.mkdir(); (self.root/'yomiyasu').symlink_to(self.home/'absent')
+        with self.assertRaises(I.InstallError): self.install()
+    def test_symlink_parent_rejected(self):
+        self.root.symlink_to(self.project, target_is_directory=True)
+        with self.assertRaises(I.InstallError): self.install()
+    def test_duplicate_skill_blocks(self):
+        other = self.home/'.agents/skills/yomiyasu'; other.mkdir(parents=True); (other/'SKILL.md').write_text('other')
+        with self.assertRaises(I.InstallError): self.install()
+    def test_other_style_is_not_disabled(self):
+        other = self.home/'.agents/skills/natural-japanese'; other.mkdir(parents=True); (other/'SKILL.md').write_text('other')
+        r = self.install(('yomiyasu',))
+        self.assertIn(str(other), r['conflicts']['other_style_skills']); self.assertEqual((other/'SKILL.md').read_text(), 'other')
+    def test_lock_does_not_delete_another_lock(self):
+        self.root.mkdir(); lock = self.root/'.yomiyasu-installer.lock'; lock.write_text('other pid')
+        with self.assertRaises(I.InstallError): self.install()
+        self.assertEqual(lock.read_text(), 'other pid')
+    def test_download_failure_changes_nothing(self):
+        self.fetch_mock.side_effect = OSError('network failure')
+        with self.assertRaises(OSError): self.install()
+        self.assertFalse(self.root.exists())
+    def test_update_failure_preserves_all(self):
+        self.install(); before = {n: self.snapshot(n) for n in I.COMPONENTS}; self.fetch_mock.side_effect = OSError('network')
+        with self.assertRaises(OSError): self.install(update=True)
+        for n in I.COMPONENTS: self.assertEqual(before[n], self.snapshot(n))
+    def test_backup_is_exact(self):
+        self.install(); old = self.snapshot(); r = self.install(('yomiyasu',), force=True)
+        with zipfile.ZipFile(r['backup']) as z:
+            self.assertEqual(old, {n: z.read(n) for n in z.namelist()})
+    def test_mid_switch_failure_restores_every_directory(self):
+        self.install(); old = {n: self.snapshot(n) for n in I.COMPONENTS}; replace = I.os.replace
+        def fail_second(src, dst):
+            if '-stage-' in str(src) and Path(dst).name == 'paragraph-writing': raise OSError('simulated rename failure')
+            return replace(src, dst)
+        with mock.patch.object(I.os, 'replace', side_effect=fail_second):
+            with self.assertRaises(OSError): self.install(force=True)
+        for n in I.COMPONENTS: self.assertEqual(old[n], self.snapshot(n))
+    def test_no_config_or_agents_changes(self):
+        config = self.home/'.codex/config.toml'; config.parent.mkdir(); config.write_text('keep=true')
+        agents = self.project/'AGENTS.md'; agents.write_text('keep instructions')
+        self.install(); self.assertEqual(config.read_text(), 'keep=true'); self.assertEqual(agents.read_text(), 'keep instructions')
+    def test_uninstall_preview(self):
+        self.install(); before=self.snapshot(); I.uninstall_selected(self.root, I.COMPONENTS, False)
+        self.assertEqual(before,self.snapshot())
+    def test_uninstall_apply(self):
+        self.install(); I.uninstall_selected(self.root, I.COMPONENTS, True)
+        self.assertFalse((self.root/'yomiyasu').exists())
+    def test_uninstall_refuses_extras(self):
+        self.install(); (self.root/'yomiyasu/notes.md').write_text('mine')
+        with self.assertRaises(I.InstallError): I.uninstall_selected(self.root, I.COMPONENTS, True)
+    def test_uninstall_refuses_edited(self):
+        self.install(); (self.root/'yomiyasu/SKILL.md').write_text('mine')
+        with self.assertRaises(I.InstallError): I.uninstall_selected(self.root, I.COMPONENTS, True)
+    def test_doctor_ready(self):
+        self.install(); report,code=I.doctor(self.root/'yomiyasu',self.project)
+        self.assertEqual(code,0);self.assertEqual(report['status'],'READY_FILES')
+    def test_doctor_missing_not_ready(self):
+        self.assertEqual(I.doctor(self.root/'yomiyasu',self.project)[1],2)
+    def test_doctor_flags_untracked_upstream(self):
+        self.install();(self.root/'yomiyasu/upstream/scripts/evil.py').write_text('pass')
+        self.assertEqual(I.doctor(self.root/'yomiyasu',self.project)[1],2)
+    def test_only_companion_is_offline(self):
+        self.install(('paragraph-writing',));self.resolve_mock.assert_not_called()
+        self.assertFalse((self.root/'yomiyasu').exists())
     def test_check_update_is_read_only(self):
-        self.put(); before=self.files()
-        latest={"tag":"v1.0.4","commit":I.COMMIT,"published_at":"2026-10-02T15:10:34Z","release_url":"x","files":{}}
-        with mock.patch.object(I,'latest_release_meta',return_value=latest):
-            r=I.check_update(self.target)
-        self.assertFalse(r['update_available'])
-        self.assertEqual(before,self.files())
-
-    def test_explicit_update_refreshes_upstream_and_backs_up(self):
-        self.put(); before=self.files()
-        future={"tag":"v1.1.0","commit":"f"*40,"published_at":"2026-11-01T00:00:00Z","release_url":"x","files":{}}
-        changed=dict(self.fake); changed['SKILL.md']=b'---\nname: yomiyasu\n---\nnew upstream\n'
-        dynamic={I.map_upstream(k):v for k,v in changed.items()}
-        with mock.patch.object(I,'latest_release_meta',return_value=future), mock.patch.object(I,'fetch_release_upstream',return_value=dynamic):
-            r=I.install(self.target,apply=True,update=True)
-        self.assertTrue(r['applied']); self.assertEqual(r['upstream_tag'],'v1.1.0')
-        self.assertEqual((self.target/'upstream/SKILL.upstream.md').read_bytes(), changed['SKILL.md'])
-        self.assertTrue(Path(r['backup']).exists())
-        self.assertNotEqual(before,self.files())
-
-    def test_mode_preserved(self):
-        self.put(mode='explicit'); r = I.install(self.target, apply=True); self.assertEqual(r['mode'], 'explicit')
-
-    def test_mode_change_needs_force(self):
-        self.put()
-        with self.assertRaises(I.InstallError): self.put(mode='explicit')
-
-    def test_mode_change_force_uses_cached_upstream(self):
-        self.put()
-        with mock.patch.object(I, 'download', side_effect=AssertionError('network')):
-            r = I.install(self.target, mode='explicit', force=True, apply=True)
-        self.assertFalse(r['network']); self.assertTrue(Path(r['backup']).exists())
-        self.assertIn('false', (self.target/'agents/openai.yaml').read_text())
-
-    def test_update_backup_and_preserve_extras(self):
-        self.put(); (self.target/'notes.txt').write_text('my note')
-        before = self.files(); r = self.put(force=True)
-        self.assertEqual((self.target/'notes.txt').read_text(), 'my note')
-        with zipfile.ZipFile(r['backup']) as z: self.assertEqual(z.read('notes.txt'), before['notes.txt'])
-
-    def test_edited_managed_protected_even_force(self):
-        self.put(); (self.target/'SKILL.md').write_text('edited'); before = self.files()
-        with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual(before, self.files())
-
-    def test_missing_managed_protected(self):
-        self.put(); (self.target/'upstream/LICENSE').unlink()
-        with self.assertRaises(I.InstallError): self.put(force=True)
-
-    def test_unknown_same_name_not_adopted(self):
-        self.target.mkdir(parents=True); (self.target/'SKILL.md').write_text('other')
-        with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual((self.target/'SKILL.md').read_text(), 'other')
-
-    def test_corrupt_manifest(self):
-        self.put(); (self.target/I.MANIFEST).write_text('{')
-        with self.assertRaises(I.InstallError): self.put(force=True)
-
-    def test_traversal_manifest_refused(self):
-        self.put(); p=self.target/I.MANIFEST; m=json.loads(p.read_text()); m['files']['../x']='a'*64; p.write_text(json.dumps(m))
-        with self.assertRaises(I.InstallError): self.put(force=True)
-
-    def test_symlink_destination(self):
-        other=self.home/'elsewhere'; other.mkdir(); self.target.parent.mkdir(parents=True); self.target.symlink_to(other)
-        with self.assertRaises(I.InstallError): self.put()
-        self.assertEqual(list(other.iterdir()), [])
-
-    def test_symlink_parent(self):
-        other=self.home/'elsewhere'; other.mkdir(); self.target.parent.parent.mkdir(parents=True); self.target.parent.symlink_to(other)
-        with self.assertRaises(I.InstallError): self.put()
-
-    def test_symlink_inside_installation(self):
-        self.put(); (self.target/'outside').symlink_to(self.home/'secret')
-        with self.assertRaises(I.InstallError): self.put(force=True)
-
-    def test_symlink_source(self):
-        p=self.source/'LICENSE'; p.unlink(); alt=self.home/'license'; alt.write_bytes(self.fake['LICENSE']); p.symlink_to(alt)
-        with self.assertRaises(I.InstallError): self.put()
-        self.assertFalse(self.target.exists())
-
-    def test_source_checksum_mismatch_before_writes(self):
-        self.put(); before=self.files(); (self.source/'LICENSE').write_bytes(b'bad')
-        with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual(before, self.files())
-
-    def test_download_failure_preserves_existing(self):
-        self.put(); before=self.files()
-        future = {"tag":"v9.9.9","commit":"f"*40,"published_at":"2099-01-01T00:00:00Z","release_url":"https://github.com/nanaism/yomiyasu/releases/tag/v9.9.9","files":{}}
-        with mock.patch.object(I, 'latest_release_meta', return_value=future), mock.patch.object(I, 'fetch_release_upstream', side_effect=I.InstallError('offline')):
-            with self.assertRaises(I.InstallError): I.install(self.target, apply=True, update=True)
-        self.assertEqual(before, self.files())
-
-    def test_raw_download_exact_pins(self):
-        def downloader(url): return self.fake[url.split(I.COMMIT+'/')[1]]
-        with mock.patch.object(I, 'download', side_effect=downloader) as d:
-            r = I.fetch_upstream()
-        self.assertEqual(d.call_count, len(self.fake)); self.assertEqual(r['upstream/LICENSE'], self.fake['LICENSE'])
-
-    def test_api_fallback_exact_pins(self):
-        def downloader(url):
-            if 'raw.githubusercontent' in url: raise urllib.error.URLError('raw unavailable')
-            name=url.split('/contents/')[1].split('?')[0]
-            return json.dumps({'encoding':'base64','sha':I.PINS[name][0], 'content':I.base64.b64encode(self.fake[name]).decode()}).encode()
-        with mock.patch.object(I, 'download', side_effect=downloader):
-            self.assertEqual(I.fetch_upstream()['upstream/LICENSE'], self.fake['LICENSE'])
-
-    def test_api_bad_sha_refused(self):
-        def downloader(url):
-            if 'raw.githubusercontent' in url: raise urllib.error.URLError('no')
-            return b'{"encoding":"base64","sha":"wrong","content":"YQ=="}'
-        with mock.patch.object(I, 'download', side_effect=downloader):
-            with self.assertRaises(I.InstallError): I.fetch_upstream()
-
-    def test_download_mismatching_content_refused(self):
-        with mock.patch.object(I, 'download', return_value=b'evil'):
-            with self.assertRaises(I.InstallError): I.fetch_upstream()
-
-    def test_source_python_syntax(self):
-        name='scripts/yomiyasu_lint.py'; bad=b'def :\n'; (self.source/name).write_bytes(bad)
-        I.PINS[name] = (I.blob_sha(bad), len(bad))
-        with self.assertRaises(I.InstallError): I.fetch_upstream(self.source)
-
-    def test_lock_prevents_parallel_update(self):
-        self.put(); lock=self.target.parent/'.yomiyasu-installer.lock'; lock.write_text('another')
-        with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual(lock.read_text(), 'another')
-
-    def test_stage_rename_failure_rolls_back(self):
-        self.put(); before=self.files(); orig=I.os.replace
-        def fail(src,dst):
-            if Path(src).name.startswith('.yomiyasu-stage-'): raise OSError('simulated rename failure')
-            return orig(src,dst)
-        with mock.patch.object(I.os, 'replace', side_effect=fail):
-            with self.assertRaises(OSError): self.put(force=True)
-        self.assertEqual(before, self.files())
-        self.assertFalse((self.target.parent/'.yomiyasu-installer.lock').exists())
-
-    def test_concurrent_edit_detected(self):
-        self.put(); original=I.bundle
-        def side(*args):
-            data=original(*args); (self.target/'SKILL.md').write_text('concurrent'); return data
-        with mock.patch.object(I, 'bundle', side_effect=side):
-            with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual((self.target/'SKILL.md').read_text(), 'concurrent')
-
-    def test_duplicate_codex_home_blocks_install(self):
-        other=Path(os.environ['CODEX_HOME'])/'skills/yomiyasu'; other.mkdir(parents=True); (other/'SKILL.md').write_text('other')
-        with self.assertRaises(I.InstallError): self.put()
-        self.assertFalse(self.target.exists())
-
-    def test_duplicate_project_blocks_install(self):
-        project=self.home/'proj'; p=project/'.agents/skills/yomiyasu'; p.mkdir(parents=True); (p/'SKILL.md').write_text('other')
-        with self.assertRaises(I.InstallError): self.put(project=project)
-
-    def test_other_styler_warning_not_removed(self):
-        p=self.target.parent/'natural-japanese'; p.mkdir(parents=True); (p/'SKILL.md').write_text('other')
-        r=self.put(); self.assertIn(str(p),r['conflicts']['other_style_skills']); self.assertEqual((p/'SKILL.md').read_text(),'other')
-
-    def test_doctor_reads_no_write(self):
-        self.put(); before=self.files(); r,c=I.doctor(self.target,None)
-        self.assertEqual(c,0); self.assertEqual(before,self.files()); self.assertEqual(r['status'],'READY_FILES')
-
-    def test_doctor_detects_upstream_modification(self):
-        self.put(); (self.target/'upstream/LICENSE').write_text('bad'); r,c=I.doctor(self.target,None)
-        self.assertEqual(c,2); self.assertEqual(r['status'],'DAMAGED_OR_EDITED'); self.assertTrue(r['edited'])
-
-    def test_doctor_missing(self):
-        r,c=I.doctor(self.target,None); self.assertEqual(c,2); self.assertEqual(r['status'],'NOT_READY')
-
-    def test_uninstall_dry_then_apply(self):
-        self.put(); r=I.uninstall(self.target,False); self.assertFalse(r['applied']); self.assertTrue(self.target.exists())
-        r=I.uninstall(self.target,True); self.assertFalse(self.target.exists()); self.assertTrue(Path(r['backup']).exists())
-        self.assertEqual(I.uninstall(self.target,True)['action'],'absent')
-
-    def test_uninstall_protects_edits(self):
-        self.put(); (self.target/'SKILL.md').write_text('edited')
-        with self.assertRaises(I.InstallError): I.uninstall(self.target,True)
-
-    def test_uninstall_protects_extras(self):
-        self.put(); (self.target/'notes.txt').write_text('keep')
-        with self.assertRaises(I.InstallError): I.uninstall(self.target,True)
-
-    def test_invalid_arguments_are_read_only(self):
-        with contextlib.redirect_stdout(io.StringIO()): code=I.main(['--doctor','--apply'])
-        self.assertEqual(code,2); self.assertFalse(self.target.exists())
-
-    def test_extract_empty_only(self):
-        dest=self.home/'extracted'; I.extract(dest); self.assertTrue((dest/'SKILL.md').exists())
-        self.assertTrue((dest/'upstream-pin.json').exists())
-        with self.assertRaises(I.InstallError): I.extract(dest)
-
-    def test_custom_skills_dir_not_codex_settings(self):
-        target=self.home/'custom skills/yomiyasu'; I.install(target,apply=True,source=self.source)
-        self.assertTrue((target/'SKILL.md').exists()); self.assertFalse((self.home/'custom-codex').exists())
-
-    def test_check_lint_uses_upstream_fixture(self):
-        self.put(); p=self.home/'記事.md'; p.write_text('日本語のテストです。')
-        m=self.check_module()
-        with contextlib.redirect_stdout(io.StringIO()) as o: code=m.main(['lint',str(p)])
-        data=json.loads(o.getvalue()); self.assertEqual(code,0); self.assertFalse(data['meaning_preservation_verified'])
-
-    def test_check_strict_returncode(self):
-        self.put(); p=self.home/'記事.md'; p.write_text('test')
-        m=self.check_module()
-        with contextlib.redirect_stdout(io.StringIO()): code=m.main(['lint',str(p),'--strict'])
-        self.assertEqual(code,1)
-
-    def test_check_upstream_modification_refused(self):
-        self.put(); (self.target/'upstream/scripts/yomiyasu_lint.py').write_text('raise Exception()')
-        m=self.check_module()
-        with self.assertRaises(ValueError): m.verified_script('yomiyasu_lint.py')
-
-    def test_check_no_source_rewrite_and_path_safety(self):
-        self.put(); p=self.home/"--本文 ' $().md"; q=self.home/'after.md'
-        p.write_text('APP-FR-001 は10秒で確認する。'); q.write_text('APP-FR-001 は20秒で確認する。')
-        b={p:p.read_bytes(),q:q.read_bytes()}; m=self.check_module()
-        with contextlib.redirect_stdout(io.StringIO()) as o: code=m.main(['compare',str(p),str(q),'--stance','決まり'])
-        data=json.loads(o.getvalue()); self.assertEqual(code,1); self.assertTrue(data['protected_changes'])
-        self.assertEqual(b,{p:p.read_bytes(),q:q.read_bytes()})
-        self.assertIn('--stance=決まり',data['upstream']['report']['received'])
-
-    def test_check_same_input_refused(self):
-        self.put(); p=self.home/'x.md'; p.write_text('text'); m=self.check_module()
-        with contextlib.redirect_stderr(io.StringIO()): code=m.main(['compare',str(p),str(p)])
-        self.assertEqual(code,2)
-
-    def test_check_binary_docx_refused(self):
-        self.put(); p=self.home/'x.docx'; p.write_bytes(b'PK00'); m=self.check_module()
-        with contextlib.redirect_stderr(io.StringIO()): code=m.main(['lint',str(p)])
-        self.assertEqual(code,2)
-
-    def test_check_protected_terms(self):
-        self.put(); m=self.check_module()
-        changes=m.compare_anchors('双曲空間を使う。','特殊な空間を使う。',['双曲空間'])
-        self.assertIn('specified_terms',[x['kind'] for x in changes])
-
-    def test_check_code_links_quotes_math_frontmatter(self):
-        self.put(); m=self.check_module()
-        b='---\ntype: a\n---\n```python\nx=1\n```\n`code` [ref](target)\n> 引用\n$$x=1$$\n- [ ] 未実施\n'
-        a='---\ntype: b\n---\n```python\nx=2\n```\n`kode` [ref](other)\n> 改変\n$$x=2$$\n- [x] 未実施\n'
-        kinds={x['kind'] for x in m.compare_anchors(b,a,[])}
-        self.assertTrue({'frontmatter','code_blocks','inline_code','link_targets','literal_quotes','math','checkbox_state'} <= kinds)
-
-    def test_japanese_adjacent_numbers_and_units(self):
-        self.put(); m=self.check_module()
-        for before, after in [('待つのは10秒。','待つのは20秒。'),('締切2026-10-10','締切2026-10-11'),('価格は3万円','価格は4万円')]:
-            with self.subTest(before=before):
-                self.assertIn('numbers_and_units',[x['kind'] for x in m.compare_anchors(before,after,[])])
-
-    def test_check_prose_only_changes_no_semantic_claim(self):
-        self.put(); m=self.check_module()
-        self.assertEqual(m.compare_anchors('処理が可能です。','処理できます。',[]),[])
-
-    def test_check_ids_mentions(self):
-        self.put(); m=self.check_module(); changes=m.compare_anchors('APP-FR-001 #12 @alice','APP-FR-002 #13 @bob',[])
-        self.assertIn('ids_mentions',[c['kind'] for c in changes])
-
-    def test_helper_timeout_not_pass(self):
-        self.put(); m=self.check_module(); p=self.home/'x.md'; p.write_text('text')
-        with mock.patch.object(m.subprocess,'run',side_effect=subprocess.TimeoutExpired('python',30)), contextlib.redirect_stderr(io.StringIO()):
-            self.assertEqual(m.main(['lint',str(p)]),2)
-
-    def test_skill_contract(self):
-        self.put(); s=(self.target/'SKILL.md').read_text(); policy=(self.target/'references/usage-policy.md').read_text()
-        for text in ['upstream/SKILL.upstream.md','GitHub Project Director','SpecKit Upstream','Office Workbench',
-                     '数値','Issue','未実施','承認','二重','本文だけ','scripts/check.py']:
-            self.assertIn(text,s)
-        self.assertIn('一律に強制しない',policy); self.assertIn('最大一回',s)
-
-    def test_safe_paths_reject(self):
-        for path in ['../x','/tmp/x','a\\b','x:bad','a//b']:
-            with self.subTest(path=path), self.assertRaises(I.InstallError): I.safe_rel(path)
-
-    def test_redirect_external_refused(self):
-        handler=I.LockedRedirect()
-        with self.assertRaises(I.InstallError): handler.redirect_request(None,None,302,'',{},'http://example.com/a')
-
-    def test_extras_collide_new_assets_refused(self):
-        self.put(); extra=self.target/'references/new.md'; extra.write_text('user')
-        original=I.bundle
-        def more(*args): return {**original(*args),'references/new.md':b'new managed'}
-        with mock.patch.object(I,'bundle',side_effect=more):
-            with self.assertRaises(I.InstallError): self.put(force=True)
-        self.assertEqual(extra.read_text(),'user')
-
-class BundleTests(unittest.TestCase):
-    setUp = InstallerTests.setUp
-    put = InstallerTests.put
-    files = InstallerTests.files
-
-    def both(self, **kwargs):
-        return I.install_selected(self.target.parent, apply=True, source=self.source, **kwargs)
-
-    def paragraph(self):
-        return self.target.parent/'paragraph-writing'
-
-    def direct(self):
-        return self.target.parent/'japanese-direct-writing'
-
-    def snapshots(self):
-        return {name:I.inventory(self.target.parent/name) for name in I.COMPONENTS}
-
-    def test_default_cli_installs_three_and_only_three_entrypoints(self):
-        with contextlib.redirect_stdout(io.StringIO()) as stream:
-            code = I.main(['--apply','--source-dir',str(self.source)])
-        self.assertEqual(code,0)
-        result=json.loads(stream.getvalue())
-        self.assertEqual(set(result['components']),set(I.COMPONENTS))
-        self.assertEqual({p.parent.name for p in self.target.parent.rglob('SKILL.md')},set(I.COMPONENTS))
-        for name in I.COMPONENTS:
-            marker=json.loads((self.target.parent/name/I.MANIFEST).read_text())
-            self.assertEqual(marker['owner'],I.OWNERS[name])
-
-    def test_bundle_preview_no_directory_or_network(self):
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent)
-        self.assertFalse(result['applied'])
-        self.assertFalse(self.target.parent.exists())
-
-    def test_bundle_idempotent_no_files_or_mtimes_changed(self):
-        self.both(); before=self.snapshots()
-        mtimes={p:p.stat().st_mtime_ns for p in self.target.parent.rglob('*') if p.is_file()}
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,apply=True)
-        self.assertFalse(result['applied'])
-        self.assertEqual(before,self.snapshots())
-        self.assertEqual(mtimes,{p:p.stat().st_mtime_ns for p in mtimes})
-
-    def test_new_paragraph_inherits_existing_explicit_yomiyasu(self):
-        self.put(mode='explicit')
-        result=self.both()
-        self.assertEqual(result['components']['paragraph-writing']['mode'],'explicit')
-        self.assertIn('allow_implicit_invocation: false',(self.paragraph()/'agents/openai.yaml').read_text())
-        self.assertEqual(result['components']['japanese-direct-writing']['mode'],'explicit')
-        self.assertIn('allow_implicit_invocation: false',(self.direct()/'agents/openai.yaml').read_text())
-
-    def test_individual_existing_modes_preserved(self):
-        self.put(mode='explicit')
-        I.install_selected(self.target.parent,('paragraph-writing',),mode='auto',apply=True)
-        I.install_selected(self.target.parent,('japanese-direct-writing',),mode='auto',apply=True)
-        result=self.both()
-        self.assertEqual(result['components']['yomiyasu']['mode'],'explicit')
-        self.assertEqual(result['components']['paragraph-writing']['mode'],'auto')
-        self.assertEqual(result['components']['japanese-direct-writing']['mode'],'auto')
-
-    def test_explicit_mode_changes_both_with_force_offline(self):
-        self.both()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,mode='explicit',force=True,apply=True)
-        for entry in result['components'].values():
-            self.assertEqual(entry['mode'],'explicit')
-            self.assertTrue(Path(entry['backup']).exists())
-
-    def test_paragraph_only_no_yomiyasu_or_network(self):
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            I.install_selected(self.target.parent,('paragraph-writing',),apply=True)
-        self.assertFalse(self.target.exists())
-        meta=json.loads((self.paragraph()/'UPSTREAM.json').read_text())
-        for name,digest in meta['files'].items():
-            self.assertEqual(I.sha((self.paragraph()/name).read_bytes()),digest)
-
-    def test_paragraph_source_option_rejected_without_writes(self):
-        with contextlib.redirect_stdout(io.StringIO()):
-            code=I.main(['--only','paragraph-writing','--source-dir',str(self.source),'--apply'])
-        self.assertEqual(code,2)
-        self.assertFalse(self.target.parent.exists())
-
-    def test_legacy_yomiyasu_manifest_requires_force_and_keeps_upstream(self):
-        self.put(mode='explicit'); marker=self.target/I.MANIFEST
-        legacy=json.loads(marker.read_text());legacy['version']='1.1.0';legacy.pop('component')
-        marker.write_text(json.dumps(legacy)); before=self.files()
-        with self.assertRaises(I.InstallError):self.both()
-        self.assertFalse(self.paragraph().exists())
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,force=True,apply=True)
-        self.assertEqual((self.target/'upstream/SKILL.upstream.md').read_bytes(),before['upstream/SKILL.upstream.md'])
-        self.assertEqual(result['components']['paragraph-writing']['mode'],'explicit')
-
-    def test_paragraph_edit_blocks_whole_update_even_force(self):
-        self.both();(self.paragraph()/'SKILL.md').write_text('user edit');before=self.snapshots()
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_unowned_paragraph_blocks_before_yomiyasu_install(self):
-        self.paragraph().mkdir(parents=True);(self.paragraph()/'SKILL.md').write_text('other install')
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertFalse(self.target.exists())
-        self.assertEqual((self.paragraph()/'SKILL.md').read_text(),'other install')
-
-    def test_owner_cannot_be_swapped_between_components(self):
-        self.both();p=self.paragraph()/I.MANIFEST;marker=json.loads(p.read_text());marker['owner']=I.OWNER;p.write_text(json.dumps(marker))
-        with self.assertRaises(I.InstallError):self.both(force=True)
-
-    def test_duplicate_paragraph_blocks_entire_install(self):
-        duplicate=Path(os.environ['CODEX_HOME'])/'skills/paragraph-writing'
-        duplicate.mkdir(parents=True);(duplicate/'SKILL.md').write_text('other')
-        with self.assertRaises(I.InstallError):self.both()
-        self.assertFalse(self.target.exists())
-        self.assertFalse(self.paragraph().exists())
-
-    def test_companions_not_classified_as_conflicting_stylers(self):
-        self.both()
-        for name in I.COMPONENTS:
-            result,code=I.doctor(self.target.parent/name,None,name)
-            self.assertEqual(code,0)
-            self.assertEqual(result['conflicts']['other_style_skills'],[])
-
-    def test_second_install_switch_failure_restores_both_existing(self):
-        self.both();before=self.snapshots();original=I.os.replace
-        def fail(src,dst):
-            if Path(src).name.startswith('.paragraph-writing-stage-'):raise OSError('second switch fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-        self.assertFalse((self.target.parent/'.yomiyasu-installer.lock').exists())
-
-    def test_second_install_failure_removes_first_new_component(self):
-        original=I.os.replace
-        def fail(src,dst):
-            if Path(src).name.startswith('.paragraph-writing-stage-'):raise OSError('second switch fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):self.both()
-        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
-
-    def test_second_preparation_failure_leaves_existing_files_unchanged(self):
-        self.both();before=self.snapshots()
-        with mock.patch.object(I,'paragraph_bundle',side_effect=I.InstallError('invalid payload')):
-            with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_concurrent_paragraph_edit_is_preserved_before_switch(self):
-        self.both();before=self.files();original=I.paragraph_bundle
-        def changed(mode):
-            data=original(mode);(self.paragraph()/'SKILL.md').write_text('concurrent edit');return data
-        with mock.patch.object(I,'paragraph_bundle',side_effect=changed):
-            with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.files())
-        self.assertEqual((self.paragraph()/'SKILL.md').read_text(),'concurrent edit')
-
-    def test_user_paragraph_extra_preserved_update_but_blocks_uninstall(self):
-        self.both();(self.paragraph()/'notes.txt').write_text('keep')
-        self.both(force=True);before=self.snapshots()
-        self.assertEqual((self.paragraph()/'notes.txt').read_text(),'keep')
-        with self.assertRaises(I.InstallError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_second_uninstall_rename_failure_restores_both(self):
-        self.both();before=self.snapshots();original=I.os.replace
-        def fail(src,dst):
-            if Path(src)==self.paragraph():raise OSError('second removal fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_uninstall_only_paragraph_keeps_yomiyasu(self):
-        self.both();before=self.files()
-        with contextlib.redirect_stdout(io.StringIO()):
-            code=I.main(['--uninstall','--only','paragraph-writing','--apply'])
-        self.assertEqual(code,0);self.assertFalse(self.paragraph().exists());self.assertEqual(before,self.files())
-
-    def test_bundle_uninstall_preview_does_not_mutate(self):
-        self.both();before=self.snapshots()
-        I.uninstall_selected(self.target.parent,I.COMPONENTS,False)
-        self.assertEqual(before,self.snapshots())
-
-    def test_bundle_uninstall_removes_three_with_distinct_backups(self):
-        self.both();result=I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        paths={entry['backup'] for entry in result['components'].values()}
-        self.assertEqual(len(paths),3)
-        self.assertTrue(all(Path(p).exists() for p in paths))
-        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
-
-    def test_paragraph_check_update_is_offline_read_only(self):
-        self.both();before=self.snapshots()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.check_updates(self.target.parent,('paragraph-writing',))
-        self.assertFalse(result['update_available']);self.assertEqual(before,self.snapshots())
-
-    def test_paragraph_update_is_offline_and_leaves_yomiyasu_unchanged(self):
-        self.both();before=self.files()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            I.install_selected(self.target.parent,('paragraph-writing',),update=True,apply=True)
-        self.assertEqual(before,self.files())
-
-    def test_bundle_doctor_no_mtime_changes(self):
-        self.both();before=self.snapshots()
-        mtimes={p:p.stat().st_mtime_ns for p in self.target.parent.rglob('*') if p.is_file()}
-        with contextlib.redirect_stdout(io.StringIO()) as stream:code=I.main(['--doctor'])
-        self.assertEqual(code,0)
-        self.assertTrue(all(entry['status']=='READY_FILES' for entry in json.loads(stream.getvalue())['components'].values()))
-        self.assertEqual(before,self.snapshots());self.assertEqual(mtimes,{p:p.stat().st_mtime_ns for p in mtimes})
-
-    def test_extracted_python_can_install_paragraph_alone(self):
-        destination=self.home/'extract';I.extract(destination)
-        result=subprocess.run([sys.executable,str(destination/'installer.py'),'--only','paragraph-writing','--apply'],
-                              cwd=self.home,text=True,capture_output=True,timeout=20)
-        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
-        self.assertTrue((self.paragraph()/'SKILL.md').exists());self.assertFalse(self.target.exists())
-
-    def test_corrupt_bundled_original_rejected_before_skill_placement(self):
-        data=I.assets();data['paragraph-writing/upstream/SKILL.upstream.md']=b'corrupt'
-        with mock.patch.object(I,'assets',return_value=data):
-            with self.assertRaises(I.InstallError):
-                I.install_selected(self.target.parent,('paragraph-writing',),apply=True)
-        self.assertFalse(self.paragraph().exists())
-
-    def test_edit_during_backup_is_preserved_on_install(self):
-        self.both();before=self.files();original=I.backup
-        def modified(target,files):
-            path=original(target,files)
-            if target==self.paragraph():(target/'SKILL.md').write_text('edit during backup')
-            return path
-        with mock.patch.object(I,'backup',side_effect=modified):
-            with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.files())
-        self.assertEqual((self.paragraph()/'SKILL.md').read_text(),'edit during backup')
-
-    def test_edit_during_backup_is_preserved_on_uninstall(self):
-        self.both();before=self.files();original=I.backup
-        def modified(target,files):
-            path=original(target,files)
-            if target==self.paragraph():(target/'SKILL.md').write_text('edit during backup')
-            return path
-        with mock.patch.object(I,'backup',side_effect=modified):
-            with self.assertRaises(I.InstallError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        self.assertEqual(before,self.files())
-        self.assertEqual((self.paragraph()/'SKILL.md').read_text(),'edit during backup')
-
-    def test_direct_only_preserves_zip_content_without_network(self):
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
-        self.assertTrue(result['applied']);self.assertFalse(result['network'])
-        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
-        expected={'SKILL.md':'2f275f460caa23ad6c61c5f5f3581b927559bab1651a28e808615bf4811493e3',
-                  'agents/openai.yaml':'f032fde03311af6ce22465b634173eb39d32b5e21aa1f7d620ccf20f4f4d4792'}
-        source=json.loads((self.direct()/'SOURCE.json').read_text())
-        self.assertEqual(source['files'],expected)
-        self.assertEqual(source['archive_sha256'],'88f033759318483739f73ca297bd84dd997146171c795dbe907defa544aff1de')
-        self.assertEqual(result['upstream_revision'],source['archive_sha256'])
-        for name,digest in expected.items():
-            self.assertEqual(I.sha((self.direct()/name).read_bytes()),digest)
-
-    def test_direct_explicit_changes_only_invocation_setting(self):
-        I.install_selected(self.target.parent,('japanese-direct-writing',),mode='explicit',apply=True)
-        original=I.assets()['japanese-direct-writing/agents/openai.yaml']
-        expected=original.replace(b'allow_implicit_invocation: true',b'allow_implicit_invocation: false')
-        self.assertEqual((self.direct()/'agents/openai.yaml').read_bytes(),expected)
-        self.assertEqual((self.direct()/'SKILL.md').read_bytes(),I.assets()['japanese-direct-writing/SKILL.md'])
-        result,code=I.doctor(self.direct(),None,'japanese-direct-writing')
-        self.assertEqual(code,0);self.assertFalse(result['implicit_invocation'])
-
-    def test_direct_only_inherits_owned_yomiyasu_mode(self):
-        self.put(mode='explicit');before=self.files()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
-        self.assertEqual(result['mode'],'explicit');self.assertEqual(before,self.files())
-        self.assertFalse(self.paragraph().exists())
-
-    def test_direct_only_does_not_claim_unowned_yomiyasu(self):
-        self.target.mkdir(parents=True);(self.target/'SKILL.md').write_text('unowned')
-        before=self.files()
-        result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
-        self.assertEqual(result['mode'],'auto');self.assertEqual(before,self.files())
-
-    def test_version_120_upgrade_keeps_upstream_and_existing_modes(self):
-        I.install_selected(self.target.parent,('yomiyasu','paragraph-writing'),mode='explicit',apply=True,source=self.source)
-        before=self.files()
-        for name in ('yomiyasu','paragraph-writing'):
-            path=self.target.parent/name/I.MANIFEST;marker=json.loads(path.read_text());marker['version']='1.2.0'
-            path.write_text(json.dumps(marker))
-        with self.assertRaises(I.InstallError):self.both()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.install_selected(self.target.parent,force=True,apply=True)
+        self.install();before=self.snapshot();I.check_updates(self.root,I.COMPONENTS)
+        self.assertEqual(before,self.snapshot())
+    def test_snapshot_source_offline(self):
+        self.install(('yomiyasu',));source=self.root/'yomiyasu';other=self.home/'other'
+        result=I.install_selected(other,('yomiyasu',),apply=True,source=source,project=self.project)
         self.assertFalse(result['network'])
-        self.assertEqual({k:v for k,v in self.files().items() if k.startswith('upstream/')},
-                         {k:v for k,v in before.items() if k.startswith('upstream/')})
-        for entry in result['components'].values():self.assertEqual(entry['mode'],'explicit')
-
-    def test_direct_source_option_rejected_without_writes(self):
+    def test_snapshot_source_rejects_extra_module(self):
+        self.install(('yomiyasu',));(self.root/'yomiyasu/upstream/scripts/evil.py').write_text('pass')
+        with self.assertRaises(I.InstallError): I.source_upstream(self.root/'yomiyasu')
+    def test_stub_upstream_runner_and_sibling_module(self):
+        self.install(('yomiyasu',)); original=L.ROOT;L.ROOT=self.root/'yomiyasu'
+        try:
+            report=L.upstream('yomiyasu_lint.py',[])
+            self.assertTrue(report['report']['fixture'])
+        finally:L.ROOT=original
+    def test_stub_runner_rejects_edited_dependency(self):
+        self.install(('yomiyasu',));(self.root/'yomiyasu/upstream/scripts/markdown_visibility.py').write_text('READY=False')
+        original=L.ROOT;L.ROOT=self.root/'yomiyasu'
+        try:
+            with self.assertRaises(ValueError):L.upstream('yomiyasu_lint.py',[])
+        finally:L.ROOT=original
+    def test_extract_empty_only(self):
+        dst=self.home/'extract';dst.mkdir();(dst/'keep').write_text('mine')
+        with self.assertRaises(I.InstallError):I.extract(dst)
+    def test_extracted_source_can_read_assets(self):
+        dst=self.home/'extract';I.extract(dst)
+        spec=importlib.util.spec_from_file_location('exported_installer',dst/'installer.py')
+        mod=importlib.util.module_from_spec(spec);sys.modules[spec.name]=mod;spec.loader.exec_module(mod)
+        self.assertIn('SKILL.md',mod.assets())
+    def test_cli_invalid_modes(self):
         with contextlib.redirect_stdout(io.StringIO()):
-            code=I.main(['--only','japanese-direct-writing','--source-dir',str(self.source),'--apply'])
-        self.assertEqual(code,2);self.assertFalse(self.target.parent.exists())
-
-    def test_unowned_direct_blocks_entire_install(self):
-        self.direct().mkdir(parents=True);(self.direct()/'SKILL.md').write_text('unowned')
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
-        self.assertEqual((self.direct()/'SKILL.md').read_text(),'unowned')
-
-    def test_direct_edits_and_missing_files_block_whole_update(self):
-        self.both();(self.direct()/'SKILL.md').write_text('user edit');before=self.snapshots()
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-        (self.direct()/'SKILL.md').write_bytes(I.assets()['japanese-direct-writing/SKILL.md'])
-        (self.direct()/'agents/openai.yaml').unlink();before=self.snapshots()
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_duplicate_direct_blocks_entire_install(self):
-        duplicate=Path(os.environ['CODEX_HOME'])/'skills/japanese-direct-writing'
-        duplicate.mkdir(parents=True);(duplicate/'SKILL.md').write_text('other')
-        with self.assertRaises(I.InstallError):self.both()
-        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
-
-    def test_direct_owner_cannot_be_swapped(self):
-        self.both();path=self.direct()/I.MANIFEST;marker=json.loads(path.read_text())
-        marker['owner']=I.OWNERS['paragraph-writing'];path.write_text(json.dumps(marker))
-        before=self.snapshots()
-        with self.assertRaises(I.InstallError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_corrupt_direct_payload_aborts_before_any_placement(self):
-        for filename in ('SKILL.md','agents/openai.yaml'):
-            with self.subTest(filename=filename):
-                data=I.assets();data['japanese-direct-writing/'+filename]=b'corrupt'
-                with mock.patch.object(I,'assets',return_value=data):
-                    with self.assertRaises(I.InstallError):self.both()
-                self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
-
-    def test_third_install_switch_failure_restores_all_existing(self):
-        self.both();before=self.snapshots();original=I.os.replace
-        def fail(src,dst):
-            if Path(src).name.startswith('.japanese-direct-writing-stage-'):raise OSError('third switch fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):self.both(force=True)
-        self.assertEqual(before,self.snapshots())
-        self.assertFalse((self.target.parent/'.yomiyasu-installer.lock').exists())
-
-    def test_third_install_failure_removes_all_new_components(self):
-        original=I.os.replace
-        def fail(src,dst):
-            if Path(src).name.startswith('.japanese-direct-writing-stage-'):raise OSError('third switch fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):self.both()
-        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
-
-    def test_third_uninstall_failure_restores_all(self):
-        self.both();before=self.snapshots();original=I.os.replace
-        def fail(src,dst):
-            if Path(src)==self.direct():raise OSError('third removal fails')
-            return original(src,dst)
-        with mock.patch.object(I.os,'replace',side_effect=fail):
-            with self.assertRaises(OSError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_direct_check_update_is_offline_read_only_and_detects_absence(self):
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            missing=I.check_updates(self.target.parent,('japanese-direct-writing',))
-        self.assertTrue(missing['update_available']);self.assertFalse(self.target.parent.exists())
-        self.both();before=self.snapshots()
-        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            result=I.check_updates(self.target.parent,('japanese-direct-writing',))
-        self.assertFalse(result['update_available']);self.assertEqual(before,self.snapshots())
-
-    def test_direct_revision_update_is_offline_and_preserves_others(self):
-        self.both();before=self.snapshots();data=I.assets()
-        data['japanese-direct-writing/SKILL.md']+=b'\nUpdated fixture\n'
-        meta=json.loads(data['japanese-direct-writing/SOURCE.json']);meta['revision']='f'*64
-        meta['files']['SKILL.md']=I.sha(data['japanese-direct-writing/SKILL.md'])
-        data['japanese-direct-writing/SOURCE.json']=json.dumps(meta).encode()
-        with mock.patch.object(I,'assets',return_value=data),mock.patch.object(I,'download',side_effect=AssertionError('network')):
-            check=I.check_updates(self.target.parent,('japanese-direct-writing',))
-            self.assertTrue(check['update_available'])
-            result=I.install_selected(self.target.parent,('japanese-direct-writing',),update=True,apply=True)
-        self.assertTrue(result['applied']);self.assertFalse(result['network'])
-        self.assertEqual(result['upstream_revision'],'f'*64);self.assertTrue(Path(result['backup']).exists())
-        self.assertEqual((self.direct()/'SKILL.md').read_bytes(),data['japanese-direct-writing/SKILL.md'])
-        for name in ('yomiyasu','paragraph-writing'):self.assertEqual(before[name],I.inventory(self.target.parent/name))
-
-    def test_direct_uninstall_only_keeps_other_components(self):
-        self.both();before=self.snapshots()
-        with contextlib.redirect_stdout(io.StringIO()) as stream:
-            code=I.main(['--only','japanese-direct-writing','--uninstall','--apply'])
-        self.assertEqual(code,0);self.assertFalse(self.direct().exists())
-        for name in ('yomiyasu','paragraph-writing'):self.assertEqual(before[name],I.inventory(self.target.parent/name))
-        with zipfile.ZipFile(json.loads(stream.getvalue())['backup']) as archive:
-            self.assertEqual(archive.read('SKILL.md'),before['japanese-direct-writing']['SKILL.md'])
-
-    def test_direct_extra_preserved_but_blocks_uninstall(self):
-        self.both();(self.direct()/'notes.txt').write_text('keep')
-        self.both(force=True);before=self.snapshots()
-        self.assertEqual((self.direct()/'notes.txt').read_text(),'keep')
-        with self.assertRaises(I.InstallError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
-        self.assertEqual(before,self.snapshots())
-
-    def test_extracted_python_can_install_direct_alone(self):
-        destination=self.home/'extract';I.extract(destination)
-        result=subprocess.run([sys.executable,str(destination/'installer.py'),'--only','japanese-direct-writing','--apply'],
-                              cwd=self.home,text=True,capture_output=True,timeout=20)
-        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
-        self.assertTrue((self.direct()/'SKILL.md').exists());self.assertFalse(self.target.exists())
-        self.assertFalse(self.paragraph().exists())
+            code=I.main(['--doctor','--apply'])
+        self.assertEqual(code,2)
+    def test_cli_upstream_only_narrows_default_all(self):
+        self.install()
+        with contextlib.redirect_stdout(io.StringIO()) as buf:
+            code=I.main(['--skills-dir',str(self.root),'--update','--upstream-only','--apply'])
+        self.assertEqual(code,0);self.assertEqual(json.loads(buf.getvalue())['component'],'yomiyasu')
+    def test_assets_python310_syntax(self):
+        import ast
+        for name,data in I.assets().items():
+            if name.endswith('.py'):ast.parse(data.decode(),filename=name,feature_version=(3,10))
 
 
-if __name__=='__main__': unittest.main()
+class UpstreamAndSecurityTests(unittest.TestCase):
+    def test_paths_are_rejected(self):
+        for value in ('../x','/x','x/../y','x\\y','C:x','x//y','x\0y','.'):
+            with self.subTest(value=value):
+                with self.assertRaises(I.InstallError):I.safe_rel(value)
+    def test_observed_v1_1_1_tree_selection(self):
+        tree=json.loads(A['tests/upstream-v1.1.1-tree.json'])
+        files=I.release_file_manifest(tree)
+        self.assertEqual(len(files),13)
+        self.assertIn('UNICODE-LICENSE.txt',files)
+        self.assertIn('scripts/markdown_visibility.py',files)
+        self.assertNotIn('.claude-plugin/plugin.json',files)
+        self.assertEqual(files['SKILL.md']['git_blob_sha1'],'ad38af2140d4e102cad69737f2ca035cc1e87677')
+    def test_unicode_license_is_included(self):
+        _,_,rows=fixture(); files=I.release_file_manifest({'tree':rows,'truncated':False})
+        self.assertIn('UNICODE-LICENSE.txt',files);self.assertIn('scripts/markdown_visibility.py',files)
+    def test_legacy_layout_supported(self):
+        _,_,rows=fixture();rows=[{**r,'path':r['path'].removeprefix('skills/yomiyasu/')} for r in rows if r['path'].startswith('skills/')]
+        self.assertIn('SKILL.md',I.release_file_manifest({'tree':rows}))
+    def test_truncated_tree_blocks(self):
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':[],'truncated':True})
+    def test_symlink_tree_blocks(self):
+        _,_,rows=fixture();rows[0]['mode']='120000'
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':rows})
+    def test_path_traversal_in_tree_blocks(self):
+        _,_,rows=fixture();rows.append({'path':'skills/yomiyasu/scripts/../../evil.py','type':'blob','mode':'100644','sha':'a'*40,'size':1})
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':rows})
+    def test_nested_skill_blocks(self):
+        _,_,rows=fixture();rows.append({'path':'skills/yomiyasu/references/nested/SKILL.md','type':'blob','mode':'100644','sha':'a'*40,'size':1})
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':rows})
+    def test_conflicting_duplicate_license_blocks(self):
+        _,_,rows=fixture();rows[-1]['sha']='a'*40
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':rows})
+    def test_missing_required_files_blocks(self):
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':[]})
+    def test_size_limit_blocks(self):
+        _,_,rows=fixture();rows[0]['size']=I.MAX_FILE+1
+        with self.assertRaises(I.InstallError):I.release_file_manifest({'tree':rows})
+    def test_hash_mismatch_blocks(self):
+        with self.assertRaises(I.InstallError):I.verify_file('SKILL.md',b'bad',{'size':3,'git_blob_sha1':'a'*40})
+    def test_python_syntax_blocks(self):
+        raw=b'def x(:'
+        with self.assertRaises(SyntaxError):I.verify_file('scripts/a.py',raw,{'size':len(raw),'git_blob_sha1':I.blob_sha(raw)})
+    def test_contract_missing_helper(self):
+        _,files,_=fixture();del files['upstream/scripts/markdown_visibility.py']
+        with self.assertRaises(I.InstallError):I.upstream_contract(files)
+    def test_contract_missing_license(self):
+        _,files,_=fixture();del files['upstream/UNICODE-LICENSE.txt']
+        with self.assertRaises(I.InstallError):I.upstream_contract(files)
+    def test_changed_skill_name_blocks(self):
+        _,files,_=fixture();files['upstream/SKILL.upstream.md']=b'---\nname: different\n---\n'
+        with self.assertRaises(I.InstallError):I.upstream_contract(files)
+    def test_allowed_urls(self):
+        I.validate_url('https://api.github.com/repos/nanaism/yomiyasu/releases/latest')
+        I.validate_url('https://raw.githubusercontent.com/nanaism/yomiyasu/main/README.md')
+    def test_other_endpoints_are_rejected(self):
+        for url in ('http://api.github.com/repos/nanaism/yomiyasu/x','https://api.github.com/repos/evil/repo/x','https://evil.example/x','https://user:pass@api.github.com/repos/nanaism/yomiyasu/x'):
+            with self.subTest(url=url):
+                with self.assertRaises(I.InstallError):I.validate_url(url)
+    def test_lightweight_tag_resolution(self):
+        with mock.patch.object(I,'json_download',return_value={'object':{'type':'commit','sha':'a'*40}}):
+            self.assertEqual(I.tag_commit('v1.1.1'),'a'*40)
+    def test_annotated_tag_ignores_remote_url(self):
+        replies=[{'object':{'type':'tag','sha':'b'*40,'url':'https://evil.example'}},{'object':{'type':'commit','sha':'a'*40}}]
+        with mock.patch.object(I,'json_download',side_effect=replies) as getter:
+            self.assertEqual(I.tag_commit('v1.1.1'),'a'*40)
+            self.assertIn('/git/tags/'+('b'*40),getter.call_args[0][0])
+    def test_prerelease_is_rejected(self):
+        with mock.patch.object(I,'json_download',return_value={'prerelease':True,'tag_name':'v1.1.1'}):
+            with self.assertRaises(I.InstallError):I.resolve_release()
+    def test_downloaded_files_verified_and_mapped(self):
+        meta,files,_=fixture()
+        source={spec['repo_path']:files[I.map_upstream(name)] for name,spec in meta['files'].items()}
+        with mock.patch.object(I,'download',side_effect=lambda url:source[url.split(meta['commit']+'/',1)[1]]):
+            self.assertEqual(I.fetch_release(meta),files)
+
+
+class TextRegressionTests(unittest.TestCase):
+    def test_soft_wrapped_meta_is_detected(self):
+        self.assertTrue(L.local_lint('ご依頼に\n沿って整理しました。'))
+    def test_footnote_continuation_detected(self):
+        self.assertTrue(L.local_lint('[^a]: 注記\n    ご依頼に沿って整理しました。'))
+    def test_nested_inline_quotes_are_protected(self):
+        self.assertFalse(L.local_lint('「中に『ご依頼に沿って』を含む」という用例。'))
+    def test_comment_continuation_detected(self):
+        self.assertTrue(L.local_lint('<!--\nここに図を入れる\n-->'))
+    def test_four_backtick_fence_protected(self):
+        self.assertFalse(L.local_lint('````\n```\nご依頼に沿って\n````'))
+    def test_outline_respects_blank_paragraphs(self):
+        rows=L.outline('# 見出し\n\n方式Aは速い。理由を示す。\n\n方式Bは遅い。')
+        self.assertEqual([x['first_sentence'] for x in rows if x['kind']=='paragraph'],['方式Aは速い。','方式Bは遅い。'])
+    def test_outline_ignores_code(self):
+        self.assertFalse([x for x in L.outline('```\ncode\n```') if x['kind']=='paragraph'])
+    def test_outline_decimal(self):
+        rows=L.outline('正解率は0.82だった。比較を続ける。')
+        self.assertEqual(rows[0]['first_sentence'],'正解率は0.82だった。')
+    def test_negative_to_positive_is_flagged(self):
+        self.assertTrue(L.compare_anchors('効果は確認できない。','効果を確認した。'))
+    def test_no_significance_to_no_effect_flagged(self):
+        self.assertTrue(L.compare_anchors('有意差はなかった。','効果はない。'))
+    def test_protected_number_changed(self):
+        self.assertTrue(L.compare_anchors('正解率は82%。','正解率は86%。'))
+    def test_url_changed(self):
+        self.assertTrue(L.compare_anchors('[出典](https://example.org/a)','[出典](https://example.org/b)'))
+    def test_term_removed(self):
+        self.assertTrue(L.compare_anchors('Poincareモデルを比較した。','モデルを比較した。',['Poincare']))
+    def test_citation_removed(self):
+        self.assertTrue(L.compare_anchors('結果を報告した[1]。','結果を報告した。'))
+    def test_code_changed(self):
+        self.assertTrue(L.compare_anchors('```python\nx=1\n```','```python\nx=2\n```'))
+    def test_math_changed(self):
+        self.assertTrue(L.compare_anchors('$x=y$','$x=z$'))
+    def test_same_anchors_do_not_prove_semantics(self):
+        # A counter cannot know that ownership has swapped. This limitation is explicit.
+        self.assertEqual(L.compare_anchors('Aは82%、Bは86%。','Aは86%、Bは82%。'),[])
+    def test_identical_text_unchanged(self):
+        s='本研究では方式Aを評価した。正解率は82%だった。'
+        self.assertEqual(L.compare_anchors(s,s),[])
+    def test_empty_after_is_flagged(self):
+        self.assertTrue(L.compare_anchors('結果を報告した。',''))
+    def test_template_todo_is_kept(self):
+        self.assertFalse(L.local_lint('TODO: 担当者名を記入。','template'))
+    def test_safe_reader_request_in_email(self):
+        self.assertFalse(L.local_lint('ご依頼の資料をご確認ください。','email'))
+    def test_technical_prompt_is_kept(self):
+        self.assertFalse(L.local_lint('プロンプトの長さを測定した。','research'))
+    def test_input_rejects_nul(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'a.md';p.write_bytes(b'abc\0')
+            with self.assertRaises(ValueError):L.read_text(str(p))
+    def test_input_bom_supported(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'a.md';p.write_bytes(b'\xef\xbb\xbfabc')
+            self.assertEqual(L.read_text(str(p))[1],'abc')
+
+
+class DevelopmentCorpusTests(unittest.TestCase):
+    pass
+
+for _case in [json.loads(x) for x in A['evals/boundary-cases.jsonl'].decode().splitlines() if x]:
+    if _case['split'] != 'development':continue
+    def _test(self, case=_case):
+        self.assertEqual(bool(L.local_lint(case['text'],case['genre'])),case['expected'],case['id'])
+    setattr(DevelopmentCorpusTests,'test_'+_case['id'],_test)
+
+if __name__=='__main__':unittest.main()
+
+class GenerationPreparationTests(Isolated):
+    def module(self):
+        mod=types.ModuleType('generation_preparation')
+        mod.__file__=str(self.home/'evals/prepare_generation_eval.py')
+        exec(compile(A['evals/prepare_generation_eval.py'].decode(),mod.__file__,'exec'),mod.__dict__)
+        return mod
+    def setup_sources(self):
+        up=self.home/'upstream';up.mkdir();(up/'SKILL.upstream.md').write_text('Upstream rules')
+        old=self.home/'old';new=self.home/'new'
+        for folder,names in [(old,['SKILL.md','paragraph-writing/SKILL.md','japanese-direct-writing/SKILL.md']),
+                             (new,['SKILL.md','references/paragraphs.md','references/audience.md','references/directness.md','references/review.md'])]:
+            for rel in names:
+                p=folder/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('Rules '+rel)
+        tasks=[{'id':'W01','instruction':'Rewrite','input':'Input','must_keep':['DO_NOT_LEAK_ANSWER']}]
+        return up,old,new,tasks
+    def test_balanced_preparation(self):
+        up,old,new,tasks=self.setup_sources()
+        r=self.module().prepare(tasks,up,old,new,self.home/'out',repeats=3)
+        self.assertEqual(len(r['jobs']),9)
+        self.assertEqual(set(j['arm'] for j in r['jobs']),{'upstream_only','existing_three_skills','proposal'})
+        self.assertTrue(all(j['status']=='NOT_RUN' for j in r['jobs']))
+    def test_answers_not_in_generation_prompt(self):
+        up,old,new,tasks=self.setup_sources();out=self.home/'out'
+        self.module().prepare(tasks,up,old,new,out)
+        for p in (out/'prompts').glob('*'):
+            self.assertNotIn('DO_NOT_LEAK_ANSWER',p.read_text())
+    def test_prepare_existing_destination_refused(self):
+        up,old,new,tasks=self.setup_sources();out=self.home/'out';out.mkdir()
+        with self.assertRaises(ValueError):self.module().prepare(tasks,up,old,new,out)
+    def test_preparation_deterministic(self):
+        up,old,new,tasks=self.setup_sources();m=self.module()
+        a=m.prepare(tasks,up,old,new,self.home/'out1');b=m.prepare(tasks,up,old,new,self.home/'out2')
+        self.assertEqual(a,b)
+    def test_task_id_path_rejected(self):
+        up,old,new,tasks=self.setup_sources();tasks[0]['id']='../bad'
+        with self.assertRaises(ValueError):self.module().prepare(tasks,up,old,new,self.home/'out')

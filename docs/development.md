@@ -218,18 +218,20 @@ Memory保存は外側のSkillが担当し、既存の保存基準・モードと
 ### Office Workbenchとyomiyasuの埋め込み資料
 
 どちらもスクリプト単体に独自資材とテストを含み、`--extract DIRECTORY`で展開できます。
-Office Workbenchは`README_JA.md`と`install.py`を確認します。yomiyasuは`tools/codex-yomiyasu/`の編集用ソースを確認し、`python3 tools/codex-yomiyasu/build_installer.py`で単一ファイルを再生成します。`--check`では配布物と編集用ソースの一致を検査します。展開時は`installer.py`、`SKILL.md`、`references/`、`scripts/`、`paragraph-writing/`、`japanese-direct-writing/`に3スキルの資材を配置します。
+Office Workbenchは`README_JA.md`と`install.py`を確認します。yomiyasuは`tools/codex-yomiyasu/`の編集用ソースを確認し、`python3 tools/codex-yomiyasu/build_installer.py`で単一ファイルを再生成します。`--check`では配布物と編集用ソースの一致を検査します。展開時は`installer.py`、`SKILL.md`、`references/`、`scripts/`、`paragraph-writing/`、`japanese-direct-writing/`と、検査用の`tests/`・`evals/`を配置します。評価資材はSkillの導入先には配置しません。
 
-japanese-direct-writingは提供されたZIPの本文・発動設定を同梱し、`SOURCE.json`で原本のhashとZIPのSHA256を記録します。原本の本文を変更せず、導入時の`auto`/`explicit`に応じて発動設定だけを切り替えます。資材を差し替える場合は、出典とhash、revisionを更新し、再生成と自己テストを行います。
+2.0.0-proposal.1では、補助2スキルの本文を部分作業用に限定しています。現在の本文のhashと由来は`UPSTREAM.json`・`SOURCE.json`に記録し、発動設定は導入時の`auto`/`explicit`に応じて生成します。資材を差し替える場合は、出典とhash、revisionを更新し、再生成と自己テストを行います。
 展開物はレビュー用の一時ディレクトリに置き、利用者向けの説明は専用ガイドで保守します。
 
-yomiyasuとparagraph-writingの文章比較は、`tools/codex-yomiyasu/evaluate_writing.py`を明示実行します。Python 3.11以降、ログイン済みのCodex CLI、yomiyasuの原本が必要です。設定済みのモデルと推論設定で実際のモデル利用が発生するため、インストールや`--self-test`からは呼びません。
+1.1.0と1.2.0の文章比較を再測定する場合は、`tools/codex-yomiyasu/evaluate_writing.py`を明示実行します。比較対象の入口・参照資料と4件の原稿は、`tools/codex-yomiyasu/evaluation-v130/`に旧版のまま保持しています。Python 3.11以降、ログイン済みのCodex CLI、yomiyasuの上流原本が必要です。設定済みのモデルと推論設定で実際のモデル利用が発生するため、インストールや`--self-test`からは呼びません。
 
 ```bash
 python3 tools/codex-yomiyasu/evaluate_writing.py --out /tmp/paragraph-writing-comparison
 ```
 
-入力4件と構成条件は`tests/evaluation_cases.json`、既存入口の比較用原本は`tests/baseline-yomiyasu.md`で固定しています。結果には実行条件、入力hash、出力全文、条件名を伏せた評価を残します。数値やコードの機械差分に加え、原文の各事実・条件・断定の強さを本文で照合してから結論を記載します。[比較検証](codex-yomiyasu/validation.md)には実際の修正前後と限界を載せます。
+結果には実行条件、入力hash、出力全文、条件名を伏せた評価を残します。数値やコードの機械差分に加え、原文の各事実・条件・断定の強さを本文で照合してから結論を記載します。[検証結果](codex-yomiyasu/validation.md)には実際の修正前後と限界を載せます。
+
+現在の統合工程の生成比較は、`evals/prepare_generation_eval.py`で別途準備します。[比較手順](../tools/codex-yomiyasu/evals/PROTOCOL.md)に条件と採点方法をまとめています。`evals/evaluate.py`は60件の人工データによる検出器の試験、`evals/review_examples.py`は推敲例の機械点検です。どちらもモデルを呼びません。生成比較、自動選択の試験、読者の理解度測定と混同しないでください。
 
 ### 日本語の説明を推敲する
 

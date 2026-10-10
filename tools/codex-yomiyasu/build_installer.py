@@ -11,22 +11,20 @@ import zlib
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT.parents[1]/'install_codex_yomiyasu.sh'
 HEADER = '''#!/usr/bin/env bash
-# Codex yomiyasu + paragraph-writing + japanese-direct-writing installer 1.3.0 — standalone.
-# Default: dry-run. --apply installs all three. --only selects one component.
-# New yomiyasu installs use the latest stable GitHub Release; companions are bundled.
-# --force refreshes companion assets; --update explicitly updates selected skills.
-# No npm, pip, sudo, MCP, hooks, AGENTS.md, shell config or existing plugin changes.
-# Requires Python 3.10+. Edited managed files are never overwritten, even with --force.
+# yomiyasu Japanese writing integration 2.0.0-proposal.1 — standalone.
+# Default: dry-run. --update --apply migrates an owned 1.3.0 installation.
+# --update --upstream-only --apply refreshes upstream without changing local rules.
+# Python 3.10+; no npm/pip/sudo/hooks/AGENTS.md edits. Save to a file before running.
 PY="${PYTHON_BIN:-}"
 if [[ -z "$PY" ]]; then
-  for candidate in python3 python3.13 python3.12 python3.11 python3.10; do
+  for candidate in python3 python3.14 python3.13 python3.12 python3.11 python3.10; do
     if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3,10) else 1)' 2>/dev/null; then
       PY="$candidate"; break
     fi
   done
 fi
 if [[ -z "$PY" ]] || ! "$PY" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3,10) else 1)' 2>/dev/null; then
-  printf '%s\\n' 'ERROR: Python 3.10+ が必要です。PYTHON_BIN=/path/to/python3 で指定できます。' >&2
+  printf '%s\\n' 'ERROR: Python 3.10+が必要です。PYTHON_BIN=/path/to/python3で指定できます。' >&2
   exit 2
 fi
 export PYTHONDONTWRITEBYTECODE=1
@@ -36,7 +34,7 @@ export PYTHONDONTWRITEBYTECODE=1
 
 def build() -> str:
     assets = {}
-    for prefix, folder in [('', ROOT/'assets'), ('tests/', ROOT/'tests')]:
+    for prefix, folder in [('', ROOT/'assets'), ('tests/', ROOT/'tests'), ('evals/', ROOT/'evals')]:
         for p in sorted(folder.rglob('*')):
             if p.is_symlink():
                 raise ValueError('Symlink in source assets: '+str(p))

@@ -1,13 +1,7 @@
 {
-  "source": "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d",
-  "revision": "8f2d57610a73efc97d743c9b0b0ecb1002e09fa4",
-  "original_name": "japanese-tech-writing",
-  "license": "Unlicense",
-  "license_source": "https://gist.github.com/k16shikano/67625f2a7d96e3bbdfae8d571a936063",
-  "license_revision": "1092e6b60296c760071c308624e344469ec345cf",
+  "revision": "2.0.0-proposal.1",
+  "origin": "original integration text; see yomiyasu references/sources.md",
   "files": {
-    "upstream/SKILL.upstream.md": "ad350e0e6f5630fd94d8ab98a6aee194053b0096fdc944c23e271d6dfa09ee68",
-    "upstream/LICENSING.upstream.md": "6f9a2fb009225de5cca1c2a24dfed7a68bc22657e455b4a3d63f065258b455d1"
-  },
-  "note": "原本は無改変で同梱。paragraph-writingは段落・論証構成に限定して用途別に再構成した派生Skill。導入時にGistを取得しない。"
+    "SKILL.md": "4708c7510abded07f78ccb0ac8fb1b16d6655bfcf14bec2d4b07d7f7d2ca251d"
+  }
 }
