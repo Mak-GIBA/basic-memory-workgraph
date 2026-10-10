@@ -80,6 +80,99 @@ class ManagerTest(unittest.TestCase):
         self.codex = FakeCodex(self.home, self.skills_root, self.originals)
         self.manager = ecc.Manager(self.home, self.skills_root, self.codex, self.root)
 
+    def test_mcp_defaults_restore_preserves_user_connections(self):
+        self.config.write_text(CONFIG + '\n[mcp_servers.context7]\nenabled = false\ncommand = "user-docs"\n')
+        original_servers = ecc.tomllib.loads(self.config.read_text())["mcp_servers"]
+        report = self.manager.apply()
+        self.assertEqual(report["mcps"]["context7"], "existing_disabled")
+        parsed = ecc.tomllib.loads(self.config.read_text())["mcp_servers"]
+        self.assertEqual(parsed["chrome-devtools"], original_servers["chrome-devtools"])
+        self.assertEqual(parsed["context7"], original_servers["context7"])
+        self.assertNotIn("parallel-search", parsed)
+        self.assertNotIn("sequential-thinking", parsed)
+        self.assertIn("--headless", parsed["playwright"]["args"])
+        self.assertNotIn("github", parsed)
+        self.manager.restore()
+        self.assertEqual(ecc.tomllib.loads(self.config.read_text())["mcp_servers"], original_servers)
+
+    def test_mcp_user_changes_prevent_apply_and_restore_without_mutation(self):
+        self.manager.apply()
+        self.config.write_text(self.config.read_text() + '\n[mcp_servers.context7.env]\nCONTEXT7_API_KEY = "user-value"\n')
+        before = self.config.read_bytes()
+        with self.assertRaisesRegex(ecc.ManagementError, "Managed MCP changed"):
+            self.manager.apply()
+        with self.assertRaisesRegex(ecc.ManagementError, "Managed MCP changed"):
+            self.manager.restore()
+        self.assertEqual(before, self.config.read_bytes())
+        self.assertTrue(self.manager.state_path.is_file())
+
+    def test_mcp_legacy_alias_and_upgrade_from_old_state(self):
+        self.config.write_text(CONFIG + '\n[mcp_servers.context7-mcp]\ncommand = "legacy-docs"\n')
+        self.manager.apply()
+        self.assertNotIn("context7", ecc.tomllib.loads(self.config.read_text())["mcp_servers"])
+        # Existing installations before MCP support have no mcps field.
+        state = self.manager.state()
+        text = self.config.read_text()
+        for record in state.pop("mcps").values():
+            text = text.replace(record["block"], "")
+        self.config.write_text(text)
+        self.manager.state_path.write_text(json.dumps(state))
+        self.manager.apply()
+        self.assertIn("playwright", self.manager.state()["mcps"])
+
+    def test_mcp_selection_persists_and_none_keeps_prior_connections(self):
+        self.manager.apply(mcps="research,cloudflare")
+        state = self.manager.state()
+        self.assertEqual(state["selected_mcps"], ["context7", "parallel-search", "cloudflare-docs"])
+        self.assertNotIn("playwright", state["mcps"])
+        before = self.config.read_bytes()
+        self.assertEqual(self.manager.apply()["changed_files"], 0)
+        self.manager.apply(mcps="none")
+        self.assertEqual(self.config.read_bytes(), before)
+        self.assertEqual(self.manager.state()["selected_mcps"], [])
+        self.assertEqual(self.manager.apply()["changed_files"], 0)
+        self.manager.restore()
+        self.assertEqual(self.config.read_text(), CONFIG)
+
+    def test_legacy_owned_mcp_survives_new_defaults_and_can_be_restored(self):
+        self.manager.apply(mcps=tuple(ecc.MCP_SERVERS))
+        state = self.manager.state()
+        state.pop("selected_mcps")
+        # A previous installer used a different unpinned server command.
+        old = state["mcps"]["sequential-thinking"]
+        old_block = old["block"]
+        old["block"] = old_block.replace("@2026.8.31", "")
+        old["config"]["args"][1] = old["config"]["args"][1].removesuffix("@2026.8.31")
+        self.config.write_text(self.config.read_text().replace(old_block, old["block"]))
+        self.manager.state_path.write_text(json.dumps(state))
+        result = self.manager.apply()
+        self.assertEqual(result["selected_mcps"], list(ecc.RECOMMENDED_MCPS))
+        self.assertEqual(result["mcps"]["sequential-thinking"], "managed_retained")
+        self.assertEqual(self.manager.doctor()["status"], "ready")
+        self.manager.restore()
+        self.assertEqual(self.config.read_text(), CONFIG)
+
+    def test_mcp_presets_use_verified_flags_and_do_not_add_token_optimizer(self):
+        # Remove the existing user-owned browser so a new managed one is tested.
+        self.config.write_text('[plugins."ecc@ecc"]\nenabled = true\n')
+        self.manager.apply(mcps="browser,cloudflare,sequential-thinking,browser")
+        servers = ecc.tomllib.loads(self.config.read_text())["mcp_servers"]
+        self.assertEqual(len(servers), 5)
+        self.assertIn("--isolated", servers["playwright"]["args"])
+        self.assertIn("--no-usage-statistics", servers["chrome-devtools"]["args"])
+        self.assertIn("--no-performance-crux", servers["chrome-devtools"]["args"])
+        self.assertEqual(servers["cloudflare-docs"]["url"], "https://docs.mcp.cloudflare.com/mcp")
+        self.assertEqual(servers["sequential-thinking"]["env"]["DISABLE_THOUGHT_LOGGING"], "true")
+        self.assertNotIn("token-optimizer", servers)
+
+    def test_invalid_mcp_selection_stops_before_configuration_changes(self):
+        for value in ["typo", "none,context7", "context7,", "token-optimizer"]:
+            with self.subTest(value=value):
+                with self.assertRaises(ecc.ManagementError):
+                    self.manager.apply(mcps=value)
+                self.assertEqual(self.config.read_text(), CONFIG)
+                self.assertFalse(self.manager.state_path.exists())
+
     def test_apply_is_idempotent_preserves_other_settings_and_keeps_originals(self):
         originals = {Path(s["path"]): Path(s["path"]).read_bytes() for s in self.originals}
         self.manager.apply()

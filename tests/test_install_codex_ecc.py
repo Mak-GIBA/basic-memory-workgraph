@@ -172,6 +172,28 @@ class InstallerTest(unittest.TestCase):
         self.assertTrue(tomllib.loads(self.config.read_text())['added_after_install']['keep'])
         self.assertFalse(any(c.get('rpc','').startswith(('thread/','turn/')) for c in self.calls()))
 
+    def test_mcp_preview_selection_and_invalid_name_are_offline(self):
+        before = self.config.read_bytes()
+        report = self.run_installer('--mcps', 'recommended,cloudflare')
+        self.assertEqual(report['selected_mcps'], ['context7', 'playwright', 'cloudflare-docs'])
+        self.assertEqual(report['recommended_mcps'], ['context7', 'playwright'])
+        error = self.run_installer('--apply', '--mcps', 'unknown', success=False)
+        self.assertIn('Unknown MCP selection', error['error'])
+        self.assertFalse(self.calls())
+        self.assertEqual(self.config.read_bytes(), before)
+
+    def test_mcp_selection_survives_update_and_none_preserves_old_connections(self):
+        self.run_installer('--apply', '--mcps', 'research,cloudflare')
+        initial = tomllib.loads(self.config.read_text())['mcp_servers']
+        self.assertEqual(set(initial), {'context7', 'parallel-search', 'cloudflare-docs', 'chrome-devtools'})
+        self.run_installer('--update', '--apply')
+        self.assertEqual(tomllib.loads(self.config.read_text())['mcp_servers'], initial)
+        self.run_installer('--update', '--apply', '--mcps', 'none')
+        self.assertEqual(tomllib.loads(self.config.read_text())['mcp_servers'], initial)
+        self.assertEqual(self.run_installer('--update')['selected_mcps'], [])
+        self.run_installer('--restore', '--apply')
+        self.assertEqual(tomllib.loads(self.config.read_text())['mcp_servers'], {'chrome-devtools': {'command': 'keep-browser'}})
+
     def test_existing_native_install_has_no_download_and_restores_initial_enabled(self):
         self.preinstall()
         original = self.config.read_bytes()

@@ -12,7 +12,7 @@ import sys
 import time
 from urllib.parse import urlparse
 
-from ecc_on_demand import (OWNER, PLUGIN, ENTRIES, Codex, Manager, ManagementError,
+from ecc_on_demand import (OWNER, PLUGIN, ENTRIES, MCP_SERVERS, MCP_PRESETS, RECOMMENDED_MCPS, Codex, Manager, ManagementError,
                            atomic_write, config_value, digest, edit_enabled)
 
 SOURCE = "affaan-m/ECC"
@@ -33,8 +33,9 @@ def official_source(source: dict) -> bool:
 
 
 class Installer:
-    def __init__(self, manager: Manager):
+    def __init__(self, manager: Manager, mcps=None):
         self.manager = manager
+        self.mcps = mcps
         self.codex = manager.codex
         self.journal_path = manager.directory / JOURNAL
 
@@ -127,19 +128,26 @@ class Installer:
         steps = {
             "install": ["Inspect native ECC marketplace and plugin inventory",
                         "Register affaan-m/ECC if absent; install ecc@ecc if absent",
-                        "Disable native ECC and install/update four entrypoints", "Run doctor"],
+                        "Disable native ECC and install/update four entrypoints",
+                        "Add missing selected MCPs; preserve existing connections and disabled settings", "Run doctor"],
             "update": ["Refresh the ECC marketplace and native plugin", "Keep ECC disabled",
-                       "Update managed CLI/entrypoints and run doctor"],
-            "restore": ["Restore managed ECC setting and remove owned CLI/entrypoints; keep native cache"],
+                       "Update managed CLI/entrypoints and add missing selected MCPs; run doctor"],
+            "restore": ["Restore managed ECC setting and remove owned CLI/entrypoints and unchanged owned MCPs; keep native cache"],
         }
         return {"status": "planned", "action": action, "steps": steps[action],
                 "codex_home": str(self.manager.home), "skills_root": str(self.manager.skills_root),
                 "entrypoints": list(ENTRIES), "native_inventory": "not_queried_in_offline_preview",
+                "recommended_mcps": list(RECOMMENDED_MCPS),
+                "selected_mcps": list(self.manager.selected_mcps(self.mcps)),
+                "mcp_presets": {name: list(names) for name, names in MCP_PRESETS.items()},
+                "available_mcps": list(MCP_SERVERS),
+                "mcp_selection_scope": "add_missing_only; existing connections and opt-outs preserved",
                 "managed_installation": state is not None}
 
     def install(self, *, update: bool = False) -> dict:
         manager = self.manager
         manager.preflight()
+        manager.selected_mcps(self.mcps)
         failure = None
         applied = None
         with manager.lock():
@@ -172,7 +180,7 @@ class Installer:
                     verified = self.plugin(self.native("plugin", "list", "--json").get("installed", []), required=True)
                     if verified.get("installed") is not True:
                         raise ManagementError("Codex did not report ECC installed after plugin add")
-                applied = manager.apply(baseline, _locked=True)
+                applied = manager.apply(baseline, _locked=True, mcps=self.mcps)
             except (ManagementError, OSError, ValueError, KeyError) as error:
                 failure = str(error)
             finally:
@@ -206,6 +214,7 @@ def main(argv=None) -> int:
     actions.add_argument("--update", action="store_true", help="ECCと管理資材を更新する")
     actions.add_argument("--restore", action="store_true", help="管理した設定と入口を復元する")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--mcps", help="追加するMCPのプリセット/名前をカンマ区切りで選択。初回はrecommended、再適用・更新は前回の選択")
     parser.add_argument("--codex-home", type=Path, default=Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))))
     parser.add_argument("--skills-root", type=Path, default=Path.home() / ".agents/skills")
     parser.add_argument("--codex", default="codex")
@@ -213,6 +222,8 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     if args.doctor and args.apply:
         parser.error("--doctor is read-only and cannot be combined with --apply")
+    if args.mcps is not None and (args.doctor or args.restore):
+        parser.error("--mcps is only available for install/update, not doctor/restore")
     try:
         if not sys.platform.startswith("linux"):
             raise ManagementError("This installer supports Linux / WSL2")
@@ -225,7 +236,7 @@ def main(argv=None) -> int:
         if not cwd.is_dir():
             raise ManagementError(f"Working directory is unavailable: {cwd}")
         manager = Manager(home, root, Codex(args.codex, home), cwd)
-        installer = Installer(manager)
+        installer = Installer(manager, mcps=args.mcps)
         if args.doctor:
             report = manager.doctor()
         elif not args.apply:

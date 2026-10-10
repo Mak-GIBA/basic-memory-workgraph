@@ -3,3 +3,7 @@ __pycache__/
 *.py[cod]
 /.vscode/
 /UX Tips.md
+.gan.lock
+# Keep research results and receipts; omit verbose model execution streams.
+/docs/design-research/*/runs/*/*/stdout.log
+/docs/design-research/*/runs/*/*/stderr.log

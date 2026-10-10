@@ -1,0 +1,9 @@
+{
+  "source_path": "docs/codex-ecc/installation.md",
+  "source_sha256": "65193dbda758dc77b108986ac50f0808e83d3e7551ebab9dbd9d1fc781eba05b",
+  "line_start": 110,
+  "line_end": 135,
+  "checked_at": "2026-10-10T10:01:18.172625+00:00",
+  "excerpt": "Basic Memory、既存のMCP、他のプラグイン、スキル一覧の上限を保持します。\n追加したMCP設定は管理状態に記録し、再適用では重複させません。\n選択は不足する接続の追加だけに使います。別のプリセットや`none`へ変更しても、既存接続を無効化・削除しません。\n以前のインストーラーが追加したSequential Thinkingなども保持します。旧状態に選択の記録がない場合は、\n新しく追加する候補に`recommended`を使い、以前の管理・復元情報を引き継ぎます。\n`--restore --apply`は変更されていない管理対象MCPだけを削除します。\n管理対象MCPへ認証設定などを手で追加した場合は、上書き・削除せず停止します。\n`--doctor`のMCP診断は設定の検証です。起動や認証、検索結果の取得成功を保証するものではありません。\nECCに付属する起動フックとMCPはプラグインの無効化に伴い停止します。\nECC設定がインラインテーブルやドット区切りのキーで書かれている場合は自動編集せず、\n通常の`[plugins.\"ecc@ecc\"]`テーブルに整理するよう案内します。\n\n## 更新・再実行\n\n```bash\nbash install_codex_ecc.sh --update\nbash install_codex_ecc.sh --update --apply\n```\n\n更新はCodex標準の `plugin marketplace upgrade ecc` と `plugin add ecc@ecc` を使い、\n管理CLIと入口もリポジトリの資材で更新します。管理ファイルを手で編集した場合は上書きせず停止します。\n以前の方式でこのリポジトリの管理CLIだけを適用した環境も、その復元情報を引き継ぎます。\n\n導入・更新の処理を始める前にバックアップを作ります。途中で失敗した場合はECCを無効に戻し、原因とバックアップ先を表示します。\n初回失敗の復元情報は `bootstrap.json` に残し、原因を直して `--apply` を再実行すると引き継ぎます。\n更新失敗後は `--update --apply` を再実行できます。復元情報やバックアップを手で削除しないでください。",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

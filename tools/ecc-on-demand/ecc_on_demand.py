@@ -30,6 +30,78 @@ ENTRIES = {
     "ecc-library": None,
 }
 MANAGER_DIR = "ecc-on-demand"
+MCP_SERVERS = {
+    "context7": {"command": "npx", "args": ["-y", "@upstash/context7-mcp@4.3.0"], "startup_timeout_sec": 60},
+    "parallel-search": {"url": "https://search.parallel.ai/mcp", "startup_timeout_sec": 60},
+    "playwright": {"command": "npx", "args": ["-y", "@playwright/mcp@0.0.83", "--headless", "--isolated"], "startup_timeout_sec": 60},
+    "chrome-devtools": {"command": "npx", "args": ["-y", "chrome-devtools-mcp@1.10.1", "--headless", "--isolated", "--no-usage-statistics", "--no-performance-crux"], "startup_timeout_sec": 60},
+    # Retain legacy names for ownership validation/restoration and explicit use.
+    "sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking@2026.8.31"], "env": {"DISABLE_THOUGHT_LOGGING": "true"}, "startup_timeout_sec": 60},
+    "cloudflare-docs": {"url": "https://docs.mcp.cloudflare.com/mcp", "startup_timeout_sec": 60},
+}
+RECOMMENDED_MCPS = ("context7", "playwright")
+MCP_PRESETS = {
+    "recommended": RECOMMENDED_MCPS,
+    "research": ("context7", "parallel-search"),
+    "browser": ("playwright", "chrome-devtools"),
+    "cloudflare": ("context7", "cloudflare-docs"),
+    "none": (),
+}
+
+
+def mcp_selection(value) -> tuple[str, ...]:
+    """Validate selections before any native command or configuration mutation."""
+    names = value.split(",") if isinstance(value, str) else value
+    if not isinstance(names, (list, tuple)) or any(not isinstance(n, str) or not n.strip() for n in names):
+        raise ManagementError("MCP selection must contain names/presets separated by commas")
+    names = [n.strip() for n in names]
+    if "none" in names and len(names) != 1:
+        raise ManagementError("MCP preset none cannot be combined with other selections")
+    result = []
+    for name in names:
+        if name in MCP_PRESETS:
+            result.extend(MCP_PRESETS[name])
+        elif name in MCP_SERVERS:
+            result.append(name)
+        else:
+            raise ManagementError(f"Unknown MCP selection: {name}; available: {', '.join(MCP_PRESETS)}; {', '.join(MCP_SERVERS)}")
+    return tuple(dict.fromkeys(result))
+
+
+def check_mcps(text: str, owned: dict) -> None:
+    servers = tomllib.loads(text).get("mcp_servers", {})
+    for name, record in owned.items():
+        if (name not in MCP_SERVERS or text.count(record["block"]) != 1
+                or servers.get(name) != record["config"]):
+            raise ManagementError(f"Managed MCP changed; preserving it: {name}")
+
+
+def add_mcps(text: str, owned: dict, selected=RECOMMENDED_MCPS) -> tuple[str, dict, dict]:
+    """Append missing servers; preserve existing commands, credentials and opt-outs."""
+    check_mcps(text, owned)
+    servers = tomllib.loads(text).get("mcp_servers", {})
+    selected = mcp_selection(selected)
+    records = dict(owned)
+    report = {name: "managed_retained" for name in owned if name not in selected}
+    for name in selected:
+        config = MCP_SERVERS[name]
+        # Older Context7 names must not create a second connection.
+        alias = "context7-mcp" if name == "context7" else name
+        if name in servers or alias in servers:
+            existing = servers.get(name, servers.get(alias))
+            report[name] = "managed" if name in owned else "existing_disabled" if existing.get("enabled") is False else "existing_preserved"
+            continue
+        block = f'\n# {OWNER}:mcp:{name}:begin\n[mcp_servers.{name}]\n'
+        for key, value in config.items():
+            literal = ('{ ' + ', '.join(f'{json.dumps(k)} = {json.dumps(v)}' for k, v in value.items()) + ' }'
+                       if isinstance(value, dict) else json.dumps(value))
+            block += f'{key} = {literal}\n'
+        block += f'# {OWNER}:mcp:{name}:end\n'
+        text += block
+        records[name] = {"block": block, "config": config}
+        report[name] = "added"
+    check_mcps(text, records)
+    return text, records, report
 
 
 class ManagementError(Exception):
@@ -361,20 +433,31 @@ class Manager:
                 raise ManagementError("Existing unmanaged ECC manager script")
         text = self.config.read_text() if self.config.exists() else ""
         edit_enabled(text, False)
+        check_mcps(text, state.get("mcps", {}) if state else {})
         return state
 
-    def apply(self, baseline: dict | None = None, *, _locked: bool = False) -> dict:
+    def selected_mcps(self, requested=None) -> tuple[str, ...]:
+        if requested is None:
+            requested = (self.state() or {}).get("selected_mcps", RECOMMENDED_MCPS)
+        return mcp_selection(requested)
+
+    def apply(self, baseline: dict | None = None, *, _locked: bool = False, mcps=None) -> dict:
+        selected = self.selected_mcps(mcps)
         originals = catalog(self.codex, self.cwd)
         with nullcontext() if _locked else self.lock():
             state = self.preflight()
             files = self.payload()
             original = self.config.read_bytes() if self.config.exists() else b""
-            changed = edit_enabled(original.decode(), False).encode()
+            changed_text = edit_enabled(original.decode(), False)
+            selected = self.selected_mcps(mcps)
+            changed_text, records, mcp_report = add_mcps(changed_text, state.get("mcps", {}) if state else {}, selected)
+            changed = changed_text.encode()
             state = state or {"owner": OWNER, "version": 1,
                               "config_path": str(self.config), "skills_root": str(self.skills_root),
                               "previous_enabled": baseline["previous_enabled"] if baseline else config_value(original.decode()),
                               "backup": baseline["backup"] if baseline else str(self.directory / f"config.before-ecc-on-demand.{time.time_ns()}.toml")}
             new_state = {**state, "codex_binary": self.codex.binary,
+                         "mcps": records, "selected_mcps": list(selected),
                          "files": {str(path): digest(data) for path, data in files.items()}}
             writes = dict(files)
             if not self.state_path.exists():
@@ -408,6 +491,8 @@ class Manager:
                         directory.rmdir()
                 raise
         return {"status": "applied", "original_skills": len(originals),
+                "mcps": mcp_report, "selected_mcps": list(selected),
+                "mcp_selection_scope": "add_missing_only; existing connections and opt-outs preserved",
                 "entrypoints": list(ENTRIES), "backup": state["backup"],
                 "changed_files": len(touched), "new_session_required": True}
 
@@ -422,6 +507,15 @@ class Manager:
             except ManagementError as error:
                 issues.append(str(error))
         config = self.config.read_text() if self.config.exists() else ""
+        try:
+            check_mcps(config, state.get("mcps", {}) if state else {})
+        except ManagementError as error:
+            issues.append(str(error))
+        servers = tomllib.loads(config).get("mcp_servers", {})
+        mcp_report = {name: "configured" if servers.get(name, {}).get("enabled", True) and name in servers
+                      else "disabled" if name in servers else "not_configured" for name in MCP_SERVERS}
+        if "context7" not in servers and "context7-mcp" in servers:
+            mcp_report["context7"] = "configured_legacy_alias" if servers["context7-mcp"].get("enabled", True) else "disabled"
         if config_value(config) is not False:
             issues.append("ECC native plugin is enabled or lacks an explicit false setting; run apply")
         row = self.codex.skills(self.cwd)
@@ -441,6 +535,8 @@ class Manager:
         except ManagementError as error:
             issues.append(str(error))
         return {"status": "ready" if not issues else "needs_attention", "issues": issues,
+                "mcps": mcp_report, "mcp_verification": "configuration_only; startup and credentials not tested",
+                "selected_mcps": list(self.selected_mcps()), "recommended_mcps": list(RECOMMENDED_MCPS),
                 "active_skills": len(active), "active_native_ecc_skills": len(active_ecc),
                 "available_original_skills": len(originals),
                 "original_versions": sorted({s["version"] for s in originals if s["version"]}),
@@ -485,9 +581,13 @@ class Manager:
                 if extras:
                     raise ManagementError(f"Unexpected files in managed skill; preserving them: {extras}")
             text = self.config.read_text()
+            check_mcps(text, state.get("mcps", {}))
             if config_value(text) is not False:
                 raise ManagementError("ECC setting changed after apply; run apply before restore")
+            check_mcps(text, state.get("mcps", {}))
             restored = edit_enabled(text, state["previous_enabled"]).encode()
+            for record in state.get("mcps", {}).values():
+                restored = restored.replace(record["block"].encode(), b"", 1)
             paths = [self.config, self.state_path, *(Path(name) for name in state["files"])]
             snapshots = {path: (path.read_bytes(), path.stat().st_mode & 0o777) for path in paths}
             try:
@@ -531,6 +631,8 @@ def main(argv=None) -> int:
     for name in ("apply", "doctor", "update", "restore", "search", "resolve"):
         sub = subcommands.add_parser(name)
         sub.add_argument("--json", action="store_true")
+        if name == "apply":
+            sub.add_argument("--mcps", help="追加するMCPのプリセット/名前をカンマ区切りで選択。未指定は前回の選択、初回はrecommended")
         if name == "search":
             sub.add_argument("query")
             sub.add_argument("--limit", type=int, choices=range(1, 6), default=5)
@@ -552,6 +654,8 @@ def main(argv=None) -> int:
                 if len(matches) != 1:
                     raise ManagementError(f"ECC skill not found or ambiguous: {args.name}; use search")
                 result = matches[0]
+        elif args.command == "apply":
+            result = manager.apply(mcps=args.mcps)
         else:
             result = getattr(manager, args.command)()
         if args.json:

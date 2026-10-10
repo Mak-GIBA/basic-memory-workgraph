@@ -1,0 +1,44 @@
+[
+  {
+    "path": "sources/sequential-lib.ts",
+    "url": "https://raw.githubusercontent.com/modelcontextprotocol/servers/main/src/sequentialthinking/lib.ts",
+    "sha256": "50e7998ac2bfe8fe9e2110bf87b56319a8051492125f1644352026e991357136",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  },
+  {
+    "path": "sources/context7-README.md",
+    "url": "https://raw.githubusercontent.com/upstash/context7/master/README.md",
+    "sha256": "495b47a95b9c4c35eccf7912eb4a73f60378168990587476e64c8896e20ed995",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  },
+  {
+    "path": "sources/playwright-README.md",
+    "url": "https://raw.githubusercontent.com/microsoft/playwright-mcp/main/README.md",
+    "sha256": "b33aa71a13d655e96e6b736d0c9de1e5ddea52f205916ca20b876387ff830e87",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  },
+  {
+    "path": "sources/chrome-devtools-README.md",
+    "url": "https://raw.githubusercontent.com/ChromeDevTools/chrome-devtools-mcp/main/README.md",
+    "sha256": "059a0349daaef6bda98eae6d9384ed349ac94b8033b18be817c317a01b472024",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  },
+  {
+    "path": null,
+    "url": "https://raw.githubusercontent.com/ooples/token-optimizer-mcp/main/README.md",
+    "status": "unavailable",
+    "error": "HTTPError"
+  },
+  {
+    "path": "sources/parallel-docs.txt",
+    "url": "https://docs.parallel.ai/integrations/mcp/search-mcp",
+    "sha256": "45d0e9325ea1c0e17ea4ec0e3e9859efd231913f0c39e6731d0586eb14b73cd1",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  },
+  {
+    "path": "sources/cloudflare-docs.txt",
+    "url": "https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/",
+    "sha256": "d61c18b83878aefe2cab689adce7a9eaba4b46a9aebb091df8de7e33b3c0caef",
+    "read_scope": "Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence"
+  }
+]

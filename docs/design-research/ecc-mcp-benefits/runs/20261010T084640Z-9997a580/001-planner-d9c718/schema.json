@@ -1,0 +1,148 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "blocked"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "research",
+        "backend"
+      ]
+    },
+    "baseline": {
+      "type": "string"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "runtime",
+              "research",
+              "static"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "acceptance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "required",
+          "acceptance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "test_commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string"
+          },
+          "check_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "artifact_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "command",
+          "check_ids",
+          "artifact_paths"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "complexity_baseline": {
+      "type": "string"
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "all",
+              "arxiv",
+              "semantic-scholar",
+              "crossref"
+            ]
+          },
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "provider",
+          "query",
+          "limit"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "evaluation_json": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "reason",
+    "goal",
+    "domain",
+    "baseline",
+    "constraints",
+    "criteria",
+    "test_commands",
+    "complexity_baseline",
+    "queries",
+    "evaluation_json"
+  ],
+  "additionalProperties": false
+}

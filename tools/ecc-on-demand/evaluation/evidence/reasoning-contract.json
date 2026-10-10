@@ -1,0 +1,63 @@
+{
+  "purpose": "Compare actual final reasoning answers with/without Sequential Thinking",
+  "tasks": [
+    {
+      "id": "critical-path",
+      "input": "同時実行数は無制限。A=4分、B=3分(A後)、C=6分(A後)、D=2分(BとC後)、E=5分(B後)、F=1分(DとE後)。開始0、待機なし。全作業の完了時刻を整数の分で答える。",
+      "expected": 13
+    },
+    {
+      "id": "duplicate-test",
+      "input": "有病率1%、感度95%、偽陽性率5%。1回の検査結果が陽性だった。その同じ結果が誤って2件として複製保存された。2回の独立検査ではない。この情報での疾病確率をbasis points(1%=100bp)にして四捨五入した整数で答える。",
+      "expected": 1610
+    },
+    {
+      "id": "deadline-boundary",
+      "input": "初回試行開始1000ms、絶対期限1700ms。全試行は瞬時に失敗する。再試行待機100,200,400msの順。試行は開始時刻が期限より厳密に小さい場合だけ許可。実際に開始する全試行の時刻を整数配列で答える。",
+      "expected": [
+        1000,
+        1100,
+        1300
+      ]
+    },
+    {
+      "id": "order-constraints",
+      "input": "A,B,C,D,Eを各1回並べる。CはAより前。DはBの直後。Eは3番目。AはEより後。条件を満たす全配列を5文字文字列の配列にして辞書順に答える。",
+      "expected": [
+        "BDECA"
+      ]
+    },
+    {
+      "id": "null-join",
+      "input": "users(id):1,2,3。events(user_id,amount):(1,10),(1,NULL),(2,0)。SELECT COUNT(*), COUNT(e.amount), COUNT(DISTINCT u.id), SUM(e.amount) FROM users u LEFT JOIN events e ON u.id=e.user_id の4値を整数配列で答える。SQLのNULL規則に従う。",
+      "expected": [
+        4,
+        2,
+        3,
+        10
+      ]
+    },
+    {
+      "id": "conditional-retry",
+      "input": "再試行許可は「(HTTP statusが429または503) かつ idempotent=true かつ attempt<3」。ケース順:(503,true,2),(503,false,0),(429,true,3),(500,true,0),(429,true,1)。許可結果をboolean配列で答える。",
+      "expected": [
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "repetitions": 2,
+  "primary_metric": "Exact JSON final-answer accuracy, every task and failure retained",
+  "secondary_metrics": [
+    "end-to-end wall seconds including startup/model/tools",
+    "reported input/output tokens"
+  ],
+  "adoption_rule": "For default adoption require at least one additional correct task without regressions across repeats and <=10% mean latency increase. Ties do not support default adoption.",
+  "limitations": "Six synthetic tasks, two balanced batch trials by default, not a population estimate; no human work-time measurement.",
+  "server_launch": "node, already installed 2026.8.31"
+}

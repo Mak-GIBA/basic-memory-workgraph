@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# ECC native install + four on-demand entrypoints. Requires this repository.
+# ECC native install + four on-demand entrypoints + selected independent MCPs.
+# Requires this repository. Existing MCP settings are preserved.
 # Default: offline preview. --apply installs/configures; --update --apply updates.
+# --mcps recommended|research|browser|cloudflare|none or comma-separated names.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

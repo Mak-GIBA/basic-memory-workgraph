@@ -1,0 +1,233 @@
+{
+  "contract_sha256": "18a92c59356b45f332e580e72f7f3b3f2e95ef9d0936eaa50becd4b8fd8b8b66",
+  "rows": [
+    {
+      "candidate": "native",
+      "trial": 1,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 19094,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 780,
+        "reasoning_output_tokens": 676
+      },
+      "tool_calls": [],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 23.084,
+      "checked_at": "2026-10-10T08:27:14.851087+00:00",
+      "contract_sha256": "18a92c59356b45f332e580e72f7f3b3f2e95ef9d0936eaa50becd4b8fd8b8b66",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "treatment_valid": true,
+      "total": 6
+    },
+    {
+      "candidate": "sequential-thinking",
+      "trial": 1,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 55531,
+        "cached_input_tokens": 35712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1434,
+        "reasoning_output_tokens": 1105
+      },
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 52.581,
+      "checked_at": "2026-10-10T08:28:07.432815+00:00",
+      "contract_sha256": "18a92c59356b45f332e580e72f7f3b3f2e95ef9d0936eaa50becd4b8fd8b8b66",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "treatment_valid": true,
+      "total": 6
+    },
+    {
+      "candidate": "sequential-thinking",
+      "trial": 2,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 61532,
+        "cached_input_tokens": 39808,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1401,
+        "reasoning_output_tokens": 1009
+      },
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 50.994,
+      "checked_at": "2026-10-10T08:28:58.426837+00:00",
+      "contract_sha256": "18a92c59356b45f332e580e72f7f3b3f2e95ef9d0936eaa50becd4b8fd8b8b66",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "treatment_valid": true,
+      "total": 6
+    },
+    {
+      "candidate": "native",
+      "trial": 2,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 17316,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1010,
+        "reasoning_output_tokens": 906
+      },
+      "tool_calls": [],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 35.268,
+      "checked_at": "2026-10-10T08:29:33.694801+00:00",
+      "contract_sha256": "18a92c59356b45f332e580e72f7f3b3f2e95ef9d0936eaa50becd4b8fd8b8b66",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "treatment_valid": true,
+      "total": 6
+    }
+  ]
+}

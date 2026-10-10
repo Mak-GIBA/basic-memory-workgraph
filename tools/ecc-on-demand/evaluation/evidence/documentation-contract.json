@@ -1,0 +1,31 @@
+{
+  "tasks": [
+    {
+      "id": "requests-timeout",
+      "input": "Requestsのtimeout=(3.05,27)はconnect/readの設定か。また、このread timeoutは全レスポンスのダウンロードを27秒以内に完了させる期限か。{\"connect_read_pair\":boolean,\"total_download_deadline\":boolean}で答える。",
+      "expected": {
+        "connect_read_pair": true,
+        "total_download_deadline": false
+      }
+    },
+    {
+      "id": "pydantic-before",
+      "input": "Pydantic v2の@field_validator(...,mode=\"before\")は型変換前の生入力を受け取るか。また返した値には通常の型検証が引き続き適用されるか。{\"raw_input\":boolean,\"type_validation_after\":boolean}で答える。",
+      "expected": {
+        "raw_input": true,
+        "type_validation_after": true
+      }
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "effort": "max",
+  "primary": "Exact final JSON answers",
+  "controls": "Same questions, expected answers, model and effort. Only supplied documentation differs.",
+  "scope": "Known official URLs, one batch per condition. No claim about unknown-URL discovery or population accuracy.",
+  "sources": [
+    "https://raw.githubusercontent.com/psf/requests/main/docs/user/advanced.rst",
+    "https://raw.githubusercontent.com/pydantic/pydantic/main/docs/concepts/validators.md"
+  ],
+  "native_document_retrieval_seconds": 0.07100813090801239,
+  "context7_retrieval_seconds": 7.682246633805335
+}

@@ -1,0 +1,501 @@
+{
+  "contract_sha256": "c0cf96348d916c94a3f5027f02cbae3883d75daa3489ea9614036a4f18d0d89a",
+  "rows": [
+    {
+      "task_id": "first-read",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.00316715519875288,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "first-read",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.09773826971650124,
+      "startup_seconds": 0.44497237354516983,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0028076935559511185,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.005388439632952213,
+      "startup_seconds": 0.44497237354516983,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002893969416618347,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {},
+      "elapsed_seconds": 0.08151891361922026,
+      "startup_seconds": 0.4321556128561497,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0029327934607863426,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.02574968244880438,
+      "startup_seconds": 0.4321556128561497,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "first-read",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002768170088529587,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "first-read",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.10211354959756136,
+      "startup_seconds": 0.4589457530528307,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0027237609028816223,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0057613663375377655,
+      "startup_seconds": 0.4589457530528307,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0029156431555747986,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {},
+      "elapsed_seconds": 0.08650134783238173,
+      "startup_seconds": 0.4382868418470025,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0028595151379704475,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.022650878876447678,
+      "startup_seconds": 0.4382868418470025,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "quantity-10",
+      "output": "1700",
+      "elapsed_seconds": 0.06383310299999999,
+      "candidate": "native-browser",
+      "trial": 1
+    },
+    {
+      "task_id": "quantity-11",
+      "output": "1870",
+      "elapsed_seconds": 0.047517318000000044,
+      "candidate": "native-browser",
+      "trial": 1
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 1,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.4254748150706291,
+      "startup_seconds": 0.18326665740460157,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTypeError: document.querySelector(...).textContent is not a function\n    at eval (eval at <anonymous> (eval at evaluate (:368:30)), <anonymous>:1:146)\n    at eval (eval at evaluate (:368:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:370:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 1,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.027030371129512787,
+      "startup_seconds": 0.18326665740460157,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTypeError: document.querySelector(...).textContent is not a function\n    at eval (eval at <anonymous> (eval at evaluate (:368:30)), <anonymous>:1:146)\n    at eval (eval at evaluate (:368:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:370:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 1,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.5497790491208434,
+      "startup_seconds": 0.32483232486993074,
+      "tool_error": true,
+      "reply_excerpt": "Error: document.querySelector(...).textContent is not a function"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 1,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.12795952428132296,
+      "startup_seconds": 0.32483232486993074,
+      "tool_error": true,
+      "reply_excerpt": "Error: document.querySelector(...).textContent is not a function"
+    },
+    {
+      "task_id": "quantity-10",
+      "output": "1700",
+      "elapsed_seconds": 0.060535018999999975,
+      "candidate": "native-browser",
+      "trial": 2
+    },
+    {
+      "task_id": "quantity-11",
+      "output": "1870",
+      "elapsed_seconds": 0.04893595100000005,
+      "candidate": "native-browser",
+      "trial": 2
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 2,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.4280707351863384,
+      "startup_seconds": 0.17358189541846514,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTypeError: document.querySelector(...).textContent is not a function\n    at eval (eval at <anonymous> (eval at evaluate (:368:30)), <anonymous>:1:146)\n    at eval (eval at evaluate (:368:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:370:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 2,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.033612119033932686,
+      "startup_seconds": 0.17358189541846514,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTypeError: document.querySelector(...).textContent is not a function\n    at eval (eval at <anonymous> (eval at evaluate (:368:30)), <anonymous>:1:146)\n    at eval (eval at evaluate (:368:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:370:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 2,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.5445976629853249,
+      "startup_seconds": 0.333010689355433,
+      "tool_error": true,
+      "reply_excerpt": "Error: document.querySelector(...).textContent is not a function"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 2,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.12663746438920498,
+      "startup_seconds": 0.333010689355433,
+      "tool_error": true,
+      "reply_excerpt": "Error: document.querySelector(...).textContent is not a function"
+    }
+  ],
+  "public_retrieval": [
+    {
+      "candidate": "context7",
+      "query": "Python requests timeout is not a total response download deadline",
+      "elapsed_seconds": 3.7075336016714573,
+      "tool_error": false,
+      "response": "### Set combined connect and read timeout\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nApplies a single timeout value to both the connect and read timeouts. By default, requests do not time out unless explicitly set.\n\n```python\nr = requests.get('https://github.com', timeout=5)\n```\n\n--------------------------------\n\n### Set separate connect and read timeouts with a tuple\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nSets the connect and read timeouts individually by passing a tuple of (connect, read) seconds.\n\n```python\nr = requests.get('https://github.com', timeout=(3.05, 27))\n```\n\n--------------------------------\n\n### Defer response body download using stream=True\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nOverrides the default behavior of downloading the response body immediately. Keeps the connection open until Response.content is accessed.\n\n```python\ntarball_url = 'https://github.com/psf/requests/tarball/main'\nr = requests.get(tarball_url, stream=True)\n```\n\n### Timeouts\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nMost requests to external servers should have a timeout attached, in case the\nserver is not responding in a timely manner. By default, requests do not time\nout unless a timeout value is set explicitly. Without a timeout, your code may\nhang for minutes or more.\n\nThe **connect** timeout is the number of seconds Requests will wait for your\nclient to establish a connection to a remote machine (corresponding to the\n[connect()](https://linux.die.net/man/2/connect)) call on the socket. It’s a good practice to set connect timeouts\nto slightly larger than a multiple of 3, which is the default [TCP packet\nretransmission window](https://datatracker.ietf.org/doc/html/rfc2988).\n\nOnce your client has connected to the server and sent the HTTP request, the\n**read** timeout is the number of seconds the client will wait for the server\nto send a response. (Specifically, it’s the number of seconds that the client\nwill wait *between* bytes sent from the server. In 99.9% of cases, this is the\ntime before the server sends the first byte).\n\nIf you specify a single value for the timeout, like this:\n\nThe timeout value will be applied to both the `connect` and the `read`\ntimeouts. Specify a tuple if you would like to set the values separately:\n\nIf the remote server is very slow, you can tell Requests to wait forever for\na response, by passing None as a timeout value and then retrieving a cup of\ncoffee.\n\n--------------------------------\n\n### Body Content Workflow\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nBy default, when you make a request, the body of the response is downloaded\nimmediately. You can override this behaviour and defer downloading the response\nbody until you access the `Response.content`\nattribute with the `stream` parameter:\n\nAt this point only the response headers have been downloaded and the connection\nremains open, hence allowing us to make content retrieval conditional:\n\nYou can further control the workflow by use of the `Response.iter_content()`\nand `Response.iter_lines()` methods.\nAlternatively, you can read the undecoded body from the underlying\nurllib3 `urllib3.HTTPResponse` at\n`Response.raw`.\n\nIf you set `stream` to `True` when making a request, Requests cannot\nrelease the connection back to the pool unless you consume all the data or call\n`Response.close`. This can lead to\ninefficiency with connections. If you find yourself partially reading request\nbodies (or not reading them at all) while using `stream=True`, you should\nmake the request within a `with` statement to ensure it’s always closed:"
+    },
+    {
+      "candidate": "context7",
+      "query": "Pydantic v2 field_validator mode before raw input",
+      "elapsed_seconds": 4.0176175106316805,
+      "tool_error": false,
+      "response": "### Define before validator using @field_validator decorator\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nUse the @field_validator decorator with mode='before' to transform raw inputs before standard validation occurs. Pydantic continues to validate the returned value against the specified field type.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, ValidationError, field_validator\n\n\nclass Model(BaseModel):\n    numbers: list[int]\n\n    @field_validator('numbers', mode='before')\n    @classmethod\n    def ensure_list(cls, value: Any) -> Any:  # (1)!\n        if not isinstance(value, list):  # (2)!\n            return [value]\n        else:\n            return value\n\n\nprint(Model(numbers=2))\n#> numbers=[2]\ntry:\n    Model(numbers='str')\nexcept ValidationError as err:\n    print(err)  # (3)!\n    \"\"\"\n    1 validation error for Model\n    numbers.0\n      Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='str', input_type=str]\n    \"\"\"\n```\n\n--------------------------------\n\n### Define before validator using BeforeValidator and Annotated\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nUse BeforeValidator with typing.Annotated to process raw inputs before Pydantic executes internal type parsing and validation. Pydantic validates the returned value against the field's declared type annotation.\n\n```python\nfrom typing import Annotated, Any\n\nfrom pydantic import BaseModel, BeforeValidator, ValidationError\n\n\ndef ensure_list(value: Any) -> Any:  # (1)!\n    if not isinstance(value, list):  # (2)!\n        return [value]\n    else:\n        return value\n\n\nclass Model(BaseModel):\n    numbers: Annotated[list[int], BeforeValidator(ensure_list)]\n\n\nprint(Model(numbers=2))\n#> numbers=[2]\ntry:\n    Model(numbers='str')\nexcept ValidationError as err:\n    print(err)  # (3)!\n    \"\"\"\n    1 validation error for Model\n    numbers.0\n      Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='str', input_type=str]\n    \"\"\"\n```\n\n--------------------------------\n\n### Define a before model validator with @model_validator(mode='before')\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nRuns before model instantiation and receives raw input data as `Any`. Avoid mutating the raw input value directly if raising errors later, as the mutated value may be passed to other validators.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, model_validator\n\n\nclass UserModel(BaseModel):\n    username: str\n\n    @model_validator(mode='before')\n    @classmethod\n    def check_card_number_not_present(cls, data: Any) -> Any:  # (1)!\n        if isinstance(data, dict):\n            if 'card_number' in data:\n                raise ValueError(\"'card_number' should not be included\")\n        return data\n```\n\n--------------------------------\n\n### Casting integers in a before field_validator\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nDefines a field validator with mode='before' to cast integer inputs to strings before standard field validation.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, field_validator\n\n\nclass Model(BaseModel):\n    value: str\n\n    @field_validator('value', mode='before')\n    @classmethod\n    def cast_ints(cls, value: Any) -> Any:\n        if isinstance(value, int):\n            return str(value)\n        else:\n            return value\n\n\nprint(Model(value='a'))\n#> value='a'\nprint(Model(value=1))\n#> value='1'\n```\n\n### Field validators\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\n* ***Before* validators**: run before Pydantic's internal parsing and validation (e.g. coercion of a `str` to an `int`).\n  These are more flexible than [*after* validators](#field-after-validator), but they also have to deal with the raw input, which\n  in theory could be any arbitrary object. You should also avoid mutating the value directly if you are raising a\n  [validation error](#raising-validation-errors) later in your validator function, as the mutated value may be passed to other\n  validators if using [unions](./unions.md).\n  {#field-before-validator}\n\n    The value returned from this callable is then validated against the provided type annotation by Pydantic.\n\n        1. Notice the use of [`Any`][typing.Any] as a type hint for `value`. *Before* validators take the raw input, which\n           can be anything.\n\n        2. Note that you might want to check for other sequence types (such as tuples) that would normally successfully\n           validate against the `list` type. *Before* validators give you more flexibility, but you have to account for\n           every possible case.\n\n        3. Pydantic still performs validation against the `int` type, no matter if our `ensure_list` validator\n           did operations on the original input type."
+    },
+    {
+      "candidate": "parallel-search",
+      "stage": "discovery",
+      "tool_names": [
+        "web_search",
+        "web_fetch"
+      ],
+      "elapsed_seconds": 0.46425460278987885
+    },
+    {
+      "candidate": "parallel-search",
+      "query": "Python Requests official documentation timeout is not a time limit on the entire response download",
+      "response": {
+        "_meta": {
+          "parallel/usage": [
+            {
+              "name": "sku_search",
+              "count": 1,
+              "cost_usd": 0.001
+            }
+          ]
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"search_id\": \"search_a635c57ea3c4097953726ce1eca8dd4c\",\n  \"results\": [\n    {\n      \"url\": \"https://requests.readthedocs.io/_/downloads/en/latest/pdf\",\n      \"title\": \"Requests Documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \" > \\n[PDF] Requests Documentation\\n2.33.1 Note timeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response\\n > \\nRequests Documentation\\nOct 5, 2015 — Release 2.33.1 Release v2.33.1. (Installation) Requests is an elegant and simple HTTP library for Python, built for human beings. GitHub API v3\\nRequests Documentation\\nBy default, requests do not time out unless a timeout value is set explicitly. Without a timeout, your code may hang for minutes or more.\"\n      ]\n    },\n    {\n      \"url\": \"https://docs.python-requests.org/en/stable/api\",\n      \"title\": \"Developer Interface — Requests 2.34.2 documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"Developer Interface ¶\\nThis part of the documentation covers all the interfaces of Requests. For parts where Requests depends on external libraries, we document the most important right here and provide links to the canonical documentation.\\nMain Interface ¶\\n* auth – (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.\\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\\n* allow_redirects (bool) – (optional) Boolean.\\nDefaults to True.\\n* stream – (optional) if False, the response content will be immediately downloaded.\\n* cert – (optional) if String, path to ssl client cert file (.pem). If Tuple, (‘cert’, ‘key’) pair.\\n* Returns:\\nResponse object\\n* Return type:\\nrequests.Response\\nUsage:\\nAn HTTP error occurred.\\n* *exception*requests.TooManyRedirects(**args: Any *, ***kwargs: Any *) [source] ¶\\nToo many redirects.\\n* *exception*requests.ConnectTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe request timed out while trying to connect to the remote server.\\nRequests that produced this error are safe to retry.\\n* *exception*requests.ReadTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe server did not send any data in the allotted amount of time.\\n* *exception*requests.Timeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe request timed out.\\nCatching this error will catch both ConnectTimeout and ReadTimeout errors.\\nIf the request exceeds this limit, a TooManyRedirects exception is raised. This defaults to requests.models.DEFAULT_REDIRECT_LIMIT, which is 30.\\n* merge_environment_settings(*url: str *, *proxies: dict [ str , str ]| None *, *stream: bool | None *, *verify:_t.VerifyType| None *, *cert:_t.CertType*) → dict [ str ,Any] [source] ¶\\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\\n* allow_redirects (bool) – (optional) Set to True by default.\\n* proxies – (optional) Dictionary mapping protocol or protocol and hostname to the URL of the proxy.\\n* hooks – (optional) Dictionary mapping hook name to one event or list of events, event must be callable.\\n* stream – (optional) whether to immediately download the response content. Defaults to False.\\nThe amount of time elapsed between sending the request and the arrival of the response (as a timedelta). This property specifically measures the time taken between sending the first byte of the request and finishing parsing the headers. It is therefore unaffected by consuming the response content or the value of the stream keyword argument.\\n* stream – (optional) Whether to stream the request content.\\n* timeout (float* or* tuple) – (optional) How long to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\"\n      ]\n    },\n    {\n      \"url\": \"https://docs.python-requests.org/en/latest/api?highlight=ReadTimeout\",\n      \"title\": \"Developer Interface — Requests 2.34.2 documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"Developer Interface ¶\\nThis part of the documentation covers all the interfaces of Requests. For parts where Requests depends on external libraries, we document the most important right here and provide links to the canonical documentation.\\nMain Interface ¶\\n* auth – (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.\\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\\n* allow_redirects (bool) – (optional) Boolean.\\nDefaults to True.\\n* stream – (optional) if False, the response content will be immediately downloaded.\\n* cert – (optional) if String, path to ssl client cert file (.pem). If Tuple, (‘cert’, ‘key’) pair.\\n* Returns:\\nResponse object\\n* Return type:\\nrequests.Response\\nUsage:\\nAn HTTP error occurred.\\n* *exception*requests.TooManyRedirects(**args: Any *, ***kwargs: Any *) [source] ¶\\nToo many redirects.\\n* *exception*requests.ConnectTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe request timed out while trying to connect to the remote server.\\nRequests that produced this error are safe to retry.\\n* *exception*requests.ReadTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe server did not send any data in the allotted amount of time.\\n* *exception*requests.Timeout(**args: Any *, ***kwargs: Any *) [source] ¶\\nThe request timed out.\\nCatching this error will catch both ConnectTimeout and ReadTimeout errors.\\nIf the request exceeds this limit, a TooManyRedirects exception is raised. This defaults to requests.models.DEFAULT_REDIRECT_LIMIT, which is 30.\\n* merge_environment_settings(*url: str *, *proxies: dict [ str , str ]| None *, *stream: bool | None *, *verify:_t.VerifyType| None *, *cert:_t.CertType*) → dict [ str ,Any] [source] ¶\\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\\n* allow_redirects (bool) – (optional) Set to True by default.\\n* proxies – (optional) Dictionary mapping protocol or protocol and hostname to the URL of the proxy.\\n* hooks – (optional) Dictionary mapping hook name to one event or list of events, event must be callable.\\n* stream – (optional) whether to immediately download the response content. Defaults to False.\\n* request – The PreparedRequest being sent.\\n* stream – (optional) Whether to stream the request content.\\n* timeout (float* or* tuple) – (optional) How long to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\\nthis raises requests.exceptions.MissingSchema\\n* Keys in the headers dictionary are now native strings on all Python versions, i.e. bytestrings on Python 2 and unicode on Python 3. If the keys are not native strings (unicode on Python 2 or bytestrings on Python 3) they will be converted to the native string type assuming UTF-8 encoding.\"\n      ]\n    },\n    {\n      \"url\": \"https://docs.python-requests.org/en/latest/user/quickstart?highlight=raise_for_status\",\n      \"title\": \"Quickstart — Requests 2.34.2 documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"You can tell Requests to stop waiting for a response after a given number of seconds with the timeout parameter. Nearly all production code should use this parameter in nearly all requests. Failure to do so can cause your program to hang indefinitely:\\nrequests.get('https://github.com/', timeout=0.001) Traceback (most recent call last): File \\\"\\\", line 1, in  requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)\\nNote\\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout seconds). If no timeout is specified explicitly, requests do not time out.\"\n      ]\n    },\n    {\n      \"url\": \"https://docs.python-requests.org/en/latest/user/advanced\",\n      \"title\": \"Advanced Usage — Requests 2.34.2 documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"Advanced Usage — Requests 2.34.2 documentation\\nMost requests to external servers should have a timeout attached, in case the server is not responding in a timely manner. By default, requests do not time out unless a timeout value is set explicitly.\"\n      ]\n    },\n    {\n      \"url\": \"https://requests.readthedocs.io/_/downloads/en/v2.9.1/pdf\",\n      \"title\": \"[PDF] Requests Documentation\",\n      \"publish_date\": \"2016-08-19\",\n      \"excerpts\": [\n        \"You can tell Requests to stop waiting for a response after a given number of seconds with the timeout parameter:\\nrequests.get ( 'http://github.com' , timeout=0.001 ) Traceback (most recent call last):\\nFile \\\"\\\", line 1, in\\nrequests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (time\\nNote\\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout seconds).\\n3.3.15 Errors and Exceptions\\nIn the event of a network problem (e.g.\"\n      ]\n    },\n    {\n      \"url\": \"https://requests.readthedocs.io/en/latest\",\n      \"title\": \"Requests: HTTP for Humans™ — Requests 2.34.2 documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"Requests: HTTP for Humans™ — Requests 2.34.2 documentation\\nStreaming Downloads Connection Timeouts Chunked Requests .netrc Support Requests officially supports Python 3.10+, and runs great on PyPy. The User Guide ¶ This part of the documentation, which is mostly prose, begins with some background information about Requests, then focuses on step-by-step instructions for getting the most out of Requests.\"\n      ]\n    },\n    {\n      \"url\": \"https://requests.readthedocs.io/_/downloads/en/stable/pdf\",\n      \"title\": \"Requests Documentation\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"• Browser-style SSL Verification\\n• Automatic Content Decoding\\n• Basic/Digest Authentication\\n• Elegant Key/Value Cookies\\n• Automatic Decompression\\n• Unicode Response Bodies\\n• HTTP(S) Proxy Support\\n• Multipart File Uploads\\n• Streaming Downloads\\n• Connection Timeouts\\n• Chunked Requests\\n• .netrc Support\\nRequests officially supports Python 3.10+, and runs great on PyPy.\\n3\\nRequests Documentation, Release 2.34.2\\n4\\nChapter 1. Beloved Features\\nCHAPTER\\nTWO\\nTHE USER GUIDE\\nThis part of the documentation, which is mostly prose, begins with some background information about Requests, then\\nso we only compare our submitted data here.\\nget ( ' https://github.com/ ' , timeout = 0.001 )\\nTraceback (most recent call last):\\nFile \\\"\\\" , line 1 , in\\nrequests.exceptions.Timeout : HTTPConnectionPool(host= ' github.com ' , port=80): Request ␣\\n˓ → timed out. (timeout=0.001)\\n14\\nChapter 2. The User Guide\\nRequests Documentation, Release 2.34.2\\nso we only compare our submitted data here.\\nNote\\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued\\na response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout\\nseconds).\"\n      ]\n    },\n    {\n      \"url\": \"https://www.scrapingbee.com/blog/python-requests-timeout\",\n      \"title\": \"How to handle timeouts in Python Requests - scrapingbee.com\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"How to handle timeouts in Python Requests - scrapingbee.com\\nLearn how to fix requests timeout issues in Python with clear timeouts, retries, and smarter scraping patterns, plus when to switch to a managed scraping API.\"\n      ]\n    },\n    {\n      \"url\": \"https://oxylabs.io/blog/python-requests-timeout\",\n      \"title\": \"Guide to Handling Python Requests Timeout\",\n      \"publish_date\": null,\n      \"excerpts\": [\n        \"Guide to Handling Python Requests Timeout\\nNov 19, 2024 — A Python request timeout is a setting that limits how long a request can wait for a server response before failing. By defining a Python timeout\"\n      ]\n    }\n  ],\n  \"warnings\": null,\n  \"metadata\": null,\n  \"session_id\": \"session_a635c57ea3c4097953726ce1eca8dd4c\"\n}"
+          }
+        ],
+        "structuredContent": {
+          "search_id": "search_a635c57ea3c4097953726ce1eca8dd4c",
+          "results": [
+            {
+              "url": "https://requests.readthedocs.io/_/downloads/en/latest/pdf",
+              "title": "Requests Documentation",
+              "publish_date": null,
+              "excerpts": [
+                " > \n[PDF] Requests Documentation\n2.33.1 Note timeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response\n > \nRequests Documentation\nOct 5, 2015 — Release 2.33.1 Release v2.33.1. (Installation) Requests is an elegant and simple HTTP library for Python, built for human beings. GitHub API v3\nRequests Documentation\nBy default, requests do not time out unless a timeout value is set explicitly. Without a timeout, your code may hang for minutes or more."
+              ]
+            },
+            {
+              "url": "https://docs.python-requests.org/en/stable/api",
+              "title": "Developer Interface — Requests 2.34.2 documentation",
+              "publish_date": null,
+              "excerpts": [
+                "Developer Interface ¶\nThis part of the documentation covers all the interfaces of Requests. For parts where Requests depends on external libraries, we document the most important right here and provide links to the canonical documentation.\nMain Interface ¶\n* auth – (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\n* allow_redirects (bool) – (optional) Boolean.\nDefaults to True.\n* stream – (optional) if False, the response content will be immediately downloaded.\n* cert – (optional) if String, path to ssl client cert file (.pem). If Tuple, (‘cert’, ‘key’) pair.\n* Returns:\nResponse object\n* Return type:\nrequests.Response\nUsage:\nAn HTTP error occurred.\n* *exception*requests.TooManyRedirects(**args: Any *, ***kwargs: Any *) [source] ¶\nToo many redirects.\n* *exception*requests.ConnectTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe request timed out while trying to connect to the remote server.\nRequests that produced this error are safe to retry.\n* *exception*requests.ReadTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe server did not send any data in the allotted amount of time.\n* *exception*requests.Timeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe request timed out.\nCatching this error will catch both ConnectTimeout and ReadTimeout errors.\nIf the request exceeds this limit, a TooManyRedirects exception is raised. This defaults to requests.models.DEFAULT_REDIRECT_LIMIT, which is 30.\n* merge_environment_settings(*url: str *, *proxies: dict [ str , str ]| None *, *stream: bool | None *, *verify:_t.VerifyType| None *, *cert:_t.CertType*) → dict [ str ,Any] [source] ¶\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\n* allow_redirects (bool) – (optional) Set to True by default.\n* proxies – (optional) Dictionary mapping protocol or protocol and hostname to the URL of the proxy.\n* hooks – (optional) Dictionary mapping hook name to one event or list of events, event must be callable.\n* stream – (optional) whether to immediately download the response content. Defaults to False.\nThe amount of time elapsed between sending the request and the arrival of the response (as a timedelta). This property specifically measures the time taken between sending the first byte of the request and finishing parsing the headers. It is therefore unaffected by consuming the response content or the value of the stream keyword argument.\n* stream – (optional) Whether to stream the request content.\n* timeout (float* or* tuple) – (optional) How long to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple."
+              ]
+            },
+            {
+              "url": "https://docs.python-requests.org/en/latest/api?highlight=ReadTimeout",
+              "title": "Developer Interface — Requests 2.34.2 documentation",
+              "publish_date": null,
+              "excerpts": [
+                "Developer Interface ¶\nThis part of the documentation covers all the interfaces of Requests. For parts where Requests depends on external libraries, we document the most important right here and provide links to the canonical documentation.\nMain Interface ¶\n* auth – (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\n* allow_redirects (bool) – (optional) Boolean.\nDefaults to True.\n* stream – (optional) if False, the response content will be immediately downloaded.\n* cert – (optional) if String, path to ssl client cert file (.pem). If Tuple, (‘cert’, ‘key’) pair.\n* Returns:\nResponse object\n* Return type:\nrequests.Response\nUsage:\nAn HTTP error occurred.\n* *exception*requests.TooManyRedirects(**args: Any *, ***kwargs: Any *) [source] ¶\nToo many redirects.\n* *exception*requests.ConnectTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe request timed out while trying to connect to the remote server.\nRequests that produced this error are safe to retry.\n* *exception*requests.ReadTimeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe server did not send any data in the allotted amount of time.\n* *exception*requests.Timeout(**args: Any *, ***kwargs: Any *) [source] ¶\nThe request timed out.\nCatching this error will catch both ConnectTimeout and ReadTimeout errors.\nIf the request exceeds this limit, a TooManyRedirects exception is raised. This defaults to requests.models.DEFAULT_REDIRECT_LIMIT, which is 30.\n* merge_environment_settings(*url: str *, *proxies: dict [ str , str ]| None *, *stream: bool | None *, *verify:_t.VerifyType| None *, *cert:_t.CertType*) → dict [ str ,Any] [source] ¶\n* timeout (float* or* tuple) – (optional) How many seconds to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\n* allow_redirects (bool) – (optional) Set to True by default.\n* proxies – (optional) Dictionary mapping protocol or protocol and hostname to the URL of the proxy.\n* hooks – (optional) Dictionary mapping hook name to one event or list of events, event must be callable.\n* stream – (optional) whether to immediately download the response content. Defaults to False.\n* request – The PreparedRequest being sent.\n* stream – (optional) Whether to stream the request content.\n* timeout (float* or* tuple) – (optional) How long to wait for the server to send data before giving up, as a float, or a (connect timeout, read timeout) tuple.\nthis raises requests.exceptions.MissingSchema\n* Keys in the headers dictionary are now native strings on all Python versions, i.e. bytestrings on Python 2 and unicode on Python 3. If the keys are not native strings (unicode on Python 2 or bytestrings on Python 3) they will be converted to the native string type assuming UTF-8 encoding."
+              ]
+            },
+            {
+              "url": "https://docs.python-requests.org/en/latest/user/quickstart?highlight=raise_for_status",
+              "title": "Quickstart — Requests 2.34.2 documentation",
+              "publish_date": null,
+              "excerpts": [
+                "You can tell Requests to stop waiting for a response after a given number of seconds with the timeout parameter. Nearly all production code should use this parameter in nearly all requests. Failure to do so can cause your program to hang indefinitely:\nrequests.get('https://github.com/', timeout=0.001) Traceback (most recent call last): File \"\", line 1, in  requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)\nNote\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout seconds). If no timeout is specified explicitly, requests do not time out."
+              ]
+            },
+            {
+              "url": "https://docs.python-requests.org/en/latest/user/advanced",
+              "title": "Advanced Usage — Requests 2.34.2 documentation",
+              "publish_date": null,
+              "excerpts": [
+                "Advanced Usage — Requests 2.34.2 documentation\nMost requests to external servers should have a timeout attached, in case the server is not responding in a timely manner. By default, requests do not time out unless a timeout value is set explicitly."
+              ]
+            },
+            {
+              "url": "https://requests.readthedocs.io/_/downloads/en/v2.9.1/pdf",
+              "title": "[PDF] Requests Documentation",
+              "publish_date": "2016-08-19",
+              "excerpts": [
+                "You can tell Requests to stop waiting for a response after a given number of seconds with the timeout parameter:\nrequests.get ( 'http://github.com' , timeout=0.001 ) Traceback (most recent call last):\nFile \"\", line 1, in\nrequests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (time\nNote\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued a response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout seconds).\n3.3.15 Errors and Exceptions\nIn the event of a network problem (e.g."
+              ]
+            },
+            {
+              "url": "https://requests.readthedocs.io/en/latest",
+              "title": "Requests: HTTP for Humans™ — Requests 2.34.2 documentation",
+              "publish_date": null,
+              "excerpts": [
+                "Requests: HTTP for Humans™ — Requests 2.34.2 documentation\nStreaming Downloads Connection Timeouts Chunked Requests .netrc Support Requests officially supports Python 3.10+, and runs great on PyPy. The User Guide ¶ This part of the documentation, which is mostly prose, begins with some background information about Requests, then focuses on step-by-step instructions for getting the most out of Requests."
+              ]
+            },
+            {
+              "url": "https://requests.readthedocs.io/_/downloads/en/stable/pdf",
+              "title": "Requests Documentation",
+              "publish_date": null,
+              "excerpts": [
+                "• Browser-style SSL Verification\n• Automatic Content Decoding\n• Basic/Digest Authentication\n• Elegant Key/Value Cookies\n• Automatic Decompression\n• Unicode Response Bodies\n• HTTP(S) Proxy Support\n• Multipart File Uploads\n• Streaming Downloads\n• Connection Timeouts\n• Chunked Requests\n• .netrc Support\nRequests officially supports Python 3.10+, and runs great on PyPy.\n3\nRequests Documentation, Release 2.34.2\n4\nChapter 1. Beloved Features\nCHAPTER\nTWO\nTHE USER GUIDE\nThis part of the documentation, which is mostly prose, begins with some background information about Requests, then\nso we only compare our submitted data here.\nget ( ' https://github.com/ ' , timeout = 0.001 )\nTraceback (most recent call last):\nFile \"\" , line 1 , in\nrequests.exceptions.Timeout : HTTPConnectionPool(host= ' github.com ' , port=80): Request ␣\n˓ → timed out. (timeout=0.001)\n14\nChapter 2. The User Guide\nRequests Documentation, Release 2.34.2\nso we only compare our submitted data here.\nNote\ntimeout is not a time limit on the entire response download; rather, an exception is raised if the server has not issued\na response for timeout seconds (more precisely, if no bytes have been received on the underlying socket for timeout\nseconds)."
+              ]
+            },
+            {
+              "url": "https://www.scrapingbee.com/blog/python-requests-timeout",
+              "title": "How to handle timeouts in Python Requests - scrapingbee.com",
+              "publish_date": null,
+              "excerpts": [
+                "How to handle timeouts in Python Requests - scrapingbee.com\nLearn how to fix requests timeout issues in Python with clear timeouts, retries, and smarter scraping patterns, plus when to switch to a managed scraping API."
+              ]
+            },
+            {
+              "url": "https://oxylabs.io/blog/python-requests-timeout",
+              "title": "Guide to Handling Python Requests Timeout",
+              "publish_date": null,
+              "excerpts": [
+                "Guide to Handling Python Requests Timeout\nNov 19, 2024 — A Python request timeout is a setting that limits how long a request can wait for a server response before failing. By defining a Python timeout"
+              ]
+            }
+          ],
+          "warnings": null,
+          "metadata": null,
+          "session_id": "session_a635c57ea3c4097953726ce1eca8dd4c"
+        },
+        "isError": false
+      }
+    }
+  ],
+  "checked_at": "2026-10-10T08:36:39.956485+00:00"
+}

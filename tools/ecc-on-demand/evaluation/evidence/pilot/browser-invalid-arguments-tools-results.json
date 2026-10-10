@@ -1,0 +1,386 @@
+{
+  "contract_sha256": "464d2451939aa883e392e7157884fc2d596d272138569b0dc4c7859ff76fafed",
+  "rows": [
+    {
+      "task_id": "first-read",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0021743029356002808,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "first-read",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.10582540929317474,
+      "startup_seconds": 0.4559946395456791,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002770933322608471,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.005400177091360092,
+      "startup_seconds": 0.4559946395456791,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0018590707331895828,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {},
+      "elapsed_seconds": 0.07547437585890293,
+      "startup_seconds": 0.43873325642198324,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 1,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002810961566865444,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 1,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.025788957253098488,
+      "startup_seconds": 0.43873325642198324,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "first-read",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0019104629755020142,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "first-read",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.09734704531729221,
+      "startup_seconds": 0.4556182259693742,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002747904509305954,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "same-session-repeat",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.006377986632287502,
+      "startup_seconds": 0.4556182259693742,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.0018209684640169144,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-shared-cache",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {},
+      "elapsed_seconds": 0.07437163591384888,
+      "startup_seconds": 0.4333032453432679,
+      "response_bytes": 27,
+      "calls": 1,
+      "tool_error": false,
+      "reply_excerpt": "{\"content\":\"// No changes\"}"
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 2,
+      "candidate": "native",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.002725786529481411,
+      "response_bytes": 63481,
+      "calls": 1
+    },
+    {
+      "task_id": "new-session-explicit-full",
+      "trial": 2,
+      "candidate": "token-optimizer",
+      "output": {
+        "retry_limit": 3,
+        "max_count": 1700,
+        "request_id": "req-01731",
+        "error": "E_CONFLICT",
+        "guard": "approval_required"
+      },
+      "elapsed_seconds": 0.02550683356821537,
+      "startup_seconds": 0.4333032453432679,
+      "response_bytes": 63558,
+      "calls": 2,
+      "tool_error": false,
+      "reply_excerpt": "background_0=synthetic unchanged detail\nbackground_1=synthetic unchanged detail\nbackground_2=synthetic unchanged detail\nbackground_3=synthetic unchanged detail\n"
+    },
+    {
+      "task_id": "quantity-10",
+      "output": "1700",
+      "elapsed_seconds": 0.076285126,
+      "candidate": "native-browser",
+      "trial": 1
+    },
+    {
+      "task_id": "quantity-11",
+      "output": "1870",
+      "elapsed_seconds": 0.04797394000000003,
+      "candidate": "native-browser",
+      "trial": 1
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 1,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.3436817368492484,
+      "startup_seconds": 0.18142111133784056,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTool \"browser_run_code\" not found"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 1,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.0003326190635561943,
+      "startup_seconds": 0.18142111133784056,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTool \"browser_run_code\" not found"
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 1,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.002424490638077259,
+      "startup_seconds": 0.3434869833290577,
+      "tool_error": true,
+      "reply_excerpt": "Input validation error: Invalid arguments for tool evaluate_script: pageId: Invalid input: expected number, received undefined"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 1,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.0004603331908583641,
+      "startup_seconds": 0.3434869833290577,
+      "tool_error": true,
+      "reply_excerpt": "Input validation error: Invalid arguments for tool evaluate_script: pageId: Invalid input: expected number, received undefined"
+    },
+    {
+      "task_id": "quantity-10",
+      "output": "1700",
+      "elapsed_seconds": 0.07605670500000002,
+      "candidate": "native-browser",
+      "trial": 2
+    },
+    {
+      "task_id": "quantity-11",
+      "output": "1870",
+      "elapsed_seconds": 0.06366249999999997,
+      "candidate": "native-browser",
+      "trial": 2
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 2,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.32672558072954416,
+      "startup_seconds": 0.17780493758618832,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTool \"browser_run_code\" not found"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 2,
+      "candidate": "playwright",
+      "output": null,
+      "elapsed_seconds": 0.0003427807241678238,
+      "startup_seconds": 0.17780493758618832,
+      "tool_error": true,
+      "reply_excerpt": "### Error\nTool \"browser_run_code\" not found"
+    },
+    {
+      "task_id": "quantity-10",
+      "trial": 2,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.0025565791875123978,
+      "startup_seconds": 0.3376388382166624,
+      "tool_error": true,
+      "reply_excerpt": "Input validation error: Invalid arguments for tool evaluate_script: pageId: Invalid input: expected number, received undefined"
+    },
+    {
+      "task_id": "quantity-11",
+      "trial": 2,
+      "candidate": "chrome-devtools",
+      "output": null,
+      "elapsed_seconds": 0.00048532988876104355,
+      "startup_seconds": 0.3376388382166624,
+      "tool_error": true,
+      "reply_excerpt": "Input validation error: Invalid arguments for tool evaluate_script: pageId: Invalid input: expected number, received undefined"
+    }
+  ],
+  "public_retrieval": [
+    {
+      "candidate": "context7",
+      "query": "Python requests timeout is not a total response download deadline",
+      "elapsed_seconds": 3.636464743874967,
+      "tool_error": false,
+      "response": "### Set separate connect and read timeouts with a tuple\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nSets the connect and read timeouts individually by passing a tuple of (connect, read) seconds.\n\n```python\nr = requests.get('https://github.com', timeout=(3.05, 27))\n```\n\n--------------------------------\n\n### Disable timeout with None\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nTells Requests to wait indefinitely for a response by setting timeout to None.\n\n```python\nr = requests.get('https://github.com', timeout=None)\n```\n\n--------------------------------\n\n### Defer response body download using stream=True\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nOverrides the default behavior of downloading the response body immediately. Keeps the connection open until Response.content is accessed.\n\n```python\ntarball_url = 'https://github.com/psf/requests/tarball/main'\nr = requests.get(tarball_url, stream=True)\n```\n\n### Timeouts\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nMost requests to external servers should have a timeout attached, in case the\nserver is not responding in a timely manner. By default, requests do not time\nout unless a timeout value is set explicitly. Without a timeout, your code may\nhang for minutes or more.\n\nThe **connect** timeout is the number of seconds Requests will wait for your\nclient to establish a connection to a remote machine (corresponding to the\n[connect()](https://linux.die.net/man/2/connect)) call on the socket. It’s a good practice to set connect timeouts\nto slightly larger than a multiple of 3, which is the default [TCP packet\nretransmission window](https://datatracker.ietf.org/doc/html/rfc2988).\n\nOnce your client has connected to the server and sent the HTTP request, the\n**read** timeout is the number of seconds the client will wait for the server\nto send a response. (Specifically, it’s the number of seconds that the client\nwill wait *between* bytes sent from the server. In 99.9% of cases, this is the\ntime before the server sends the first byte).\n\nIf you specify a single value for the timeout, like this:\n\nThe timeout value will be applied to both the `connect` and the `read`\ntimeouts. Specify a tuple if you would like to set the values separately:\n\nIf the remote server is very slow, you can tell Requests to wait forever for\na response, by passing None as a timeout value and then retrieving a cup of\ncoffee.\n\n--------------------------------\n\n### Body Content Workflow\n\nSource: https://github.com/psf/requests/blob/main/docs/user/advanced.rst\n\nBy default, when you make a request, the body of the response is downloaded\nimmediately. You can override this behaviour and defer downloading the response\nbody until you access the `Response.content`\nattribute with the `stream` parameter:\n\nAt this point only the response headers have been downloaded and the connection\nremains open, hence allowing us to make content retrieval conditional:\n\nYou can further control the workflow by use of the `Response.iter_content()`\nand `Response.iter_lines()` methods.\nAlternatively, you can read the undecoded body from the underlying\nurllib3 `urllib3.HTTPResponse` at\n`Response.raw`.\n\nIf you set `stream` to `True` when making a request, Requests cannot\nrelease the connection back to the pool unless you consume all the data or call\n`Response.close`. This can lead to\ninefficiency with connections. If you find yourself partially reading request\nbodies (or not reading them at all) while using `stream=True`, you should\nmake the request within a `with` statement to ensure it’s always closed:"
+    },
+    {
+      "candidate": "context7",
+      "query": "Pydantic v2 field_validator mode before raw input",
+      "elapsed_seconds": 4.0457818899303675,
+      "tool_error": false,
+      "response": "### Define before validator using @field_validator decorator\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nUse the @field_validator decorator with mode='before' to transform raw inputs before standard validation occurs. Pydantic continues to validate the returned value against the specified field type.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, ValidationError, field_validator\n\n\nclass Model(BaseModel):\n    numbers: list[int]\n\n    @field_validator('numbers', mode='before')\n    @classmethod\n    def ensure_list(cls, value: Any) -> Any:  # (1)!\n        if not isinstance(value, list):  # (2)!\n            return [value]\n        else:\n            return value\n\n\nprint(Model(numbers=2))\n#> numbers=[2]\ntry:\n    Model(numbers='str')\nexcept ValidationError as err:\n    print(err)  # (3)!\n    \"\"\"\n    1 validation error for Model\n    numbers.0\n      Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='str', input_type=str]\n    \"\"\"\n```\n\n--------------------------------\n\n### Define before validator using BeforeValidator and Annotated\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nUse BeforeValidator with typing.Annotated to process raw inputs before Pydantic executes internal type parsing and validation. Pydantic validates the returned value against the field's declared type annotation.\n\n```python\nfrom typing import Annotated, Any\n\nfrom pydantic import BaseModel, BeforeValidator, ValidationError\n\n\ndef ensure_list(value: Any) -> Any:  # (1)!\n    if not isinstance(value, list):  # (2)!\n        return [value]\n    else:\n        return value\n\n\nclass Model(BaseModel):\n    numbers: Annotated[list[int], BeforeValidator(ensure_list)]\n\n\nprint(Model(numbers=2))\n#> numbers=[2]\ntry:\n    Model(numbers='str')\nexcept ValidationError as err:\n    print(err)  # (3)!\n    \"\"\"\n    1 validation error for Model\n    numbers.0\n      Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='str', input_type=str]\n    \"\"\"\n```\n\n--------------------------------\n\n### Define a before model validator with @model_validator(mode='before')\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nRuns before model instantiation and receives raw input data as `Any`. Avoid mutating the raw input value directly if raising errors later, as the mutated value may be passed to other validators.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, model_validator\n\n\nclass UserModel(BaseModel):\n    username: str\n\n    @model_validator(mode='before')\n    @classmethod\n    def check_card_number_not_present(cls, data: Any) -> Any:  # (1)!\n        if isinstance(data, dict):\n            if 'card_number' in data:\n                raise ValueError(\"'card_number' should not be included\")\n        return data\n```\n\n--------------------------------\n\n### Casting integers in a before field_validator\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\nDefines a field validator with mode='before' to cast integer inputs to strings before standard field validation.\n\n```python\nfrom typing import Any\n\nfrom pydantic import BaseModel, field_validator\n\n\nclass Model(BaseModel):\n    value: str\n\n    @field_validator('value', mode='before')\n    @classmethod\n    def cast_ints(cls, value: Any) -> Any:\n        if isinstance(value, int):\n            return str(value)\n        else:\n            return value\n\n\nprint(Model(value='a'))\n#> value='a'\nprint(Model(value=1))\n#> value='1'\n```\n\n### Field validators\n\nSource: https://github.com/pydantic/pydantic/blob/main/docs/concepts/validators.md\n\n* ***Before* validators**: run before Pydantic's internal parsing and validation (e.g. coercion of a `str` to an `int`).\n  These are more flexible than [*after* validators](#field-after-validator), but they also have to deal with the raw input, which\n  in theory could be any arbitrary object. You should also avoid mutating the value directly if you are raising a\n  [validation error](#raising-validation-errors) later in your validator function, as the mutated value may be passed to other\n  validators if using [unions](./unions.md).\n  {#field-before-validator}\n\n    The value returned from this callable is then validated against the provided type annotation by Pydantic.\n\n        1. Notice the use of [`Any`][typing.Any] as a type hint for `value`. *Before* validators take the raw input, which\n           can be anything.\n\n        2. Note that you might want to check for other sequence types (such as tuples) that would normally successfully\n           validate against the `list` type. *Before* validators give you more flexibility, but you have to account for\n           every possible case.\n\n        3. Pydantic still performs validation against the `int` type, no matter if our `ensure_list` validator\n           did operations on the original input type."
+    },
+    {
+      "candidate": "parallel-search",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    }
+  ],
+  "checked_at": "2026-10-10T08:31:12.690668+00:00"
+}

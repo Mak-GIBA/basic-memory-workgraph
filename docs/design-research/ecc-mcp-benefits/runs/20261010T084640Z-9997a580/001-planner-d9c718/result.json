@@ -1,0 +1,103 @@
+{
+  "status": "ready",
+  "reason": "必須の実測記録、固定タスク、計測コード、一次資料、現行実装と既存テストを読んだ。保存された最終出力を、追加のモデル呼び出しなしで再採点できる。チェックは未実行。文書比較の保存資料と現在のContext7取得記録には文面・取得時間の不一致があるため、その来歴の制約を記録して比較範囲を限定する。",
+  "goal": "ECCを必要時に読む軽量な構成と既存設定を保ちながら、各MCPが最終回答、重要値の取得、ブラウザー操作に何を加えるかを実測記録と一次資料から評価する。日本語で用途別の導入判断を示し、親がinstallerを改修するための推奨追加集合と明示的選択の方針を返す。",
+  "domain": "research",
+  "baseline": "Aは既存モデル単独、公式文書の直接取得、catによる全文取得、Playwright APIによるブラウザー操作。Bは同じ課題に対応するSequential Thinking、Context7、@ooples/token-optimizer-mcp 7.4.3、Playwright MCP。現行installerは4つのスキル入口を配置し、Context7、Parallel Search、Playwright、Chrome DevTools、Sequential Thinkingの不足分を自動追加する。Token Optimizerは現行のMCP_SERVERSには含まれていない。",
+  "constraints": [
+    "研究モードを維持し、application source、スキル、個人設定、既存のユーザー編集、公開済み報告と過去のスナップショットを変更しない。Memory保存、依存導入、commit、reset、push、deploy、外部への送信、課金サービスの呼び出しを行わない。",
+    "主実験は保存captureの独立再採点である。producer-assetsが標準ライブラリだけの検証・抽出スクリプトを作り、親が隔離コピーで実行する。measure_reasoning.py、measure_documentation.py、measure_tools.pyは読解用であり、再実行・importしない。",
+    "task-manifest.jsonの14課題と期待値を保持する。異なる課題はtask_id、反復はtrial_idで表し、全A/B pairsと実際の失敗を残す。期待値をoutputへ代入する実験、欠落出力の補完、成功例だけの採点は禁止する。",
+    "comparison profileを維持する。主要候補はA/Bの二つとし、異用途のMCPを全課題へ適用する5方式の順位付けが妥当でない理由をcomparison_plan.exception_reasonとreader_guide.comparison_exceptionに記載する。Chrome DevToolsはブラウザー課題だけの追加比較、Cloudflare-docsとParallel Searchは公開情報取得の能力確認とする。",
+    "主要指標は最終出力のexact_matchとする。返却量、tools/list、取得件数、HTTP成功、記録されたthought文字列を推論精度やユーザー作業の成功率と呼ばない。統合率を個々のMCPの採用根拠へ読み替えない。",
+    "採用条件未達、同等、悪化は有効な研究結果である。証拠の検証・実行失敗とは区別する。今回の再採点の基準は元のcapture取得後に固定するものであり、元実験すべてに事前登録された基準とは説明しない。推論の採用条件は既存reasoning-contractの条件を保持する。",
+    "一次資料は提供snapshotの決定的な節を読み、各locatorを200行以内にする。独立した著者・開発主体の一次資料を少なくとも二つ比較する。メーカーの機能説明や設計目標を独立性能証明とせず、未読のbenchmarkや一般的なMCPの効果は未確認として扱う。",
+    "認証情報、raw reasoning、会話履歴ログ、production dataを読まない。必要な追加資料は公開一次資料に限定し、外部検索には一般的な概念だけを使う。今回は提供資料で計画できるため、文献検索要求は追加しない。",
+    "ECCのunscoped token-optimizer-mcp 2.17.0と今回測定したscoped @ooples/token-optimizer-mcp 7.4.3を別の対象として扱う。提供snapshotの内容を、測定したreleaseの実装と無条件に同一視しない。",
+    "前回の3研究のblocked、600秒のrole timeout、依存symlinkによるexit127、locator・ledger不整合は歴史的な中断原因として扱う。今回の初期issueをresolvedとして作らず、同じrunで生じたissueだけを安定したIDで保持する。"
+  ],
+  "criteria": [
+    {
+      "id": "R_CAPTURE",
+      "title": "保存captureと比較条件の来歴を検証する",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "親のE_CAPTURE_RESCOREでcapture-manifestのファイルSHA-256、固定タスクと各contractの対応、reasoning/toolsのcanonical contract hash、reasoningの共通prompt hash、documentationの保存資料から再構成した各prompt hashを検証する。推論の4 batchはnative/ST/ST/nativeの順序、同一model/effort、nativeのツール非使用、STの完了した実呼び出しとエラー情報を確認する。文書比較はモデル自身のMCP使用ではなく、取得資料を与えた回答比較と説明する。現在の取得記録との不一致、存在しないmetadata、古いsource-manifestの差異は明示し、照合済みと偽らない。SHA-256照合は内容の同一性を確認するもので、外部実行の独立認証ではない。"
+    },
+    {
+      "id": "R_OUTCOME",
+      "title": "全最終出力を独立再採点する",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "親のE_CAPTURE_RESCOREが実測resultsのoutputs/outputから14課題・26組・52件のA/B出力を抽出し、親から渡されたevaluation_contract_sha256、共通input、expected、trial_idを持つpaired-results.jsonをexportする。JSON全体を型と配列順序を保って比較し、保存済みcorrect値を採点の根拠にしない。新しい会話でのToken Optimizerのoutput={}を2件とも残す。改変hash、欠落pair、重複trial、未知task、出力欠落を検出する検証を含める。現在の成功したexport receiptと親の再計算をもって測定完了とし、改善幅が負でもこの基準は合格できる。"
+    },
+    {
+      "id": "R_SCOPES",
+      "title": "用途別の成績・失敗・測定範囲を保持する",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "E_CAPTURE_RESCOREの監査artifactで推論6問×2回、文書2問×1回、ファイル4条件×2回、ブラウザー2条件×2回を別集計し、Chrome DevToolsの追加4出力も保持する。推論時間は6問batchごとの値から平均を求め、taskごとの独立時間として水増ししない。同一会話の再読は以前の本文を抽出器へ与える条件、新会話は同じcacheでプロセスを再開してpriorを空にする条件、全文回復はdiffMode:falseの条件と照合する。返却byteとstartupを記録するが課金tokenと同一視しない。nativeとMCPで操作・時間区間が異なるブラウザーの一般速度比は計算しない。pilotの準備失敗は原記録を残して本試験の分母から分離する。"
+    },
+    {
+      "id": "R_BASELINE",
+      "title": "現行installerの設定保護を確認する",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "既存のtest_ecc_on_demand.pyとtest_install_codex_ecc.pyを親の隔離コピーで実行し、終了コード0とstdout/stderrを確認する。模擬Codexと一時設定を使う再適用、既存接続、enabled=false、Context7旧alias、管理対象の手動変更、復元、更新失敗・回復の確認を根拠にする。この成功は現行実装の検証範囲だけを示し、未実装の選択機能やMCPの性能が検証済みとは説明しない。"
+    },
+    {
+      "id": "R_PRIMARY",
+      "title": "一次資料の機構と性能主張を区別する",
+      "kind": "research",
+      "required": true,
+      "acceptance": "STのprocessThought、Context7のlibrary ID・query-docs・免責、PlaywrightのCLI/MCP比較・profile・browser_evaluate、DevToolsの診断機能・独立サーバー・収集設定、Optimizerの差分読取・性能説明・限界、ParallelとCloudflareの対象機能を関連節から比較する。例えばsequential-lib.ts:52-97、context7-README.md:63-137、playwright-README.md:1-21/462-511/963-971、chrome-devtools-README.md:13-60、optimizer-README.md:2164-2191/2485-2492を使い、source receiptだけを読解証拠にしない。メーカー説明と今回の観測、推論、未確認を分け、読んでいない独立性能研究の不足を明示する。"
+    },
+    {
+      "id": "R_DECISIONS",
+      "title": "用途別の採否を測定結果と対応させる",
+      "kind": "research",
+      "required": true,
+      "acceptance": "同じ入力のexpected/A/B実出力と失敗例を示し、各用途に導入・用途限定・見送りと理由、既存ツールとの差、再評価条件を付ける。推論は事前の追加正答・無回帰・平均時間増加10%以内の条件を評価する。文書の同等成績から精度改善や未知URL探索を主張しない。ファイルの情報欠落と全文回復を残し、ブラウザーのDOM成功から診断能力全体や生成コードの正しさへ拡張しない。人の著作時間、課金費用、別model・難しい課題・長期運用は未測定とする。"
+    },
+    {
+      "id": "R_CATALOG",
+      "title": "ECC catalog全体の判断を漏れなく示す",
+      "kind": "research",
+      "required": true,
+      "acceptance": "実読したECC 2.2.3のcatalogの34項目と独立Chrome DevToolsを対象に、約35候補すべての用途、既存代替、追加判断、証拠の状態を示す。認証サービス、用途未指定サービス、既存Memoryと重複する候補は既定追加不要とする。GitHubは既存gh/official appとの差を説明し、DevFleet等の過去の調査不足を今回の測定失敗と混同しない。測定済みのsubset以外を未測定と明示し、scoped/unscoped Optimizerへ効果や失敗率を転用しない。catalogのsnapshot・versionの来歴を示す。"
+    },
+    {
+      "id": "R_INSTALLER",
+      "title": "新規追加集合と既存所有状態を分けて提案する",
+      "kind": "static",
+      "required": true,
+      "acceptance": "推奨既定値と明示的選択の具体案を返す。Context7、Playwright、DevToolsを文書・画面操作・診断の用途で選べるようにし、STとToken Optimizerは常用defaultへ追加しない。Cloudflare-docsはCloudflare用途限定とする。追加可能なcatalogと今回追加する集合を分け、既定集合を縮めても旧owned MCPがcheck_mcpsで未知扱いになったり削除されたりしない案にする。既存user config、disabled、alias、所有記録、変更検知、復元契約を保持する。追加なしの選択は新規追加を0件にし、旧接続を消さない。選択機能の実装と新しい回帰テストは親の後続作業である。"
+    },
+    {
+      "id": "R_READER",
+      "title": "初見の読者が採否を追える報告にする",
+      "kind": "research",
+      "required": true,
+      "acceptance": "dossier.reader_guideにpurpose、scope、takeaway、walkthrough、glossary、limitations、comparison_exceptionを記載する。課題、具体的な入力と出力、全体像、部品、抽出・採点手順、検証、限界の順に説明する。diagram_source=reader-guideとし、全体図と採点部品の詳細図を含める。各図にid/kind/title/caption/reading_guide/alt/nodes/edgesを付け、詳細図にparent_figureとexpanded_componentを付ける。図を性能証拠と呼ばず、新手法の詳細設計章や架空のサーバー構成を追加しない。"
+    },
+    {
+      "id": "R_BOUNDARIES",
+      "title": "今回の証拠と実行権限を守る",
+      "kind": "static",
+      "required": true,
+      "acceptance": "生成するPoCは標準ライブラリで保存ファイルだけを読む構成とし、ネットワーク、モデル、MCPサーバー、認証設定へアクセスしない。親の現在のreceiptとstdout/stderrに対応する主張だけを実行済みとする。ソース取得、再採点、元の外部測定、構造検査、人の承認を区別する。過去runの停止理由を今回解決したissueとして登録しない。公開済みreportや個人設定を変更せず、既存編集を保つ。"
+    }
+  ],
+  "test_commands": [
+    {
+      "command": "python3 -B -m unittest discover -s tests -p 'test*ecc*.py' -v",
+      "check_ids": [
+        "R_BASELINE"
+      ],
+      "artifact_paths": []
+    }
+  ],
+  "complexity_baseline": "現行管理コードはPython標準ライブラリで動き、4入口×2ファイルと管理CLIの計9ファイル、TOML設定、所有状態とbackupを扱う。MCP追加対象は固定5件で、利用目的による選択はない。スキル検索は全catalogを語彙一致で採点して並べ替え、最大5件を返す。走査とsortが必要だが今回の改善対象はそのrankingではなくMCP追加の判断である。外部MCPはNode/browser/remote endpointと起動・cache状態を追加する。PoCは保存JSONの検証と52出力の採点だけとし、運用時間や計算量の改善を新たに測ったとは主張しない。",
+  "queries": [],
+  "evaluation_json": "{\"purpose\":\"effectiveness\",\"baseline_id\":\"A\",\"candidate_ids\":[\"A\",\"B\"],\"task_manifest\":\"tools/ecc-on-demand/evaluation/task-manifest.json\",\"task_manifest_sha256\":\"2aa187035b8a3e9f6868321eff059ba84b97e57c901f190cd8284e10e44f5087\",\"dataset\":\"親が取得済みの合成課題の保存capture。14種類の課題に26組のpaired trialがある。推論6課題を2回、文書2課題を1回、ファイル4条件を2回、ブラウザー2条件を2回。52件のA/B最終出力を独立再採点する。新しいモデル試行や代表母集団の標本ではない。\",\"controls\":[\"各task/trialで共通のinputとexpectedを用い、task-manifestと既存contractの対応を保持する。expectedは採点にだけ使用する。\",\"推論はgpt-6.1-sol/effort=max、6問を同じpromptで処理するbatchを条件ごとに2回。360秒の実行上限、ephemeral/read-only、user configとrulesの無視、native/ST/ST/nativeの順序を元の計測コードと記録から確認する。\",\"推論のnativeはツール非使用、BはSequential Thinking 2026.8.31の実呼び出しが完了した条件。追加tool schemaとmodel cache hitは処置の一部または交絡として残し、同じtoken数や同じcache条件だったとは仮定しない。\",\"文書は同じ2問・expected・gpt-6.1-sol/maxで、与えた文書だけを変える。保存documentsから各promptを再構成するため、A/Bのprompt hashが異なること自体は不整合ではない。条件の順序はAの後にBで、各1batchである。\",\"Context7のlibrary IDは計測コードで指定されている。未知URLの探索、library候補の自動選定、生成コードの機能的正しさは測定対象に含めない。\",\"ファイルは同じdocument_sha256と5項目を使う決定的な抽出器の比較である。first-readは空cache、same-session-repeatは以前の本文あり、new-session-shared-cacheは同じcacheでMCPを再起動して以前の本文なし、new-session-explicit-fullはdiffMode:falseによる回復とする。これらの状態はtask_idと既存計測コードで識別し、manifestのinputを変更しない。\",\"ブラウザーは同じローカルHTML、quantity、unit_priceとChromeを使う。Aのfill/clickとBのJavaScript設定/clickは手順が異なるため、同じ最終DOM値の比較だけを主要効果として扱う。\",\"反復はtrial_id=1,2で保持する。文書のみtrial_id=1を付ける。6問batchを6回の独立モデル呼び出しとして数えない。\",\"全失敗とtool_error、error、exit_code、欠落metadataを保持する。準備失敗を含むpilotは別記録とし、本試験の採点へ混ぜない。\",\"Chrome DevToolsの同じブラウザー4出力は追加比較の監査artifactへ保存する。Cloudflare-docsとParallel Searchの公開取得は能力確認であり、A/Bの主要採点へ加えない。\"],\"budget\":\"保存captureを読む標準ライブラリのローカルPoCを1件、親がネットワークなしの隔離コピーで実行する。PoC上限180秒、roleの既存上限1800秒を維持する。モデル/API/MCP再呼び出しと依存導入は0件。既存ECCの隔離unit testsを別途1コマンド実行する。再採点は元の外部測定時間、人の著作時間、課金費用を測定しない。\",\"limitations\":\"少数の合成課題であり、統計的有意性、一般的なMCPの優位、別model・難度・実務課題への一般化は扱わない。推論は2つの6問batch、文書は1batchずつである。文書の保存Context7資料と現在のtools-results.public_retrievalは文面と時間が一致せず、元の取得記録への完全な接続は確認できない。保存documentsとfinal answersの整合性を検証し、取得経路に関する主張は条件付きにする。ファイルは抽出器への情報可用性、ブラウザーは単純DOM値を測る。請求token、人の作業時間、未知文書探索、包括的なUI診断は未測定。再採点基準は取得済みcaptureを読んだ後に固定する。\",\"metrics\":[{\"id\":\"exact_match\",\"criterion_id\":\"R_OUTCOME\",\"primary\":true,\"kind\":\"exact_match\",\"unit\":\"fraction\",\"direction\":\"higher\",\"aggregation\":\"mean\",\"acceptance_delta\":0.0,\"grading\":\"各保存final outputを固定expectedとJSON全体で比較し、一致を1、不一致を0とする。objectのkey順は無視し、booleanとnumber、stringとnumber、配列順序、欠落fieldを区別する。output={}やnullを正解へ補完しない。26組のpaired trialを等重みで平均し、親がexport artifactから再計算する。\",\"outcome_scope\":\"final_outcome\"}],\"threshold_interpretation\":\"exact_matchの差0以上は、この混合集合で最終出力を悪化させないという診断用の条件であり、常用採用条件ではない。条件未達でも全出力が測定・検証できていれば研究は成立する。採否は用途別の成績と必要な機能で判断し、統合率をMCP個別の精度へ転用しない。\",\"comparison_plan\":{\"target_methods\":5,\"candidate_ids\":[\"A\",\"B\"],\"exception_reason\":\"MCPごとに用途と入出力が違うため、ST、Context7、Optimizer、Playwright、DevToolsを同じ全課題へ強制して五つの順位を作る比較は意味がない。既存ツールを使うAと、各課題に対応するMCPを使うBという二つの利用方針に絞り、個々の用途で差を説明する。\",\"candidate_mapping\":{\"reasoning\":{\"A\":\"native\",\"B\":\"sequential-thinking\"},\"documentation\":{\"A\":\"official-docs\",\"B\":\"context7\"},\"file\":{\"A\":\"native\",\"B\":\"token-optimizer; measured package @ooples/token-optimizer-mcp 7.4.3\"},\"browser\":{\"A\":\"native-browser\",\"B\":\"playwright\"}},\"additional_comparisons\":\"Chrome DevToolsはbrowserだけの追加対照。Parallel SearchとCloudflare-docsは公開取得の能力確認。主要exportに全課題を持たないcandidate Cを作らない。\"},\"group_decision_rules\":{\"reasoning\":\"reasoning-contractの既存adoption_ruleを保持する。少なくとも1課題の追加正答、全反復で回帰なし、平均batch時間の増加10%以内が常用採用条件。tiesは採用を支持しない。改善したunique task数とpaired trial数を分けて記録する。\",\"documentation\":\"2問の最終回答の一致と保存資料の適用範囲を確認する。同等成績は精度改善を示さず、既知URL以外の効果は未測定。文書取得経路の来歴の不足を残し、機能上の差を理由に選ぶ場合も用途限定の提案とする。\",\"file\":\"各条件で5値をすべて得られたかを判定する。新しい会話での欠落を同一会話のbyte削減で相殺しない。常用の全文読取代替には、以前の本文がない条件でも欠落がないことが必要。全文回復は独立した条件として報告する。\",\"browser\":\"各quantityとtrialでDOM値が一致したかを判定する。MCP固有の診断機能は一次資料による機能説明とし、今回のDOM成功を包括的な性能証明にしない。\",\"default_additions\":\"用途未指定の自動追加は、既存代替との差と必要性を説明できる集合に限定する。Context7/Playwright/DevToolsは用途別に明示的に選べる案を返し、STとToken Optimizerは常用defaultへ追加しない。Cloudflare-docsはCloudflare用途限定。既存接続と旧owned MCPは追加集合の縮小によって削除しない。\"},\"provenance_policy\":{\"capture_manifest\":\"tools/ecc-on-demand/evaluation/capture-manifest.json\",\"source_manifest\":\"tools/ecc-on-demand/evaluation/sources/source-manifest.json\",\"hash_scope\":\"capture-manifestのbyte hash、計測コードで用いたcanonical contract/prompt hash、親のfrozen evaluation hashを別々に検証する。古いevaluation/source-manifest.jsonの取得失敗や古いhashを新しいmanifestへ黙って置換しない。\",\"documentation_lineage\":\"documentation-results.documentsをprompt検証の資料とし、現在のtools-results.public_retrievalとの文面・取得時間の差を監査artifactへ記録する。存在しないdocumentation contract hashやexit_codeを捏造しない。\",\"failure_policy\":\"本試験の不正解出力はそのまま採点する。pair欠落やhash不一致、処置の不成立は証拠・実行の不備として区別し、成功した測定へ変換しない。pilotの全記録は除外理由とともに保持する。\"},\"planned_regrade\":{\"experiment_id\":\"E_CAPTURE_RESCORE\",\"command\":\"python3 -B regrade_captures.py --contract evaluation-contract.json --input-root tools/ecc-on-demand/evaluation --output paired-results.json --audit capture-audit.json\",\"command_state\":\"producer-assetsがこれから作成するPoCのインターフェース。既存コマンドや実行済みテストとして扱わない。\",\"check_ids\":[\"R_CAPTURE\",\"R_OUTCOME\",\"R_SCOPES\"],\"input_policy\":\"capture-manifest.jsonとその全参照ファイル、task-manifest.json、計測コード、一次資料とpilotを通常ファイルとしてinput_filesへ宣言する。evaluation-contract.jsonは親が固定した内容をそのまま生成資材へ含め、親から与えられたhashに結び付ける。依存directoryやsymlink、個人設定を持ち込まない。\",\"artifact_paths\":[\"paired-results.json\",\"capture-audit.json\"],\"artifact_policy\":\"主要paired-results.jsonだけをdossier.evaluation_resultへ結び付ける。追加対照、用途別集計、時間・byte、検証結果、pilot、来歴の留保はcapture-audit.jsonへ残し、そのtop-levelを主要paired-result形式にしない。実験artifactsには実在する現在の親receiptを参照する。\",\"timeout_seconds\":180,\"anti_fabrication_checks\":\"保存outputの変更が抽出結果・gradeへ反映されること、hash改変・欠落pair・重複trialを拒否すること、expectedへfallbackしないことを標準ライブラリの検証で確認する。実測失敗を消すための定数出力を禁止する。\"}}"
+}

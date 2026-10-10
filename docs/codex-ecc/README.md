@@ -1,6 +1,6 @@
 # Codex ECCのスキルを必要なときに読む
 
-[docs一覧](../README.md) · [導入手順](installation.md) · [使い方](usage.md)
+[docs一覧](../README.md) · [導入手順](installation.md) · [使い方](usage.md) · [MCPの導入判断](mcp-evaluation.md)
 
 ECCをCodex標準のプラグインとしてインストールし、常設スキルを4つの短い入口に絞ります。
 原本を保持したまま、Python実装・エラー処理・安全性レビューに使う手順を参照できます。

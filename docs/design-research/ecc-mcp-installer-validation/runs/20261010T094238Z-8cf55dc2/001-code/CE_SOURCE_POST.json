@@ -1,0 +1,9 @@
+{
+  "source_path": "tools/ecc-on-demand/evaluation/sources/source-manifest.json",
+  "source_sha256": "596eef826520cbee20d77d2cdf725c1d3ca119b659d76f59a2021676674ac4bb",
+  "line_start": 26,
+  "line_end": 43,
+  "checked_at": "2026-10-10T10:01:18.170587+00:00",
+  "excerpt": "  {\n    \"path\": \"sources/parallel-docs.txt\",\n    \"url\": \"https://docs.parallel.ai/integrations/mcp/search-mcp\",\n    \"sha256\": \"278a4938a0ce72bfaadab655228afc3e115123bdf780871cad83d9e8189209bc\",\n    \"format\": \"visible HTML text\"\n  },\n  {\n    \"path\": \"sources/cloudflare-docs.txt\",\n    \"url\": \"https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/\",\n    \"sha256\": \"9c88272826ceb9c36cc2536bbec16356ac45c30da2619f6511ac5014b0b5c7b5\",\n    \"format\": \"visible HTML text\"\n  },\n  {\n    \"path\": \"sources/optimizer-README.md\",\n    \"url\": \"https://raw.githubusercontent.com/ooples/token-optimizer-mcp/master/README.md\",\n    \"sha256\": \"fbe472951a472f80f714401c46c58cfa378bbd6e6629c16facd98488dfb78526\",\n    \"format\": \"source text\"\n  }",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

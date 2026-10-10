@@ -1,0 +1,62 @@
+{
+  "status": "ready",
+  "reason": "対象の実装、既存テスト、固定入力・期待値、保存出力、取得記録、説明文書と前研究の停止記録を読んだ。指定の2コマンドで限定auditを計画できる。チェックは未実行であり、runtimeの合否は親ハーネスの現在のreceiptとstdout/stderrで判断する。",
+  "goal": "ECC原本を保持し、必要なスキルを4つの入口から読む構成で、選択したMCPの追加・更新・復元が既存設定を保つことを確認する。あわせて保存captureを正しく再採点し、導入説明が今回の少数試験から分かる範囲を守っているかを点検する。MCPはCodexがツールへ接続する共通方式、captureは取得済みの入力・出力・呼び出し記録を指す。",
+  "domain": "backend",
+  "baseline": "設定の基準は操作前の一時configと所有・復元記録。現行実装の初回recommendedはcontext7とplaywrightで、noneは新規追加0件を意味する。管理対象はインストーラーが追加して所有記録に残した設定を指す。採点の基準は既存contractのinput/expectedと保存された実出力。既存手段のAと各課題に対応するMCPのBについて、同じ課題・試行の出力組をpairとし、14課題・26pairs・52出力を保持する。新しい方式比較は行わない。",
+  "constraints": [
+    "必須範囲はtools/ecc-on-demand/{ecc_on_demand,install_ecc}.py、evaluation/check_captures.py、tests/test*ecc*.py、docs/codex-ecc/{installation,mcp-evaluation}.md。評価に必要な既存manifest、contract、results、pilotは参照資料とする。",
+    "auditとして現在のソースとユーザー編集を保持する。公開済み研究レポート、過去のスナップショット、Memory、個人設定を変更しない。依存導入、commit、reset、push、deploy、外部送信、課金サービスの呼び出しを行わない。",
+    "plannerはチェックや実験を実行しない。親ハーネスが指定の2コマンドをそのまま隔離コピーで実行し、capture-regrading.jsonを回収する。別ハーネスを開始しない。",
+    "宣言するチェックはPython標準ライブラリ、合成データ、一時設定、模擬Codexだけを使う。Node、実際のCodexモデル、MCPサーバー、ネットワーク、production data、PC設定へアクセスしない。",
+    "measure_*.pyは実行・importしない。計測コードの読解とmanifestによるファイル内容のhash照合は、外部モデルやMCPの再測定とは区別する。",
+    "入力・期待値・保存captureを保持し、期待値による出力補完や不正解の除外を禁止する。異常系テストでの変更は一時コピーだけに限定する。",
+    "前研究20261010T084640Z-9997a580のproducer-design timeoutとblockedは歴史的な停止記録として扱う。今回のauditを研究レビュー完了へ読み替えず、過去runの問題を今回resolvedとして起票しない。今回のissueは安定したIDで保持し、解決済みも削除しない。",
+    "今回は改修後の設定保護と既存capture採点の限定auditである。34サービスの再調査、論文調査、5方式比較、停止した研究工程の再試行は不要とする。",
+    "取得記録やhashの照合は内容の対応を確認するもので、一般的な効果、外部実行の独立認証、人間の承認を証明しない。結果と限界を日本語で簡潔に説明し、検証フロー図は親が供給する実際の手順に基づく。"
+  ],
+  "criteria": [
+    {
+      "id": "R_INSTALLER",
+      "title": "MCP選択・更新・復元が既存設定と所有情報を保つ",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "親の指定unittestが終了コード0となり、次の操作と期待結果を現在のreceiptで裏付ける。初回・再適用・更新では選択したMCPの不足分だけを追加し、既存enabled=false、context7-mcp alias、既存command・設定、無関係なプラグインを保持する。選択を再適用・更新へ引き継ぎ、noneへ変更しても既存接続と旧管理対象MCPを削除・無効化しない。選択記録のない旧状態でも所有記録、最初のbackup、previous_enabledを引き継ぎ、復元では未変更の管理対象だけを取り除く。未知名と不正な組合せは設定変更・Codex呼び出し前に拒否する。管理対象の手動変更時は上書き・削除せず停止し、書込み・更新・復元の失敗後も既存情報を保って再試行できる。検証範囲は一時設定と模擬Codexによる挙動に限定する。"
+    },
+    {
+      "id": "R_CAPTURE",
+      "title": "保存実出力から全pairsと情報欠落を保持して再採点する",
+      "kind": "runtime",
+      "required": true,
+      "acceptance": "指定unittestとcheck_captures.pyの現在の成功receipt、およびcapture-regrading.jsonで確認する。capture-manifestのファイルhash、reasoning/toolsのcontract hash、推論の共通prompt hash、保存文書から再構成した文書prompt hash、task-manifestとcontractのinput/expectedの対応を確認する。native推論のツール非使用とSequential Thinkingの完了した実呼び出しを区別する。保存outputs/outputを採点し、correct集計値や期待値を実出力として使わない。14課題・26pairs・52出力を保ち、Token Optimizerの新会話でのoutput={}を2件とも不正解として残す。課題群別の期待集計は推論A/B各12/12、文書各2/2、ファイルA=8/8・B=6/8、ブラウザー各4/4で、Chrome DevToolsの追加4出力も別に保持する。型と配列順序を区別し、出力変更が採点へ反映され、hash改変、欠落試行、MCP呼び出し欠落を拒否する既存異常系テストを確認する。文書のContext7入力はevidence/pilot/browser-invalid-arguments-tools-results.jsonの取得応答と順序を含めて完全一致し、取得時間とエラー情報も対応すること。変換前のevaluation/source-manifest.jsonと変換後のevaluation/sources/source-manifest.jsonのhash・取得状態を混同せず、その差は静的確認も併用する。この成功は保存記録の再採点であり、外部モデルの再測定ではない。"
+    },
+    {
+      "id": "R_SCOPE",
+      "title": "導入説明が少数試験の結果と未確認事項を正しく示す",
+      "kind": "static",
+      "required": true,
+      "acceptance": "docs/codex-ecc/installation.mdとmcp-evaluation.mdを実装・保存記録に照らして読む。初回既定2件、選択の引継ぎ、noneによる接続保持、旧管理対象の保持、変更検知と復元の説明がR_INSTALLERの契約と一致すること。前研究がproducer-designの1800.009秒timeoutでblockedとなり、独立レビューとハーネス内実験が未完了であることを明示する。文書探索や対話的画面操作への接続上の価値と、正答率改善の証拠を区別する。推論6問×2回、既知URLの文書2問×各条件1試行、合成文書4条件×2回、単純DOM2条件×2回という範囲を保持する。情報欠落2件と全文取得による回復、ブラウザーの操作・計時範囲の違い、返却byteと課金tokenの違いを説明し、一般的な精度・速度・費用改善や人間の作業時間短縮へ広げない。測定したscoped Optimizerの結果を別パッケージへ転用せず、未測定サービスを効果不合格と扱わない。今回のaudit結果も、具体的な入力・操作、期待結果、実際の結果、未確認事項が初見の読者に分かる説明とする。"
+    }
+  ],
+  "test_commands": [
+    {
+      "command": "python3 -B -m unittest discover -s tests -p 'test*ecc*.py' -q",
+      "check_ids": [
+        "R_INSTALLER",
+        "R_CAPTURE"
+      ],
+      "artifact_paths": []
+    },
+    {
+      "command": "python3 -B tools/ecc-on-demand/evaluation/check_captures.py --out capture-regrading.json",
+      "check_ids": [
+        "R_CAPTURE"
+      ],
+      "artifact_paths": [
+        "capture-regrading.json"
+      ]
+    }
+  ],
+  "complexity_baseline": "現行管理処理はPython標準ライブラリだけで、MCP定義6件、プリセット5件、4入口×2ファイルと管理CLIの計9管理ファイル、TOML設定、所有状態、backupを扱う。設定全体の解析と管理対象ごとの保存ブロック照合、ファイルhash、ロック、原子的書込み、失敗時の復元を行う。capture検証はmanifest対象の内容を読み、JSONを解析して14課題・52出力と追加4出力を照合・集計する。主な費用は保存データの読込み・hash・出力走査であり、今回その速度や資源使用量の改善は測定しない。",
+  "queries": []
+}

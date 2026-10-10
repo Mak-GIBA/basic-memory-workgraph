@@ -1,0 +1,9 @@
+{
+  "source_path": "tools/ecc-on-demand/evaluation/source-manifest.json",
+  "source_sha256": "e0c1ea463a0198cea8d55cb492597edf56dea6a379429be706c275141ca1a88d",
+  "line_start": 26,
+  "line_end": 43,
+  "checked_at": "2026-10-10T10:01:18.169741+00:00",
+  "excerpt": "  {\n    \"path\": null,\n    \"url\": \"https://raw.githubusercontent.com/ooples/token-optimizer-mcp/main/README.md\",\n    \"status\": \"unavailable\",\n    \"error\": \"HTTPError\"\n  },\n  {\n    \"path\": \"sources/parallel-docs.txt\",\n    \"url\": \"https://docs.parallel.ai/integrations/mcp/search-mcp\",\n    \"sha256\": \"45d0e9325ea1c0e17ea4ec0e3e9859efd231913f0c39e6731d0586eb14b73cd1\",\n    \"read_scope\": \"Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence\"\n  },\n  {\n    \"path\": \"sources/cloudflare-docs.txt\",\n    \"url\": \"https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/\",\n    \"sha256\": \"d61c18b83878aefe2cab689adce7a9eaba4b46a9aebb091df8de7e33b3c0caef\",\n    \"read_scope\": \"Relevant mechanism, setup and limitations sections; source receipt alone is not efficacy evidence\"\n  }",
+  "scope": "Static code observation; does not prove runtime behavior"
+}

@@ -1,0 +1,215 @@
+{
+  "contract_sha256": "9b3efa0ecb36e28ea4a92d4e92ade4a356df9f5deadcd467ee618deb59c9c05f",
+  "rows": [
+    {
+      "candidate": "native",
+      "trial": 1,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 19092,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 954,
+        "reasoning_output_tokens": 850
+      },
+      "tool_calls": [],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 32.131,
+      "checked_at": "2026-10-10T08:23:13.471417+00:00",
+      "contract_sha256": "9b3efa0ecb36e28ea4a92d4e92ade4a356df9f5deadcd467ee618deb59c9c05f",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "total": 6,
+      "original_correct_with_treatment_gate": 6,
+      "treatment_valid": true
+    },
+    {
+      "candidate": "sequential-thinking",
+      "trial": 1,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 19092,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 883,
+        "reasoning_output_tokens": 779
+      },
+      "tool_calls": [],
+      "exit_code": 0,
+      "error": "Sequential Thinking was not successfully used",
+      "elapsed_seconds": 32.913,
+      "checked_at": "2026-10-10T08:23:46.385008+00:00",
+      "contract_sha256": "9b3efa0ecb36e28ea4a92d4e92ade4a356df9f5deadcd467ee618deb59c9c05f",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "total": 6,
+      "original_correct_with_treatment_gate": 0,
+      "treatment_valid": false
+    },
+    {
+      "candidate": "sequential-thinking",
+      "trial": 2,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 62230,
+        "cached_input_tokens": 40064,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1863,
+        "reasoning_output_tokens": 1470
+      },
+      "tool_calls": [
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "type": "mcp_tool_call",
+          "server": "sequential-thinking",
+          "tool": "sequentialthinking",
+          "status": "completed",
+          "error": null
+        }
+      ],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 66.432,
+      "checked_at": "2026-10-10T08:24:52.817396+00:00",
+      "contract_sha256": "9b3efa0ecb36e28ea4a92d4e92ade4a356df9f5deadcd467ee618deb59c9c05f",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "total": 6,
+      "original_correct_with_treatment_gate": 6,
+      "treatment_valid": true
+    },
+    {
+      "candidate": "native",
+      "trial": 2,
+      "outputs": {
+        "critical-path": 13,
+        "duplicate-test": 1610,
+        "deadline-boundary": [
+          1000,
+          1100,
+          1300
+        ],
+        "order-constraints": [
+          "BDECA"
+        ],
+        "null-join": [
+          4,
+          2,
+          3,
+          10
+        ],
+        "conditional-retry": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ]
+      },
+      "usage": {
+        "input_tokens": 39317,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1327,
+        "reasoning_output_tokens": 1148
+      },
+      "tool_calls": [],
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 46.155,
+      "checked_at": "2026-10-10T08:25:38.973149+00:00",
+      "contract_sha256": "9b3efa0ecb36e28ea4a92d4e92ade4a356df9f5deadcd467ee618deb59c9c05f",
+      "prompt_sha256": "6b3b499c9723fa85b8e3e50ccc6b9b116726596d0c19dca857e133c4efca5d6e",
+      "correct": 6,
+      "total": 6,
+      "original_correct_with_treatment_gate": 6,
+      "treatment_valid": true
+    }
+  ]
+}

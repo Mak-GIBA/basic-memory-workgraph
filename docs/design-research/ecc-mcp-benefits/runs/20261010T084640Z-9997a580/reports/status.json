@@ -1,0 +1,11 @@
+{
+  "run_id": "20261010T084640Z-9997a580",
+  "status": "blocked",
+  "phase": "proposal_design",
+  "iteration": 1,
+  "reason": "producer-design のモデル処理が制限時間に達しました（経過 1800.009 秒、設定上限 1800 秒）。親が実行した検証は 0 件です。この停止は方式の精度・効果の不合格を意味しません。実行記録: runs/20261010T084640Z-9997a580/001-producer-design-89dc77/receipt.json",
+  "updated_at": "2026-10-10T09:35:58.612049+00:00",
+  "domain": "research",
+  "source_head": "f29a6d6d8232a6b846813bd4310a9503e4336a2d",
+  "state_path": "runs/20261010T084640Z-9997a580/state.json"
+}

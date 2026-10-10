@@ -1,0 +1,5 @@
+WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir "/tmp" (codex_home: AbsolutePathBuf("/tmp/design-research-check-cvdycolb/.test-home/.codex"))
+----------------------------------------------------------------------
+Ran 47 tests in 9.234s
+
+OK

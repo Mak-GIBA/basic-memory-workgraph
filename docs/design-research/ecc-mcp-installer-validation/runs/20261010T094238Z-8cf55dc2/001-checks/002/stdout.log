@@ -1,0 +1,53 @@
+{
+  "reasoning_mean_seconds": {
+    "native": 29.176000000000002,
+    "sequential-thinking": 51.7875
+  },
+  "documentation_retrieval_capture": [
+    "evidence/pilot/browser-invalid-arguments-tools-results.json"
+  ],
+  "chrome_devtools": {
+    "correct": 4,
+    "total": 4
+  },
+  "reasoning": {
+    "A": {
+      "correct": 12,
+      "total": 12
+    },
+    "B": {
+      "correct": 12,
+      "total": 12
+    }
+  },
+  "documentation": {
+    "A": {
+      "correct": 2,
+      "total": 2
+    },
+    "B": {
+      "correct": 2,
+      "total": 2
+    }
+  },
+  "file": {
+    "A": {
+      "correct": 8,
+      "total": 8
+    },
+    "B": {
+      "correct": 6,
+      "total": 8
+    }
+  },
+  "browser": {
+    "A": {
+      "correct": 4,
+      "total": 4
+    },
+    "B": {
+      "correct": 4,
+      "total": 4
+    }
+  }
+}

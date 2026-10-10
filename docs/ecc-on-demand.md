@@ -18,7 +18,27 @@ python3 tools/ecc-on-demand/ecc_on_demand.py doctor
 `~/.agents/skills/` に `ecc-python`、`ecc-errors`、`ecc-security`、`ecc-library` を配置します。
 管理CLIは `${CODEX_HOME:-~/.codex}/ecc-on-demand/ecc_on_demand.py` に配置します。
 設定のバックアップと管理状態も同じディレクトリに保存します。バックアップの権限は所有者のみ読み書き可能です。
-ECCの原本、Basic Memory、独立したMCP、スキル一覧の上限は変更しません。
+ECCの原本、Basic Memory、既存のMCP、スキル一覧の上限は変更しません。
+初回の既定ではContext7とPlaywrightを独立MCPとして追加します。
+既存の同名設定と無効指定は保持します。Context7の旧名`context7-mcp`があれば二重登録しません。
+stdio接続にはNode.jsと`npx`が必要です。GitHubは既存の公式連携または`gh`を使います。
+
+```bash
+python3 tools/ecc-on-demand/ecc_on_demand.py apply --mcps recommended,browser,cloudflare
+python3 tools/ecc-on-demand/ecc_on_demand.py apply --mcps none
+```
+
+`--mcps`は`apply`の後に指定します。`research`はContext7とParallel Search、`browser`はPlaywrightとChrome DevTools、
+`cloudflare`はContext7とCloudflare Docsを選びます。プリセットと接続名をカンマで組み合わせられます。
+選択は保存され、未指定の再適用やルートのインストーラーによる更新で引き継ぎます。
+`none`や別の選択への変更は既存接続を削除・無効化しません。以前の管理対象MCPも保持します。
+新規登録に使うパッケージは実測した版に固定し、既存接続のバージョン・引数はそのまま保持します。
+
+Sequential Thinkingは明示指定のみ、Token Optimizerは登録対象外です。今回の比較では前者の正答増加を確認できず、
+後者には新しい会話で必要な情報を取得できない失敗がありました。既定2件も精度改善を保証する選択ではなく、
+文書探索・画面操作の接続を用意するためのものです。
+用途別の判断と実測例は[MCPの導入判断](codex-ecc/mcp-evaluation.md)、
+選択肢の詳細は[ECCのインストール](codex-ecc/installation.md)を参照してください。
 
 `--codex-home PATH`、`--skills-root PATH`、`--cwd PATH` はサブコマンドの前に指定できます。
 同名の未管理スキルや、導入後に手で変更した管理ファイルがある場合は上書きせず停止します。
@@ -73,6 +93,8 @@ ECC原本と管理資材をまとめて更新する場合は、ルートの`inst
 `doctor` が再有効化を検出したら `apply` で戻してください。
 
 `restore` は導入前のECCの有効値に戻し、管理対象の入口とCLIを取り除きます。
+追加したMCPのうち変更されていない管理対象設定も取り除き、元から存在する接続は保持します。
+管理対象MCPに手動で認証情報や引数を追加した場合は、消さずに停止します。
 新しいECCインストーラーでECC自体を初めて導入した環境では、原本を残し、ECCを無効状態に保ちます。
 導入後に追加した無関係な設定は保持し、設定バックアップも残します。
 管理ファイルや有効値が手で変更されている場合は、その変更を消さず停止します。
@@ -89,6 +111,7 @@ Basic Memoryのフック、Codexの会話履歴、Claude Code側のECC設定は�
 
 `doctor` は新しい独立app-serverのカタログを確認します。モデルに渡される一覧が省略されていないかは、
 新規セッションの診断ログでも確認してください。実行中のセッションの一覧は置き換えません。
+MCPについては設定だけを検証し、起動・認証・ツール実行は別途確認します。
 
 ## 検証
 

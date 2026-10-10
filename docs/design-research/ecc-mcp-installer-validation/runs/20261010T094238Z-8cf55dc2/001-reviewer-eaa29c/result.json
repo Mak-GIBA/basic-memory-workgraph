@@ -1,0 +1,147 @@
+{
+  "status": "reviewed",
+  "reason": "ECC原本を保ち、必要なスキルを4つの入口から読む構成について、設定保護・保存出力の採点・説明の範囲を確認しました。MCPはCodexとツールをつなぐ共通方式、captureは保存された入力・出力・呼び出し記録です。今回の47テストと再採点は成功し、限定範囲で指摘事項はありません。対象45ファイルは両receiptの記録とhashが一致しました。実Codex・MCPの再測定や人間の承認を示す結果ではなく、前研究のblocked状態も変更しません。",
+  "issues": [],
+  "checks": [
+    {
+      "check_id": "R_INSTALLER",
+      "result": "pass",
+      "reason": "EV-00001は指定unittestが終了コード0、47テスト成功と記録しています。一時設定と模擬Codexによる初回適用・再適用・更新・復元で、選択した不足分の追加、既存disabled・alias・command・無関係な設定の保持、noneへの変更後の接続保持が期待どおりでした。旧所有記録、最初のbackup、previous_enabledの保持、未知名の変更前拒否、適用・復元の変更検知、書込み・更新・削除の模擬失敗後の復旧も確認されています。実MCPの起動・認証、実Codexとの互換性は今回の確認範囲外です。",
+      "evidence_ids": [
+        "EV-00001",
+        "CE_INSTALL_SELECTION",
+        "CE_INSTALL_STATE"
+      ]
+    },
+    {
+      "check_id": "R_CAPTURE",
+      "result": "pass",
+      "reason": "現在の成功receipt EV-00001・EV-00003と、runs/20261010T094238Z-8cf55dc2/001-checks/002/artifacts/capture-regrading.jsonを読みました。ファイル・contractのhash、推論の共通prompt、保存文書から再構成したprompt、input/expected、実呼び出し、型と配列順序を確認しています。保存outputs/outputから14課題・26組・52出力を採点し、推論A/B各12/12、文書各2/2、ファイルA=8/8・B=6/8、ブラウザー各4/4でした。Token Optimizerの空出力2件を不正解として保持し、Chrome DevToolsの追加4出力は保存記録で確認して別集計しています。出力変更、hash改変、欠落試行、MCP呼び出し欠落の既存テストも成功しました。文書入力は指定pilotの取得応答2件と順序を含めて一致し、合計7.682246633805335秒、tool_error=falseも対応しています。変換前manifestのHTML hashとmain URL取得失敗は歴史的記録です。変換後manifestの7資料は現在の内容とhashが一致し、Optimizerはmaster URLの取得資料として区別しました。成功は保存記録の再採点を示します。",
+      "evidence_ids": [
+        "EV-00001",
+        "EV-00002",
+        "EV-00003",
+        "CE_CAPTURE",
+        "CE_SOURCE_PRE",
+        "CE_SOURCE_POST"
+      ]
+    },
+    {
+      "check_id": "R_SCOPE",
+      "result": "pass",
+      "reason": "導入文書は初回既定2件、選択の引継ぎ、noneと旧管理対象の保持、変更検知・復元を実装と整合する形で説明しています。導入判断の文書は前研究20261010T084640Z-9997a580の1800.009秒timeout、独立レビュー未完了、ハーネス内実験0件を明示し、実際の停止receiptとも一致しました。推論6問×2回、文書2問×各条件1試行、合成文書4条件×2回、DOM操作2条件×2回の範囲を保っています。情報欠落2件と全文取得による回復、ブラウザーの操作・計時範囲の差、返却byteと課金token、接続上の価値と正答率改善を区別しています。scoped Optimizerの結果を別パッケージへ転用せず、未測定サービスも効果不合格として扱っていません。",
+      "evidence_ids": [
+        "CE_SCOPE_EVALUATION",
+        "CE_SCOPE_INSTALLATION"
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "id": "CE_INSTALL_SELECTION",
+      "path": "tools/ecc-on-demand/ecc_on_demand.py",
+      "line_start": 52,
+      "line_end": 104,
+      "description": "選択名を検証し、既存設定・alias・旧所有記録を保って不足するMCPだけを追加する処理。"
+    },
+    {
+      "id": "CE_INSTALL_STATE",
+      "path": "tools/ecc-on-demand/ecc_on_demand.py",
+      "line_start": 439,
+      "line_end": 492,
+      "description": "選択の引継ぎ、最初の復元情報の保持、状態保存、書込み失敗時の巻戻し。実行結果はEV-00001で確認する。"
+    },
+    {
+      "id": "CE_CAPTURE",
+      "path": "tools/ecc-on-demand/evaluation/check_captures.py",
+      "line_start": 10,
+      "line_end": 131,
+      "description": "型を区別した保存出力の採点、hash・prompt・取得記録・実呼び出しの照合、26組と追加比較の集計。"
+    },
+    {
+      "id": "CE_SOURCE_PRE",
+      "path": "tools/ecc-on-demand/evaluation/source-manifest.json",
+      "line_start": 26,
+      "line_end": 43,
+      "description": "変換前HTMLのhashとOptimizer main URLの取得失敗記録。現在の変換済み資料のhashとして扱わない。"
+    },
+    {
+      "id": "CE_SOURCE_POST",
+      "path": "tools/ecc-on-demand/evaluation/sources/source-manifest.json",
+      "line_start": 26,
+      "line_end": 43,
+      "description": "可読テキストへ変換したHTML資料のhashとOptimizer master URLの取得資料を記録する。"
+    },
+    {
+      "id": "CE_SCOPE_EVALUATION",
+      "path": "docs/codex-ecc/mcp-evaluation.md",
+      "line_start": 3,
+      "line_end": 59,
+      "description": "前研究の停止、少数試験の条件・結果・失敗、接続価値と精度改善、計時・費用・パッケージの限界を説明する。"
+    },
+    {
+      "id": "CE_SCOPE_INSTALLATION",
+      "path": "docs/codex-ecc/installation.md",
+      "line_start": 110,
+      "line_end": 135,
+      "description": "選択変更後の接続保持、旧所有状態、変更検知、復元、診断と失敗後の再試行の説明。"
+    },
+    {
+      "id": "CE_REFERENCE_PLAYWRIGHT",
+      "path": "tools/ecc-on-demand/evaluation/sources/playwright-README.md",
+      "line_start": 3,
+      "line_end": 21,
+      "description": "提供済み公式snapshotのCLI/MCP用途区分と実行要件を実読。効率に関する配布元の説明を今回の実測改善とは扱わない。"
+    },
+    {
+      "id": "CE_REFERENCE_CONTEXT7",
+      "path": "tools/ecc-on-demand/evaluation/sources/context7-README.md",
+      "line_start": 63,
+      "line_end": 137,
+      "description": "提供済み公式snapshotのライブラリID、バージョン指定、取得API、正確性と公開範囲の限界を実読。"
+    }
+  ],
+  "dossier_json": "",
+  "sources": [
+    {
+      "id": "S_PLAYWRIGHT",
+      "title": "Playwright MCP README（提供済み公式snapshot）",
+      "url": "https://raw.githubusercontent.com/microsoft/playwright-mcp/main/README.md",
+      "path": "",
+      "locator": "Playwright MCP vs Playwright CLI、Requirements。提供済みsnapshotの行3–21をCE_REFERENCE_PLAYWRIGHTで参照。オンライン再取得は未実施。",
+      "read_level": "relevant_sections"
+    },
+    {
+      "id": "S_CONTEXT7",
+      "title": "Context7 README（提供済み公式snapshot）",
+      "url": "https://raw.githubusercontent.com/upstash/context7/master/README.md",
+      "path": "",
+      "locator": "Important Tips、Available Tools、Disclaimer。提供済みsnapshotの行63–137をCE_REFERENCE_CONTEXT7で参照。オンライン再取得は未実施。",
+      "read_level": "relevant_sections"
+    }
+  ],
+  "reference_implementations": [
+    {
+      "name": "Playwright MCP / Playwright CLI",
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "strength": "公式説明は、継続するブラウザー状態を使う対話的操作と、CLIによる定型操作の用途を区別しています。",
+      "application": "固定テストでは既存APIを基準に保ち、対話的な画面調査が必要な場合にMCP接続を選ぶ判断に使えます。",
+      "limitations": "配布元の用途説明です。今回のDOM値4/4から、一般的な速度・費用・診断品質の改善は推定できません。",
+      "source_ids": [
+        "S_PLAYWRIGHT"
+      ]
+    },
+    {
+      "name": "Context7 MCP",
+      "url": "https://github.com/upstash/context7",
+      "strength": "ライブラリ名の識別と、ライブラリID・質問に基づく文書取得を別のツールとして提供しています。",
+      "application": "必要なライブラリ文書を取得する接続として利用し、既知IDを使う今回の試験と未知文書の探索を区別します。",
+      "limitations": "今回の文書課題は各条件1試行で両方2/2です。公式説明も文書の正確性・完全性を保証しておらず、非公開backendの設計は確認していません。",
+      "source_ids": [
+        "S_CONTEXT7"
+      ]
+    }
+  ],
+  "complexity_ok": true,
+  "complexity_reason": "今回の管理処理と再採点はPython標準ライブラリだけで構成されています。9管理ファイル、所有記録、backup、ブロック照合、ロック、原子的書込みは、既存設定を保って復元する目的に対応しています。設定全体を書き直す単純な実装ではコメントや既存設定の保持が難しくなります。ECCスキルだけ必要なら--mcps noneが最小構成です。監査による依存追加・サービス追加・設定変更はなく、処理速度や資源使用量の改善は測定していません。"
+}
