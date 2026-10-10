@@ -388,10 +388,13 @@ class BundleTests(unittest.TestCase):
     def paragraph(self):
         return self.target.parent/'paragraph-writing'
 
+    def direct(self):
+        return self.target.parent/'japanese-direct-writing'
+
     def snapshots(self):
         return {name:I.inventory(self.target.parent/name) for name in I.COMPONENTS}
 
-    def test_default_cli_installs_both_and_only_two_entrypoints(self):
+    def test_default_cli_installs_three_and_only_three_entrypoints(self):
         with contextlib.redirect_stdout(io.StringIO()) as stream:
             code = I.main(['--apply','--source-dir',str(self.source)])
         self.assertEqual(code,0)
@@ -422,13 +425,17 @@ class BundleTests(unittest.TestCase):
         result=self.both()
         self.assertEqual(result['components']['paragraph-writing']['mode'],'explicit')
         self.assertIn('allow_implicit_invocation: false',(self.paragraph()/'agents/openai.yaml').read_text())
+        self.assertEqual(result['components']['japanese-direct-writing']['mode'],'explicit')
+        self.assertIn('allow_implicit_invocation: false',(self.direct()/'agents/openai.yaml').read_text())
 
     def test_individual_existing_modes_preserved(self):
         self.put(mode='explicit')
         I.install_selected(self.target.parent,('paragraph-writing',),mode='auto',apply=True)
+        I.install_selected(self.target.parent,('japanese-direct-writing',),mode='auto',apply=True)
         result=self.both()
         self.assertEqual(result['components']['yomiyasu']['mode'],'explicit')
         self.assertEqual(result['components']['paragraph-writing']['mode'],'auto')
+        self.assertEqual(result['components']['japanese-direct-writing']['mode'],'auto')
 
     def test_explicit_mode_changes_both_with_force_offline(self):
         self.both()
@@ -553,12 +560,12 @@ class BundleTests(unittest.TestCase):
         I.uninstall_selected(self.target.parent,I.COMPONENTS,False)
         self.assertEqual(before,self.snapshots())
 
-    def test_bundle_uninstall_removes_both_with_distinct_backups(self):
+    def test_bundle_uninstall_removes_three_with_distinct_backups(self):
         self.both();result=I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
         paths={entry['backup'] for entry in result['components'].values()}
-        self.assertEqual(len(paths),2)
+        self.assertEqual(len(paths),3)
         self.assertTrue(all(Path(p).exists() for p in paths))
-        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
+        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
 
     def test_paragraph_check_update_is_offline_read_only(self):
         self.both();before=self.snapshots()
@@ -615,6 +622,173 @@ class BundleTests(unittest.TestCase):
             with self.assertRaises(I.InstallError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
         self.assertEqual(before,self.files())
         self.assertEqual((self.paragraph()/'SKILL.md').read_text(),'edit during backup')
+
+    def test_direct_only_preserves_zip_content_without_network(self):
+        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
+        self.assertTrue(result['applied']);self.assertFalse(result['network'])
+        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
+        expected={'SKILL.md':'2f275f460caa23ad6c61c5f5f3581b927559bab1651a28e808615bf4811493e3',
+                  'agents/openai.yaml':'f032fde03311af6ce22465b634173eb39d32b5e21aa1f7d620ccf20f4f4d4792'}
+        source=json.loads((self.direct()/'SOURCE.json').read_text())
+        self.assertEqual(source['files'],expected)
+        self.assertEqual(source['archive_sha256'],'88f033759318483739f73ca297bd84dd997146171c795dbe907defa544aff1de')
+        self.assertEqual(result['upstream_revision'],source['archive_sha256'])
+        for name,digest in expected.items():
+            self.assertEqual(I.sha((self.direct()/name).read_bytes()),digest)
+
+    def test_direct_explicit_changes_only_invocation_setting(self):
+        I.install_selected(self.target.parent,('japanese-direct-writing',),mode='explicit',apply=True)
+        original=I.assets()['japanese-direct-writing/agents/openai.yaml']
+        expected=original.replace(b'allow_implicit_invocation: true',b'allow_implicit_invocation: false')
+        self.assertEqual((self.direct()/'agents/openai.yaml').read_bytes(),expected)
+        self.assertEqual((self.direct()/'SKILL.md').read_bytes(),I.assets()['japanese-direct-writing/SKILL.md'])
+        result,code=I.doctor(self.direct(),None,'japanese-direct-writing')
+        self.assertEqual(code,0);self.assertFalse(result['implicit_invocation'])
+
+    def test_direct_only_inherits_owned_yomiyasu_mode(self):
+        self.put(mode='explicit');before=self.files()
+        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
+        self.assertEqual(result['mode'],'explicit');self.assertEqual(before,self.files())
+        self.assertFalse(self.paragraph().exists())
+
+    def test_direct_only_does_not_claim_unowned_yomiyasu(self):
+        self.target.mkdir(parents=True);(self.target/'SKILL.md').write_text('unowned')
+        before=self.files()
+        result=I.install_selected(self.target.parent,('japanese-direct-writing',),apply=True)
+        self.assertEqual(result['mode'],'auto');self.assertEqual(before,self.files())
+
+    def test_version_120_upgrade_keeps_upstream_and_existing_modes(self):
+        I.install_selected(self.target.parent,('yomiyasu','paragraph-writing'),mode='explicit',apply=True,source=self.source)
+        before=self.files()
+        for name in ('yomiyasu','paragraph-writing'):
+            path=self.target.parent/name/I.MANIFEST;marker=json.loads(path.read_text());marker['version']='1.2.0'
+            path.write_text(json.dumps(marker))
+        with self.assertRaises(I.InstallError):self.both()
+        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            result=I.install_selected(self.target.parent,force=True,apply=True)
+        self.assertFalse(result['network'])
+        self.assertEqual({k:v for k,v in self.files().items() if k.startswith('upstream/')},
+                         {k:v for k,v in before.items() if k.startswith('upstream/')})
+        for entry in result['components'].values():self.assertEqual(entry['mode'],'explicit')
+
+    def test_direct_source_option_rejected_without_writes(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            code=I.main(['--only','japanese-direct-writing','--source-dir',str(self.source),'--apply'])
+        self.assertEqual(code,2);self.assertFalse(self.target.parent.exists())
+
+    def test_unowned_direct_blocks_entire_install(self):
+        self.direct().mkdir(parents=True);(self.direct()/'SKILL.md').write_text('unowned')
+        with self.assertRaises(I.InstallError):self.both(force=True)
+        self.assertFalse(self.target.exists());self.assertFalse(self.paragraph().exists())
+        self.assertEqual((self.direct()/'SKILL.md').read_text(),'unowned')
+
+    def test_direct_edits_and_missing_files_block_whole_update(self):
+        self.both();(self.direct()/'SKILL.md').write_text('user edit');before=self.snapshots()
+        with self.assertRaises(I.InstallError):self.both(force=True)
+        self.assertEqual(before,self.snapshots())
+        (self.direct()/'SKILL.md').write_bytes(I.assets()['japanese-direct-writing/SKILL.md'])
+        (self.direct()/'agents/openai.yaml').unlink();before=self.snapshots()
+        with self.assertRaises(I.InstallError):self.both(force=True)
+        self.assertEqual(before,self.snapshots())
+
+    def test_duplicate_direct_blocks_entire_install(self):
+        duplicate=Path(os.environ['CODEX_HOME'])/'skills/japanese-direct-writing'
+        duplicate.mkdir(parents=True);(duplicate/'SKILL.md').write_text('other')
+        with self.assertRaises(I.InstallError):self.both()
+        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
+
+    def test_direct_owner_cannot_be_swapped(self):
+        self.both();path=self.direct()/I.MANIFEST;marker=json.loads(path.read_text())
+        marker['owner']=I.OWNERS['paragraph-writing'];path.write_text(json.dumps(marker))
+        before=self.snapshots()
+        with self.assertRaises(I.InstallError):self.both(force=True)
+        self.assertEqual(before,self.snapshots())
+
+    def test_corrupt_direct_payload_aborts_before_any_placement(self):
+        for filename in ('SKILL.md','agents/openai.yaml'):
+            with self.subTest(filename=filename):
+                data=I.assets();data['japanese-direct-writing/'+filename]=b'corrupt'
+                with mock.patch.object(I,'assets',return_value=data):
+                    with self.assertRaises(I.InstallError):self.both()
+                self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
+
+    def test_third_install_switch_failure_restores_all_existing(self):
+        self.both();before=self.snapshots();original=I.os.replace
+        def fail(src,dst):
+            if Path(src).name.startswith('.japanese-direct-writing-stage-'):raise OSError('third switch fails')
+            return original(src,dst)
+        with mock.patch.object(I.os,'replace',side_effect=fail):
+            with self.assertRaises(OSError):self.both(force=True)
+        self.assertEqual(before,self.snapshots())
+        self.assertFalse((self.target.parent/'.yomiyasu-installer.lock').exists())
+
+    def test_third_install_failure_removes_all_new_components(self):
+        original=I.os.replace
+        def fail(src,dst):
+            if Path(src).name.startswith('.japanese-direct-writing-stage-'):raise OSError('third switch fails')
+            return original(src,dst)
+        with mock.patch.object(I.os,'replace',side_effect=fail):
+            with self.assertRaises(OSError):self.both()
+        self.assertTrue(all(not (self.target.parent/name).exists() for name in I.COMPONENTS))
+
+    def test_third_uninstall_failure_restores_all(self):
+        self.both();before=self.snapshots();original=I.os.replace
+        def fail(src,dst):
+            if Path(src)==self.direct():raise OSError('third removal fails')
+            return original(src,dst)
+        with mock.patch.object(I.os,'replace',side_effect=fail):
+            with self.assertRaises(OSError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
+        self.assertEqual(before,self.snapshots())
+
+    def test_direct_check_update_is_offline_read_only_and_detects_absence(self):
+        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            missing=I.check_updates(self.target.parent,('japanese-direct-writing',))
+        self.assertTrue(missing['update_available']);self.assertFalse(self.target.parent.exists())
+        self.both();before=self.snapshots()
+        with mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            result=I.check_updates(self.target.parent,('japanese-direct-writing',))
+        self.assertFalse(result['update_available']);self.assertEqual(before,self.snapshots())
+
+    def test_direct_revision_update_is_offline_and_preserves_others(self):
+        self.both();before=self.snapshots();data=I.assets()
+        data['japanese-direct-writing/SKILL.md']+=b'\nUpdated fixture\n'
+        meta=json.loads(data['japanese-direct-writing/SOURCE.json']);meta['revision']='f'*64
+        meta['files']['SKILL.md']=I.sha(data['japanese-direct-writing/SKILL.md'])
+        data['japanese-direct-writing/SOURCE.json']=json.dumps(meta).encode()
+        with mock.patch.object(I,'assets',return_value=data),mock.patch.object(I,'download',side_effect=AssertionError('network')):
+            check=I.check_updates(self.target.parent,('japanese-direct-writing',))
+            self.assertTrue(check['update_available'])
+            result=I.install_selected(self.target.parent,('japanese-direct-writing',),update=True,apply=True)
+        self.assertTrue(result['applied']);self.assertFalse(result['network'])
+        self.assertEqual(result['upstream_revision'],'f'*64);self.assertTrue(Path(result['backup']).exists())
+        self.assertEqual((self.direct()/'SKILL.md').read_bytes(),data['japanese-direct-writing/SKILL.md'])
+        for name in ('yomiyasu','paragraph-writing'):self.assertEqual(before[name],I.inventory(self.target.parent/name))
+
+    def test_direct_uninstall_only_keeps_other_components(self):
+        self.both();before=self.snapshots()
+        with contextlib.redirect_stdout(io.StringIO()) as stream:
+            code=I.main(['--only','japanese-direct-writing','--uninstall','--apply'])
+        self.assertEqual(code,0);self.assertFalse(self.direct().exists())
+        for name in ('yomiyasu','paragraph-writing'):self.assertEqual(before[name],I.inventory(self.target.parent/name))
+        with zipfile.ZipFile(json.loads(stream.getvalue())['backup']) as archive:
+            self.assertEqual(archive.read('SKILL.md'),before['japanese-direct-writing']['SKILL.md'])
+
+    def test_direct_extra_preserved_but_blocks_uninstall(self):
+        self.both();(self.direct()/'notes.txt').write_text('keep')
+        self.both(force=True);before=self.snapshots()
+        self.assertEqual((self.direct()/'notes.txt').read_text(),'keep')
+        with self.assertRaises(I.InstallError):I.uninstall_selected(self.target.parent,I.COMPONENTS,True)
+        self.assertEqual(before,self.snapshots())
+
+    def test_extracted_python_can_install_direct_alone(self):
+        destination=self.home/'extract';I.extract(destination)
+        result=subprocess.run([sys.executable,str(destination/'installer.py'),'--only','japanese-direct-writing','--apply'],
+                              cwd=self.home,text=True,capture_output=True,timeout=20)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertTrue((self.direct()/'SKILL.md').exists());self.assertFalse(self.target.exists())
+        self.assertFalse(self.paragraph().exists())
 
 
 if __name__=='__main__': unittest.main()

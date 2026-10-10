@@ -11,9 +11,9 @@ import zlib
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT.parents[1]/'install_codex_yomiyasu.sh'
 HEADER = '''#!/usr/bin/env bash
-# Codex yomiyasu + paragraph-writing installer 1.2.0 — standalone.
-# Default: dry-run. --apply installs both. --only selects one component.
-# New yomiyasu installs use the latest stable GitHub Release; paragraph-writing is bundled.
+# Codex yomiyasu + paragraph-writing + japanese-direct-writing installer 1.3.0 — standalone.
+# Default: dry-run. --apply installs all three. --only selects one component.
+# New yomiyasu installs use the latest stable GitHub Release; companions are bundled.
 # --force refreshes companion assets; --update explicitly updates selected skills.
 # No npm, pip, sudo, MCP, hooks, AGENTS.md, shell config or existing plugin changes.
 # Requires Python 3.10+. Edited managed files are never overwritten, even with --force.

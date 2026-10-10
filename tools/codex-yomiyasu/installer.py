@@ -1,4 +1,4 @@
-"""Single-file Codex writing skills installer, companion version 1.2.0.
+"""Single-file Codex writing skills installer, companion version 1.3.0.
 Reads/fetches pinned upstream text files; never runs npm/pip or an upstream installer.
 All helper assets are embedded by the release packager.
 """
@@ -28,10 +28,12 @@ import zipfile
 import zlib
 
 SELF_SCRIPT = None
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 OWNER = 'basic-memory-workgraph/codex-yomiyasu'
-COMPONENTS = ('yomiyasu', 'paragraph-writing')
-OWNERS = {'yomiyasu': OWNER, 'paragraph-writing': 'basic-memory-workgraph/paragraph-writing'}
+COMPONENTS = ('yomiyasu', 'paragraph-writing', 'japanese-direct-writing')
+OWNERS = {'yomiyasu': OWNER, 'paragraph-writing': 'basic-memory-workgraph/paragraph-writing',
+          'japanese-direct-writing': 'basic-memory-workgraph/japanese-direct-writing'}
+BUNDLED_METADATA = {'paragraph-writing': 'UPSTREAM.json', 'japanese-direct-writing': 'SOURCE.json'}
 REPO = 'nanaism/yomiyasu'
 TAG = 'v1.0.4'
 COMMIT = '8d5abeebe2dd20c2db005deaddcc50be43c59c0a'
@@ -150,7 +152,7 @@ def download(url: str) -> bytes:
     if u.scheme != 'https' or u.hostname not in {'raw.githubusercontent.com', 'api.github.com'}:
         raise InstallError('想定外のダウンロード先を拒否しました: ' + str(u.hostname or ''))
     opener = urllib.request.build_opener(LockedRedirect())
-    request = urllib.request.Request(url, headers={'User-Agent': 'codex-yomiyasu-installer/1.1.0',
+    request = urllib.request.Request(url, headers={'User-Agent': 'codex-yomiyasu-installer/'+VERSION,
                                                   'Accept': 'application/vnd.github+json'})
     # No bearer token, document text or local path is sent.
     with opener.open(request, timeout=25) as response:
@@ -475,6 +477,27 @@ def paragraph_bundle(mode: str) -> dict[str, bytes]:
     return out
 
 
+def bundled_meta(component: str) -> dict:
+    return json.loads(assets()[component+'/'+BUNDLED_METADATA[component]])
+
+
+def direct_bundle(mode: str) -> dict[str, bytes]:
+    prefix = 'japanese-direct-writing/'
+    out = {k[len(prefix):]: v for k, v in assets().items() if k.startswith(prefix)}
+    meta = json.loads(out['SOURCE.json'])
+    for name, digest in meta['files'].items():
+        if name not in out or sha(out[name]) != digest:
+            raise InstallError('同梱したjapanese-direct-writing原本のhashが一致しません。')
+    agent = out['agents/openai.yaml'].decode('utf-8')
+    setting = '  allow_implicit_invocation: true\n'
+    if agent.count(setting) != 1:
+        raise InstallError('japanese-direct-writingの原本の発動設定が不正です。')
+    if mode == 'explicit':
+        agent = agent.replace(setting, '  allow_implicit_invocation: false\n')
+    out['agents/openai.yaml'] = agent.encode('utf-8')
+    return out
+
+
 def replace_directories(stages: list[tuple[Path | None, Path]]) -> None:
     """Commit directory switches together; retain every original until all renames succeed."""
     switched = []
@@ -534,7 +557,7 @@ def plan(target: Path, mode: str | None, force: bool, project: Path | None = Non
         result.update(upstream_tag=manifest.get('upstream_tag') if manifest else TAG,
                       upstream_commit=manifest.get('upstream_commit') if manifest else COMMIT)
     else:
-        result['upstream_revision'] = json.loads(assets()['paragraph-writing/UPSTREAM.json'])['revision']
+        result['upstream_revision'] = bundled_meta(component)['revision']
     return result, manifest, files
 
 
@@ -543,7 +566,7 @@ def selected_plans(root: Path, names: tuple[str, ...], mode: str | None, force: 
     inherited = 'auto'
     yomi = root/'yomiyasu'
     # A separately installed/edited yomiyasu does not become managed merely by
-    # installing paragraph-writing. Only a valid owned manifest supplies a default.
+    # installing companions. Only a valid owned manifest supplies a default.
     if mode is None and yomi.exists():
         try:
             inherited = manifest_for(inventory(yomi))['mode']
@@ -567,9 +590,9 @@ def prepare_install(result: dict, manifest: dict | None, files: dict[str, bytes]
                     source: Path | None, latest: dict | None) -> tuple[dict, dict[str, bytes]]:
     name, mode = result['component'], result['mode']
     network = False
-    if name == 'paragraph-writing':
-        expected = paragraph_bundle(mode)
-        meta = json.loads(expected['UPSTREAM.json'])
+    if name != 'yomiyasu':
+        expected = paragraph_bundle(mode) if name == 'paragraph-writing' else direct_bundle(mode)
+        meta = json.loads(expected[BUNDLED_METADATA[name]])
         upstream_marker = {'upstream_revision': meta['revision']}
     else:
         if latest:
@@ -771,12 +794,12 @@ def check_updates(root: Path, names: tuple[str, ...]) -> dict:
             safe_path(target)
             files = inventory(target) if target.exists() else {}
             marker = manifest_for(files, name) if target.exists() else None
-            revision = json.loads(assets()['paragraph-writing/UPSTREAM.json'])['revision']
+            revision = bundled_meta(name)['revision']
             results[name] = {'action': 'check-update', 'component': name, 'network': False,
                              'installed_version': marker.get('version') if marker else None,
                              'latest_version': VERSION, 'bundled_revision': revision,
                              'update_available': not marker or marker.get('version') != VERSION or marker.get('upstream_revision') != revision,
-                             'note': '確認のみ。同梱版への更新は --update --apply。Gistへの通信はありません。'}
+                             'note': '確認のみ。同梱版への更新は --update --apply。外部への通信はありません。'}
     return summarize(results)
 
 
@@ -828,17 +851,17 @@ def self_test() -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description='Codex用yomiyasu + paragraph-writing installer（単一ファイル）')
+    p = argparse.ArgumentParser(description='Codex用yomiyasu + paragraph-writing + japanese-direct-writing installer（単一ファイル）')
     a = p.add_mutually_exclusive_group()
     a.add_argument('--apply', action='store_true', help='実際に配置/解除する')
     a.add_argument('--dry-run', action='store_true', help='予定表示のみ（既定）')
     p.add_argument('--force', action='store_true', help='companion設定/資材を明示更新。上流更新は --update。編集済みは上書きしない')
-    p.add_argument('--update', action='store_true', help='GitHub Releasesの最新安定版yomiyasuへ更新。--applyなしは予定表示')
+    p.add_argument('--update', action='store_true', help='yomiyasuは最新安定版、補助Skillは同梱版へ更新。--applyなしは予定表示')
     p.add_argument('--mode', choices=['auto', 'explicit'], help='自然言語発動を許可/明示呼び出しのみ。新規はauto、既存は設定を維持')
-    p.add_argument('--only', choices=['all', *COMPONENTS], default='all', help='導入/更新/診断/解除の対象。既定は両方')
+    p.add_argument('--only', choices=['all', *COMPONENTS], default='all', help='導入/更新/診断/解除の対象。既定は3つ全て')
     action = p.add_mutually_exclusive_group()
     action.add_argument('--doctor', '--status', action='store_true', help='配置とhash、暗黙発火設定、既知の競合を診断。通信なし')
-    action.add_argument('--check-update', action='store_true', help='GitHub Releasesの最新安定版と導入版を比較。読み取りのみ')
+    action.add_argument('--check-update', action='store_true', help='yomiyasuは最新安定版、補助Skillは同梱版と比較。読み取りのみ')
     action.add_argument('--uninstall', action='store_true', help='本installer所有のSkillだけ解除。既定は予定表示')
     action.add_argument('--self-test', action='store_true', help='一時HOMEでローカルテスト。外部取得は模擬応答')
     action.add_argument('--extract', metavar='DIRECTORY', help='独自Skill/検査コード/テストを展開')
@@ -857,7 +880,7 @@ def main(argv: list[str] | None = None) -> int:
         project = abs_path(args.project) if args.project else None
         if args.self_test:
             if args.only != 'all':
-                raise InstallError('--self-test は両方を検証するため --only と併用できません。')
+                raise InstallError('--self-test は全Skillを検証するため --only と併用できません。')
             return self_test()
         if args.extract:
             if args.only != 'all':

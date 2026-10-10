@@ -1,0 +1,6 @@
+interface:
+  display_name: "日本語・過剰留保の削除"
+  short_description: "不要な留意書きと免責を削り、根拠に即して直接書く"
+  default_prompt: "$japanese-direct-writing を適用して、日本語の文章から不要な留意書き・予防線・免責を削り、内容の正確さと説明の詳しさは維持してください。"
+policy:
+  allow_implicit_invocation: true

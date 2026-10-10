@@ -1,0 +1,10 @@
+{
+  "source": "japanese-direct-writing.zip",
+  "archive_sha256": "88f033759318483739f73ca297bd84dd997146171c795dbe907defa544aff1de",
+  "revision": "88f033759318483739f73ca297bd84dd997146171c795dbe907defa544aff1de",
+  "files": {
+    "SKILL.md": "2f275f460caa23ad6c61c5f5f3581b927559bab1651a28e808615bf4811493e3",
+    "agents/openai.yaml": "f032fde03311af6ce22465b634173eb39d32b5e21aa1f7d620ccf20f4f4d4792"
+  },
+  "note": "提供されたZIPの本文と発動設定を無改変で同梱。explicitでは配置時にallow_implicit_invocationのみfalseへ変更。"
+}
